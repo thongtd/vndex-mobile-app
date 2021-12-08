@@ -1,124 +1,237 @@
 import { httpService } from "./http.service";
-import { CHART_API, EXCHANGE_API, MARKET_API } from "../config/API";
-import {get_past_date, splitPair} from "../config/utilities";
 import { storageService } from "./storage.service";
-import { constant } from "../config/constants";
-import moment from "moment";
-
+import { MARKET_API, EXCHANGE_API, XWALLET_API } from "../configs/api";
+import { eventChannel, END } from 'redux-saga'
+import { size, get } from "../configs/utils";
+import _ from "lodash"
 export const marketService = {
-    get_chart_time: async () => {
-        return httpService.get_without_token(CHART_API.GET_SERVER_TIME);
+    getSwapOrderBooks: async (
+        customerId,
+        pageIndex,
+        pageSize=15,
+        fromDate = getOneMonthAgoDate(),
+        toDate = getCurrentDate(),
+        walletCurrency = "",
+        status = ""
+    ) => {
+        try {
+            let res = await httpService.get(XWALLET_API.GET_SWAP_ORDER_BOOKS + `${customerId}/${pageIndex}/${pageSize}?fromDate=${fromDate}&toDate=${toDate}&walletCurrency=${walletCurrency}&status=${status}`);
+            if (res.status === 200) {
+                let data = res.data.source;
+                return {
+                    result: 'ok',
+                    data,
+                };
+            } else {
+                return {
+                    result: 'err',
+                    message: 'Please check your internet connection!',
+                };
+            }
+        } catch (error) {
+            return {
+                result: 'err',
+                message: 'Please check your internet connection!',
+                messErr: error
+            };
+        }
     },
-    get_chart_config: (symbol) => {
-        return httpService.get_without_token(`${CHART_API.CONFIG_BY_SYMBOL}?symbol=${symbol.replace('-', '_')}`);
+    getSwapTickers: async () => {
+        try {
+            return await httpService.get_without_token(EXCHANGE_API.GET_SWAP_TICKERS);
+        } catch (error) {
+            return []
+        }
     },
-    get_chart_data: async (symbol, resolution) => {
-       // let time = await httpService.get_without_token(`${CHART_API.GET_SERVER_TIME}?symbol=${symbol}`);
-        let to = moment().unix();
-        let from = moment().add(-120, 'days').unix();
-        if(resolution !== 'D' && resolution !== 'W' && resolution !== 'M'){
-            from = moment().add(-5, 'days').unix();
+    getOrderBooks: async (dataOrderBook) => {
+        try {
+            let post_data = {
+                accId: get(dataOrderBook, "UserId"),
+                startDate: get(dataOrderBook, "fromDate"),
+                endDate: get(dataOrderBook, "toDate"),
+                symbol: get(dataOrderBook, "symbol"),
+                paymentUnit:get(dataOrderBook, "paymentUnit"),
+                side:"",
+                pageIndex: get(dataOrderBook, "pageIndex"),
+                pageSize: 15
+            }
+            // console.log(post_data, "dataOrderBook");
+            let data = await httpService.post(EXCHANGE_API.GET_ORDER_BOOKS, post_data);
+            // console.log(data, "data kakak");
+            if (data) {
+
+                return {
+                    result: 'ok',
+                    data,
+                };
+            }
+        } catch (error) {
+            return {
+                result: 'err',
+                message: 'Please check your internet connection!',
+                messErr:error
+            };
         }
 
-        return new Promise((resolve, reject) => {
-            let url = `${CHART_API.TRADE_HISTORIES}?symbol=${symbol.replace("-", "_")}&resolution=${resolution}&from=${from}&to=${to}`;
-            console.log(url,"url chart data");
-            httpService.get_without_token(url).then((res) => {
-                if (res.s === "ok") {
-                    let result = {
-                        data: res,
-                        status: "OK",
-                        message: ""
-                    }
-                    resolve(result);
-                }
-                else {
-                    let result = {
-                        data: res,
-                        status: "ERROR",
-                        message: "NO_DATA"
-                    }
-                    resolve(result)
-                }
-            })
-                .catch(err => {
-                    reject(err);
-                })
-        })
     },
-    get_depth_data: (symbol, paymentUnit) => {
-        let top = 10;
-        let url = `${CHART_API.DEPTH_CHART}/${symbol}/${paymentUnit}/${top}`
-        return new Promise((resolve, reject) => {
-            httpService.get_without_token(url).then((res) => {
-                if (res) {
-                    resolve({
-                        data: res,
-                        message: "",
-                        status: "OK"
-                    })
-                }
-                else {
-                    resolve({
-                        data: null,
-                        message: "NO_DATA_FOUND",
-                        status: "ERROR"
-                    })
-                }
-            })
-                .catch(err => {
-                    resolve({
-                        data: err,
-                        message: "DEPTH_DATA_ERROR",
-                        status: "ERROR"
-                    })
-                })
-        })
+    getSwapConfigs: async () => {
+        try {
+            let data = await httpService.get_without_token(EXCHANGE_API.GET_SWAP_CONFIGS);
+            if (data) {
+                return {
+                    result: 'ok',
+                    data,
+                };
+            }
+
+        } catch (error) {
+            return {
+                result: 'err',
+                message: 'Please check your internet connection!',
+            };
+        }
 
     },
-    getMarketWatchByPair: async (pair) => {
-        let unit = splitPair(pair, '-').unit;
-        return new Promise((resolve, reject) => {
-            httpService.get_without_token(MARKET_API.GET_MARKET_WATCH).then(res => {
-                let marketData = res;
-
-                marketData.forEach(e => {
-                    if (e.name == unit) {
-                        e.tradingCoins.forEach(j => {
-                            if (j.pair == pair) {
-                                resolve(j);
-                            }
-                        })
-                    }
-                })
-            })
-                .catch(err => {
-                    reject(err);
-                })
-        })
+    getMarketWatch: async () => {
+        try {
+            let data = await httpService.get_without_token(MARKET_API.GET_MARKET_WATCH);
+            return {
+                result: 'ok',
+                data,
+            };
+        } catch (error) {
+            return {
+                result: 'err',
+                message: 'Please check your internet connection!',
+            };
+        }
     },
     getCurrencies: async () => {
-        return await httpService.post_without_token(EXCHANGE_API.GET_CURENCIES);
+        try {
+            let data = await httpService.post_without_token(EXCHANGE_API.GET_CURENCIES);
+            return {
+                result: 'ok',
+                data,
+            };
+        } catch (error) {
+            return {
+                result: 'err',
+                message: 'Please check your internet connection!',
+            };
+        }
+
     },
-    setCurrencies: async () => {
+    getCurrencyConversion: async () => {
+        try {
+            let data = await httpService.post_without_token(EXCHANGE_API.GET_CURRENCY_CONVERSION);
+            return {
+                result: 'ok',
+                data,
+            };
+        } catch (error) {
+            return {
+                result: 'err',
+                message: 'Please check your internet connection!',
+            };
+        }
+    },
+    getCrytoWallet: async (customerId) => {
+        try {
+            let response = await httpService.post(EXCHANGE_API.GET_CRYPTO_WALLET + `${customerId}`);
+            if (response.status === 200) {
+                let data = response.data;
+                return {
+                    result: 'ok',
+                    data,
+                };
+            }
+
+        } catch (error) {
+            return {
+                result: 'err',
+                message: 'Please check your internet connection!',
+            };
+        }
+    },
+    getFiatWallet: async (customerId) => {
+        try {
+            let response = await httpService.post(EXCHANGE_API.GET_FIAT_WALLET + `${customerId}`);
+            if (response.status === 200) {
+                let data = response.data;
+                return {
+                    result: 'ok',
+                    data,
+                };
+            }
+        } catch (error) {
+            return {
+                result: 'err',
+                message: 'Please check your internet connection!',
+            };
+        }
+    },
+    create_new_order: async (coinSymbol, paymentUnit, quantity, price, orderType, side, customerEmail, accId, via, lastestPrice, percentWithLastestPrice) => {
+        let order_entity = {
+            coinSymbol: coinSymbol,
+            paymentUnit: paymentUnit,
+            quantity: quantity,
+            price: price,
+            orderType: orderType,
+            side: side,
+            customerEmail: customerEmail,
+            accId: accId,
+            via: via,
+            lastestPrice,
+            percentWithLastestPrice
+        }
+        console.log(order_entity, "order_entity");
         return new Promise((resolve, reject) => {
-            httpService.post_without_token(EXCHANGE_API.GET_CURENCIES).then(res => {
-                if (res) {
-                    storageService.setItem(constant.STORAGEKEY.CURRENCY, res).then(success => {
-                        resolve(success);
-                    })
+            httpService.post(EXCHANGE_API.CREATE_NEW_ORDER, order_entity).then(res => {
+                let result = res.data;
+                console.log(result)
+                if (result.code === 0) {
+                    if (result.status == false) {
+                        let response = {
+                            status: "error",
+                            message: result.description,
+                            data: result
+                        }
+                        resolve(response);
+                    }
+                    else {
+                        let response = {
+                            status: "ok",
+                            message: result.description,
+                            data: result
+                        }
+                        resolve(response);
+                    }
+                }
+                else if (result.code == -1100) {
+                    let response = {
+                        status: "error",
+                        message: result.description,
+                        data: null
+                    }
+                    resolve(response);
                 }
                 else {
-                    resolve(false);
+                    let response = {
+                        status: "error",
+                        message: result.description,
+                        data: null
+                    }
+                    resolve(response);
                 }
             })
                 .catch(err => {
-                    reject(err);
+                    let response = {
+                        status: "error",
+                        message: "UNKNOWN_ERROR",
+                        data: err
+                    }
+                    reject(response);
                 })
         })
     },
-
-    getCurrency: async () => {
-        return await storageService.getItem(constant.STORAGEKEY.CURRENCY);
-    }
 }

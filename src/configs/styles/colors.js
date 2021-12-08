@@ -1,0 +1,21 @@
+export default {
+    red:"#ff315d",
+    yellow:"#f9ca06",
+    green:"#00d154",
+    highlightTitle:"#448ef6",
+    title:"#91c6ed",
+    subText:"#63686e",
+    text:"#333333",
+    description:"#8fc5ea",
+    line:"#e6e6e6",
+    iconButton:"#3e8bff",
+    statusBar:"#1f71e8",
+    background:"#fff",
+    tabbar:"#7ba5c6",
+    tabbarActive:"#3e8bff",
+    gradientFrom:'#0c44ca',
+    gradientTo:'#3ea0ff',
+    highlight:"#06ffff",
+    transparent:"#00000036",
+    btnBlur:"#e4f0f9"
+}
