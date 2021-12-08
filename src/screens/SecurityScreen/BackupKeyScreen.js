@@ -26,15 +26,17 @@ const BackupKeyScreen = ({
     const getQrCode = () => {
 
         jwtDecode().then(user => {
-            if (get(user, "sub")) {
+            if (get(user, "Username")) {
                 setDisabled(true);
-                authService.getQrCode(get(user, "sub")).then(res => {
+                authService.getQrCode(get(user, "Username")).then(res => {
+                    console.log(res,"Ress");
                     setDisabled(false);
                     if (size(get(res, "secretKey")) > 0 && size(get(res, "manualEntryKey")) > 0) {
                         setSecretKey(get(res, "secretKey"));
                         setManualEntryKey(get(res, "manualEntryKey"));
                     }
                 }).catch(err => {
+                    console.log(err,"Errr");
                     setDisabled(false)
                 })
             }

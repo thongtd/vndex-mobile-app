@@ -66,8 +66,8 @@ const FaCodeEmail = ({
         try {
 
             let content = await jwtDecode();
-            if (get(content, "sub")) {
-                let res = await authService.getTwoFactorEmailCode(get(content, "sub"));
+            if (get(content, "Username")) {
+                let res = await authService.getTwoFactorEmailCode(get(content, "Username"));
                 if (get(res, "data.sessionId")) {
                     setSessionId(get(res, "data.sessionId"));
                 }

@@ -33,12 +33,12 @@ const Enable2FaGG = ({
 
             try {
                 let user = await jwtDecode();
-                if (get(user, "sub")) {
+                if (get(user, "Username")) {
                     if (enable) {
                         let data = {
                             password: Password,
                             verifyCode: VerifyCode,
-                            email: get(user, "sub"),
+                            email: get(user, "Username"),
                             secretKey: SecretKey
                         }
                         setDisabled(true)
@@ -54,7 +54,7 @@ const Enable2FaGG = ({
                         }
                     } else {
                         setDisabled(true)
-                        let res = await authService.disableGGAuth(get(user, "sub"), Password, VerifyCode);
+                        let res = await authService.disableGGAuth(get(user, "Username"), Password, VerifyCode);
                         setDisabled(false);
                         if (get(res, "data.status")) {
                             dispatcher(createAction(SET_FA_CODE, { twoFactorEnabled: false, twoFactorService: "" }))

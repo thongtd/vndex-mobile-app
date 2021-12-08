@@ -19,7 +19,8 @@ export const authService = {
         }
     },
     getQrCode: async (email) => {
-        let response = await httpService.post(EXCHANGE_API.GET_QR_CODE_IMAGE_URL + email);
+        let response = await httpService.post(EXCHANGE_API.GET_QR_CODE_IMAGE_URL,{email});
+        console.log(response,"Resssp")
         if (response.status === 200) {
             return response.data
         }
@@ -49,6 +50,8 @@ export const authService = {
     },
     changePassword: async (data) => {
         let response = await httpService.post(EXCHANGE_API.CHANGE_PASSWORD, data)
+        console.log(response,"response22")
+        console.log(data,"data")
         if (response.data.code == 0) {
             return {
                 status: 'err',

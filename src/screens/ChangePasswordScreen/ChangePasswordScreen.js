@@ -42,7 +42,7 @@ const ChangePasswordScreen = ({
             setDisabled(true);
             try {
                 let response = await authService.changePassword(data);
-                // console.log(response,"response")
+                console.log(response,"response")
                 setDisabled(false);
                 if (get(response, "status") === 'ok') {
                     removeTokenAndUserInfo();
@@ -68,24 +68,29 @@ const ChangePasswordScreen = ({
     }, [])
     const getSessionId = () => {
         jwtDecode().then(user => {
-            if (get(user, "sub")) {
-                authService.getTwoFactorEmailCode(get(user, "sub")).then(res => {
+            console.log(user,"ss")
+            if (get(user, "Username")) {
+                authService.getTwoFactorEmailCode(get(user, "Username")).then(res => {
+                    console.log(res,"Ress");
                     if (get(res, "data.sessionId")) {
                         setSessionId(get(res, "data.sessionId"))
                     }
-                })
+                }).catch(err => console.log(err,"Err"))
             }
         })
 
     }
     const getKeepLogin = () => {
         jwtDecode().then(user => {
-            if (get(user, "id")) {
-                setEmail(get(user, "sub"));
+            
+            if (get(user, "Username")) {
+                console.log(get(user, "Username"),"llll");
+                setEmail(get(user, "Username"));
             }
         })
 
     }
+    console.log(Email,"kakak");
     return (
         <Container
             title={"Change Password".t()}
