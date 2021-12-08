@@ -155,7 +155,9 @@ export const authService = {
     },
     register: async (registerModel) => {
         return new Promise((resolve, reject) => {
+            console.log(EXCHANGE_API.REGISTER,registerModel,"reggg");
             httpService.post_without_token(EXCHANGE_API.REGISTER, registerModel).then(res => {
+                console.log(res,"Resss");
                 if (res.status) {
                     let result = {
                         data: null,
@@ -185,9 +187,16 @@ export const authService = {
     },
     resetPassword: async (email) => {
         try {
-            let response = await httpService.post_without_token(EXCHANGE_API.RESET_PASSWORD + email + `?callback=&via=2`, email);
+            console.log(email)
+            let response = await httpService.post_without_token(EXCHANGE_API.RESET_PASSWORD, {
+                email,
+                callback:'',
+                via:2
+            });
+            console.log(response,"Err");
             return response
         } catch (error) {
+            console.log(error,"Err");
         }
     },
     confirmResetPassword: async (data) => {

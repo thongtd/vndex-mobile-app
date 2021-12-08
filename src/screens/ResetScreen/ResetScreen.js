@@ -26,18 +26,24 @@ const ResetScreen = ({
             setDisabled(false)
             return toast("PLEASE_INPUT_A_VALID_EMAIL".t())
         } else {
-            let res = await authService.resetPassword(email);
-            setDisabled(false)
-            if (get(res, "status")) {
-                pushSingleScreenApp(componentId,CONFIRM_RESET_SCREEN,{
-                    sessionId: get(res, "otpToken.sessionId"),
-                    email
-                })
-            } else if (get(res, "code") === 1) {
-                Navigation.showModal(hiddenModal(ALERT_ACCOUNT_ACTIVE))
-            } else {
-                toast(get(res, "message").t())
+            try {
+                let res = await authService.resetPassword(email);
+                console.log(res,"REss");
+                setDisabled(false)
+                if (get(res, "status")) {
+                    pushSingleScreenApp(componentId,CONFIRM_RESET_SCREEN,{
+                        sessionId: get(res, "otpToken.sessionId"),
+                        email
+                    })
+                } else if (get(res, "code") === 1) {
+                    Navigation.showModal(hiddenModal(ALERT_ACCOUNT_ACTIVE))
+                } else {
+                    toast(get(res, "message").t())
+                }
+            } catch (error) {
+                console.log(error,"err");
             }
+           
         }
     }
 

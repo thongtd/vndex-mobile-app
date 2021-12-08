@@ -60,6 +60,7 @@ const RegisterScreen = ({
         } else{
             try {
                 let res = await authService.checkRegister(email);
+                console.log(res,"res reg")
                 if (get(res, "result") === 'ok') {
                     if (get(res, "data.code") === 7) {
                         setDisabled(false)   
@@ -73,6 +74,7 @@ const RegisterScreen = ({
                     }
                 }
             } catch (error) {
+                console.log(error,"err reg")
                 setDisabled(false)
             }
         }

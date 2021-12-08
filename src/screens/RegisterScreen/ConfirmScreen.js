@@ -60,6 +60,7 @@ const ConfirmScreen = ({
                 }
             })
                 .catch(err => {
+                    console.log(err,"Err");
                     setDisabled(false)
                 })
         }

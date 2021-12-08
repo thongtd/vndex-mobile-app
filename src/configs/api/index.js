@@ -12,7 +12,7 @@ export const MARKET_API = {
 }
 
 //Exchange
-const EXCHANGE_URL = env === "dev" ? 'https://sandbox-exchange-api.vndex.io/' : 'https://api.financex.io/';
+const EXCHANGE_URL = env === "dev" ? 'http://54.169.221.223:6870/' : 'https://api.financex.io/';
 // const EXCHANGE_URL = 'http://dev-api.financex.io/';
 export const EXCHANGE_API = {
     CHECK_API: `${EXCHANGE_URL}api/health-check`,

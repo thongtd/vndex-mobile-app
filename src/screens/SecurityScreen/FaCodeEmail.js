@@ -111,6 +111,7 @@ const FaCodeEmail = ({
             if (validate()) {
                 setDisabled(true)
                 let res = await authService.enableEmail(Password, Email);
+                console.log(res,"ress");
                 setDisabled(false)
                 if (get(res, "data.status")) {
                     toast(get(res, "data.message").t());
@@ -121,6 +122,7 @@ const FaCodeEmail = ({
                 }
             }
         } catch (error) {
+            console.log(error,"errr");
             setDisabled(false)
         }
     }
