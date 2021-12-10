@@ -19,13 +19,14 @@ const LayoutSplashScreen = ({
     ...rest
 }) => {
     return (
-        <LinearGradient
-            start={{ x: 0.0, y: 0.25 }}
-            end={{ x: 0.5, y: 1.0 }}
-            colors={[colors.gradientFrom, colors.gradientTo]} 
-            style={stylest.linearGradient}>
+        // <LinearGradient
+        //     start={{ x: 0.0, y: 0.25 }}
+        //     end={{ x: 0.5, y: 1.0 }}
+        //     colors={[colors.gradientFrom, colors.gradientTo]} 
+        //     style={stylest.linearGradient}>
         <View style={{
-            flex: 1
+            flex: 1,
+            backgroundColor:colors.baseBg
         }}>
             
                 <SafeAreaView >
@@ -36,13 +37,13 @@ const LayoutSplashScreen = ({
                     >
                         <Spinner visible={isLoadding} />
                         <View style={{
-                            paddingHorizontal: "12%",
+                            paddingHorizontal: "7%",
                             height: isIos() ? (hasNotch ? fullHeight - 60 : fullHeight - 20) : fullHeight,
                         }}>
 
-                            {isSplashScreen ? (<View style={stylest.viewLogo}>
+                            {/* {isSplashScreen ? (<View style={stylest.viewLogo}>
                                 <Image source={icons.logo} style={stylest.logo} resizeMode={"contain"} />
-                            </View>) : <WellCome />}
+                            </View>) : <WellCome />} */}
                             <View style={{
                                 flex: 1,
                                 height: "100%"
@@ -57,7 +58,7 @@ const LayoutSplashScreen = ({
             
         </View>
 
-        </LinearGradient>
+        // </LinearGradient>
     );
 }
 LayoutSplashScreen.propTypes = {

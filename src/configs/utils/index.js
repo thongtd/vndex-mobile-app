@@ -393,6 +393,30 @@ export function checkStatusPlatform(ios, android) {
         return android
     }
 }
+export function hiddenTabbarShowHeader(title) {
+    return {
+        bottomTabs: {
+            visible: false,
+            drawBehind: true
+        },
+        statusBar: {
+            backgroundColor: 'transparent',
+            drawBehind: true,
+            visible: true
+        },
+        topBar: {
+            visible: true,
+            drawBehind: true,
+            title:{
+                text: title,
+                color: colors.text
+              },
+              background: {
+                color: colors.navigation
+              }
+        }
+    }
+}
 export function hiddenTabbar() {
     return {
         bottomTabs: {

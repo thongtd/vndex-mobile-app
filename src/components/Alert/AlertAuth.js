@@ -35,7 +35,7 @@ const AlertAuth = ({
                     <View />
                     <ButtonIcon
                         onPress={dismissModal}
-                        style={[styles.icon, { marginRight: -20 }]} color={colors.text} size={17} name="times" />
+                        style={[styles.icon, { marginRight: -20 }]} color={colors.black} size={17} name="times" />
                 </LayoutSpaceBetween>
                 {isTitle && <TextFnx style={stylest.textTitle} value={title} />}
                 {customView}
@@ -50,7 +50,7 @@ const stylest = StyleSheet.create({
         backgroundColor: colors.transparent
     },
     block: {
-        backgroundColor: colors.background,
+        backgroundColor: colors.text,
         position: "absolute",
         width: "90%",
         alignSelf: "center",
@@ -60,6 +60,6 @@ const stylest = StyleSheet.create({
         paddingHorizontal: 20,
         paddingBottom: 40,
     },
-    textTitle: { paddingBottom: 10, color: colors.highlightTitle }
+    textTitle: { paddingBottom: 10, color: colors.black }
 })
 export default AlertAuth;

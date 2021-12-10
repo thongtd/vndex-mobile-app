@@ -8,7 +8,7 @@ import { authService } from '../../../services/authentication.service';
 import { toast, get, formatMessageByArray, emitEventEmitter, setTokenAndUserInfo } from '../../../configs/utils';
 import { pushSingleScreenApp, WALLET_SCREEN, CONFIRM_LOGIN_SCREEN, ALERT_ACCOUNT_ACTIVE } from '../../../navigation';
 import { IdNavigation, constant } from '../../../configs/constant';
-import { showModal, pushTabBasedApp } from '../../../navigation/Navigation';
+import { showModal, pushTabBasedApp, pushWithHeaderSingleScreenApp } from '../../../navigation/Navigation';
 
 import { marketService } from '../../../services/market.service';
 export function* asyncGetCountries() {
@@ -52,7 +52,7 @@ export function* asyncCheckLogin({ payload }) {
             password:get(payload, "password"),
             twoFactorType:get(res,"data.twoFactorType")
           }
-          pushSingleScreenApp(payload.componentId,CONFIRM_LOGIN_SCREEN,twoFa)
+          pushWithHeaderSingleScreenApp(payload.componentId,CONFIRM_LOGIN_SCREEN,twoFa,"security verification".t())
         } else if (get(res, "data.isNotAllowed")) {
           showModal(ALERT_ACCOUNT_ACTIVE, {
             email: get(payload, "email")

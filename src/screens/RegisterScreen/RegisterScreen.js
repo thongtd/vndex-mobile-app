@@ -83,42 +83,45 @@ const RegisterScreen = ({
         <LayoutSplashScreen
         isLoadding={disabled}
         >
+             <View style={stylest.textRegister}>
+                {/* <TextFnx space={10} value={`${"I_HAVE_ACCOUNT".t()} `} /> */}
+                <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
+            </View>
             <View style={stylest.title}>
                 <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"REGISTER".t()} />
             </View>
             <Button
+                isLabel
+                label={"CHOOSE_YOUR_COUNTRY".t()}
                 isPlaceholder={false}
                 spaceVertical={10}
                 onInput={handleSelectCountry}
                 isInput
-                isInputCircle
                 iconRight="caret-down"
                 iconLeft="globe-americas"
                 placeholder={get(country, "name")}
             />
             <Input
-            onSubmitEditing={handleSubmitCheckEmail}
+                isLabel
+                label="Email"
+                onSubmitEditing={handleSubmitCheckEmail}
                 value={email}
                 onChangeText={handleChangeEmail}
                 keyboardType={"email-address"}
                 spaceVertical={10}
-                isIconLeft
-                nameIconLeft={"envelope"}
                 placeholder={"Enter your email or phone".t()}
-                isCircle />
+                // isCircle
+                 />
             <Button
+                isButtonCircle={false}
                 disabled={disabled}
                 onSubmit={handleSubmitCheckEmail}
-                spaceVertical={10}
+                spaceVertical={25}
                 isSubmit
-                isButtonCircle
                 textSubmit={"NEXT".t()}
             />
 
-            <View style={stylest.textRegister}>
-                <TextFnx space={10} value={`${"I_HAVE_ACCOUNT".t()} `} />
-                <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
-            </View>
+           
             <ButtonFooterAuth 
             textLeft=""
             componentId={componentId}
@@ -130,12 +133,12 @@ const stylest = StyleSheet.create({
     blockCheckbox: { flexDirection: "row", alignItems: "center" },
     title: {
         alignItems: "center",
-        paddingTop: 65,
-        paddingBottom: 10
+        paddingTop: 31,
+        paddingBottom: 32
     },
     textRegister: {
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "flex-end",
         // marginVertical: 10
     },
     textBottom: {

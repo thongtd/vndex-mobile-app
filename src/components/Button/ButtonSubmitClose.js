@@ -20,7 +20,7 @@ const ButtonSubmitClose = ({
             {...rest}
         >
             <View style={[isButtonCircle?stylest.btnCircle:stylest.btn,{backgroundColor:bgButtonColor},style]}>
-                <TextFnx value={title} />
+                <TextFnx color={colors.black} value={title} />
             </View>
         </TouchablePreview>
     </View>
@@ -33,6 +33,7 @@ const stylest = StyleSheet.create({
         height: 40,
         justifyContent:"center",
         alignItems:"center",
+        borderRadius: 8,
         
     },
     btnCircle:{

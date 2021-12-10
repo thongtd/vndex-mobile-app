@@ -11,7 +11,7 @@ const TextDot = ({
     style,
     size,
     weight,
-    colorDot=colors.statusBar,
+    colorDot=colors.black,
     sizeDot=13
 }) => (
     <View style={{flexDirection:"row",

@@ -18,7 +18,7 @@ import registerScreens from './registerScreens';
 import colors from '../configs/styles/colors';
 import { optionTabbar, Tabbar } from './helpers';
 import { IdNavigation } from '../configs/constant';
-import { hiddenModal, hiddenTabbar, isSameScreen, resetScreenGlobal } from '../configs/utils';
+import { hiddenModal, hiddenTabbar,hiddenTabbarShowHeader, isSameScreen, resetScreenGlobal } from '../configs/utils';
 
 // Register all screens on launch
 registerScreens();
@@ -88,6 +88,18 @@ export function pushSingleScreenApp(componentId, screen, passProps = {}, options
       name: screen,
       passProps,
       options: hiddenTab ? hiddenTabbar() : options
+    }
+  })
+}
+export function pushWithHeaderSingleScreenApp(componentId, screen, passProps = {},title, options = {}) {
+  if(isSameScreen(screen)){
+    return;
+  }
+  return Navigation.push(componentId, {
+    component: {
+      name: screen,
+      passProps,
+      options: {...hiddenTabbarShowHeader(title),...options}
     }
   })
 }

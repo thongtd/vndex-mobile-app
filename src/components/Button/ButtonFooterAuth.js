@@ -6,6 +6,7 @@ import { IdNavigation } from '../../configs/constant';
 import { WALLET_SCREEN, RESET_SCREEN, pushSingleScreenApp, pushTabBasedApp, LOGIN_SCREEN } from '../../navigation';
 import { hiddenTabbar, checkIndexSetting } from '../../configs/utils';
 import { pop } from '../../navigation/Navigation';
+import colors from '../../configs/styles/colors';
 
 const ButtonFooterAuth = ({
     hasBack,
@@ -23,8 +24,8 @@ const ButtonFooterAuth = ({
     onLeft = () => pushSingleScreenApp(componentId, RESET_SCREEN, {}, hiddenTabbar()),
 }) => (
         <View style={stylest.textBottom}>
-            <ButtonWithTitle space={10} onPress={onLeft} title={textLeft} />
-            <ButtonWithTitle space={10} onPress={onRight} title={textRight} />
+            <ButtonWithTitle color={colors.subText} space={10} onPress={onLeft} title={textLeft} />
+            <ButtonWithTitle color={colors.subText} space={10} onPress={onRight} title={textRight} />
         </View>
     );
 const stylest = StyleSheet.create({
@@ -33,8 +34,8 @@ const stylest = StyleSheet.create({
         bottom: 20,
         flexDirection: "row",
         justifyContent: "space-between",
-        width: "120%",
-        left: "-10%"
+        width: "100%",
+        // left: "-10%"
     },
 })
 export default ButtonFooterAuth;

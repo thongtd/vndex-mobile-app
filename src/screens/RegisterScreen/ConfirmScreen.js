@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, Linking } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import colors from '../../configs/styles/colors';
 import TextFnx from '../../components/Text/TextFnx';
 import Input from '../../components/Input';
@@ -7,7 +8,7 @@ import Button from '../../components/Button/Button';
 import { LayoutSplashScreen } from '../../components';
 import ButtonWithTitle from '../../components/Button/ButtonWithTitle';
 import Icon from '../../components/Icon';
-import CheckBox from 'react-native-check-box';
+// import CheckBox from 'react-native-check-box';
 import ModalAlert from '../../components/Alert/AlertNoticePassword';
 import { Navigation } from 'react-native-navigation';
 import { ALERT_NOTICE_PASSWORD, ALERT_ACCOUNT_ACTIVE, WALLET_SCREEN, LOGIN_SCREEN, pushSingleScreenApp } from '../../navigation';
@@ -69,11 +70,16 @@ const ConfirmScreen = ({
         <LayoutSplashScreen
             isLoadding={disabled}
         >
+            <View style={stylest.textRegister}>
+                <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(componentId, LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
+            </View>
             <View style={stylest.title}>
                 <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"REGISTER".t()} />
             </View>
 
             <Input
+                isLabel
+                label={"PASSWORD".t()}
                 styleRight={{
                     borderRightWidth: 1,
                     borderRightColor:colors.iconButton ,
@@ -81,32 +87,33 @@ const ConfirmScreen = ({
                 }}
                 isSecurity
                 onChangeText={(text) => setPassword(text)}
-                // secureTextEntry
                 onPressButtonRight={handleButtonRight}
                 nameIconLeft="lock"
                 spaceVertical={10}
                 isIconLeft
                 placeholder={"PASSWORD".t()}
-                isCircle
                 isButtonRight
                 nameIconRight="exclamation-circle"
             />
             <Input
+            isLabel
+            label={"CONFIRM_PASSWORD".t()}
                 isSecurity
                 onChangeText={(text) => setRePassword(text)}
-                // secureTextEntry
                 spaceVertical={10}
                 isIconLeft
                 nameIconLeft={"lock"}
                 placeholder={"CONFIRM_PASSWORD".t()}
-                isCircle />
+                />
             <Input
+            isLabel
+            label={"REFERRAL_ID".t()}
                 onChangeText={(text) => setReferralId(text)}
                 spaceVertical={10}
                 isIconLeft
                 nameIconLeft={"user-friends"}
                 placeholder={"REFERRAL_ID".t()}
-                isCircle />
+                />
             {/* <Input
                 handleResend={() => console.log("k")}
                 onSubmitEditing={doRegister}
@@ -120,18 +127,30 @@ const ConfirmScreen = ({
                 isPaste
                 isCircle /> */}
 
-            <View style={stylest.blockCheckbox}>
-                <CheckBox
+            <View style={[stylest.blockCheckbox,{height:20, marginTop:10}]}>
+            <CheckBox
+            style={{ height: 20, width: 20 }}
+            boxType="square"
+            onTintColor="orange"
+            onCheckColor="orange"
+            
+          value={isCheck}
+          onValueChange={() => {
+            setCheck(!isCheck)
+        }}
+        />
+         <TextFnx spaceLeft={10} color={colors.subText} value={`${"I_ALREADED_READ".t()} `} />
+                {/* <CheckBox
                     onClick={() => {
                         setCheck(!isCheck)
                     }}
                     checkBoxColor={colors.green}
                     isChecked={isCheck}
-                    rightTextStyle={{ color: colors.background }}
+                    rightTextStyle={{ color: colors.text }}
                     rightTextView={
-                        <TextFnx value={`${"I_ALREADED_READ".t()} `} />
+                        <TextFnx color={colors.subText} value={`${"I_ALREADED_READ".t()} `} />
                     }
-                />
+                /> */}
                 <ButtonWithTitle
                     onPress={() => Linking.openURL("LINK_POLICY".t())}
                     color={colors.highlight}
@@ -139,20 +158,17 @@ const ConfirmScreen = ({
             </View>
             <Button
                 disabled={disabled}
-                textSubmit={"Complete".t()}
+                textSubmit={"CreateAccount".t()}
                 onSubmit={doRegister}
-                spaceVertical={10}
+                spaceVertical={25}
                 isSubmit
-                isButtonCircle />
+                isButtonCircle={false} />
 
-            <View style={stylest.textRegister}>
-                <TextFnx space={10} value={`${"I_HAVE_ACCOUNT".t()} `} />
-                <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(componentId, LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
-            </View>
-            <ButtonWithTitle space={10} onPress={() => Navigation.pop(componentId)} style={[stylest.textRegister, { alignItems: 'center', }]}>
+            
+            {/* <ButtonWithTitle space={10} onPress={() => Navigation.pop(componentId)} style={[stylest.textRegister, { alignItems: 'center', }]}>
                 <Icon name="arrow-left" color={colors.background} />
-                <TextFnx value={` ${"BACK".t()}`} />
-            </ButtonWithTitle>
+                <TextFnx color={colors.subText} value={` ${"BACK".t()}`} />
+            </ButtonWithTitle> */}
             <ButtonFooterAuth
                 textLeft={""}
             />
@@ -169,7 +185,7 @@ const stylest = StyleSheet.create({
     },
     textRegister: {
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "flex-end",
         // marginVertical: 10
     },
     textBottom: {

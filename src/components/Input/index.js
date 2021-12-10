@@ -114,7 +114,7 @@ const Input = ({
                         secureTextEntry={isSecurity || rest.secureTextEntry}
                         onChangeText={handleChange}
                         value={hasValue ? value : valueInput}
-                        style={style}
+                        style={[{color:colors.text},style]}
                         placeholderTextColor={colors.description}
                         placeholder={placeholder}
                         onSubmitEditing={onSubmitEditing}
@@ -186,13 +186,14 @@ const stylest = StyleSheet.create({
     },
     inputView: {
         width: "100%",
-        borderColor: colors.line,
+        // borderColor: colors.line,
         borderWidth: 0.5,
         height: 40,
         flexDirection: "row",
         alignItems: "center",
         paddingLeft: 10,
-        backgroundColor: colors.background
+        backgroundColor: colors.background,
+        borderRadius: 5,
     },
     inputCircle: {
         width: "100%",
@@ -209,7 +210,7 @@ const stylest = StyleSheet.create({
         height: 40, flex: 1
     },
     label: {
-        paddingVertical: 15,
+        paddingTop: 10,
         color: colors.subText,
 
     },

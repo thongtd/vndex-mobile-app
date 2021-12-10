@@ -13,7 +13,7 @@ import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
 import { CHECK_LOGIN, useActionsAuthen } from '../../redux/modules/authentication/actions';
 import { createAction, toast, size, validateEmail, jwtDecode, listenerEventEmitter, get } from '../../configs/utils';
 import { useDispatch } from "react-redux"
-import { pushSingleScreenApp, REGISTER_SCREEN, LOGIN_SCREEN } from '../../navigation';
+import { pushSingleScreenApp, REGISTER_SCREEN, LOGIN_SCREEN, RESET_SCREEN } from '../../navigation';
 import { pop } from '../../navigation/Navigation';
 import ButtonBack from '../../components/Button/ButtonBack';
 import { constant } from '../../configs/constant';
@@ -92,18 +92,29 @@ const LoginScreen = ({
     <LayoutSplashScreen
       isLoadding={disabled}
     >
+       <View style={[stylest.textRegister,{justifyContent:"flex-end"}]}>
+        
+        <ButtonWithTitle
+          space={10}
+          color={colors.highlight} onPress={() => pushSingleScreenApp(componentId, REGISTER_SCREEN)} title={"REGISTER".t()} />
+      </View>
       <View style={stylest.title}>
         <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"LOGIN".t()} />
       </View>
       <Input
+        isLabel
+        label={"Email"}
         onChangeText={(text) => setemail(text)}
         nameIconLeft="user-alt"
         spaceVertical={10}
         isIconLeft
         keyboardType={"email-address"}
         placeholder="Email"
-        isCircle />
+        // isCircle 
+        />
       <Input
+        isLabel
+        label={"PASSWORD".t()}
         onSubmitEditing={handleLogin}
         onChangeText={(text) => setpassword(text)}
         spaceVertical={10}
@@ -111,21 +122,22 @@ const LoginScreen = ({
         nameIconLeft={"lock"}
         isSecurity
         placeholder={"PASSWORD".t()}
-        isCircle /> 
+        // isCircle 
+        /> 
       <Button
         disabled={disabled}
         onSubmit={handleLogin}
-        spaceVertical={10} isSubmit isButtonCircle />
-
-      <View style={stylest.textRegister}>
-        <TextFnx
-          space={10}
-          value={`${"NOT_REGISTERED_YET".t()} `} />
+        spaceVertical={25} isSubmit 
+        isButtonCircle={false} 
+        />
+ <View style={stylest.textRegister}>
+        
         <ButtonWithTitle
           space={10}
-          color={colors.highlight} onPress={() => pushSingleScreenApp(componentId, REGISTER_SCREEN)} title={"REGISTER".t()} />
+          color={colors.highlight} onPress={() => pushSingleScreenApp(componentId, RESET_SCREEN)} title={"FORGOT_PASSWORD".t()} />
       </View>
-      <ButtonFooterAuth hasBack={hasBack} componentId={componentId} />
+     
+      <ButtonFooterAuth textLeft="" hasBack={hasBack} componentId={componentId} />
     </LayoutSplashScreen>
   );
 }

@@ -37,9 +37,11 @@ const Button = ({
     bgButtonColor,
     spaceHorizontal,
     sizeIconRight,
+    label,
     ...rest
 }) => (
         <>
+        {rest.isLabel && <TextFnx style={stylest.label} value={label} />}
             {(isSubmit || isClose) && (
                 <View style={[stylest.flexRow, { marginVertical: spaceVertical }]}>
                     {isSubmit && <ButtonSubmitClose
@@ -105,7 +107,8 @@ const stylest = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         paddingLeft: 10,
-        backgroundColor: colors.background
+        backgroundColor: colors.background,
+        borderRadius: 5,
     },
     inputCircle: {
         width: "100%",
@@ -137,7 +140,12 @@ const stylest = StyleSheet.create({
         height: 40,
         lineHeight: 40,
         textAlign: "center"
-    }
+    },
+    label: {
+        paddingTop: 10,
+        color: colors.subText,
+
+    },
 })
 
 Button.propTypes = {
