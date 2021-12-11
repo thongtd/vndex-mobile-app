@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { fullHeight, isIos } from '../../configs/utils';
 import DeviceInfo from 'react-native-device-info';
 import Spinner from './Spinner';
+import { StatusBar } from 'react-native';
 const { StatusBarManager } = NativeModules;
 let hasNotch = DeviceInfo.hasNotch();
 const LayoutSplashScreen = ({
@@ -29,6 +30,7 @@ const LayoutSplashScreen = ({
             backgroundColor:colors.baseBg
         }}>
             
+            <StatusBar barStyle="light-content"/>
                 <SafeAreaView >
 
                     <KeyboardAwareScrollView

@@ -11,6 +11,7 @@ import NoteImportant from '../../components/Text/NoteImportant';
 import { useDispatch, useSelector } from "react-redux"
 import { CHECK_STATE_LOGIN } from '../../redux/modules/authentication/actions';
 import { pushSingleScreenApp, LOGIN_SCREEN } from '../../navigation';
+import colors from '../../configs/styles/colors';
 const ChangePasswordScreen = ({
     componentId,
 }) => {
@@ -100,6 +101,8 @@ const ChangePasswordScreen = ({
             isScroll={true}
         >
             <Input
+                isLabel
+                label={"Old password".t()}
                 value={OldPassword}
                 isSecurity
                 placeholder={"Old password".t()}
@@ -107,6 +110,8 @@ const ChangePasswordScreen = ({
                 onChangeText={(text) => setOldPassword(text)}
             />
             <Input
+                isLabel
+                label={"New Password".t()}
                 value={NewPassword}
                 isSecurity
                 placeholder={"New Password".t()}
@@ -114,6 +119,8 @@ const ChangePasswordScreen = ({
                 onChangeText={(text) => setNewPassword(text)}
             />
             <Input
+                isLabel
+                label={"Confirm New Password".t()}
                 value={ReNewPassword}
                 isSecurity
                 placeholder={"Confirm New Password".t()}
@@ -121,6 +128,8 @@ const ChangePasswordScreen = ({
                 onChangeText={(text) => setReNewPassword(text)}
             />
             {TwoFactorEnable && <Input
+                isLabel
+                label={"2FA_CODE".t()}
                 handleResend={getSessionId}
                 value={VerifyCode}
                 isResend={TwoFAType === constant.TWO_FACTOR_TYPE.EMAIL_2FA ? true : false}
@@ -129,6 +138,7 @@ const ChangePasswordScreen = ({
                 spaceVertical={10}
                 onChangeText={(text) => setVerifyCode(text)}
             />}
+            {TwoFAType === constant.TWO_FACTOR_TYPE.EMAIL_2FA?(<TextFnx space={10} color={colors.description}>{"Enter the 6 numbers sent to the email".t()} {Email}</TextFnx>):(<TextFnx color={colors.description} space={10}>{"Enter 6 numbers google authenticator from".t()} {Email}</TextFnx>)}
             <Button
                 disabled={Disabled}
                 isSubmit

@@ -66,7 +66,7 @@ const BackupKeyScreen = ({
                 <LayoutCenter>
                     <TextFnx space={10} align="center" value={"SAVE_CODE_STEP_3".t()} color={colors.text} />
                     <View style={stylest.blockValue}>
-                        <TextFnx size={20} align="center" value={ManualEntryKey} color={colors.highlightTitle} />
+                        <TextFnx size={20} align="center" value={ManualEntryKey} color={colors.highlight} />
                     </View>
                     <TouchablePreview
                         onPress={() => handleCopy(ManualEntryKey)}
@@ -74,8 +74,8 @@ const BackupKeyScreen = ({
                         <View
                             style={stylest.blockBtn}
                         >
-                            <Icon size={18} color={colors.highlightTitle} name={"copy"} />
-                            <TextFnx size={15} color={colors.highlightTitle} value={`  ${"COPY".t()}`} />
+                            <Icon size={18} color={colors.description} name={"copy"} />
+                            <TextFnx size={15} color={colors.description} value={`  ${"COPY".t()}`} />
                         </View>
                     </TouchablePreview>
 
@@ -96,7 +96,7 @@ const BackupKeyScreen = ({
 const stylest = StyleSheet.create({
     blockBtn: {
         height: 50,
-        borderColor: colors.statusBar,
+        borderColor: colors.highlight,
         borderWidth: 0.5,
         width: 150,
         borderRadius: 5,
@@ -109,7 +109,7 @@ const stylest = StyleSheet.create({
         height: 60,
         borderWidth: 0.5,
         borderColor: colors.line,
-        backgroundColor: colors.btnBlur,
+        backgroundColor: colors.background,
         justifyContent: "center",
         width: "100%",
         marginVertical: 10,

@@ -1,8 +1,11 @@
+import React from "react"
+import Lock from "assets/svg/ic_lock.svg"
+import Email from "assets/svg/ic_email.svg"
 export default {
     copy:require("../../assets/icons/ic_copy.png"),
     ggAuthenL: require("../../assets/images/gg_authen_l.png"),
     ggAuthenL2: require("../../assets/images/gg_authen2_l.png"),
-    logo: require("../../assets/images/logo.png"),
+    logo: require("assets/svg/Logo.svg"),
     bg: require("../../assets/images/bg.jpg"),
     swap: require("../../assets/icons/swap_ic.png"),
     swap_right: require("../../assets/icons/swap_right.png"),
@@ -22,8 +25,8 @@ export default {
     gmail: require("../../assets/icons/ic_gmail.png"),
     medium: require("../../assets/icons/ic_medium.png"),
     fb: require("../../assets/icons/ic_fb.png"),
-    gg2fa: require("../../assets/icons/ic_gg2FA.png"),
-    email2fa: require("../../assets/icons/ic_email2FA.png"),
+    gg2fa: <Lock />,
+    email2fa: <Email />,
     withdraw: require("../../assets/icons/ic_withdraw.png"),
     deposit: require("../../assets/icons/ic_deposit.png"),
     emailSupport: require("../../assets/icons/icon_support1.png"),

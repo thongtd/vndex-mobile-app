@@ -4,12 +4,13 @@ import { fullWidth, fullHeight } from '../../configs/utils';
 import {
     UIActivityIndicator,
 } from 'react-native-indicators';
+import colors from '../../configs/styles/colors';
 const Spinner = ({
     visible
 }) => (
         <>
             {visible && <View style={stylest.spinner}>
-                <UIActivityIndicator />
+                <UIActivityIndicator color={colors.text} />
             </View>}
         </>
 

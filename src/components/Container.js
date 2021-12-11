@@ -8,6 +8,8 @@ import Spinner from './Layout/Spinner';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import LayoutSplashScreen from './Layout/LayoutSplashScreen';
 import TaskBackground from '../redux/Provider/TaskBackground';
+import { StatusBar } from 'react-native';
+import colors from '../configs/styles/colors';
 const Container = ({
     children,
     isTopBar = true,
@@ -39,6 +41,7 @@ const Container = ({
     isFilter
 }) => (
         <>
+        <StatusBar barStyle="light-content" />
             <TaskBackground
                 componentId={componentId}
             />
@@ -70,7 +73,7 @@ const Container = ({
                             isFilter={isFilter}
                         />}
                         {customTopBar && customTopBar}
-                        <View style={[stylest.container, { paddingTop: space }, isFlex && { flex: 1 }, style]}>
+                        <View style={[stylest.container, { paddingTop: space, backgroundColor:colors.baseBg }, isFlex && { flex: 1 }, style]}>
                             <Spinner visible={isLoadding} />
                             {isScroll ? (
                                 <KeyboardAwareScrollView
@@ -133,8 +136,9 @@ Container.propTypes = {
 }
 const stylest = StyleSheet.create({
     container: {
-        marginHorizontal: spacingApp,
-        zIndex: 1
+        paddingHorizontal: spacingApp,
+        zIndex: 1,
+        
     }
 });
 export default Container;

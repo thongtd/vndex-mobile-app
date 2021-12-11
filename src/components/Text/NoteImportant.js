@@ -11,19 +11,19 @@ const NoteImportant = ({
     isTitle=true,
     space=10,
     hasDot,
-    isRed
+    isRed=true
 }) => (
         <View style={{marginVertical:space}}>
-        {isTitle &&<View style={stylest.title}>
+        {/* {isTitle &&<View style={stylest.title}>
             <Icon name={"exclamation-triangle"} color={colors.yellow} size={16} />
             <TextFnx style={stylest.textTitle} value={`  ${"Important Note".t().toUpperCase()}`} />
-        </View>}
+        </View>} */}
 
         
         {(size(arrNote) === 1 && !hasDot) ?<TextFnx style={
             !isRed &&
             {
-            textAlign:"center"
+            // textAlign:"center"
         }} color={isRed?colors.red:colors.text} value={arrNote[0]} />:arrNote.map((item, index) => {
                 return (
                     <TextDot colorDot={colors.subText} key={`key-${index}`} value={item} color={colors.subText} />
@@ -39,7 +39,7 @@ const stylest = StyleSheet.create({
         marginBottom:8
     },
     textTitle:{
-        marginBottom: -3,
+        // marginBottom: -3,
         fontSize: 13,
         fontWeight:"bold"
     }

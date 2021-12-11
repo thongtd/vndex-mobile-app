@@ -1,5 +1,5 @@
 export default {
-    red:"#ff315d",
+    red:"#D23131",
     yellow:"#f9ca06",
     green:"#00d154",
     black:'#000000',
@@ -8,7 +8,7 @@ export default {
     subText:"#FCFCFD",
     text:"#FFFFFF",
     description:"#8A8779",
-    line:"#181818",
+    line:"#252424",
     iconButton:"#FFBC0F",
     statusBar:"#1f71e8",
     background:"#2F2F2F",
@@ -19,6 +19,6 @@ export default {
     highlight:"#FFBC0F",
     transparent:"#00000036",
     btnBlur:"#e4f0f9",
-    baseBg:'#000',
-    navigation:'#181818'
+    baseBg:'#181818',
+    navigation:'#343a40'
 }

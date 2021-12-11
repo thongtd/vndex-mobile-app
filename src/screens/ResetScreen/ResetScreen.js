@@ -6,11 +6,12 @@ import Input from '../../components/Input';
 import Button from '../../components/Button/Button';
 import { LayoutSplashScreen } from '../../components';
 import { Navigation } from 'react-native-navigation';
-import { ALERT_NOTICE_PASSWORD, PICKER_SEARCH, CONFIRM_RESET_SCREEN, ALERT_ACCOUNT_ACTIVE, pushSingleScreenApp } from '../../navigation';
+import { ALERT_NOTICE_PASSWORD, PICKER_SEARCH, CONFIRM_RESET_SCREEN, ALERT_ACCOUNT_ACTIVE, pushSingleScreenApp, LOGIN_SCREEN } from '../../navigation';
 import { hiddenModal, size, toast, validateEmail, get } from '../../configs/utils';
 import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
 import { authService } from '../../services/authentication.service';
 import ButtonBack from '../../components/Button/ButtonBack';
+import ButtonWithTitle from '../../components/Button/ButtonWithTitle';
 
 const ResetScreen = ({
     componentId
@@ -51,10 +52,15 @@ const ResetScreen = ({
         <LayoutSplashScreen
         isLoadding={disabled}
         >
+             <View style={stylest.textRegister}>
+                <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
+            </View>
             <View style={stylest.title}>
                 <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"RESET_PASSWORD".t()} />
             </View>
             <Input
+                isLabel
+                label="Email"
             onSubmitEditing={handleNext}
                 value={email}
                 keyboardType={"email-address"}
@@ -62,7 +68,7 @@ const ResetScreen = ({
                 isIconLeft
                 nameIconLeft={"envelope"}
                 placeholder={"Enter your email or phone".t()}
-                isCircle
+                
                 onChangeText={(mail) => setEmail(mail)}
             />
             <Button
@@ -70,15 +76,15 @@ const ResetScreen = ({
                 onSubmit={handleNext}
                 spaceVertical={10}
                 isSubmit
-                isButtonCircle
+                isButtonCircle={false}
                 textSubmit={"NEXT".t()}
             />
             <View style={stylest.layoutFooter}>
                 <TextFnx style={stylest.noteReset} value={`${"NOTE_RESET_PASSWORD".t()} `} />
             </View>
-            <ButtonBack 
+            {/* <ButtonBack 
             componentId={componentId}
-            />
+            /> */}
             <ButtonFooterAuth
                 textLeft={""}
             />
@@ -94,8 +100,7 @@ const stylest = StyleSheet.create({
     },
     textRegister: {
         flexDirection: "row",
-        justifyContent: "center",
-        marginVertical: 10
+        justifyContent: "flex-end"
     },
     textBottom: {
         position: "absolute",
@@ -106,13 +111,13 @@ const stylest = StyleSheet.create({
         left: "-10%"
     },
     noteReset: {
-        textAlign: "center",
-        color: colors.background,
+        // textAlign: "center",
+        color: colors.red,
         paddingVertical: 10,
     },
     layoutFooter: {
-        width: "124%",
-        marginLeft: "-12%",
-    }
+        // width: "124%",
+        // marginLeft: "-12%",
+    },
 })
 export default ResetScreen;

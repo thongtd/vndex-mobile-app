@@ -1,4 +1,5 @@
 {
+  "Note Security":"Vì lý do an toàn, vui lòng KHÔNG cung cấp mã xác minh bảo mật cho bất kỳ ai.",
   "security verification":"Xác minh bảo mật",
   "Enter the 6 numbers sent to the email":"Nhập 6 số đã được gửi đến email",
   "Enter 6 numbers google authenticator from":"Enter 6 numbers Google Authenticator from",
@@ -112,7 +113,7 @@
   "SECRET_KEY": "Khóa bí mật",
   "BACK_UP_KEY": "Sao lưu khóa",
   "ACTIVATE": "Kích hoạt",
-  "SET_UP_CODE_1": "Nhập mã dự phòng vào ứng dụng Google Authenticator để nhận code",
+  "SET_UP_CODE_1": "Bạn sẽ cần phải thêm tài khoản VnDex vào ứng dụng Google Authenticator và nhập Key 16 ký tự để lấy mã xác minh.",
   "SET_UP_CODE_2": "Mã Google Authenticator",
   "DOWNLOAD_AND_INSTALL": "Tải về và cài đặt",
   "GUIDE_INSTALL": "Để bắt đầu, bạn sẽ cần cài đặt ứng dụng Google Authenticator trên điện thoại của bạn",
@@ -200,7 +201,7 @@
   "Important Note":"Lưu ý",
   "NoteChangePass": "Vì lý do bảo mật, chức năng Rút Tiền và Rút Coin tại tài khoản của bạn sẽ tạm thời bị khoá. Vui lòng thực hiện yêu cầu rút sau 24 giờ.",
   "Email Verification":"Xác thực qua Email",
-  "Google Authentication":"Xác thực Google",
+  "Google Authentication":"Xác thực Google Authenticator",
   "2FA by Email has been enabled": "Bảo mật hai lớp bằng Email đã được bật",
   "Your account has been enabled 2FA by Gooogle Authenticator": "Vui lòng tắt bảo mật hai lớp qua Google Authenticator trước khi kích hoạt Email",
   "Your account has not been actived 2FA by Google Authenticator": "Tài khoản của bạn chưa kích hoạt bảo mật hai lớp qua Google Authenticator",

@@ -7,11 +7,12 @@ import icons from '../../../configs/icons';
 const ItemSecurity = ({
     onValueChange,
     IsSwitch,
-    iconLeft=icons.email2fa,
+    iconLeft,
     isBorder=true,
+    iconLeftSvg,
     textLeft="Email Verification".t()
 }) => (
-        <ItemSetting iconLeft={iconLeft} height={90} sizeIconLeft={{
+        <ItemSetting iconLeftSvg={iconLeftSvg} height={90} sizeIconLeft={{
             width: 70,
             height: 70
         }}

@@ -8,7 +8,8 @@ import TextFnx from '../Text/TextFnx';
 import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
 import Icon from '../Icon';
 import { isAndroid } from '../../configs/utils';
-
+// import Logo from 'assets/svg/Logo.svg';
+import IcLock from 'assets/svg/ic_lock.svg';
 const ItemSetting = ({
     onPress,
     onValueChange = () => { },
@@ -18,7 +19,7 @@ const ItemSetting = ({
     nameIcon,
     colorIcon = colors.description,
     textLeft,
-    iconLeft = icons.passCode,
+    iconLeft,
     isBorder = false,
     sizeIconLeft = {
         width: 25,
@@ -27,6 +28,7 @@ const ItemSetting = ({
     sizeIconRight = 18,
     IsSwitch,
     height = 50,
+    iconLeftSvg,
     ...rest
 }) => {
     return (
@@ -35,7 +37,8 @@ const ItemSetting = ({
         >
             <View style={[stylest.container, { height: height, }, isBorder && { borderBottomWidth: 0.5 }]}>
                 <View style={stylest.blockLeft}>
-                    <Image source={iconLeft} style={sizeIconLeft} resizeMode="contain" />
+                    {iconLeftSvg && iconLeftSvg}
+                    {/* <Image source={iconLeft} style={sizeIconLeft} resizeMode="contain" /> */}
                     <TextFnx style={stylest.textLeft} value={textLeft} color={colors.text} />
                 </View>
                 {hasSwitch ? <Switch value={IsSwitch} style={isAndroid()?{marginRight:-3.5}:{}} onValueChange={onValueChange} /> : (iconRight ? <Icon size={sizeIconRight} color={colorIcon} name={"chevron-right"} /> : <TextFnx color={colors.text} value={textRight} />)}
@@ -56,6 +59,7 @@ const stylest = StyleSheet.create({
         alignItems: "center"
     },
     textLeft: {
+        color:colors.text,
         paddingLeft: "3%",
     }
 })

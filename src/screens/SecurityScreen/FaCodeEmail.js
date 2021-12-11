@@ -9,6 +9,8 @@ import { pop } from '../../navigation/Navigation';
 import { useDispatch,useSelector } from "react-redux"
 import { SET_FA_CODE } from '../../redux/modules/authentication/actions';
 import { constant } from '../../configs/constant';
+import TextFnx from '../../components/Text/TextFnx';
+import colors from '../../configs/styles/colors';
 const FaCodeEmail = ({
     componentId,
     enable,
@@ -135,6 +137,8 @@ const FaCodeEmail = ({
             title={`${disable ? "Disable".t() : "Enable".t()} ${"Email Verification".t().toLowerCase()}`}
         >
             <Input
+                isLabel
+                label={"PASSWORD".t()}
                 spaceVertical={10}
                 isSecurity
                 value={Password}
@@ -142,12 +146,16 @@ const FaCodeEmail = ({
                 onChangeText={(text) => setPassword(text)}
             />
             <Input
+                isLabel
+                label={"Email"}
                 spaceVertical={10}
                 value={Email}
                 placeholder={"Email"}
                 onChangeText={(text) => setEmail(text)}
             />
             {disable && <Input
+            isLabel
+            label={"2FA_CODE".t()}
                 isResend
                 isPaste
                 spaceVertical={10}
@@ -156,7 +164,8 @@ const FaCodeEmail = ({
                 onChangeText={(text) => setFaCode(text)}
                 handleResend={handleResend2Fa}
             />}
-
+            
+            <TextFnx space={10} color={colors.description}>{"Enter the 6 numbers sent to the email".t()} {Email}</TextFnx>
             <Button
                 spaceVertical={10}
                 isSubmit

@@ -56,10 +56,15 @@ const ConfirmResetScreen = ({
         <LayoutSplashScreen
         isLoadding={disabled}
         >
+            <View style={stylest.textRegister}>
+                <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(rest.componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
+            </View>
             <View style={stylest.title}>
                 <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"RESET_PASSWORD".t()} />
             </View>
             <Input
+                label={"PASSWORD".t()}
+                isLabel
                 isSecurity
                 value={password}
                 onChangeText={(pass) => setPassword(pass)}
@@ -68,11 +73,13 @@ const ConfirmResetScreen = ({
                 spaceVertical={10}
                 isIconLeft
                 placeholder={"PASSWORD".t()}
-                isCircle
+                // isCircle
                 isButtonRight
                 nameIconRight="exclamation-circle"
             />
             <Input
+                label={"CONFIRM_PASSWORD".t()}
+                isLabel
                 isSecurity
                 value={rePassword}
                 onChangeText={(pass) => setRePassword(pass)}
@@ -80,8 +87,11 @@ const ConfirmResetScreen = ({
                 isIconLeft
                 nameIconLeft={"lock"}
                 placeholder={"CONFIRM_PASSWORD".t()}
-                isCircle />
+                // isCircle 
+                />
             <Input
+                label={"OTP_CODE".t()}
+                isLabel
                 onSubmitEditing={handleConfirm}
                 handleResend={handleResend}
                 value={otp}
@@ -92,12 +102,17 @@ const ConfirmResetScreen = ({
                 isResend
                 spaceVertical={10}
                 placeholder={"OTP_CODE".t()}
-                isCircle />
-            <Button disabled={disabled} onSubmit={handleConfirm} spaceVertical={10} isSubmit textSubmit={"CONFIRM".t()} isButtonCircle />
-            <ButtonWithTitle space={10} onPress={() => Navigation.pop(rest.componentId)} style={[stylest.textRegister, { alignItems: 'center', }]}>
+                // isCircle 
+                />
+            <TextFnx color={colors.description} value={`${"Enter the 6 numbers sent to the email".t()} ${email}`} />
+            <Button disabled={disabled} onSubmit={handleConfirm} spaceVertical={10} isSubmit textSubmit={"CONFIRM".t()} isButtonCircle={false} />
+            <TextFnx style={{
+                color: colors.red
+            }} value={`${"NOTE_RESET_PASSWORD".t()} `} />
+            {/* <ButtonWithTitle space={10} onPress={() => Navigation.pop(rest.componentId)} style={[stylest.textRegister, { alignItems: 'center', }]}>
                 <Icon name="arrow-left" color={colors.background} />
                 <TextFnx value={` ${"BACK".t()}`} />
-            </ButtonWithTitle>
+            </ButtonWithTitle> */}
             <ButtonFooterAuth
                 textLeft=""
             />
@@ -114,8 +129,7 @@ const stylest = StyleSheet.create({
     },
     textRegister: {
         flexDirection: "row",
-        justifyContent: "center",
-        // marginVertical: 10
+        justifyContent: "flex-end"
     },
     textBottom: {
         position: "absolute",

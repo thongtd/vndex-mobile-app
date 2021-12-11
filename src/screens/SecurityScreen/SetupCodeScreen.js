@@ -8,13 +8,17 @@ import icons from '../../configs/icons';
 import { pushTabBasedApp, pushSingleScreenApp, ENABLE_2FA_GG } from '../../navigation';
 import TextFnx from '../../components/Text/TextFnx';
 import colors from '../../configs/styles/colors';
+import GGS1 from "assets/svg/ggs1.svg";
+import GGS2 from "assets/svg/ggs2.svg";
+import GGS3 from "assets/svg/ggs3.svg";
 const SetupCodeScreen = ({
     componentId,
     SecretKey
 }) => {
     const images = [
-        { url: icons.ggAuthenL, text: "SET_UP_CODE_1".t() },
-        { url: icons.ggAuthenL2, text: "SET_UP_CODE_2".t() }
+        { icon: <GGS1 />, text: "SET_UP_CODE_1".t() },
+        { icon: <GGS2 />, text: "SET_UP_CODE_1".t() },
+        { icon: <GGS3 />, text: "SET_UP_CODE_1".t() },
     ]
     return (
         <Container
@@ -43,12 +47,13 @@ const SetupCodeScreen = ({
                                 <View
                                     style={{
                                         // flex:1
+                                        alignItems:"center",
+                                        justifyContent:"center",
+                                        flexDirection:"column"
                                     }}
                                     key={`key-check-${index}`}>
                                     <TextFnx space={20} align="center" color={colors.text} value={e.text} />
-                                    <Image source={e.url}
-                                        style={stylest.image}
-                                        resizeMode={'contain'} />
+                                   {e.icon}
 
                                 </View>
                             )
@@ -87,7 +92,7 @@ const stylest = StyleSheet.create({
         marginBottom: 3,
     },
     activeDot: {
-        backgroundColor: '#3a4d92',
+        backgroundColor: colors.highlight,
         width: 20,
         height: 4,
         borderRadius: 4,

@@ -85,15 +85,17 @@ const Enable2FaGG = ({
             isLoadding={Disabled}
         >
             <Input
-                
+                isLabel
+                label={"PASSWORD".t()}
                 value={Password}
                 onChangeText={(text) => setPassword(text)}
-                
                 placeholder={"PASSWORD".t()}
                 spaceVertical={10}
                 isSecurity
             />
             <Input
+            isLabel
+            label={"Google authenticator code".t()}
                 hasValue
                 isPaste
                 keyboardType={"number-pad"}
@@ -103,6 +105,7 @@ const Enable2FaGG = ({
                 spaceVertical={10}
                 placeholder={"Google authenticator code".t()}
             />
+            
             <Button
                 disabled={Disabled}
                 spaceVertical={10}

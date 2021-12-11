@@ -66,6 +66,7 @@ export function pushTutorialScreen() {
                   visible: false,
                 },
                 statusBar: {
+                  style: 'light',
                   backgroundColor: 'transparent',
                   drawBehind: true,
                   visible: true

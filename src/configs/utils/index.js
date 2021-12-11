@@ -407,12 +407,16 @@ export function hiddenTabbarShowHeader(title) {
         topBar: {
             visible: true,
             drawBehind: true,
+            backButton: {
+                visible: true,
+                showTitle: false
+              },
             title:{
                 text: title,
                 color: colors.text
               },
               background: {
-                color: colors.navigation
+                color: colors.red
               }
         }
     }
@@ -464,6 +468,7 @@ export function hiddenModal(nameScreen, props, isHiddenLayout = true) {
                         drawBehind: true,
                         visible: true
                     },
+                    
                 }
             }
         }

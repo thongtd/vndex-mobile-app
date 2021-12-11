@@ -36,10 +36,11 @@ const TopBarView = ({
   
 }) => {
   return (
-    <LinearGradient
-      start={{ x: 0.0, y: 0.25 }}
-      end={{ x: 0.5, y: 1.0 }}
-      colors={[colors.gradientFrom, colors.gradientTo]} style={[stylest.bgLinear,style]}>
+    // <LinearGradient
+    //   start={{ x: 0.0, y: 0.25 }}
+    //   end={{ x: 0.5, y: 1.0 }}
+    //   colors={[colors.gradientFrom, colors.gradientTo]} style={[stylest.bgLinear,style]}>
+        <View style={[stylest.bgLinear,style]}>
       {children || <View style={[stylest.blockTextHeader]}>
         <ButtonIcon
         space={10}
@@ -67,7 +68,7 @@ const TopBarView = ({
           isHidden={onClickRight ? false : true}
         />
       </View>}
-    </LinearGradient>
+      </View>
   );
 
 }
@@ -119,7 +120,8 @@ const stylest = StyleSheet.create({
     height: hasNotch ? 85 : StatusBar.currentHeight > 24 ? 80 : 60,
     width: "100%",
     position: "relative",
-    marginBottom: 15
+    // marginBottom: 15,
+    backgroundColor:colors.baseBg
   },
   blockTextHeader: {
     flexDirection: "row",

@@ -52,17 +52,18 @@ const SecurityScreen = ({
             componentId={componentId}
         >
             <ItemSecurity
+                iconLeftSvg={icons.email2fa}
                 IsSwitch={(twoFactorEnable && twoFactorySerice === constant.TWO_FACTOR_TYPE.EMAIL_2FA) ? true : false}
                 onValueChange={handleFaEmail}
             />
             <ItemSecurity
                 IsSwitch={(twoFactorEnable && twoFactorySerice === constant.TWO_FACTOR_TYPE.GG2FA) ? true : false}
-                iconLeft={icons.gg2fa} textLeft={"Google Authentication".t()}
+                iconLeftSvg={icons.gg2fa} textLeft={"Google Authentication".t()}
                 isBorder={false}
                 onValueChange={handleFaGG}
             />
             <NoteImportant
-                arrNote={["EMAIL_VERIFY_NOTE".t(), "GG_VERIFY_NOTE".t()]}
+                arrNote={["Note Security".t()]}
             />
         </Container>
     );
