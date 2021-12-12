@@ -1,7 +1,7 @@
 export default {
     red:"#D23131",
     yellow:"#f9ca06",
-    green:"#00d154",
+    green:"#3A9232",
     black:'#000000',
     highlightTitle:"#448ef6",
     title:"#91c6ed",

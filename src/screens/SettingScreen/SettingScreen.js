@@ -14,7 +14,7 @@ import {
   size,
   removeTokenAndUserInfo,
 } from '../../configs/utils';
-import {constant} from '../../configs/constant';
+import {constant, fontSize} from '../../configs/constant';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   pushSingleScreenApp,
@@ -23,6 +23,7 @@ import {
   PASSCODE_SCREEN,
   CHANGE_PASSWORD,
   SECURITY_SCREEN,
+  LOGIN_SCREEN,
 } from '../../navigation';
 import {Navigation} from 'react-native-navigation';
 import i18n from 'react-native-i18n';
@@ -46,10 +47,15 @@ import St4 from 'assets/svg/st4.svg';
 import St5 from 'assets/svg/st5.svg';
 import St6 from 'assets/svg/st6.svg';
 import St7 from 'assets/svg/st7.svg';
+import Logo from 'assets/svg/Logo.svg';
 import {
   GET_CRYPTO_WALLET_SUCCESS,
   GET_FIAT_WALLET_SUCCESS,
 } from '../../redux/modules/market/actions';
+import TextFnx from '../../components/Text/TextFnx';
+import colors from '../../configs/styles/colors';
+import { StyleSheet } from 'react-native';
+import ButtonIcon from '../../components/Button/ButtonIcon';
 
 const checkLanguage = lang => {
   if (lang === 'vi-VN') {
@@ -63,6 +69,7 @@ const SettingScreen = ({componentId}) => {
   const logged = useSelector(state => state.authentication.logged);
   const isPasscode = useSelector(state => state.authentication.isPasscode);
   const langGlobal = useSelector(state => state.authentication.lang);
+  const userInfo = useSelector(state => state.authentication.userInfo);
   const [Lang, setLang] = useState(checkLanguage(checkLang(langGlobal)));
   const [IsSwitch, setIsSwitch] = useState(false);
   const handleLogout = () => {
@@ -75,6 +82,9 @@ const SettingScreen = ({componentId}) => {
     // dispatcher(createAction(GET_ASSET_CRYPTO_WALLETS_SUCCESS),[])
     // dispatcher(createAction(GET_ASSET_FIAT_WALLET_SUCCESS),[])
   };
+  const handleLogin = () =>{
+    return pushSingleScreenApp(componentId,LOGIN_SCREEN)
+  }
   const checkDatalogged = (lang = '', currency = '') => {
     if (logged) {
       const dtLogged = [
@@ -219,8 +229,53 @@ const SettingScreen = ({componentId}) => {
   return (
     <Container
       space={5}
-      isTopBar={false}
-      customTopBar={<HeaderSettingScreen componentId={componentId} />}>
+      isTopBar={true}
+      title={"Account".t()}
+      >
+        {logged?(<View>
+        <View style={stylest.flexRow}>
+          <TextFnx weight="bold" size={fontSize.f18}>
+            {get(userInfo,"email")}
+            </TextFnx>
+            <View style={{
+              backgroundColor:get(userInfo,"customerMetaData.verified")?"#152C18":"#361E21",
+              marginLeft:25,
+              paddingHorizontal:15,
+              paddingVertical:5,
+              borderRadius:5,
+            }}>
+              <TextFnx color={get(userInfo,"customerMetaData.verified")?colors.green:colors.red} size={fontSize.f14}>{get(userInfo,"customerMetaData.verified")?"Verified".t():"Not verified".t()}</TextFnx>
+            </View>
+        </View>
+        <View style={stylest.flexRow}>
+          <TextFnx color={colors.description}>
+          {"Account Type".t()}
+            </TextFnx>
+            <TextFnx spaceLeft={15}>VIP 1</TextFnx>
+        </View>
+        <View style={stylest.flexRow}>
+          <TextFnx color={colors.description}>
+            {"Referral code".t()}
+            </TextFnx>
+            <TextFnx spaceLeft={15}>{get(userInfo,"customerMetaData.referralId")}</TextFnx>
+            <ButtonIcon 
+            name="copy"
+            color={colors.highlight}
+            onPress={()=>{
+              alert("ok");
+            }}
+            />
+        </View>
+        </View>):(
+          <View style={{
+            justifyContent:"center",
+            alignItems:"center",
+            marginVertical:30
+          }}>
+            <SvgXml xml={Logo} />
+          </View>
+        )}
+        
       {DataSetting.map((item, index) => {
         return (
           <ItemSetting
@@ -237,15 +292,22 @@ const SettingScreen = ({componentId}) => {
           />
         );
       })}
-      {logged && <Button
-        textSubmit={'Logout'.t()}
-        onSubmit={handleLogout}
+      <Button
+        textSubmit={logged?'Logout'.t():'Login'.t()}
+        onSubmit={logged?handleLogout:handleLogin}
         spaceVertical={25}
         isSubmit
         isButtonCircle={false}
-      />}
+      />
     </Container>
   );
 };
 
+const stylest = StyleSheet.create({
+  flexRow:{
+    flexDirection:"row",
+    alignItems:"center",
+    paddingVertical:5
+  }
+})
 export default SettingScreen;

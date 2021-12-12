@@ -54,7 +54,7 @@ const TopBarView = ({
           isHidden={(onClickLeft || textLeft || nameLeft) ? false : true}
         />
         <View style={[stylest.flex1, stylest.viewCenter, { width: "60%" }]}>
-          <TextFnx size={16} weight={"bold"} value={title} />
+          <TextFnx size={16} weight={"bold"} color={colors.text} value={title} />
         </View>
         <ButtonIcon
           space={10}
@@ -121,7 +121,7 @@ const stylest = StyleSheet.create({
     width: "100%",
     position: "relative",
     // marginBottom: 15,
-    backgroundColor:colors.baseBg
+    backgroundColor:colors.navigation
   },
   blockTextHeader: {
     flexDirection: "row",

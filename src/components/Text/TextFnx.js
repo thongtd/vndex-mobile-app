@@ -4,7 +4,7 @@ import colors from '../../configs/styles/colors';
 import PropTypes from 'prop-types';
 const TextFnx = ({
     isDart,
-    color =isDart?colors.text: colors.background,
+    color =isDart?colors.text: colors.text,
     children,
     size = 14,
     weight = "normal",
