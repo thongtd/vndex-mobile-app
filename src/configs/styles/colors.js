@@ -20,5 +20,5 @@ export default {
     transparent:"#00000036",
     btnBlur:"#e4f0f9",
     baseBg:'#181818',
-    navigation:'#343a40'
+    navigation:'#1D1D1D'
 }

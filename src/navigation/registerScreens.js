@@ -85,6 +85,9 @@ import HistoryDepositFiat from '../screens/WalletScreen/screenChildren/HistoryDe
 import WithdrawCoinScreen from '../screens/WalletScreen/screenChildren/WithdrawCoinScreen';
 import WithdrawFiatScreen from '../screens/WalletScreen/screenChildren/WithdrawFiatScreen';
 import HistoryTransactions from '../screens/WalletScreen/screenChildren/HistoryTransactions';
+import { KycScreen } from '../screens/KycScreen';
+import { KYC_SCREEN, REF_SCREEN } from '.';
+import { RefScreen } from '../screens/RefScreen';
 
 function WrappedComponent(Component) {
   return function inject(props) {
@@ -105,6 +108,8 @@ export default function () {
   Navigation.registerComponent(WALLET_SCREEN, () => WrappedComponent(WalletScreen));
   Navigation.registerComponent(SPLASH_SCREEN, () => WrappedComponent(SplashScreen));
   Navigation.registerComponent(LOGIN_SCREEN,()=>WrappedComponent(LoginScreen));
+  Navigation.registerComponent(KYC_SCREEN,()=>WrappedComponent(KycScreen));
+  Navigation.registerComponent(REF_SCREEN,()=>WrappedComponent(RefScreen));
   Navigation.registerComponent(REGISTER_SCREEN,()=>WrappedComponent(RegisterScreen))
   Navigation.registerComponent(CONFIRM_REGISTER_SCREEN,()=>WrappedComponent(ConfirmScreen))
   Navigation.registerComponent(RESET_SCREEN,()=>WrappedComponent(ResetScreen))

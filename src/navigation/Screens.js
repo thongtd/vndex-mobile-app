@@ -2,6 +2,7 @@
 
 
 export const LOGIN_SCREEN = 'fnx.LoginScreen';
+export const KYC_SCREEN = 'fnx.KycScreen';
 export const CONFIRM_LOGIN_SCREEN = 'fnx.ConfirmLoginScreen';
 export const SPLASH_SCREEN = 'fnx.SplashScreen';
 export const WALLET_SCREEN = 'fnx.WalletScreen';
@@ -17,6 +18,7 @@ export const PASSCODE_SCREEN = 'fnx.passcodeScreen';
 export const PASSCODE_AUTH_SCREEN = 'fnx.passcodeAuthScreen';
 export const CHANGE_PASSWORD = 'fnx.changePasswordScreen';
 export const SECURITY_SCREEN = 'fnx.securityScreen';
+export const REF_SCREEN = 'fnx.RefScreen';
 export const FA_CODE_EMAIL = 'fnx.faCodeEmail';
 
 export const ENABLE_2FA_GG = 'fnx.enable2FaGG';

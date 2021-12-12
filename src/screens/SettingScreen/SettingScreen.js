@@ -24,6 +24,8 @@ import {
   CHANGE_PASSWORD,
   SECURITY_SCREEN,
   LOGIN_SCREEN,
+  KYC_SCREEN,
+  REF_SCREEN,
 } from '../../navigation';
 import {Navigation} from 'react-native-navigation';
 import i18n from 'react-native-i18n';
@@ -88,7 +90,7 @@ const SettingScreen = ({componentId}) => {
   const checkDatalogged = (lang = '', currency = '') => {
     if (logged) {
       const dtLogged = [
-        {textLeft: 'Identity verification', iconLeft: <SvgXml xml={St1}/>, iconRight: true},
+        {textLeft: 'Identity verification', iconLeft: <SvgXml xml={St1}/>, iconRight: true, onPress:onKyc},
         {
           textLeft: 'Change Password',
           iconLeft: <SvgXml xml={St2}/>,
@@ -105,8 +107,8 @@ const SettingScreen = ({componentId}) => {
         {
           textLeft: 'Refferal',
           iconLeft: <SvgXml xml={St4}/>,
-          textRight: 'VND',
-          onPress: onCurrency,
+          iconRight: true,
+          onPress: onRef,
         },
         {
           textLeft: 'Languages',
@@ -167,8 +169,8 @@ const SettingScreen = ({componentId}) => {
       setIsSwitch(false);
     }
   }, [isPasscode]);
-  const changeSwitchData = () => {
-    pushSingleScreenApp(componentId, PASSCODE_SCREEN);
+  const onKyc = () => {
+    pushSingleScreenApp(componentId, KYC_SCREEN);
   };
   const onSupport = () => {
     pushSingleScreenApp(componentId, SUPPORT_SCREEN, hiddenTabbar());
@@ -179,6 +181,9 @@ const SettingScreen = ({componentId}) => {
   const onSecurity = () => {
     pushSingleScreenApp(componentId, SECURITY_SCREEN);
   };
+  const onRef = () => {
+    pushSingleScreenApp(componentId, REF_SCREEN);
+  }
   const onLanguage = () => {
     let propsData = {
       data: [
