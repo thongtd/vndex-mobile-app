@@ -46,7 +46,7 @@ const SupportScreen = ({
            {data.map((item,index)=>{
                return <ItemSetting 
                key={index}
-                iconLeft={get(item,"iconLeft")}
+                iconLeftSvg={get(item,"iconLeft")}
                 textLeft={get(item,"textLeft").t()}
                 iconRight={get(item,"iconRight")}
                 isBorder
