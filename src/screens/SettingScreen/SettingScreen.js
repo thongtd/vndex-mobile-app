@@ -28,6 +28,7 @@ import {Navigation} from 'react-native-navigation';
 import i18n from 'react-native-i18n';
 import ItemList from '../../components/Item/ItemList';
 import {
+
   CHECK_STATE_LOGIN,
   LANGUAGES,
   SET_USER_INFO,
@@ -36,6 +37,8 @@ import {switchLangTabbar} from '../../navigation/helpers';
 import {storageService} from '../../services/storage.service';
 import {dismissAllModal} from '../../navigation/Navigation';
 import Button from '../../components/Button/Button';
+import {SvgXml} from 'react-native-svg';
+// import ButtonSubmitClose from 'components/Button/ButtonSubmitClose';
 import St1 from 'assets/svg/st1.svg';
 import St2 from 'assets/svg/st2.svg';
 import St3 from 'assets/svg/st3.svg';
@@ -43,7 +46,6 @@ import St4 from 'assets/svg/st4.svg';
 import St5 from 'assets/svg/st5.svg';
 import St6 from 'assets/svg/st6.svg';
 import St7 from 'assets/svg/st7.svg';
-import ButtonSubmitClose from 'components/Button/ButtonSubmitClose';
 import {
   GET_CRYPTO_WALLET_SUCCESS,
   GET_FIAT_WALLET_SUCCESS,
@@ -76,42 +78,42 @@ const SettingScreen = ({componentId}) => {
   const checkDatalogged = (lang = '', currency = '') => {
     if (logged) {
       const dtLogged = [
-        {textLeft: 'Xác minh danh tính', iconLeft: <St1 />, iconRight: true},
+        {textLeft: 'Identity verification', iconLeft: <SvgXml xml={St1}/>, iconRight: true},
         {
           textLeft: 'Change Password',
-          iconLeft: <St2 />,
+          iconLeft: <SvgXml xml={St2}/>,
           iconRight: true,
           onPress: onChangePassword,
         },
         {
           textLeft: 'Security',
-          iconLeft: <St3 />,
+          iconLeft: <SvgXml xml={St3}/>,
           iconRight: true,
           onPress: onSecurity,
           isBorder: true,
         },
         {
           textLeft: 'Refferal',
-          iconLeft: <St4 />,
+          iconLeft: <SvgXml xml={St4}/>,
           textRight: 'VND',
           onPress: onCurrency,
         },
         {
           textLeft: 'Languages',
-          iconLeft: <St5 />,
+          iconLeft: <SvgXml xml={St5}/>,
           textRight: lang,
           onPress: onLanguage,
           isBorder: true,
         },
         {
           textLeft: 'Support',
-          iconLeft: <St6 />,
+          iconLeft: <SvgXml xml={St6}/>,
           iconRight: true,
           onPress: onSupport,
         },
         {
           textLeft: 'About',
-          iconLeft: <St7 />,
+          iconLeft: <SvgXml xml={St7}/>,
           textRight: `V ${constant.GOOGLE_VERSION}`,
         },
       ];
@@ -121,20 +123,20 @@ const SettingScreen = ({componentId}) => {
         // { textLeft: "passcode", iconLeft: icons.passCode, hasSwitch: true, onValueChange: changeSwitchData, isBorder: true },
         {
           textLeft: 'Languages',
-          iconLeft: <St5 />,
+          iconLeft: <SvgXml xml={St5} />,
           textRight: lang,
           onPress: onLanguage,
           isBorder: true,
         },
         {
           textLeft: 'Support',
-          iconLeft: <St6 />,
+          iconLeft: <SvgXml xml={St6}/>,
           iconRight: true,
           onPress: onSupport,
         },
         {
           textLeft: 'About',
-          iconLeft: <St7 />,
+          iconLeft: <SvgXml xml={St7}/>,
           textRight: `V ${constant.GOOGLE_VERSION}`,
         },
       ];

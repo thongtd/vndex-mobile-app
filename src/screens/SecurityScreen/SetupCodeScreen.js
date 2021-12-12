@@ -16,9 +16,9 @@ const SetupCodeScreen = ({
     SecretKey
 }) => {
     const images = [
-        { icon: <GGS1 />, text: "SET_UP_CODE_1".t() },
-        { icon: <GGS2 />, text: "SET_UP_CODE_1".t() },
-        { icon: <GGS3 />, text: "SET_UP_CODE_1".t() },
+        { icon:  <SvgXml xml={GGS1} />, text: "SET_UP_CODE_1".t() },
+        { icon: <SvgXml xml={GGS2} />, text: "SET_UP_CODE_1".t() },
+        { icon: <SvgXml xml={GGS3} />, text: "SET_UP_CODE_1".t() },
     ]
     return (
         <Container

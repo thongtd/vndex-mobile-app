@@ -5,24 +5,30 @@ import icons from '../../configs/icons';
 import Container from '../../components/Container';
 import colors from '../../configs/styles/colors';
 import { get } from '../../configs/utils';
+import { SvgXml } from 'react-native-svg';
+import Logo from 'assets/svg/Logo.svg';
+import Fb from 'assets/svg/fb.svg';
+import Tt from 'assets/svg/tt.svg';
+import Tl from 'assets/svg/tl.svg';
+import Email from 'assets/svg/Email.svg';
 const linkSupport={
     fb:"https://www.facebook.com/FinanceX.io/",
     twitter:"https://twitter.com/FinanceX_Fiat",
     telegram:"https://t.me/FinanceX_Vietnam",
     email:"support@financex.io",
-    medium:"https://medium.com/FinanceX-vietnam",
-    teleChanel:"https://t.me/financex_channel"
+    // medium:"https://medium.com/FinanceX-vietnam",
+    // teleChanel:"https://t.me/financex_channel"
 }
 const SupportScreen = ({
     componentId,
 }) => {
     const data = [
-        { textLeft: "Like us on Facebook", iconLeft: icons.fb, iconRight: true, onPress: ()=>Linking.openURL(linkSupport.fb) },
-        { textLeft: "Follow us on Twitter", iconLeft: icons.twitter, iconRight: true, onPress: ()=>Linking.openURL(linkSupport.twitter) },
-        { textLeft: "Join us on Telegram", iconLeft: icons.telegram, iconRight: true, onPress: ()=>Linking.openURL(linkSupport.telegram) },
-        { textLeft: "Email Support", iconLeft: icons.gmail, iconRight: true, onPress: ()=> Linking.openURL(`mailto:${linkSupport.email}`) },
-        { textLeft: "Get new on Medium", iconLeft: icons.medium, iconRight: true, onPress: ()=>Linking.openURL(linkSupport.medium) },
-        { textLeft: "Track FNX Channel on Telegram", iconLeft: icons.telegram, iconRight: true, onPress: ()=>Linking.openURL(linkSupport.teleChanel) },
+        { textLeft: "Like us on Facebook", iconLeft: <SvgXml xml={Fb} />, iconRight: true, onPress: ()=>Linking.openURL(linkSupport.fb) },
+        { textLeft: "Follow us on Twitter", iconLeft:  <SvgXml xml={Tt} />, iconRight: true, onPress: ()=>Linking.openURL(linkSupport.twitter) },
+        { textLeft: "Join us on Telegram", iconLeft:  <SvgXml xml={Tl} />, iconRight: true, onPress: ()=>Linking.openURL(linkSupport.telegram) },
+        { textLeft: "Email Support", iconLeft:  <SvgXml xml={Email} />, iconRight: true, onPress: ()=> Linking.openURL(`mailto:${linkSupport.email}`) },
+        // { textLeft: "Get new on Medium", iconLeft: icons.medium, iconRight: true, onPress: ()=>Linking.openURL(linkSupport.medium) },
+        // { textLeft: "Track FNX Channel on Telegram", iconLeft: icons.telegram, iconRight: true, onPress: ()=>Linking.openURL(linkSupport.teleChanel) },
     ]
     
     return (
@@ -34,7 +40,8 @@ const SupportScreen = ({
         componentId={componentId}
         >   
         <View style={stylest.container}>
-        <Image source={icons.logoBlue} style={stylest.logo} />
+            <SvgXml xml={Logo} />
+        {/* <Image source={icons.logoBlue} style={stylest.logo} /> */}
         </View>
            {data.map((item,index)=>{
                return <ItemSetting 

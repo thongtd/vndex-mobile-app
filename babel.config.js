@@ -13,6 +13,12 @@ module.exports = {
          "components": "./src/components"
        }
       } 
-    ] 
+    ],
+    [
+      "babel-plugin-inline-import",
+      {
+        "extensions": [".svg"]
+      }
+    ]
   ]
 };

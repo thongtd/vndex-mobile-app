@@ -8,8 +8,7 @@ import TextFnx from '../Text/TextFnx';
 import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
 import Icon from '../Icon';
 import { isAndroid } from '../../configs/utils';
-// import Logo from 'assets/svg/Logo.svg';
-import IcLock from 'assets/svg/ic_lock.svg';
+
 const ItemSetting = ({
     onPress,
     onValueChange = () => { },

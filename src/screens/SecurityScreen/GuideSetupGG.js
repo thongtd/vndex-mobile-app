@@ -12,9 +12,11 @@ import icons from '../../configs/icons';
 import LayoutCenter from '../../components/Layout/LayoutCenter';
 import Button from '../../components/Button/Button';
 import {fullHeight, checkFullHeight} from '../../configs/utils';
+
 import GGAuth from 'assets/svg/Google_Authenticator.svg';
 import GGPlay from 'assets/svg/ggplay.svg';
 import AppStore from 'assets/svg/appstore.svg';
+import { SvgXml } from 'react-native-svg';
 const GuideSetupGG = ({componentId}) => (
   <Container
     hasBack
@@ -39,7 +41,7 @@ const GuideSetupGG = ({componentId}) => (
             alignItems:"center",
             paddingVertical:30,
         }}>
-        <GGAuth />
+          <SvgXml xml={GGAuth}/>
         <TextFnx
           space={10}
           spaceLeft={15}
@@ -52,10 +54,10 @@ const GuideSetupGG = ({componentId}) => (
             flexDirection:"row",
             justifyContent:"space-between"
         }}>
-            <GGPlay style={{
+          <SvgXml xml={GGPlay} style={{
                 marginRight:20
             }}/>
-            <AppStore />
+            <SvgXml xml={AppStore} />
         </View>
       </LayoutCenter>
     
