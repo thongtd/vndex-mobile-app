@@ -4,7 +4,6 @@ import LinearGradient from 'react-native-linear-gradient'
 import TextWhite from './Text/TextWhite'
 import SafeAreaViewFnx from './SafeAreaView'
 import DeviceInfo from 'react-native-device-info';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview'
 import icons from '../configs/icons'
 import Icon from "react-native-vector-icons/FontAwesome5";
 import ButtonIcon from './Button/ButtonIcon'

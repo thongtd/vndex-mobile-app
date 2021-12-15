@@ -41,7 +41,7 @@ const GuideSetupGG = ({componentId}) => (
             alignItems:"center",
             paddingVertical:30,
         }}>
-          <SvgXml xml={GGAuth}/>
+          <GGAuth />
         <TextFnx
           space={10}
           spaceLeft={15}
@@ -54,10 +54,10 @@ const GuideSetupGG = ({componentId}) => (
             flexDirection:"row",
             justifyContent:"space-between"
         }}>
-          <SvgXml xml={GGPlay} style={{
+          <GGPlay style={{
                 marginRight:20
             }}/>
-            <SvgXml xml={AppStore} />
+            <AppStore />
         </View>
       </LayoutCenter>
     

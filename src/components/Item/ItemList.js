@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View ,StyleSheet} from 'react-native';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
+
 import LayoutSpaceBetween from '../LayoutSpaceBetween';
 import TextFnx from '../Text/TextFnx';
 import Icon from '../Icon';

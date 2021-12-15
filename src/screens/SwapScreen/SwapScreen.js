@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import BlockSwap from './components/BlockSwap';
 import icons from '../../configs/icons';
 import Layout from '../../components/Layout/Layout';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 import Button from '../../components/Button/Button';
 import NoteImportant from '../../components/Text/NoteImportant';
 import { pushSingleScreenApp, SWAP_CONFIRM_SCREEN, PICKER_SEARCH, SWAP_SCREEN, LOGIN_SCREEN, HISTORY_SWAP_SCREEN } from '../../navigation';

@@ -11,7 +11,7 @@ import ButtonIcon from '../../../components/Button/ButtonIcon';
 import ItemConfirmDepositFiat from '../components/ItemConfirmDepositFiat';
 import CheckBox from 'react-native-check-box';
 import Icon from '../../../components/Icon';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 import { to_UTCDate, get, toast, formatMessageByArray } from '../../../configs/utils';
 import { pop } from '../../../navigation/Navigation';
 import Image from '../../../components/Image/Image';

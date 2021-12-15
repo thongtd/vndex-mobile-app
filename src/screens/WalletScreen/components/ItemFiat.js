@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 import PropTypes from 'prop-types';
 import colors from '../../../configs/styles/colors';
 import TextSeparators from '../../../components/Text/TextSeparators';

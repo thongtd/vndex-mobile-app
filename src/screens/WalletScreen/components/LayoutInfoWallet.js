@@ -11,7 +11,7 @@ import Image from '../../../components/Image/Image';
 import { get, isIos, isArray, size, formatCurrency, to_UTCDate, jwtDecode, listenerEventEmitter, createAction, toast, set, formatTrunc, CheckStepStatus, checkLang, CheckDisableStatus, getOneMonthAgoDate, getCurrentDate, removeEventEmitter } from '../../../configs/utils';
 import colors from '../../../configs/styles/colors';
 import icons from '../../../configs/icons';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 import ButtonTypeWallet from '../../../components/Button/ButtonTypeWallet';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Layout from '../../../components/Layout/Layout';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 import TextFnx from '../../../components/Text/TextFnx';
 import Icon from '../../../components/Icon';
 import colors from '../../../configs/styles/colors';

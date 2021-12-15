@@ -3,7 +3,7 @@ import RN, { Text, View } from 'react-native';
 import TextFnx from '../../../components/Text/TextFnx';
 import colors from '../../../configs/styles/colors';
 import Icon from '../../../components/Icon';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 
 const ButtonSortSymbol = ({
     onCheck,

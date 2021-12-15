@@ -1,7 +1,0 @@
-  
-./**/tests/*.js
-*.test.js
-./**/__tests__/**/*.js
-__mocks__/**/*.js
-jest-setup.js
-babel.config.js

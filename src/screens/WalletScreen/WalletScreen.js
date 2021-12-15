@@ -19,7 +19,7 @@ import ListCoin from './components/ListCoin';
 import ListFiat from './components/ListFiat';
 import Input from '../../components/Input';
 import Button from '../../components/Button/Button';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 import { pushSingleScreenApp, LOGIN_SCREEN, PASSCODE_SCREEN, PASSCODE_AUTH_SCREEN, TRANSACTION_HISTORY } from '../../navigation';
 import { IdNavigation } from '../../configs/constant';
 import { hiddenTabbar, listenerEventEmitter, removeEventEmitter, createAction, get, emitEventEmitter, backHandler, resetScreenGlobal } from '../../configs/utils';

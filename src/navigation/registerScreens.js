@@ -1,8 +1,8 @@
-// @flow
-
 import React from 'react';
-import { Navigation } from 'react-native-navigation';
-
+import {Navigation} from 'react-native-navigation';
+import {Provider} from 'react-redux';
+import {Text} from "react-native";
+import { withNavigationProvider, NavigationProvider } from 'react-native-navigation-hooks'
 import {
   SplashScreen,
   WalletScreen,
@@ -12,8 +12,6 @@ import {
   LoginScreen,
   RegisterScreen
 } from '../screens';
-import { Provider } from '../redux';
-
 import {
   SPLASH_SCREEN,
   SWAP_SCREEN,
@@ -85,64 +83,59 @@ import HistoryDepositFiat from '../screens/WalletScreen/screenChildren/HistoryDe
 import WithdrawCoinScreen from '../screens/WalletScreen/screenChildren/WithdrawCoinScreen';
 import WithdrawFiatScreen from '../screens/WalletScreen/screenChildren/WithdrawFiatScreen';
 import HistoryTransactions from '../screens/WalletScreen/screenChildren/HistoryTransactions';
-import { KycScreen } from '../screens/KycScreen';
-import { KYC_SCREEN, REF_SCREEN } from '.';
+import { KYC_SCREEN, REF_SCREEN } from './Screens';
 import { RefScreen } from '../screens/RefScreen';
+import { KycScreen } from '../screens/KycScreen';
+const WrapScreen = (ReduxScreen, store) => props => (
+  <Provider store={store}>
+    <ReduxScreen {...props} />
+  </Provider>
+);
 
-function WrappedComponent(Component) {
-  return function inject(props) {
-    const EnhancedComponent = () => (
-      <Provider>
-        <Component {...props} />
-      </Provider>
-    );
-
-    return <EnhancedComponent />;
-  };
-}
-
-export default function () {
-  Navigation.registerComponent(DAPP_SCREEN, () => WrappedComponent(DappScreen),);
-  Navigation.registerComponent(SWAP_SCREEN, () => WrappedComponent(SwapScreen),);
-  Navigation.registerComponent(SETTING_SCREEN, () => WrappedComponent(SettingScreen),);
-  Navigation.registerComponent(WALLET_SCREEN, () => WrappedComponent(WalletScreen));
-  Navigation.registerComponent(SPLASH_SCREEN, () => WrappedComponent(SplashScreen));
-  Navigation.registerComponent(LOGIN_SCREEN,()=>WrappedComponent(LoginScreen));
-  Navigation.registerComponent(KYC_SCREEN,()=>WrappedComponent(KycScreen));
-  Navigation.registerComponent(REF_SCREEN,()=>WrappedComponent(RefScreen));
-  Navigation.registerComponent(REGISTER_SCREEN,()=>WrappedComponent(RegisterScreen))
-  Navigation.registerComponent(CONFIRM_REGISTER_SCREEN,()=>WrappedComponent(ConfirmScreen))
-  Navigation.registerComponent(RESET_SCREEN,()=>WrappedComponent(ResetScreen))
-  Navigation.registerComponent(CONFIRM_RESET_SCREEN,()=>WrappedComponent(ConfirmResetScreen))
-  Navigation.registerComponent(CONFIRM_LOGIN_SCREEN,()=>WrappedComponent(ConfirmLoginScreen))
-  Navigation.registerComponent(SUPPORT_SCREEN,()=>WrappedComponent(SupportScreen))
-  Navigation.registerComponent(PASSCODE_SCREEN,()=>WrappedComponent(PasscodeScreen))
-  Navigation.registerComponent(PASSCODE_AUTH_SCREEN,()=>WrappedComponent(PasscodeAuthScreen))
-  Navigation.registerComponent(CHANGE_PASSWORD,()=>WrappedComponent(ChangePasswordScreen))
-  Navigation.registerComponent(SECURITY_SCREEN,()=>WrappedComponent(SecurityScreen))
-  Navigation.registerComponent(FA_CODE_EMAIL,()=>WrappedComponent(FaCodeEmail))
-  Navigation.registerComponent(ENABLE_2FA_GG,()=>WrappedComponent(Enable2FaGG))
-  Navigation.registerComponent(BACK_UP_KEY,()=>WrappedComponent(BackupKeyScreen))
-  Navigation.registerComponent(GUIDE_SET_UP_GG,()=>WrappedComponent(GuideSetupGG))
-  Navigation.registerComponent(SET_UP_CODE,()=>WrappedComponent(SetupCodeScreen))
-  Navigation.registerComponent(SWAP_CONFIRM_SCREEN,()=>WrappedComponent(SwapConfirmScreen))
-  Navigation.registerComponent(HISTORY_SWAP_SCREEN,()=>WrappedComponent(HistorySwapScreen))
-  Navigation.registerComponent(CALENDAR_SCREEN,()=>WrappedComponent(CalendarScreen))
-  Navigation.registerComponent(INFO_COIN_SCREEN,()=>WrappedComponent(InfoCoinScreen))
-  Navigation.registerComponent(INFO_FIAT_SCREEN,()=>WrappedComponent(InfoFiatScreen))
-  Navigation.registerComponent(DEPOSIT_COIN_SCREEN,()=>WrappedComponent(DepositCoinScreen))
-  Navigation.registerComponent(DEPOSIT_FIAT_SCREEN,()=>WrappedComponent(DepositFiatScreen))
-  Navigation.registerComponent(HISTORY_DEPOSIT_FIAT_SCREEN,()=>WrappedComponent(HistoryDepositFiat))
-  Navigation.registerComponent(HISTORY_DEPOSIT_COIN_SCREEN,()=>WrappedComponent(HistoryDepositCoin))
-  Navigation.registerComponent(WITHDRAW_COIN_SCREEN,()=>WrappedComponent(WithdrawCoinScreen))
-  Navigation.registerComponent(WITHDRAW_FIAT_SCREEN,()=>WrappedComponent(WithdrawFiatScreen))
-  Navigation.registerComponent(TRANSACTION_HISTORY,()=>WrappedComponent(HistoryTransactions))
+export const registerScreens = store => {
+    
+  Navigation.registerComponent(DAPP_SCREEN, () => withNavigationProvider(WrapScreen(DappScreen, store)),()=>DappScreen);
+  Navigation.registerComponent(SWAP_SCREEN, () => withNavigationProvider(WrapScreen(SwapScreen, store)),()=>SwapScreen);
+  Navigation.registerComponent(SETTING_SCREEN, () => withNavigationProvider(WrapScreen(SettingScreen, store)),()=>SettingScreen);
+  Navigation.registerComponent(WALLET_SCREEN, () => withNavigationProvider(WrapScreen(WalletScreen, store)),()=>WalletScreen);
+  Navigation.registerComponent(SPLASH_SCREEN, () => withNavigationProvider(WrapScreen(SplashScreen, store)),()=>SplashScreen);
+  Navigation.registerComponent(LOGIN_SCREEN,()=>withNavigationProvider(WrapScreen(LoginScreen, store)),()=>LoginScreen);
+  Navigation.registerComponent(KYC_SCREEN,()=>withNavigationProvider(WrapScreen(RefScreen, store)),()=>RefScreen);
+  Navigation.registerComponent(REF_SCREEN,()=>withNavigationProvider(WrapScreen(KycScreen, store)),()=>KycScreen);
+  
+  Navigation.registerComponent(REGISTER_SCREEN,()=>withNavigationProvider(WrapScreen(RegisterScreen, store)),()=>RegisterScreen);
+  Navigation.registerComponent(CONFIRM_REGISTER_SCREEN,()=>withNavigationProvider(WrapScreen(ConfirmScreen, store)),()=>ConfirmScreen);
+  Navigation.registerComponent(RESET_SCREEN,()=>withNavigationProvider(WrapScreen(ResetScreen, store)),()=>ResetScreen);
+  Navigation.registerComponent(CONFIRM_RESET_SCREEN,()=>withNavigationProvider(WrapScreen(ConfirmResetScreen, store)),()=>ConfirmResetScreen);
+  Navigation.registerComponent(CONFIRM_LOGIN_SCREEN,()=>withNavigationProvider(WrapScreen(ConfirmLoginScreen, store)),()=>ConfirmLoginScreen);
+  Navigation.registerComponent(SUPPORT_SCREEN,()=>withNavigationProvider(WrapScreen(SupportScreen, store)),()=>SupportScreen);
+  Navigation.registerComponent(PASSCODE_SCREEN,()=>withNavigationProvider(WrapScreen(PasscodeScreen, store)),()=>PasscodeScreen);
+  Navigation.registerComponent(PASSCODE_AUTH_SCREEN,()=>withNavigationProvider(WrapScreen(PasscodeAuthScreen, store)),()=>PasscodeAuthScreen);
+  Navigation.registerComponent(CHANGE_PASSWORD,()=>withNavigationProvider(WrapScreen(ChangePasswordScreen, store)),()=>ChangePasswordScreen);
+  Navigation.registerComponent(SECURITY_SCREEN,()=>withNavigationProvider(WrapScreen(SecurityScreen, store)),()=>SecurityScreen);
+  Navigation.registerComponent(FA_CODE_EMAIL,()=>withNavigationProvider(WrapScreen(FaCodeEmail, store)),()=>FaCodeEmail);
+  Navigation.registerComponent(ENABLE_2FA_GG,()=>withNavigationProvider(WrapScreen(Enable2FaGG, store)),()=>Enable2FaGG);
+  Navigation.registerComponent(BACK_UP_KEY,()=>withNavigationProvider(WrapScreen(BackupKeyScreen, store)),()=>BackupKeyScreen);
+  Navigation.registerComponent(GUIDE_SET_UP_GG,()=>withNavigationProvider(WrapScreen(GuideSetupGG, store)),()=>GuideSetupGG);
+  Navigation.registerComponent(SET_UP_CODE,()=>withNavigationProvider(WrapScreen(SetupCodeScreen, store)),()=>SetupCodeScreen);
+  Navigation.registerComponent(SWAP_CONFIRM_SCREEN,()=>withNavigationProvider(WrapScreen(SwapConfirmScreen, store)),()=>SwapConfirmScreen);
+  Navigation.registerComponent(HISTORY_SWAP_SCREEN,()=>withNavigationProvider(WrapScreen(HistorySwapScreen, store)),()=>HistorySwapScreen);
+  Navigation.registerComponent(CALENDAR_SCREEN,()=>withNavigationProvider(WrapScreen(CalendarScreen, store)),()=>CalendarScreen);
+  Navigation.registerComponent(INFO_COIN_SCREEN,()=>withNavigationProvider(WrapScreen(InfoCoinScreen, store)),()=>InfoCoinScreen);
+  Navigation.registerComponent(INFO_FIAT_SCREEN,()=>withNavigationProvider(WrapScreen(InfoFiatScreen, store)),()=>InfoFiatScreen);
+  Navigation.registerComponent(DEPOSIT_COIN_SCREEN,()=>withNavigationProvider(WrapScreen(DepositCoinScreen, store)),()=>DepositCoinScreen);
+  Navigation.registerComponent(DEPOSIT_FIAT_SCREEN,()=>withNavigationProvider(WrapScreen(DepositFiatScreen, store)),()=>DepositFiatScreen);
+  Navigation.registerComponent(HISTORY_DEPOSIT_FIAT_SCREEN,()=>withNavigationProvider(WrapScreen(HistoryDepositFiat, store)),()=>HistoryDepositFiat);
+  Navigation.registerComponent(HISTORY_DEPOSIT_COIN_SCREEN,()=>withNavigationProvider(WrapScreen(HistoryDepositCoin, store)),()=>HistoryDepositCoin);
+  Navigation.registerComponent(WITHDRAW_COIN_SCREEN,()=>withNavigationProvider(WrapScreen(WithdrawCoinScreen, store)),()=>WithdrawCoinScreen);
+  Navigation.registerComponent(WITHDRAW_FIAT_SCREEN,()=>withNavigationProvider(WrapScreen(WithdrawFiatScreen, store)),()=>WithdrawFiatScreen);
+  Navigation.registerComponent(TRANSACTION_HISTORY,()=>withNavigationProvider(WrapScreen(HistoryTransactions, store)),()=>HistoryTransactions);
 
 //modal screen
-  Navigation.registerComponent(ALERT_NOTICE_PASSWORD,()=>WrappedComponent(AlertNoticePassword))
-  Navigation.registerComponent(PICKER_SEARCH,()=>WrappedComponent(PickerSearchBox))
-  Navigation.registerComponent(ALERT_ACCOUNT_ACTIVE,()=>WrappedComponent(AlertAccountActive))
-  Navigation.registerComponent(MODAL_ALERT,()=>WrappedComponent(ModalAlert))
+  Navigation.registerComponent(ALERT_NOTICE_PASSWORD,()=>withNavigationProvider(WrapScreen(AlertNoticePassword, store)),()=>AlertNoticePassword);
+  Navigation.registerComponent(PICKER_SEARCH,()=>withNavigationProvider(WrapScreen(PickerSearchBox, store)),()=>PickerSearchBox);
+  Navigation.registerComponent(ALERT_ACCOUNT_ACTIVE,()=>withNavigationProvider(WrapScreen(AlertAccountActive, store)),()=>AlertAccountActive);
+  Navigation.registerComponent(MODAL_ALERT,()=>withNavigationProvider(WrapScreen(ModalAlert, store)),()=>ModalAlert);
   
 
-}
+};

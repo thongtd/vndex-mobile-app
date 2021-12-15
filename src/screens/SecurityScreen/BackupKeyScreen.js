@@ -9,7 +9,7 @@ import Icon from '../../components/Icon';
 import { pushTabBasedApp, pushSingleScreenApp, SET_UP_CODE } from '../../navigation';
 import { get, size, jwtDecode, toast } from '../../configs/utils';
 import { authService } from '../../services/authentication.service';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 
 const BackupKeyScreen = ({
     componentId,

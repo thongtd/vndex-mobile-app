@@ -157,7 +157,3 @@ export const currency = [{value: 'VND'}, {value: 'IDR'}, {value: 'BTC'}];
 export const currPair = ['VND', 'IDR', 'BTC'];
 export const spacingApp ='5%'
 export const BankTransfer = "BankTransfer";
-export const fontSize ={
-    f14:14,
-    f18:18
-}

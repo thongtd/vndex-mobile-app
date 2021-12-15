@@ -90,42 +90,42 @@ const SettingScreen = ({componentId}) => {
   const checkDatalogged = (lang = '', currency = '') => {
     if (logged) {
       const dtLogged = [
-        {textLeft: 'Identity verification', iconLeft: <SvgXml xml={St1}/>, iconRight: true, onPress:onKyc},
+        {textLeft: 'Identity verification', iconLeft: <St1/>, iconRight: true, onPress:onKyc},
         {
           textLeft: 'Change Password',
-          iconLeft: <SvgXml xml={St2}/>,
+          iconLeft: <St2/>,
           iconRight: true,
           onPress: onChangePassword,
         },
         {
           textLeft: 'Security',
-          iconLeft: <SvgXml xml={St3}/>,
+          iconLeft: <St3/>,
           iconRight: true,
           onPress: onSecurity,
           isBorder: true,
         },
         {
           textLeft: 'Refferal',
-          iconLeft: <SvgXml xml={St4}/>,
+          iconLeft: <St4/>,
           iconRight: true,
           onPress: onRef,
         },
         {
           textLeft: 'Languages',
-          iconLeft: <SvgXml xml={St5}/>,
+          iconLeft: <St5/>,
           textRight: lang,
           onPress: onLanguage,
           isBorder: true,
         },
         {
           textLeft: 'Support',
-          iconLeft: <SvgXml xml={St6}/>,
+          iconLeft: <St6/>,
           iconRight: true,
           onPress: onSupport,
         },
         {
           textLeft: 'About',
-          iconLeft: <SvgXml xml={St7}/>,
+          iconLeft: <St7/>,
           textRight: `V ${constant.GOOGLE_VERSION}`,
         },
       ];
@@ -135,20 +135,20 @@ const SettingScreen = ({componentId}) => {
         // { textLeft: "passcode", iconLeft: icons.passCode, hasSwitch: true, onValueChange: changeSwitchData, isBorder: true },
         {
           textLeft: 'Languages',
-          iconLeft: <SvgXml xml={St5} />,
+          iconLeft: <St5 />,
           textRight: lang,
           onPress: onLanguage,
           isBorder: true,
         },
         {
           textLeft: 'Support',
-          iconLeft: <SvgXml xml={St6}/>,
+          iconLeft: <St6/>,
           iconRight: true,
           onPress: onSupport,
         },
         {
           textLeft: 'About',
-          iconLeft: <SvgXml xml={St7}/>,
+          iconLeft: <St7/>,
           textRight: `V ${constant.GOOGLE_VERSION}`,
         },
       ];
@@ -277,7 +277,7 @@ const SettingScreen = ({componentId}) => {
             alignItems:"center",
             marginVertical:30
           }}>
-            <SvgXml xml={Logo} />
+            <Logo />
           </View>
         )}
         

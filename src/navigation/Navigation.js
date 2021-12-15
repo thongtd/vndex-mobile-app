@@ -14,14 +14,14 @@ import {
   RESET_SCREEN,
   CONFIRM_RESET_SCREEN
 } from './Screens';
-import registerScreens from './registerScreens';
+
 import colors from '../configs/styles/colors';
 import { optionTabbar, Tabbar } from './helpers';
 import { IdNavigation } from '../configs/constant';
 import { hiddenModal, hiddenTabbar,hiddenTabbarShowHeader, isSameScreen, resetScreenGlobal } from '../configs/utils';
 
 // Register all screens on launch
-registerScreens();
+// registerScreens();
 export function pushTutorialScreen() {
   Navigation.setDefaultOptions({
     topBar: {

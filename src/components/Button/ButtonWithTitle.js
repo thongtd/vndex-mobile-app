@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import TextWhite from '../Text/TextWhite';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
+
 import PropTypes from 'prop-types'
 import TextFnx from '../Text/TextFnx';
 const ButtonWithTitle = ({

@@ -12,7 +12,7 @@ export const DEFAULT = {
   userInfo: ""
 };
 
-export default function authentication(state = DEFAULT, action = {}) {
+export default authentication = (state = DEFAULT, action = {}) => {
   const { type, payload } = action;
 
   switch (type) {

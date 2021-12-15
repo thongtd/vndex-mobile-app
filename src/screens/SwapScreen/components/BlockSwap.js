@@ -7,7 +7,7 @@ import Layout from '../../../components/Layout/Layout';
 import { blockCharSpecical, get } from '../../../configs/utils';
 import icons from '../../../configs/icons';
 import Icon from '../../../components/Icon';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input';
 import Image from '../../../components/Image/Image';

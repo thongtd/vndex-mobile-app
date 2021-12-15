@@ -3,7 +3,8 @@ import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from '../Icon';
 import colors from '../../configs/styles/colors';
 import TextFnx from '../Text/TextFnx';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
+
 import ButtonSubmitClose from './ButtonSubmitClose';
 
 import PropTypes from 'prop-types'

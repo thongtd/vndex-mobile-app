@@ -5,10 +5,10 @@ import ButtonWithTitle from '../Button/ButtonWithTitle';
 import icons from '../../configs/icons';
 import colors from '../../configs/styles/colors';
 import TextFnx from '../Text/TextFnx';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
+
 import Icon from '../Icon';
 import { isAndroid } from '../../configs/utils';
-
 const ItemSetting = ({
     onPress,
     onValueChange = () => { },

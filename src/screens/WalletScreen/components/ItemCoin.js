@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import TextFnx from '../../../components/Text/TextFnx';
 import colors from '../../../configs/styles/colors';
 import TextSeparators from '../../../components/Text/TextSeparators';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/adapters/TouchablePreview';
+import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 import PropTypes from 'prop-types';
 import Image from '../../../components/Image/Image';
 import { get, formatCurrency, convertToCurr, formatSCurrency, formatCurrencyFnx } from '../../../configs/utils';
