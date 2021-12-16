@@ -12,7 +12,7 @@ const ButtonSubmitClose = ({
     isClose,
     isButtonCircle,
     title=isSubmit?"SUBMIT".t():"CLOSE".t(),
-    bgButtonColor=isSubmit?colors.iconButton:colors.tabbar,
+    bgButtonColor=isSubmit?colors.iconButton:colors.btnClose,
     ...rest
 }) => (
     <View style={stylest.flex}>
@@ -21,7 +21,7 @@ const ButtonSubmitClose = ({
             {...rest}
         >
             <View style={[isButtonCircle?stylest.btnCircle:stylest.btn,{backgroundColor:bgButtonColor},style]}>
-                <TextFnx color={colors.black} value={title} />
+                <TextFnx color={isSubmit?colors.black:colors.textBtnClose} value={title} />
             </View>
         </TouchablePreview>
     </View>

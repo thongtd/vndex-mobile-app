@@ -24,9 +24,14 @@ import { hiddenModal, hiddenTabbar,hiddenTabbarShowHeader, isSameScreen, resetSc
 // registerScreens();
 export function pushTutorialScreen() {
   Navigation.setDefaultOptions({
+    animations: {
+      setRoot: {
+        waitForRender: true,
+      },
+    },
     topBar: {
       background: {
-        color: '#039893',
+        color: 'red',
       },
       title: {
         color: 'white',

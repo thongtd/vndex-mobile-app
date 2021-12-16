@@ -45,23 +45,24 @@ const Button = ({
         {rest.isLabel && <TextFnx style={stylest.label} value={label} />}
             {(isSubmit || isClose) && (
                 <View style={[stylest.flexRow, { marginVertical: spaceVertical }]}>
-                    {isSubmit && <ButtonSubmitClose
-                        title={textSubmit}
-                        isSubmit
-                        isButtonCircle={isButtonCircle}
-                        onPress={onSubmit}
-                        bgButtonColor={bgButtonColor}
-                        style={style}
-                        {...rest}
-                    />}
-                    {isSubmit && isClose && <View style={{ flex: 0.05 }} />
-                    }
-                    {isClose && <ButtonSubmitClose
+                     {isClose && <ButtonSubmitClose
                         bgButtonColor={bgButtonColor}
                         title={textClose}
                         isClose
                         isButtonCircle={isButtonCircle}
                         onPress={onClose}
+                        style={style}
+                        {...rest}
+                    />}
+                    
+                    {isSubmit && isClose && <View style={{ flex: 0.05 }} />
+                    }
+                  {isSubmit && <ButtonSubmitClose
+                        title={textSubmit}
+                        isSubmit
+                        isButtonCircle={isButtonCircle}
+                        onPress={onSubmit}
+                        bgButtonColor={bgButtonColor}
                         style={style}
                         {...rest}
                     />}

@@ -2,6 +2,9 @@
 
 
 export const LOGIN_SCREEN = 'fnx.LoginScreen';
+export const STEP2KYC_SCREEN = 'fnx.Step2KycScreen';
+export const STEP3KYC_SCREEN = 'fnx.Step3KycScreen';
+
 export const KYC_SCREEN = 'fnx.KycScreen';
 export const CONFIRM_LOGIN_SCREEN = 'fnx.ConfirmLoginScreen';
 export const SPLASH_SCREEN = 'fnx.SplashScreen';

@@ -121,6 +121,7 @@ export const authService = {
     getCountry: async () => {
         try {
             let data = await httpService.post_without_token(EXCHANGE_API.GET_COUNTRIES);
+            console.log(data,"Data");
             if (size(data) > 0) {
                 return {
                     result: 'ok',

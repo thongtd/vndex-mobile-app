@@ -236,6 +236,7 @@ const SettingScreen = ({componentId}) => {
       space={5}
       isTopBar={true}
       title={"Account".t()}
+      isScroll
       >
         {logged?(<View>
         <View style={stylest.flexRow}>
@@ -298,7 +299,7 @@ const SettingScreen = ({componentId}) => {
         );
       })}
       <Button
-        textSubmit={logged?'Logout'.t():'Login'.t()}
+        textSubmit={logged?'Logout'.t():'LOGIN'.t()}
         onSubmit={logged?handleLogout:handleLogin}
         spaceVertical={25}
         isSubmit

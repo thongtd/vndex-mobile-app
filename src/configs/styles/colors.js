@@ -1,7 +1,7 @@
 export default {
     red:"#D23131",
     yellow:"#f9ca06",
-    green:"#00d154",
+    green:"#3A9232",
     black:'#000000',
     highlightTitle:"#448ef6",
     title:"#91c6ed",
@@ -20,5 +20,7 @@ export default {
     transparent:"#00000036",
     btnBlur:"#e4f0f9",
     baseBg:'#181818',
-    navigation:'#343a40'
+    navigation:'#1D1D1D',
+    btnClose:"#52504A",
+    textBtnClose:"#FFEFC5"
 }

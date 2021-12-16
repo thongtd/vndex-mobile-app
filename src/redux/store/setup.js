@@ -26,8 +26,7 @@ function users(state={}, action = {}) {
 }
 const persistConfig = {
   key: 'root',
-  storage: AsyncStorage,
-  whitelist,
+  storage: AsyncStorage
 };
 
 export default function setup() {

@@ -86,6 +86,9 @@ import HistoryTransactions from '../screens/WalletScreen/screenChildren/HistoryT
 import { KYC_SCREEN, REF_SCREEN } from './Screens';
 import { RefScreen } from '../screens/RefScreen';
 import { KycScreen } from '../screens/KycScreen';
+import { STEP2KYC_SCREEN, STEP3KYC_SCREEN } from '.';
+import Step2Kyc from '../screens/KycScreen/Step2Kyc';
+import Step3Kyc from '../screens/KycScreen/Step3Kyc';
 const WrapScreen = (ReduxScreen, store) => props => (
   <Provider store={store}>
     <ReduxScreen {...props} />
@@ -100,8 +103,10 @@ export const registerScreens = store => {
   Navigation.registerComponent(WALLET_SCREEN, () => withNavigationProvider(WrapScreen(WalletScreen, store)),()=>WalletScreen);
   Navigation.registerComponent(SPLASH_SCREEN, () => withNavigationProvider(WrapScreen(SplashScreen, store)),()=>SplashScreen);
   Navigation.registerComponent(LOGIN_SCREEN,()=>withNavigationProvider(WrapScreen(LoginScreen, store)),()=>LoginScreen);
-  Navigation.registerComponent(KYC_SCREEN,()=>withNavigationProvider(WrapScreen(RefScreen, store)),()=>RefScreen);
-  Navigation.registerComponent(REF_SCREEN,()=>withNavigationProvider(WrapScreen(KycScreen, store)),()=>KycScreen);
+  Navigation.registerComponent(REF_SCREEN,()=>withNavigationProvider(WrapScreen(RefScreen, store)),()=>RefScreen);
+  Navigation.registerComponent(KYC_SCREEN,()=>withNavigationProvider(WrapScreen(KycScreen, store)),()=>KycScreen);
+  Navigation.registerComponent(STEP2KYC_SCREEN,()=>withNavigationProvider(WrapScreen(Step2Kyc, store)),()=>Step2Kyc);
+  Navigation.registerComponent(STEP3KYC_SCREEN,()=>withNavigationProvider(WrapScreen(Step3Kyc, store)),()=>Step3Kyc);
   
   Navigation.registerComponent(REGISTER_SCREEN,()=>withNavigationProvider(WrapScreen(RegisterScreen, store)),()=>RegisterScreen);
   Navigation.registerComponent(CONFIRM_REGISTER_SCREEN,()=>withNavigationProvider(WrapScreen(ConfirmScreen, store)),()=>ConfirmScreen);
