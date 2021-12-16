@@ -116,6 +116,7 @@ const SettingScreen = ({componentId}) => {
           textRight: lang,
           onPress: onLanguage,
           isBorder: true,
+          iconRight:true
         },
         {
           textLeft: 'Support',
@@ -139,6 +140,7 @@ const SettingScreen = ({componentId}) => {
           textRight: lang,
           onPress: onLanguage,
           isBorder: true,
+          iconRight:true
         },
         {
           textLeft: 'Support',

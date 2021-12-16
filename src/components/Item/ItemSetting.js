@@ -28,6 +28,10 @@ const ItemSetting = ({
     IsSwitch,
     height = 50,
     iconLeftSvg,
+    colorLabel,
+    colorValue,
+    weightvalue,
+    sizeValue,
     ...rest
 }) => {
     return (
@@ -38,9 +42,11 @@ const ItemSetting = ({
                 <View style={stylest.blockLeft}>
                     {iconLeftSvg && iconLeftSvg}
                     {/* <Image source={iconLeft} style={sizeIconLeft} resizeMode="contain" /> */}
-                    <TextFnx style={stylest.textLeft} value={textLeft} color={colors.text} />
+                    <TextFnx spaceLeft={iconLeftSvg?"3%":0} value={textLeft} color={colorLabel} />
                 </View>
-                {hasSwitch ? <Switch value={IsSwitch} style={isAndroid()?{marginRight:-3.5}:{}} onValueChange={onValueChange} /> : (iconRight ? <Icon size={sizeIconRight} color={colorIcon} name={"chevron-right"} /> : <TextFnx color={colors.text} value={textRight} />)}
+                {hasSwitch ? <Switch value={IsSwitch} style={isAndroid()?{marginRight:-3.5}:{}} onValueChange={onValueChange} /> : ((textRight && iconRight) ?<View style={{
+                    flexDirection:"row"
+                }}><TextFnx size={sizeValue} weight={weightvalue} color={colorValue} spaceRight={10} value={textRight} /><Icon size={sizeIconRight} color={colorIcon} name={"chevron-right"} /></View>  :((textRight && !iconRight)?<TextFnx size={sizeValue} weight={weightvalue} color={colorValue} spaceRight={10} value={textRight} />:<Icon size={sizeIconRight} color={colorIcon} name={"chevron-right"} />) )}
             </View>
         </TouchablePreview>
     );
@@ -51,15 +57,14 @@ const stylest = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         borderBottomColor: colors.line,
-        paddingHorizontal: "1%",
+        // paddingHorizontal: "1%",
     },
     blockLeft: {
         flexDirection: "row",
         alignItems: "center"
     },
     textLeft: {
-        color:colors.text,
-        paddingLeft: "3%",
+        // paddingLeft: "3%",
     }
 })
 export default ItemSetting;

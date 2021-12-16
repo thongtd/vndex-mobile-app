@@ -20,7 +20,7 @@ const TextFnx = ({
     ...rest
 }) => (
         <Text {...rest}  
-            style={style ? style : {
+            style={[{
                 color: color,
                 fontSize: size,
                 fontWeight: weight,
@@ -31,7 +31,7 @@ const TextFnx = ({
                 paddingBottom: spaceBottom,
                 paddingLeft: spaceLeft,
                 paddingRight: spaceRight,
-            }}
+            },style]}
         >
             {children || value}
         </Text>

@@ -22,5 +22,6 @@ export default {
     baseBg:'#181818',
     navigation:'#1D1D1D',
     btnClose:"#52504A",
-    textBtnClose:"#FFEFC5"
+    textBtnClose:"#FFEFC5",
+    buy:"#31A827"
 }
