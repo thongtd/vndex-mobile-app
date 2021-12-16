@@ -9,6 +9,7 @@ import colors from '../../configs/styles/colors';
 import Fbc from 'assets/svg/fbc.svg';
 import Ttc from 'assets/svg/ttc.svg';
 import ItemSetting from '../../components/Item/ItemSetting';
+
 import {
   get,
   hiddenTabbar,
@@ -18,6 +19,7 @@ import {
   size,
   removeTokenAndUserInfo,
 } from '../../configs/utils';
+import { pushSingleScreenApp, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, TOTAL_COMMISSION_SCREEN } from '../../navigation';
 const RefScreen = ({componentId}) => {
   const [DataSetting, setDataSetting] = useState(data);
   useEffect(() => {
@@ -27,33 +29,26 @@ const RefScreen = ({componentId}) => {
   const data = [
     // { textLeft: "passcode", iconLeft: icons.passCode, hasSwitch: true, onValueChange: changeSwitchData, isBorder: true },
     {
-      textLeft: 'Tong hoa hong cua ban',
+      textLeft: 'Your total commission'.t(),
       textRight: '1,051,125 AIFT',
       iconRight: true,
-      onPress: onCommistion,
+      onPress: ()=>pushSingleScreenApp(componentId, TOTAL_COMMISSION_SCREEN),
     },
     {
-      textLeft: 'So ban be duoc ghioi thieu',
+      textLeft: 'Referred friends'.t(),
       iconRight: true,
-      onPress: onReferalFriend,
+      onPress: ()=>pushSingleScreenApp(componentId, REFFERAL_FRIEND_SCREEN),
       textRight: '1500'
     },
     {
-      textLeft: 'Chi tiet hoa hong',
+      textLeft: 'Rose details'.t(),
       iconRight: true,
-      onPress: onDetailCommistion,
+      onPress: ()=>pushSingleScreenApp(componentId, ROSE_DETAIL_SCREEN),
     },
   ];
 
-  const onCommistion = () => {
-    // pushSingleScreenApp(componentId, CHANGE_PASSWORD);
-  };
-  const onReferalFriend = () => {
-    // pushSingleScreenApp(componentId, SECURITY_SCREEN);
-  };
-  const onDetailCommistion = () => {
-    // pushSingleScreenApp(componentId, REF_SCREEN);
-  };
+  
+  
   return (
     <Container
       componentId={componentId}
@@ -73,20 +68,20 @@ const RefScreen = ({componentId}) => {
         <View style={[stylest.row,{
             width:170
         }]}>
-          <TextFnx color={colors.description}>Ma gioi thieu: </TextFnx>
+          <TextFnx color={colors.description}>{"Referral code".t()}: </TextFnx>
           <TextFnx>39919082</TextFnx>
           <ButtonIcon color={colors.highlight} name="copy" />
         </View>
       </View>
       <View>
-        <TextFnx color={colors.description}>Lien ket gioi thieu</TextFnx>
+        <TextFnx color={colors.description}>{"Referral link".t()}</TextFnx>
         <View style={stylest.row}>
           <TextFnx color={colors.highlight}>https://accountslutuananh94846757348=39919082</TextFnx>
           <ButtonIcon color={colors.highlight} name="copy" />
         </View>
       </View>
       <View>
-        <TextFnx color={colors.description}>Chia se</TextFnx>
+        <TextFnx color={colors.description}>{"Share".t()}</TextFnx>
         <View style={[stylest.row,{paddingVertical:10}]}>
           <TouchableOpacity style={{
               paddingRight:10

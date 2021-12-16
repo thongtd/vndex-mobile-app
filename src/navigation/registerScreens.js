@@ -84,11 +84,17 @@ import WithdrawCoinScreen from '../screens/WalletScreen/screenChildren/WithdrawC
 import WithdrawFiatScreen from '../screens/WalletScreen/screenChildren/WithdrawFiatScreen';
 import HistoryTransactions from '../screens/WalletScreen/screenChildren/HistoryTransactions';
 import { KYC_SCREEN, REF_SCREEN } from './Screens';
-import { RefScreen } from '../screens/RefScreen';
+import {RefScreen}  from '../screens/RefScreen';
 import { KycScreen } from '../screens/KycScreen';
-import { STEP2KYC_SCREEN, STEP3KYC_SCREEN } from '.';
+import { ACCOUNTP2P_SCREEN, HISTORY_LOGIN_SCREEN, PAYMENT_METHOD_SCREEN, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, STEP2KYC_SCREEN, STEP3KYC_SCREEN, TOTAL_COMMISSION_SCREEN } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
+import RoseDetails from '../screens/RefScreen/RoseDetails';
+import ReferralFriends from '../screens/RefScreen/ReferralFriends';
+import TotalCommisstion from '../screens/RefScreen/TotalCommisstion';
+import AccountP2PScreen from '../screens/AccountP2P/AccountP2PScreen';
+import PaymentMethodScreen from '../screens/PaymentMethod/PaymentMethodScreen';
+import HistoryLoginScreen from '../screens/HistoryLogin/HistoryLoginScreen';
 const WrapScreen = (ReduxScreen, store) => props => (
   <Provider store={store}>
     <ReduxScreen {...props} />
@@ -104,6 +110,13 @@ export const registerScreens = store => {
   Navigation.registerComponent(SPLASH_SCREEN, () => withNavigationProvider(WrapScreen(SplashScreen, store)),()=>SplashScreen);
   Navigation.registerComponent(LOGIN_SCREEN,()=>withNavigationProvider(WrapScreen(LoginScreen, store)),()=>LoginScreen);
   Navigation.registerComponent(REF_SCREEN,()=>withNavigationProvider(WrapScreen(RefScreen, store)),()=>RefScreen);
+  Navigation.registerComponent(ROSE_DETAIL_SCREEN,()=>withNavigationProvider(WrapScreen(RoseDetails, store)),()=>RoseDetails);
+  Navigation.registerComponent(REFFERAL_FRIEND_SCREEN,()=>withNavigationProvider(WrapScreen(ReferralFriends, store)),()=>ReferralFriends);
+  Navigation.registerComponent(TOTAL_COMMISSION_SCREEN,()=>withNavigationProvider(WrapScreen(TotalCommisstion, store)),()=>TotalCommisstion);
+  Navigation.registerComponent(ACCOUNTP2P_SCREEN,()=>withNavigationProvider(WrapScreen(AccountP2PScreen, store)),()=>AccountP2PScreen);
+  Navigation.registerComponent(PAYMENT_METHOD_SCREEN,()=>withNavigationProvider(WrapScreen(PaymentMethodScreen, store)),()=>PaymentMethodScreen);
+  Navigation.registerComponent(HISTORY_LOGIN_SCREEN,()=>withNavigationProvider(WrapScreen(HistoryLoginScreen, store)),()=>HistoryLoginScreen);
+
   Navigation.registerComponent(KYC_SCREEN,()=>withNavigationProvider(WrapScreen(KycScreen, store)),()=>KycScreen);
   Navigation.registerComponent(STEP2KYC_SCREEN,()=>withNavigationProvider(WrapScreen(Step2Kyc, store)),()=>Step2Kyc);
   Navigation.registerComponent(STEP3KYC_SCREEN,()=>withNavigationProvider(WrapScreen(Step3Kyc, store)),()=>Step3Kyc);

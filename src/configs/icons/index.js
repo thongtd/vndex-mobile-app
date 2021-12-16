@@ -1,7 +1,6 @@
 import React from "react"
 import Lock from "assets/svg/ic_lock.svg"
 import Email from "assets/svg/ic_email.svg"
-import {SvgXml} from "react-native-svg";
 export default {
     copy:require("../../assets/icons/ic_copy.png"),
     ggAuthenL: require("../../assets/images/gg_authen_l.png"),
@@ -26,8 +25,8 @@ export default {
     gmail: require("../../assets/icons/ic_gmail.png"),
     medium: require("../../assets/icons/ic_medium.png"),
     fb: require("../../assets/icons/ic_fb.png"),
-    gg2fa: <SvgXml xml={Lock}/>,
-    email2fa: <SvgXml xml={Email}/>,
+    gg2fa: <Lock />,
+    email2fa: <Email/>,
     withdraw: require("../../assets/icons/ic_withdraw.png"),
     deposit: require("../../assets/icons/ic_deposit.png"),
     emailSupport: require("../../assets/icons/icon_support1.png"),

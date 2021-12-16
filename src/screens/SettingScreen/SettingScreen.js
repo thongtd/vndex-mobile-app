@@ -26,6 +26,9 @@ import {
   LOGIN_SCREEN,
   KYC_SCREEN,
   REF_SCREEN,
+  ACCOUNTP2P_SCREEN,
+  PAYMENT_METHOD_SCREEN,
+  HISTORY_LOGIN_SCREEN,
 } from '../../navigation';
 import {Navigation} from 'react-native-navigation';
 import i18n from 'react-native-i18n';
@@ -40,7 +43,6 @@ import {switchLangTabbar} from '../../navigation/helpers';
 import {storageService} from '../../services/storage.service';
 import {dismissAllModal} from '../../navigation/Navigation';
 import Button from '../../components/Button/Button';
-import {SvgXml} from 'react-native-svg';
 // import ButtonSubmitClose from 'components/Button/ButtonSubmitClose';
 import St1 from 'assets/svg/st1.svg';
 import St2 from 'assets/svg/st2.svg';
@@ -49,6 +51,9 @@ import St4 from 'assets/svg/st4.svg';
 import St5 from 'assets/svg/st5.svg';
 import St6 from 'assets/svg/st6.svg';
 import St7 from 'assets/svg/st7.svg';
+import Accp2p from 'assets/svg/accp2p.svg';
+import HistoryLogin from 'assets/svg/historyLogin.svg';
+import PaymentMethod from 'assets/svg/paymentMethod.svg';
 import Logo from 'assets/svg/Logo.svg';
 import {
   GET_CRYPTO_WALLET_SUCCESS,
@@ -105,17 +110,35 @@ const SettingScreen = ({componentId}) => {
           isBorder: true,
         },
         {
+          textLeft: 'Account P2P',
+          iconLeft: <Accp2p/>,
+          iconRight: true,
+          onPress: onAccP2p,
+        },
+        {
           textLeft: 'Refferal',
           iconLeft: <St4/>,
           iconRight: true,
           onPress: onRef,
         },
         {
+          textLeft: 'Payment method',
+          iconLeft: <PaymentMethod/>,
+          iconRight: true,
+          onPress: onPaymentMethod,
+        },
+        {
+          textLeft: 'History Login',
+          iconLeft: <HistoryLogin/>,
+          iconRight: true,
+          onPress: onHistoryLogin,
+          isBorder: true,
+        },
+        {
           textLeft: 'Languages',
           iconLeft: <St5/>,
           textRight: lang,
           onPress: onLanguage,
-          isBorder: true,
           iconRight:true
         },
         {
@@ -173,6 +196,15 @@ const SettingScreen = ({componentId}) => {
   }, [isPasscode]);
   const onKyc = () => {
     pushSingleScreenApp(componentId, KYC_SCREEN);
+  };
+  const onAccP2p = () => {
+    pushSingleScreenApp(componentId, ACCOUNTP2P_SCREEN);
+  };
+  const onPaymentMethod = () => {
+    pushSingleScreenApp(componentId, PAYMENT_METHOD_SCREEN);
+  };
+  const onHistoryLogin = () => {
+    pushSingleScreenApp(componentId, HISTORY_LOGIN_SCREEN);
   };
   const onSupport = () => {
     pushSingleScreenApp(componentId, SUPPORT_SCREEN, hiddenTabbar());

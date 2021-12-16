@@ -22,6 +22,12 @@ export const PASSCODE_AUTH_SCREEN = 'fnx.passcodeAuthScreen';
 export const CHANGE_PASSWORD = 'fnx.changePasswordScreen';
 export const SECURITY_SCREEN = 'fnx.securityScreen';
 export const REF_SCREEN = 'fnx.RefScreen';
+export const TOTAL_COMMISSION_SCREEN = 'fnx.totalCommission';
+export const ROSE_DETAIL_SCREEN = 'fnx.RoseDetails';
+export const REFFERAL_FRIEND_SCREEN = 'fnx.RefferalFriend';
+export const PAYMENT_METHOD_SCREEN = 'fnx.paymentMethod';
+export const ACCOUNTP2P_SCREEN = 'fnx.AccountP2p';
+export const HISTORY_LOGIN_SCREEN = 'fnx.HistoryLogin';
 export const FA_CODE_EMAIL = 'fnx.faCodeEmail';
 
 export const ENABLE_2FA_GG = 'fnx.enable2FaGG';

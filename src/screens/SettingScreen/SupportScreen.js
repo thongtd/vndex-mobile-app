@@ -5,7 +5,6 @@ import icons from '../../configs/icons';
 import Container from '../../components/Container';
 import colors from '../../configs/styles/colors';
 import { get } from '../../configs/utils';
-import { SvgXml } from 'react-native-svg';
 import Logo from 'assets/svg/Logo.svg';
 import Fb from 'assets/svg/fb.svg';
 import Tt from 'assets/svg/tt.svg';

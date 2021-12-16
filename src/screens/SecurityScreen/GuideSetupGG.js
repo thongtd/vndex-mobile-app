@@ -16,7 +16,6 @@ import {fullHeight, checkFullHeight} from '../../configs/utils';
 import GGAuth from 'assets/svg/Google_Authenticator.svg';
 import GGPlay from 'assets/svg/ggplay.svg';
 import AppStore from 'assets/svg/appstore.svg';
-import { SvgXml } from 'react-native-svg';
 const GuideSetupGG = ({componentId}) => (
   <Container
     hasBack
