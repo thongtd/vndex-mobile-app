@@ -69,7 +69,7 @@ const ChangePasswordScreen = ({
     }, [])
     const getSessionId = () => {
         jwtDecode().then(user => {
-            console.log(user,"ss")
+            
             if (get(user, "Username")) {
                 authService.getTwoFactorEmailCode(get(user, "Username")).then(res => {
                     console.log(res,"Ress");
@@ -83,7 +83,7 @@ const ChangePasswordScreen = ({
     }
     const getKeepLogin = () => {
         jwtDecode().then(user => {
-            
+            console.log(user,"ss")
             if (get(user, "Username")) {
                 console.log(get(user, "Username"),"llll");
                 setEmail(get(user, "Username"));

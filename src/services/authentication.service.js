@@ -6,6 +6,9 @@ import { constant } from "../configs/constant";
 import { get } from "../configs/utils";
 
 export const authService = {
+    getLastLogin: async (email) => {
+        return await httpService.post(EXCHANGE_API.LAST_LOGIN + email, { email: email })
+    },
     getAssetSummary: async (accId) => {
         let response = await httpService.post(EXCHANGE_API.GET_ASSET_SUMMARY + accId);
         if (response.status === 200) {

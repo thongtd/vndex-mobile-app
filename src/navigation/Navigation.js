@@ -28,6 +28,12 @@ export function pushTutorialScreen() {
       setRoot: {
         waitForRender: true,
       },
+      push: {
+        waitForRender: true
+      },
+      showModal: {
+        waitForRender: true
+      }
     },
     topBar: {
       background: {

@@ -23,5 +23,6 @@ export default {
     navigation:'#1D1D1D',
     btnClose:"#52504A",
     textBtnClose:"#FFEFC5",
-    buy:"#31A827"
+    buy:"#31A827",
+    greyLight:"#E7E7E7"
 }

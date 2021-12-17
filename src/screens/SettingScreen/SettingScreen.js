@@ -77,6 +77,7 @@ const SettingScreen = ({componentId}) => {
   const isPasscode = useSelector(state => state.authentication.isPasscode);
   const langGlobal = useSelector(state => state.authentication.lang);
   const userInfo = useSelector(state => state.authentication.userInfo);
+  console.log(userInfo,"userInfo");
   const [Lang, setLang] = useState(checkLanguage(checkLang(langGlobal)));
   const [IsSwitch, setIsSwitch] = useState(false);
   const handleLogout = () => {

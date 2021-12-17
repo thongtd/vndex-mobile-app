@@ -3,7 +3,7 @@ const env = "dev"
 // const MARKET_WATCH_URL = 'http://54.169.27.91:6873/';
 
 
-const MARKET_WATCH_URL = env === "dev" ? 'http://54.169.88.171:6873/' : 'https://market-watch.financex.io/';
+const MARKET_WATCH_URL = env === "dev" ? 'http://54.169.221.223:6870/' : 'https://market-watch.financex.io/';
 
 export const MARKET_API = {
     GET_MARKET_WATCH: `${MARKET_WATCH_URL}api/v1/market-watch/get-market-watch`, //GET

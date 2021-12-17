@@ -423,6 +423,18 @@ export function hiddenTabbarShowHeader(title) {
 }
 export function hiddenTabbar() {
     return {
+        animations: {
+      
+            setRoot: {
+                waitForRender: true,
+              },
+              push: {
+                waitForRender: true
+              },
+              showModal: {
+                waitForRender: true
+              }
+          },
         bottomTabs: {
             visible: false,
             drawBehind: true
