@@ -69,7 +69,7 @@ const Button = ({
 
                 </View>
             )}
-            {isInput && <TouchablePreview
+            {isInput && <TouchableOpacity
                 {...rest}
                 onPress={onInput}
             >
@@ -80,18 +80,18 @@ const Button = ({
                     </View>
                     {iconRight && <Icon size={sizeIconRight} type={typeIconRight} name={iconRight} style={[stylest.iconRight, stylest.icon]} />}
                 </View>
-            </TouchablePreview>}
+            </TouchableOpacity>}
             {isTitle && <View style={{
                 width:width,
                 height:height
             }}>
-                <TouchablePreview
+                <TouchableOpacity
                 onPress={onTitle}
                 >
                     <View style={style}>
                         <TextFnx spaceHorizontal={spaceHorizontal} weight={weight} style={textStyle} size={size} color={color} value={title} />
                     </View>
-                </TouchablePreview>
+                </TouchableOpacity>
             </View>}
 
         </>

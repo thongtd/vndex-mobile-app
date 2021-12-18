@@ -1,4 +1,10 @@
 {
+  "I understand":"Tôi đã hiểu",
+  "Resend after s":"Gửi lại sau {0}s",
+  "Content verify account":"Email xác nhận đã được gửi tới {0}, Vui lòng truy cập địa chỉ email và làm theo hướng dẫn để kích hoạt tài khoản",
+  "Go to homepage":"Tới trang chủ",
+  "Unconfirmed account":"Tài khoản chưa được xác nhận",
+  "Resend email":"Gửi lại email",
   "Country":"Quốc gia",
   "PLEASE_SELECT_FRONT_OF_IDENTITY_CARD": "Vui lòng tải lên mặt trước của CMTND/Hộ chiếu",
   "PLEASE_SELECT_BACK_OF_IDENTITY_CARD": "Vui lòng tải lên mặt sau của CMTND/Hộ chiếu",

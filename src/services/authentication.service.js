@@ -9,6 +9,12 @@ export const authService = {
     getLastLogin: async (email) => {
         return await httpService.post(EXCHANGE_API.LAST_LOGIN + email, { email: email })
     },
+    resendConfirmEmail: async (email) => {
+        console.log(email,"email");
+        let response = await httpService.post_without_token(EXCHANGE_API.RESEND_CONFIRM_EMAIL, {email,callback:"string"});
+        console.log(response,"response");
+        return get(response,"status")
+    },
     getUserReferrals: async (email, user_id, page_index, page_side) => {
         return await httpService.post(EXCHANGE_API.GET_USER_REFERRALS + `${user_id}/${page_index}/${page_side}`, {
             email,

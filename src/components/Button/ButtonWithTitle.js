@@ -23,7 +23,7 @@ const ButtonWithTitle = ({
             width:width,
             height:height
         }}>
-            <TouchablePreview
+            <TouchableOpacity
                 onPress={onPress}
             >
                 <View {...rest}
@@ -39,7 +39,7 @@ const ButtonWithTitle = ({
                     </TextFnx>}
 
                 </View>
-            </TouchablePreview>
+            </TouchableOpacity>
         </View>
 
     );

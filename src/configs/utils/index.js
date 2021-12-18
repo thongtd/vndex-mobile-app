@@ -494,14 +494,13 @@ export function hiddenModal(nameScreen, props, isHiddenLayout = true) {
         name: nameScreen,
         passProps: props,
         options: {
-          layout: {backgroundColor: 'transparent'},
+          layout: {backgroundColor: 'transparent',componentBackgroundColor: 'transparent'},
           screenBackgroundColor: 'transparent',
           modalPresentationStyle: 'overCurrentContext',
-          // topBar: {
-          //     visible: true,
-          //     drawBehind: true,
-          //     backgroundColor: 'transparent',
-          // },
+          topBar: {
+              visible: false,
+              animate: true,
+          },
           statusBar: {
             backgroundColor: 'transparent',
             drawBehind: true,

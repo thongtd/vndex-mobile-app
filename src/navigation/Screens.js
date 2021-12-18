@@ -2,6 +2,7 @@
 
 
 export const LOGIN_SCREEN = 'fnx.LoginScreen';
+export const SEND_REG_SCREEN = 'fnx.SendRegScreen';
 export const STEP2KYC_SCREEN = 'fnx.Step2KycScreen';
 export const STEP3KYC_SCREEN = 'fnx.Step3KycScreen';
 

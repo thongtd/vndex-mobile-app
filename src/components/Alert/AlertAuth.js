@@ -10,6 +10,7 @@ import TextFnx from '../Text/TextFnx';
 import ButtonIcon from '../Button/ButtonIcon';
 import { Navigation } from 'react-native-navigation';
 import { dismissAllModal } from '../../navigation/Navigation';
+import Button from '../Button/Button';
 
 const AlertAuth = ({
     componentId,
@@ -31,14 +32,11 @@ const AlertAuth = ({
             <LayoutSpaceHorizontal
                 style={stylest.layoutSpace}
             >
-                <LayoutSpaceBetween>
-                    <View />
-                    <ButtonIcon
-                        onPress={dismissModal}
-                        style={[styles.icon, { marginRight: -20 }]} color={colors.black} size={17} name="times" />
-                </LayoutSpaceBetween>
+               
                 {isTitle && <TextFnx style={stylest.textTitle} value={title} />}
                 {customView}
+                <Button spaceVertical={10} onSubmit={dismissModal} textSubmit={"I understand".t()} isSubmit 
+        isButtonCircle={false} />
             </LayoutSpaceHorizontal>
         </View>
     </>
@@ -58,7 +56,8 @@ const stylest = StyleSheet.create({
     },
     layoutSpace: {
         paddingHorizontal: 20,
-        paddingBottom: 40,
+        paddingTop: 40,
+        paddingBottom: 30,
     },
     textTitle: { paddingBottom: 10, color: colors.black }
 })

@@ -86,7 +86,7 @@ import HistoryTransactions from '../screens/WalletScreen/screenChildren/HistoryT
 import { KYC_SCREEN, REF_SCREEN } from './Screens';
 import {RefScreen}  from '../screens/RefScreen';
 import { KycScreen } from '../screens/KycScreen';
-import { ACCOUNTP2P_SCREEN, HISTORY_LOGIN_SCREEN, PAYMENT_METHOD_SCREEN, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, STEP2KYC_SCREEN, STEP3KYC_SCREEN, TOTAL_COMMISSION_SCREEN } from '.';
+import { ACCOUNTP2P_SCREEN, HISTORY_LOGIN_SCREEN, PAYMENT_METHOD_SCREEN, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, SEND_REG_SCREEN, STEP2KYC_SCREEN, STEP3KYC_SCREEN, TOTAL_COMMISSION_SCREEN } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
 import RoseDetails from '../screens/RefScreen/RoseDetails';
@@ -95,6 +95,7 @@ import TotalCommisstion from '../screens/RefScreen/TotalCommisstion';
 import AccountP2PScreen from '../screens/AccountP2P/AccountP2PScreen';
 import PaymentMethodScreen from '../screens/PaymentMethod/PaymentMethodScreen';
 import HistoryLoginScreen from '../screens/HistoryLogin/HistoryLoginScreen';
+import VerifyRegScreen from '../screens/RegisterScreen/VerifyRegScreen';
 const WrapScreen = (ReduxScreen, store) => props => (
   <Provider store={store}>
     <ReduxScreen {...props} />
@@ -121,8 +122,10 @@ export const registerScreens = store => {
   Navigation.registerComponent(STEP2KYC_SCREEN,()=>withNavigationProvider(WrapScreen(Step2Kyc, store)),()=>Step2Kyc);
   Navigation.registerComponent(STEP3KYC_SCREEN,()=>withNavigationProvider(WrapScreen(Step3Kyc, store)),()=>Step3Kyc);
   
-  Navigation.registerComponent(REGISTER_SCREEN,()=>withNavigationProvider(WrapScreen(RegisterScreen, store)),()=>RegisterScreen);
+  Navigation.registerComponent(REGISTER_SCREEN,()=>withNavigationProvider(WrapScreen(ConfirmScreen, store)),()=>ConfirmScreen);
   Navigation.registerComponent(CONFIRM_REGISTER_SCREEN,()=>withNavigationProvider(WrapScreen(ConfirmScreen, store)),()=>ConfirmScreen);
+  Navigation.registerComponent(SEND_REG_SCREEN,()=>withNavigationProvider(WrapScreen(VerifyRegScreen, store)),()=>VerifyRegScreen);
+  
   Navigation.registerComponent(RESET_SCREEN,()=>withNavigationProvider(WrapScreen(ResetScreen, store)),()=>ResetScreen);
   Navigation.registerComponent(CONFIRM_RESET_SCREEN,()=>withNavigationProvider(WrapScreen(ConfirmResetScreen, store)),()=>ConfirmResetScreen);
   Navigation.registerComponent(CONFIRM_LOGIN_SCREEN,()=>withNavigationProvider(WrapScreen(ConfirmLoginScreen, store)),()=>ConfirmLoginScreen);

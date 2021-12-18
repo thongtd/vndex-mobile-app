@@ -74,6 +74,7 @@ export const httpService = {
             let response = await axios.post(url, data, {
                 headers: headers
             })
+            
             if (response.data) {
                 return response.data;
             }
@@ -81,7 +82,7 @@ export const httpService = {
 
             return null;
         } catch (error) {
-
+            console.log(error,"err");
         }
 
     },

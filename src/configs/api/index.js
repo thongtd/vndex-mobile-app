@@ -104,7 +104,7 @@ export const EXCHANGE_API = {
 
     GET_OTP: `${EXCHANGE_URL}api/v1/package/generate-opt/`, //{email}/{feature}/{itemId}
 
-    RESEND_CONFIRM_EMAIL: `${EXCHANGE_URL}api/v1/user/resend-confirm-email/`, //{email},
+    RESEND_CONFIRM_EMAIL: `${EXCHANGE_URL}api/v1/user/resend-confirm-email`, //{email},
 
     // NOTIFICATION 
 

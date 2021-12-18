@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View,StyleSheet } from 'react-native';
+import { Text, View,StyleSheet, TouchableOpacity } from 'react-native';
 import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 
 import TextFnx from '../Text/TextFnx';
@@ -16,14 +16,14 @@ const ButtonSubmitClose = ({
     ...rest
 }) => (
     <View style={stylest.flex}>
-        <TouchablePreview
+        <TouchableOpacity
             onPress={onPress}
             {...rest}
         >
             <View style={[isButtonCircle?stylest.btnCircle:stylest.btn,{backgroundColor:bgButtonColor},style]}>
                 <TextFnx color={isSubmit?colors.black:colors.textBtnClose} value={title} />
             </View>
-        </TouchablePreview>
+        </TouchableOpacity>
     </View>
 );
 const stylest = StyleSheet.create({

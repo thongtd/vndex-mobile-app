@@ -1,5 +1,11 @@
 {
+  "I understand":"I understand",
+  "Resend after s":"Resend after {0}s",
+  "Content verify account":"Confirmation email has been sent to {0}, Please access your email address and follow the instructions to activate your account",
+  "Unconfirmed account":"Unconfirmed account",
+  "Go to homepage":"Go to homepage",
   "Country":"Country",
+  "Resend email":"Resend email",
   "PLEASE_SELECT_FRONT_OF_IDENTITY_CARD": "Please select front of identity card",
   "PLEASE_SELECT_BACK_OF_IDENTITY_CARD": "Please select back of identity card",
   "PLEASE_SELECT_SELFIE_IMAGE": "Please select a Selfie image",
