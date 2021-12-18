@@ -1,6 +1,6 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Container from '../../components/Container';
-import React from 'react';
+import React, {useState} from 'react';
 import colors from '../../configs/styles/colors';
 import Gallerry from 'assets/svg/id_gallery.svg';
 import Mtcmt1 from 'assets/svg/mattruoccmt.svg';
@@ -12,20 +12,94 @@ import Checked from 'assets/svg/checked.svg';
 
 import TextFnx from '../../components/Text/TextFnx';
 import Button from '../../components/Button/Button';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {pushSingleScreenApp, STEP3KYC_SCREEN} from '../../navigation';
-export default function Step3Kyc({componentId}) {
+import {get, isEmpty} from 'lodash';
+import {toast} from '../../configs/utils';
+import FastImage from 'react-native-fast-image';
+import {pop} from '../../navigation/Navigation';
+import {authService} from '../../services/authentication.service';
+export default function Step3Kyc({
+  componentId,
+  frontIdentityCardBytes,
+  frontIdentityCardFileName,
+  backIdentityCardBytes,
+  backIdentityCardFileName,
+  birthDate,
+  city,
+  countryCode,
+  firstName,
+  lastName,
+  identityCard,
+  postalCode,
+  sex,
+  identityUserId
+}) {
+  const [assetSelfieSide, setAssetSelfieSide] = useState('');
+  const handleSubmit = selfieSide => {
+    if (isEmpty(selfieSide)) {
+      toast('PLEASE_SELECT_SELFIE_IMAGE'.t());
+    } else {
+      let data = {
+        birthDate,
+        city,
+        countryCode,
+        firstName,
+        lastName,
+        identityCard,
+        identityUserId,
+        postalCode,
+        sex,
+        selfieBytes:get(selfieSide,"base64"),
+        selfieFileName:get(selfieSide,"fileName"),
+        frontIdentityCardBytes,
+        frontIdentityCardFileName,
+        backIdentityCardBytes,
+        backIdentityCardFileName,
+      };
+
+      authService.updateUserInfo(data).then(res => {
+        console.log(res,"REss");
+      })
+    }
+  };
+  const handleSelfieSide = () => {
+    launchImageLibrary({
+      mediaType: 'photo',
+      includeBase64: true,
+    }).then(res => {
+      if (get(res, 'assets[0].fileSize') > 5000000) {
+        return toast('FILE_SIZE'.t());
+      } else {
+        setAssetSelfieSide(res.assets[0]);
+      }
+    });
+  };
   return (
     <Container
       isScroll
       componentId={componentId}
       hasBack
       title={'Update portraits'.t()}>
-      <TouchableOpacity style={[stylest.box, {marginTop: 15}]}>
+      <TouchableOpacity
+        onPress={handleSelfieSide}
+        style={[stylest.box, {marginTop: 15}]}>
         <View style={stylest.centerFlex}>
-          <Gallerry />
-          <TextFnx color={colors.description}>
-            {'Portrait'.t()}
-          </TextFnx>
+          {get(assetSelfieSide, 'uri') ? (
+            <FastImage
+              style={{width: 200, height: 200}}
+              source={{
+                uri: get(assetSelfieSide, 'uri'),
+                priority: FastImage.priority.high,
+              }}
+              resizeMode={FastImage.resizeMode.contain}
+            />
+          ) : (
+            <>
+              <Gallerry />
+              <TextFnx color={colors.description}>{'Portrait'.t()}</TextFnx>
+            </>
+          )}
         </View>
       </TouchableOpacity>
       <TextFnx space={10} color={colors.description}>
@@ -66,12 +140,13 @@ export default function Step3Kyc({componentId}) {
         </View>
       </View>
       <Button
-        textClose={"Come back".t()}
-        onSubmit={() => pushSingleScreenApp(componentId, STEP3KYC_SCREEN)}
+        textClose={'Come back'.t()}
+        onSubmit={() => handleSubmit(assetSelfieSide)}
         isButtonCircle={false}
         isSubmit
         isClose
         spaceVertical={30}
+        onClose={() => pop(componentId)}
       />
     </Container>
   );

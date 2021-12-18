@@ -14,7 +14,7 @@ const Empty = ({
             isCenter
             style={{
                 height: fullHeight/2,
-                width:fullWidth
+                // width:fullWidth
             }}
         >
             <Icon name="file" size={40} color={colors.description} />

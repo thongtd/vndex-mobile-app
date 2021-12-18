@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {Text, TouchableOpacity, View, StyleSheet, Linking} from 'react-native';
 import Container from '../../components/Container';
 import {constant} from '../../configs/constant';
 import QRCode from 'react-native-qrcode-svg';
@@ -20,12 +20,15 @@ import {
   removeTokenAndUserInfo,
 } from '../../configs/utils';
 import { pushSingleScreenApp, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, TOTAL_COMMISSION_SCREEN } from '../../navigation';
+import { useSelector } from 'react-redux';
+import { authService } from '../../services/authentication.service';
 const RefScreen = ({componentId}) => {
   const [DataSetting, setDataSetting] = useState(data);
   useEffect(() => {
     setDataSetting(data);
     return () => {};
   }, []);
+  const UserInfo = useSelector(state => state.authentication.userInfo)
   const data = [
     // { textLeft: "passcode", iconLeft: icons.passCode, hasSwitch: true, onValueChange: changeSwitchData, isBorder: true },
     {
@@ -47,7 +50,13 @@ const RefScreen = ({componentId}) => {
     },
   ];
 
-  
+  useEffect(() => {
+    let userCommissionSummary = authService.getUserCommissionSummary(get(UserInfo,"id")).then(res => console.log(res,"res")).catch(err => console.log(err,"err"))
+
+    return () => {
+      
+    }
+  }, [])
   
   return (
     <Container
@@ -83,12 +92,12 @@ const RefScreen = ({componentId}) => {
       <View>
         <TextFnx color={colors.description}>{"Share".t()}</TextFnx>
         <View style={[stylest.row,{paddingVertical:10}]}>
-          <TouchableOpacity style={{
+          <TouchableOpacity onPress={() => Linking.openURL(constant.SHARE.TWITTER)} style={{
               paddingRight:10
           }}>
             <Fbc />
           </TouchableOpacity>
-          <TouchableOpacity style={{
+          <TouchableOpacity onPress={() =>  Linking.openURL(constant.SHARE.FACEBOOK)} style={{
               paddingHorizontal:10
           }}>
             <Ttc />

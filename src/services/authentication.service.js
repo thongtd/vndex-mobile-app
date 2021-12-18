@@ -9,6 +9,35 @@ export const authService = {
     getLastLogin: async (email) => {
         return await httpService.post(EXCHANGE_API.LAST_LOGIN + email, { email: email })
     },
+    getUserReferrals: async (email, user_id, page_index, page_side) => {
+        return await httpService.post(EXCHANGE_API.GET_USER_REFERRALS + `${user_id}/${page_index}/${page_side}`, {
+            email,
+            user_id,
+            page_index,
+            page_side
+        })
+    },
+    getUserCommission: async (email, user_id, page_index, page_side) => {
+        return await httpService.post(EXCHANGE_API.GET_USER_COMMISSION + `${user_id}/${page_index}/${page_side}`, {
+            email,
+            user_id,
+            page_index,
+            page_side
+        })
+    },
+    getUserCommissionSummary: async (user_id) => {
+        return await httpService.post(EXCHANGE_API.GET_USER_COMMISSION_SUMMARY + user_id, { user_id })
+    },
+    updateUserInfo: async (data) => {
+        console.log(data,"data kakka");
+        // console.log(data);
+        // console.log(EXCHANGE_API.UPDATE_USER_INFO, data,"exchang data");
+        let response = await httpService.post(EXCHANGE_API.UPDATE_USER_INFO, data);
+        console.log(response,"responseresponse");
+        if (response.status === 200) {
+            return response.data
+        }
+    },
     getAssetSummary: async (accId) => {
         let response = await httpService.post(EXCHANGE_API.GET_ASSET_SUMMARY + accId);
         if (response.status === 200) {

@@ -1,4 +1,8 @@
 {
+  "Country":"Quốc gia",
+  "PLEASE_SELECT_FRONT_OF_IDENTITY_CARD": "Vui lòng tải lên mặt trước của CMTND/Hộ chiếu",
+  "PLEASE_SELECT_BACK_OF_IDENTITY_CARD": "Vui lòng tải lên mặt sau của CMTND/Hộ chiếu",
+  "PLEASE_SELECT_SELFIE_IMAGE": "Vui lòng tải lên ảnh của bạn",
   "Account P2P":"Tài khoản P2P",
   "Payment method":"Phương thức thanh toán",
   "History Login":"Lịch sử đăng nhập",

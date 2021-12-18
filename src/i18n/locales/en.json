@@ -1,4 +1,8 @@
 {
+  "Country":"Country",
+  "PLEASE_SELECT_FRONT_OF_IDENTITY_CARD": "Please select front of identity card",
+  "PLEASE_SELECT_BACK_OF_IDENTITY_CARD": "Please select back of identity card",
+  "PLEASE_SELECT_SELFIE_IMAGE": "Please select a Selfie image",
   "Account P2P":"Account P2P",
   "Payment method":"Payment method",
   "History Login":"History Login",

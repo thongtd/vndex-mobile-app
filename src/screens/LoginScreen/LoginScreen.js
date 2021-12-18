@@ -20,6 +20,7 @@ import { constant } from '../../configs/constant';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useSelector } from "react-redux"
 import { useActionsMarket } from '../../redux';
+import publicIP from 'react-native-public-ip';
 import { GET_ASSET_SUMARY, GET_WITHDRAW_COIN_LOG, GET_WITHDRAW_FIAT_LOG, GET_DEPOSIT_FIAT_LOG, GET_DEPOSIT_COIN_LOG } from '../../redux/modules/wallet/actions';
 const LoginScreen = ({
   componentId,
@@ -33,17 +34,18 @@ const LoginScreen = ({
   const dispatcher = useDispatch();
   const marketWatch = useSelector(state => state.market.marketWatch);
   useEffect(() => {
-    fetch("https://extreme-ip-lookup.com/json/")
-            .then(response => response.json())
-            .then(res => {
-                console.log(res, "ip address");
-                // AsyncStorage.setItem("ipAddress", res.query)
-                // this.setState({
-                //     ipAddress: res.query,
-                //     city: res.city,
-                //     userLocationRaw: res.region
-                // }, () => console.log(this.state.ipAddress, this.state.city, this.state.userLocationRaw, "ipaddress2"))
-            })
+    publicIP().then(ip => setipAddress(ip));
+    // fetch("https://extreme-ip-lookup.com/json/")
+    //         .then(response => response.json())
+    //         .then(res => {
+    //             console.log(res, "ip address");
+    //             // AsyncStorage.setItem("ipAddress", res.query)
+    //             // this.setState({
+    //             //     ipAddress: res.query,
+    //             //     city: res.city,
+    //             //     userLocationRaw: res.region
+    //             // }, () => console.log(this.state.ipAddress, this.state.city, this.state.userLocationRaw, "ipaddress2"))
+    //         })
     const emitterData = listenerEventEmitter(constant.EVENTS_DEVICE.onAPI, () => {
       setDisabled(false);
     })
