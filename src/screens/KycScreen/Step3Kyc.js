@@ -13,12 +13,13 @@ import Checked from 'assets/svg/checked.svg';
 import TextFnx from '../../components/Text/TextFnx';
 import Button from '../../components/Button/Button';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {pushSingleScreenApp, STEP3KYC_SCREEN} from '../../navigation';
+import {pushSingleScreenApp, SETTING_SCREEN, STEP3KYC_SCREEN} from '../../navigation';
 import {get, isEmpty} from 'lodash';
 import {toast} from '../../configs/utils';
 import FastImage from 'react-native-fast-image';
-import {pop} from '../../navigation/Navigation';
+import {pop, popTo} from '../../navigation/Navigation';
 import {authService} from '../../services/authentication.service';
+import { Navigation } from 'react-native-navigation';
 export default function Step3Kyc({
   componentId,
   frontIdentityCardBytes,
@@ -60,6 +61,13 @@ export default function Step3Kyc({
 
       authService.updateUserInfo(data).then(res => {
         console.log(res,"REss");
+        if(get(res,"status")){
+          // popToRoo(componentId,SETTING_SCREEN);
+          toast(get(res,"message"));
+          Navigation.popToRoot(componentId);
+        }else{
+          toast(get(res,"message"));
+        }
       })
     }
   };
