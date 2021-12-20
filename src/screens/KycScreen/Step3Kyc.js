@@ -20,6 +20,7 @@ import FastImage from 'react-native-fast-image';
 import {pop, popTo} from '../../navigation/Navigation';
 import {authService} from '../../services/authentication.service';
 import { Navigation } from 'react-native-navigation';
+import { useSelector } from 'react-redux';
 export default function Step3Kyc({
   componentId,
   frontIdentityCardBytes,
@@ -37,8 +38,10 @@ export default function Step3Kyc({
   identityUserId
 }) {
   const [assetSelfieSide, setAssetSelfieSide] = useState('');
+  
+  const userKyc = useSelector(state => state.authentication.userKyc);
   const handleSubmit = selfieSide => {
-    if (isEmpty(selfieSide)) {
+    if (isEmpty(selfieSide) && isEmpty(get(userKyc,"selfie"))) {
       toast('PLEASE_SELECT_SELFIE_IMAGE'.t());
     } else {
       let data = {
@@ -93,11 +96,11 @@ export default function Step3Kyc({
         onPress={handleSelfieSide}
         style={[stylest.box, {marginTop: 15}]}>
         <View style={stylest.centerFlex}>
-          {get(assetSelfieSide, 'uri') ? (
+          {(get(assetSelfieSide, 'uri') || get(userKyc,"selfie")) ? (
             <FastImage
               style={{width: 200, height: 200}}
               source={{
-                uri: get(assetSelfieSide, 'uri'),
+                uri:get(userKyc,"selfie")?get(userKyc,"selfie"): get(assetSelfieSide, 'uri'),
                 priority: FastImage.priority.high,
               }}
               resizeMode={FastImage.resizeMode.contain}

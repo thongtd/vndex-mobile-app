@@ -3,7 +3,7 @@
 import {
   take, put, call, fork, all, takeEvery
 } from 'redux-saga/effects';
-import { GET_COUNTRIES, actionsReducerAuthen, CHECK_EMAIL, CHECK_LOGIN, CONFIRM_2FA_CODE, LOGIN_SUCCESS } from './actions';
+import { GET_COUNTRIES, actionsReducerAuthen, CHECK_EMAIL, CHECK_LOGIN, CONFIRM_2FA_CODE, LOGIN_SUCCESS, GET_USERS_KYC } from './actions';
 import { authService } from '../../../services/authentication.service';
 import { toast, get, formatMessageByArray, emitEventEmitter, setTokenAndUserInfo } from '../../../configs/utils';
 import { pushSingleScreenApp, WALLET_SCREEN, CONFIRM_LOGIN_SCREEN, ALERT_ACCOUNT_ACTIVE } from '../../../navigation';
@@ -106,10 +106,42 @@ export function* asyncConfirm2fa({payload}){
   }
 } 
 
+export function* asyncUserKyc({payload}){
+  console.log(payload,"pay user kyc");
+  try {
+    const res = yield call(authService.getUserInfo,
+      payload
+    );
+    console.log(res,"Resss kyc")
+    yield put(
+      actionsReducerAuthen.getUsersKycSuccess(res)
+    );
+    // if (get(res, "result") === "ok" && get(res, "data.succeeded") === true) {
+    //   // emitEventEmitter(constant.EVENTS_DEVICE.onAPI,true)
+    //   // setTokenAndUserInfo(res);
+    //   // pushTabBasedApp();
+    //   // yield put(actionsReducerAuthen.setUserInfo(get(res, "data.identityUser")))
+    //   // yield put(actionsReducerAuthen.checkStateLogin(true))
+    // }else{
+    //   emitEventEmitter(constant.EVENTS_DEVICE.onAPI,true)
+    //   // toast("2FA code invalid".t());
+    //   return false
+    // }
+  } catch (error) {
+    emitEventEmitter(constant.EVENTS_DEVICE.onAPI,true)
+  }
+} 
+
 export function* watchGetCountries() {
   while (true) {
     const action = yield take(GET_COUNTRIES);
     yield* asyncGetCountries(action);
+  }
+}
+export function* watchGetUserKyc() {
+  while (true) {
+    const action = yield take(GET_USERS_KYC);
+    yield* asyncUserKyc(action);
   }
 }
 
@@ -132,6 +164,7 @@ export default function* () {
     fork(watchGetCountries), 
     fork(watchAuthorize),
     fork(watchConfirm2fa),
+    fork(watchGetUserKyc),
    
   ]);
 }

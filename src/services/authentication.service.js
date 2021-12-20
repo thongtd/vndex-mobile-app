@@ -6,6 +6,12 @@ import { constant } from "../configs/constant";
 import { get } from "../configs/utils";
 
 export const authService = {
+    getUserInfo: async (identityUserId) => {
+        let response = await httpService.post(EXCHANGE_API.GET_USER_INFO, { identityUserId })
+        if (response.status == 200) {
+            return response.data;
+        }
+    },
     getLastLogin: async (email) => {
         return await httpService.post(EXCHANGE_API.LAST_LOGIN + email, { email: email })
     },

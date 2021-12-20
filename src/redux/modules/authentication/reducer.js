@@ -1,6 +1,6 @@
 // @flow
 
-import { GET_COUNTRIES, GET_COUNTRIES_SUCCSESS, EMAIL_EXIST, EMAIL_NOT_EXIST, LOGIN_SUCCSESS, SET_TOKEN, CHECK_STATE_LOGIN, LANGUAGES, CHECK_PASSCODE, SET_USER_INFO, SET_FA_CODE } from './actions';
+import { GET_COUNTRIES, GET_COUNTRIES_SUCCSESS, EMAIL_EXIST, EMAIL_NOT_EXIST, LOGIN_SUCCSESS, SET_TOKEN, CHECK_STATE_LOGIN, LANGUAGES, CHECK_PASSCODE, SET_USER_INFO, SET_FA_CODE, GET_USERS_KYC_SUCCESS } from './actions';
 import { get, set } from '../../../configs/utils';
 import i18n from "react-native-i18n"
 export const DEFAULT = {
@@ -9,7 +9,8 @@ export const DEFAULT = {
   lang: i18n.currentLocale(),
   isPasscode: false,
   passPasscode: false,
-  userInfo: ""
+  userInfo: "",
+  userKyc:{}
 };
 
 export default authentication = (state = DEFAULT, action = {}) => {
@@ -20,6 +21,11 @@ export default authentication = (state = DEFAULT, action = {}) => {
       return {
         ...state,
         countries: payload,
+      };
+      case GET_USERS_KYC_SUCCESS:
+      return {
+        ...state,
+        userKyc: payload,
       };
     case CHECK_STATE_LOGIN:
       return {

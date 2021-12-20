@@ -39,6 +39,7 @@ const Input = ({
     hasValue,
     styleRight,
     editable,
+    defaultValue,
     ...rest
 }) => {
     const [valueInput, setValue] = useState(value);
@@ -108,6 +109,7 @@ const Input = ({
                     size={13}
                 />}
                 <TextInput
+                defaultValue={defaultValue}
                         editable={editable}
                         maxLength={rest.isResend ? 6 : maxLength}
                         keyboardType={rest.isResend ? "number-pad" : keyboardType}

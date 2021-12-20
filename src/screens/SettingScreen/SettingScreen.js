@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View} from 'react-native';
+import {Text,Clipboard, View} from 'react-native';
 import Container from '../../components/Container';
 import HeaderWalletScreen from '../WalletScreen/components/HeaderWalletScreen';
 import HeaderSettingScreen from './components/HeaderSettingScreen';
 import ItemSetting from '../../components/Item/ItemSetting';
 import icons from '../../configs/icons';
+import { useActionsAuthen } from '../../redux/modules/authentication';
+
 import {
   get,
   hiddenTabbar,
@@ -13,6 +15,7 @@ import {
   createAction,
   size,
   removeTokenAndUserInfo,
+  toast,
 } from '../../configs/utils';
 import {constant, fontSize} from '../../configs/constant';
 import {useDispatch, useSelector} from 'react-redux';
@@ -77,7 +80,6 @@ const SettingScreen = ({componentId}) => {
   const isPasscode = useSelector(state => state.authentication.isPasscode);
   const langGlobal = useSelector(state => state.authentication.lang);
   const userInfo = useSelector(state => state.authentication.userInfo);
-  console.log(userInfo,"userInfo");
   const [Lang, setLang] = useState(checkLanguage(checkLang(langGlobal)));
   const [IsSwitch, setIsSwitch] = useState(false);
   const handleLogout = () => {
@@ -90,6 +92,11 @@ const SettingScreen = ({componentId}) => {
     // dispatcher(createAction(GET_ASSET_CRYPTO_WALLETS_SUCCESS),[])
     // dispatcher(createAction(GET_ASSET_FIAT_WALLET_SUCCESS),[])
   };
+  const hanldeCopy = (url) =>{
+    Clipboard.setString(url);
+    toast("COPY_TO_CLIPBOARD".t());
+    
+  }
   const handleLogin = () =>{
     return pushSingleScreenApp(componentId,LOGIN_SCREEN)
   }
@@ -266,6 +273,14 @@ const SettingScreen = ({componentId}) => {
   const handleActiveCurrency = currency => {
     dismissAllModal();
   };
+  // useEffect(() => {
+    
+    
+  //   return () => {
+      
+  //   }
+  // }, [])
+  useActionsAuthen().handleGetUserKyc(get(userInfo,"id"));
   return (
     <Container
       space={5}
@@ -279,13 +294,13 @@ const SettingScreen = ({componentId}) => {
             {get(userInfo,"email")}
             </TextFnx>
             <View style={{
-              backgroundColor:get(userInfo,"customerMetaData.verified")?"#152C18":"#361E21",
+              backgroundColor:get(userInfo,"customerMetaData.isKycUpdated")?"#152C18":"#361E21",
               marginLeft:25,
               paddingHorizontal:15,
               paddingVertical:5,
               borderRadius:5,
             }}>
-              <TextFnx color={get(userInfo,"customerMetaData.verified")?colors.green:colors.red} size={fontSize.f14}>{get(userInfo,"customerMetaData.verified")?"Verified".t():"Not verified".t()}</TextFnx>
+              <TextFnx color={get(userInfo,"customerMetaData.isKycUpdated")?colors.green:colors.red} size={fontSize.f14}>{get(userInfo,"customerMetaData.isKycUpdated")?"Verified".t():"Not verified".t()}</TextFnx>
             </View>
         </View>
         <View style={stylest.flexRow}>
@@ -302,9 +317,7 @@ const SettingScreen = ({componentId}) => {
             <ButtonIcon 
             name="copy"
             color={colors.highlight}
-            onPress={()=>{
-              alert("ok");
-            }}
+            onPress={()=>hanldeCopy(get(userInfo,"customerMetaData.referralId"))}
             />
         </View>
         </View>):(

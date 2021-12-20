@@ -1,5 +1,6 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Container from '../../components/Container';
+
 import React, {useState, useCallback, useEffect} from 'react';
 import colors from '../../configs/styles/colors';
 import Gallerry from 'assets/svg/id_gallery.svg';
@@ -18,6 +19,7 @@ import {get, isEmpty} from 'lodash';
 import {toast} from '../../configs/utils';
 import FastImage from 'react-native-fast-image';
 import {pop} from '../../navigation/Navigation';
+import { useSelector } from 'react-redux';
 
 export default function Step2Kyc({
   componentId,
@@ -33,6 +35,7 @@ export default function Step2Kyc({
 }) {
   const [assetFrontSide, setAssetFrontSide] = useState('');
   const [assetBackSide, setAssetBackSide] = useState('');
+  const userKyc = useSelector(state => state.authentication.userKyc);
   const handleFrontSide = () => {
     launchImageLibrary({
       mediaType: 'photo',
@@ -59,9 +62,9 @@ export default function Step2Kyc({
     });
   };
   const handleNext = (assetBackSide, assetFrontSide) => {
-    if (isEmpty(assetFrontSide)) {
+    if (isEmpty(assetFrontSide) && isEmpty(get(userKyc,"frontIdentityCard"))) {
       toast('PLEASE_SELECT_FRONT_OF_IDENTITY_CARD'.t());
-    } else if (isEmpty(assetBackSide)) {
+    } else if (isEmpty(assetBackSide) && isEmpty(get(userKyc,"backIdentityCard"))) {
       toast('PLEASE_SELECT_BACK_OF_IDENTITY_CARD'.t());
     } else {
       pushSingleScreenApp(componentId, STEP3KYC_SCREEN, {
@@ -91,11 +94,11 @@ export default function Step2Kyc({
         onPress={handleFrontSide}
         style={[stylest.box, {marginTop: 15}]}>
         <View style={stylest.centerFlex}>
-          {get(assetFrontSide, 'uri') ? (
+          {(get(assetFrontSide, 'uri') || get(userKyc,"frontIdentityCard")) ? (
             <FastImage
               style={{width: 200, height: 200}}
               source={{
-                uri: get(assetFrontSide, 'uri'),
+                uri:get(userKyc,"frontIdentityCard")?get(userKyc,"frontIdentityCard"): get(assetFrontSide, 'uri'),
                 priority: FastImage.priority.high,
               }}
               resizeMode={FastImage.resizeMode.contain}
@@ -114,11 +117,11 @@ export default function Step2Kyc({
         onPress={handleBackSide}
         style={[stylest.box, {marginTop: 15}]}>
         <View style={stylest.centerFlex}>
-          {get(assetBackSide, 'uri') ? (
+          {(get(assetBackSide, 'uri') || get(userKyc,"backIdentityCard")) ? (
             <FastImage
               style={{width: 200, height: 200}}
               source={{
-                uri: get(assetBackSide, 'uri'),
+                uri:get(userKyc,"backIdentityCard")?get(userKyc,"backIdentityCard"): get(assetBackSide, 'uri'),
                 priority: FastImage.priority.high,
               }}
               resizeMode={FastImage.resizeMode.contain}

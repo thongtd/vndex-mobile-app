@@ -7,6 +7,8 @@ import { createAction } from '../../../configs/utils';
 const CONTEXT = '@AUTH';
 // declare var
 export const GET_COUNTRIES = `${CONTEXT}/GET_COUNTRIES`;
+export const GET_USERS_KYC = `${CONTEXT}/GET_USERS_KYC`;
+export const GET_USERS_KYC_SUCCESS = `${CONTEXT}/GET_USERS_KYC_SUCCESS`;
 export const GET_COUNTRIES_SUCCSESS = `${CONTEXT}/GET_COUNTRIES_SUCCSESS`;
 export const CHECK_LOGIN = `${CONTEXT}/CHECK_LOGIN`;
 export const CONFIRM_2FA_CODE = `${CONTEXT}/CONFIRM_2FA_CODE`;
@@ -24,6 +26,11 @@ export function useActionsAuthen() {
   const dispatch = useDispatch();
   return {
     handleGetCountries: () => dispatch(createAction(GET_COUNTRIES)),
+    handleGetUserKyc: (userId) => {
+      if (userId) {
+        dispatch(createAction(GET_USERS_KYC, userId))
+      }
+    },
     handleCheckLogin:(data)=>checkLogin(dispatch,data)
   }
 };
@@ -34,6 +41,7 @@ function checkLogin(dispatch,data){
 //function handle Reducer
 export const actionsReducerAuthen = {
   getCountriesSuccess:(countries)=>createAction(GET_COUNTRIES_SUCCSESS,countries),
+  getUsersKycSuccess:(userKyc)=>createAction(GET_USERS_KYC_SUCCESS,userKyc),
   confirm2FaCode:(info)=>createAction(CONFIRM_2FA_CODE,info),
   checkStateLogin:(logged) => createAction(CHECK_STATE_LOGIN,logged),
   setUserInfo:(user)=>createAction(SET_USER_INFO,user)

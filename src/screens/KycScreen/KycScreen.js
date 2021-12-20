@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {Text, View} from 'react-native';
 import Button from '../../components/Button/Button';
@@ -23,9 +23,12 @@ import {
 } from '../../configs/utils';
 import {Navigation} from 'react-native-navigation';
 import DatePicker from 'react-native-date-picker';
+import {authService} from '../../services/authentication.service';
 import moment from 'moment';
+import { useActionsAuthen } from '../../redux/modules/authentication';
 const KycScreen = ({componentId}) => {
   const UserInfo = useSelector(state => state.authentication.userInfo);
+  const userKyc = useSelector(state => state.authentication.userKyc);
   // const Districts = [{name: 'Ha Noi'}, {name: 'Viet Nam'}];
   const Sexes = [
     {name: 'Female'.t(), value: '0'},
@@ -36,17 +39,20 @@ const KycScreen = ({componentId}) => {
   //   name: 'Viet Nam',
   // });
   const [open, setOpen] = useState(false);
-  const [birthDate, setBirthDate] = useState(new Date());
+  const [birthDate, setBirthDate] = useState(new Date(get(userKyc,"birthDate")));
   // const [birthDate, setBirthDate] = useState("");
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [city, setCity] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [identityCard, setIdentityCard] = useState('');
-  const [sex, setSex] = useState({
+  const [firstName, setFirstName] = useState(get(userKyc,"firstName") || "");
+  const [lastName, setLastName] = useState(get(userKyc,"lastName") || "");
+  const [city, setCity] = useState(get(userKyc,"city") || "");
+  const [postalCode, setPostalCode] = useState(get(userKyc,"postalCode") || "");
+  const [identityCard, setIdentityCard] = useState(get(userKyc,"identityCard") || "");
+  const [sex, setSex] = useState(get(userKyc,"sex")== 1?{
     name: 'Male'.t(),
     value: '1',
-  });
+  }:{
+    name: 'Female'.t(),
+    value: '0',
+  } );
   // const handleActiveDistrict = districtActived => {
   //   setDistrict(districtActived);
   //   dismissAllModal();
@@ -74,22 +80,23 @@ const KycScreen = ({componentId}) => {
   const handleNext = (data) => {
     console.log(get(data,"sex"),"bir");
     if(isEmpty(get(data,"lastName"))){
-      return toast("Vui lòng nhập họ đệm của bạn");
+      return toast("Please enter".t().replace("{0}",'LastName'.t()));
     }else if(isEmpty(get(data,"firstName"))){
-      return toast("Vui lòng nhập tên của bạn");
+      return toast("Please enter".t().replace("{0}",'FirstName'.t()));
     }else if(isEmpty(get(data,"birthDate"))){
-      return toast("Vui lòng nhập ngày sinh của bạn");
+      return toast("Please enter".t().replace("{0}",'Date of birth'.t()));
     }else if(isEmpty(get(data,"identityCard"))){
-      return toast("Vui lòng nhập giấy CMTND/Hộ chiếu của bạn");
+      return toast("Please enter".t().replace("{0}",'Citizen identification number'.t()));
     }else if(isEmpty(get(data,"postalCode"))){
-      return toast("Vui lòng nhập mã vùng của bạn");
+      return toast("Please enter".t().replace("{0}",'Area code'.t()));
     }else if(isEmpty(get(data,"city"))){
-      return toast("Vui lòng nhập thành phố của bạn");
+      return toast("Please enter".t().replace("{0}",'City'.t()));
     }else{
       return pushSingleScreenApp(componentId, STEP2KYC_SCREEN, {...data})
     }
     
   };
+  
   const handleSelectSex = () => {
     let propsData = {
       data: Sexes,
