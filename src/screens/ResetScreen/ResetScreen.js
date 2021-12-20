@@ -6,12 +6,14 @@ import Input from '../../components/Input';
 import Button from '../../components/Button/Button';
 import { LayoutSplashScreen } from '../../components';
 import { Navigation } from 'react-native-navigation';
-import { ALERT_NOTICE_PASSWORD, PICKER_SEARCH, CONFIRM_RESET_SCREEN, ALERT_ACCOUNT_ACTIVE, pushSingleScreenApp, LOGIN_SCREEN } from '../../navigation';
+
+import { ALERT_NOTICE_PASSWORD, PICKER_SEARCH, CONFIRM_RESET_SCREEN, ALERT_ACCOUNT_ACTIVE, LOGIN_SCREEN } from '../../navigation';
 import { hiddenModal, size, toast, validateEmail, get } from '../../configs/utils';
 import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
 import { authService } from '../../services/authentication.service';
 import ButtonBack from '../../components/Button/ButtonBack';
 import ButtonWithTitle from '../../components/Button/ButtonWithTitle';
+import { pushSingleHiddenTopBarApp } from '../../navigation/Navigation';
 
 const ResetScreen = ({
     componentId
@@ -32,7 +34,7 @@ const ResetScreen = ({
                 console.log(res,"REss");
                 setDisabled(false)
                 if (get(res, "status")) {
-                    pushSingleScreenApp(componentId,CONFIRM_RESET_SCREEN,{
+                    pushSingleHiddenTopBarApp(componentId,CONFIRM_RESET_SCREEN,{
                         sessionId: get(res, "otpToken.sessionId"),
                         email
                     })
@@ -54,7 +56,7 @@ const ResetScreen = ({
         componentId={componentId}
         >
              <View style={stylest.textRegister}>
-                <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
+                <ButtonWithTitle space={10} onPress={() => pushSingleHiddenTopBarApp(componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
             </View>
             <View style={stylest.title}>
                 <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"RESET_PASSWORD".t()} />

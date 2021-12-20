@@ -10,7 +10,7 @@ import Icon from '../../components/Icon';
 import CheckBox from 'react-native-check-box';
 import ModalAlert from '../../components/Alert/AlertNoticePassword';
 import { Navigation } from 'react-native-navigation';
-import { ALERT_NOTICE_PASSWORD, ALERT_ACCOUNT_ACTIVE, LOGIN_SCREEN, pushSingleScreenApp } from '../../navigation';
+import { ALERT_NOTICE_PASSWORD, ALERT_ACCOUNT_ACTIVE, LOGIN_SCREEN, pushSingleHiddenTopBarApp } from '../../navigation';
 import { hiddenModal, get, toast, _validateAuth, size } from '../../configs/utils';
 import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
 import { authService } from '../../services/authentication.service';
@@ -38,7 +38,7 @@ const ConfirmResetScreen = ({
             if (get(res, "status")) {
                 toast(get(res, "message").t())
                 setDisabled(false);
-                pushSingleScreenApp(rest.componentId, LOGIN_SCREEN)
+                pushSingleHiddenTopBarApp(rest.componentId, LOGIN_SCREEN)
             } else {
                 setDisabled(false);
                 toast(get(res, "message").t())
@@ -58,7 +58,7 @@ const ConfirmResetScreen = ({
         componentId={rest.componentId}
         >
             <View style={stylest.textRegister}>
-                <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(rest.componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
+                <ButtonWithTitle space={10} onPress={() => pushSingleHiddenTopBarApp(rest.componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
             </View>
             <View style={stylest.title}>
                 <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"RESET_PASSWORD".t()} />

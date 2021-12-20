@@ -44,7 +44,7 @@ import {
 } from '../../redux/modules/authentication/actions';
 import {switchLangTabbar} from '../../navigation/helpers';
 import {storageService} from '../../services/storage.service';
-import {dismissAllModal} from '../../navigation/Navigation';
+import {dismissAllModal, pushSingleHiddenTopBarApp} from '../../navigation/Navigation';
 import Button from '../../components/Button/Button';
 // import ButtonSubmitClose from 'components/Button/ButtonSubmitClose';
 import St1 from 'assets/svg/st1.svg';
@@ -98,7 +98,7 @@ const SettingScreen = ({componentId}) => {
     
   }
   const handleLogin = () =>{
-    return pushSingleScreenApp(componentId,LOGIN_SCREEN)
+    return pushSingleHiddenTopBarApp(componentId,LOGIN_SCREEN)
   }
   const checkDatalogged = (lang = '', currency = '') => {
     if (logged) {

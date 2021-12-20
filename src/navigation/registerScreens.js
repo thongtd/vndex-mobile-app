@@ -86,7 +86,7 @@ import HistoryTransactions from '../screens/WalletScreen/screenChildren/HistoryT
 import { KYC_SCREEN, REF_SCREEN } from './Screens';
 import {RefScreen}  from '../screens/RefScreen';
 import { KycScreen } from '../screens/KycScreen';
-import { ACCOUNTP2P_SCREEN, HISTORY_LOGIN_SCREEN, PAYMENT_METHOD_SCREEN, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, SEND_REG_SCREEN, STEP2KYC_SCREEN, STEP3KYC_SCREEN, TOTAL_COMMISSION_SCREEN } from '.';
+import { ACCOUNTP2P_SCREEN, BUTTON_RIGHT_NAV, HISTORY_LOGIN_SCREEN, PAYMENT_METHOD_SCREEN, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, SEND_REG_SCREEN, STEP2KYC_SCREEN, STEP3KYC_SCREEN, TOTAL_COMMISSION_SCREEN } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
 import RoseDetails from '../screens/RefScreen/RoseDetails';
@@ -96,6 +96,7 @@ import AccountP2PScreen from '../screens/AccountP2P/AccountP2PScreen';
 import PaymentMethodScreen from '../screens/PaymentMethod/PaymentMethodScreen';
 import HistoryLoginScreen from '../screens/HistoryLogin/HistoryLoginScreen';
 import VerifyRegScreen from '../screens/RegisterScreen/VerifyRegScreen';
+import ButtonWithTitle from '../components/Button/ButtonWithTitle';
 const WrapScreen = (ReduxScreen, store) => props => (
   <Provider store={store}>
     <ReduxScreen {...props} />
@@ -158,5 +159,6 @@ export const registerScreens = store => {
   Navigation.registerComponent(ALERT_ACCOUNT_ACTIVE,()=>withNavigationProvider(WrapScreen(AlertAccountActive, store)),()=>AlertAccountActive);
   Navigation.registerComponent(MODAL_ALERT,()=>withNavigationProvider(WrapScreen(ModalAlert, store)),()=>ModalAlert);
   
-
+//component screen
+Navigation.registerComponent(BUTTON_RIGHT_NAV,()=>withNavigationProvider(WrapScreen(ButtonWithTitle, store)),()=>ButtonWithTitle);
 };

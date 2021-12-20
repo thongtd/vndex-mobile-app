@@ -7,7 +7,7 @@ import {Navigation} from 'react-native-navigation';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input';
 import TextFnx from '../../components/Text/TextFnx';
-import {pushSingleScreenApp, pushTabBasedApp} from '../../navigation';
+import {pushSingleHiddenTopBarApp, pushTabBasedApp} from '../../navigation';
 import BackgroundTimer from 'react-native-background-timer';
 import {authService} from '../../services/authentication.service';
 
@@ -53,7 +53,7 @@ const VerifyRegScreen = ({componentId, email}) => {
         {/* <TextFnx space={10} value={`${"I_HAVE_ACCOUNT".t()} `} /> */}
         <ButtonWithTitle
           space={10}
-          onPress={() => pushSingleScreenApp(componentId, LOGIN_SCREEN)}
+          onPress={() => pushSingleHiddenTopBarApp(componentId, LOGIN_SCREEN)}
           color={colors.highlight}
           title={'LOGIN'.t()}
         />

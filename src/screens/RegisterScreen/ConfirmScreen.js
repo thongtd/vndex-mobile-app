@@ -16,13 +16,14 @@ import {
   ALERT_ACCOUNT_ACTIVE,
   WALLET_SCREEN,
   LOGIN_SCREEN,
-  pushSingleScreenApp,
   SEND_REG_SCREEN,
 } from '../../navigation';
+
 import {hiddenModal, toast, get, _validateAuth} from '../../configs/utils';
 import {IdNavigation} from '../../configs/constant';
 import {authService} from '../../services/authentication.service';
 import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
+import { pushSingleHiddenTopBarApp } from '../../navigation/Navigation';
 
 const ConfirmScreen = ({countryCode="VN", componentId}) => {
   const [isCheck, setCheck] = useState(false);
@@ -60,7 +61,7 @@ const ConfirmScreen = ({countryCode="VN", componentId}) => {
           if (get(res, 'status') === 'OK') {
             setDisabled(false);
             toast(get(res, 'message').t());
-            pushSingleScreenApp(componentId, SEND_REG_SCREEN,{email});
+            pushSingleHiddenTopBarApp(componentId, SEND_REG_SCREEN,{email});
           } else {
             setDisabled(false);
             toast(get(res, 'message'));
@@ -77,7 +78,7 @@ const ConfirmScreen = ({countryCode="VN", componentId}) => {
       <View style={stylest.textRegister}>
         <ButtonWithTitle
           space={10}
-          onPress={() => pushSingleScreenApp(componentId, LOGIN_SCREEN)}
+          onPress={() => pushSingleHiddenTopBarApp(componentId, LOGIN_SCREEN)}
           color={colors.highlight}
           title={'LOGIN'.t()}
         />

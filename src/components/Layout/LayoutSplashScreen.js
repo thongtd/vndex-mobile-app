@@ -12,6 +12,7 @@ import DeviceInfo from 'react-native-device-info';
 import Spinner from './Spinner';
 import { StatusBar } from 'react-native';
 import { Navigation } from 'react-native-navigation';
+import { BUTTON_RIGHT_NAV } from '../../navigation';
 const { StatusBarManager } = NativeModules;
 let hasNotch = DeviceInfo.hasNotch();
 const LayoutSplashScreen = ({
@@ -25,13 +26,33 @@ const LayoutSplashScreen = ({
         
         Navigation.mergeOptions(componentId,{
             topBar:{
-                visible:false
+                animate: true,
+                visible:false,
+                backButton:{
+                    visible:false
+                },
+                background:{
+                    color:colors.baseBg
+                },
+                rightButtons: [
+                    {
+                        id: 'CustomComponent',
+                        component: {
+                            name: BUTTON_RIGHT_NAV,
+                            passProps: {
+                                originComponentId: componentId,
+                                title:"ok",
+                                color:colors.highlight
+                                // Any other prop you want to pass over
+                            }
+                        }
+                    }]
             }
         })
         return () => {
             
         }
-    }, [])
+    }, [componentId])
     
     return (
         // <LinearGradient
@@ -44,7 +65,7 @@ const LayoutSplashScreen = ({
             backgroundColor:colors.baseBg
         }}>
             
-            <StatusBar barStyle="light-content"/>
+            {/* <StatusBar barStyle="light-content"/> */}
                 <SafeAreaView >
 
                     <KeyboardAwareScrollView

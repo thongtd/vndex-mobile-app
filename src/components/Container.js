@@ -46,6 +46,7 @@ const Container = ({
         if(isTopBar){
             Navigation.mergeOptions(componentId,{
                 topBar:{
+                    animate: true,
                     title:{
                         text:title.t()
                     }
@@ -54,6 +55,7 @@ const Container = ({
         }else{
             Navigation.mergeOptions(componentId,{
                 topBar:{
+                    animate: true,
                     visible:false
                 }
             })
@@ -65,7 +67,7 @@ const Container = ({
     }, [isTopBar,componentId])
     return (
         <>
-        <StatusBar barStyle="light-content" />
+        {/* <StatusBar barStyle="light-content" /> */}
             <TaskBackground
                 componentId={componentId}
             />

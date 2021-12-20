@@ -30,10 +30,9 @@ import {
 // registerScreens();
 export function pushTutorialScreen() {
   Navigation.setDefaultOptions({
-    layout: {backgroundColor: 'transparent'},
+    layout: {backgroundColor: 'transparent',componentBackgroundColor: 'transparent'},
     screenBackgroundColor: 'transparent',
     modalPresentationStyle: 'overCurrentContext',
-    componentBackgroundColor: 'transparent',
     animations: {
       setRoot: {
         waitForRender: true,
@@ -66,6 +65,8 @@ export function pushTutorialScreen() {
     },
     statusBar: {
       style: 'light',
+      backgroundColor: colors.baseBg,
+      visible: true
     },
     layout: {
       orientation: ['portrait'],
@@ -95,8 +96,8 @@ export function pushTutorialScreen() {
                 },
                 statusBar: {
                   style: 'light',
-                  backgroundColor: 'transparent',
-                  drawBehind: true,
+                  backgroundColor: colors.baseBg,
+                  // drawBehind: true,
                   visible: true,
                 },
               },
@@ -126,12 +127,13 @@ export function pushSingleScreenApp(
     },
   });
 }
-export function pushWithHeaderSingleScreenApp(
+
+export function pushSingleHiddenTopBarApp(
   componentId,
   screen,
   passProps = {},
-  title,
   options = {},
+  hiddenTab = true,
 ) {
   // if (isSameScreen(screen)) {
   //   return;
@@ -140,10 +142,37 @@ export function pushWithHeaderSingleScreenApp(
     component: {
       name: screen,
       passProps,
-      options: {...hiddenTabbarShowHeader(title), ...options},
+      options: {
+        animations: {
+          setRoot: {
+            waitForRender: true,
+          },
+          push: {
+            waitForRender: true,
+          },
+          showModal: {
+            waitForRender: true,
+          },
+        },
+        bottomTabs: {
+          visible: false,
+          drawBehind: true,
+        },
+        statusBar: {
+          backgroundColor: colors.baseBg,
+          // drawBehind: true,
+          visible: true,
+        },
+        topBar:{
+          animate: true,
+          visible:false,
+        }
+        ,...options
+      },
     },
   });
 }
+
 export function pop(componentId) {
   // resetScreenGlobal();
   return Navigation.pop(componentId);

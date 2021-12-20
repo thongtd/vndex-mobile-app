@@ -54,3 +54,7 @@ export const ALERT_NOTICE_PASSWORD = 'modal.AlertNoticePassword';
 export const PICKER_SEARCH = 'modal.PickerSearch'
 export const ALERT_ACCOUNT_ACTIVE = 'modal.AlertAccountActive'
 export const MODAL_ALERT = 'modal.Alert'
+
+// register Component
+export const BUTTON_RIGHT_NAV = 'nav.btnRight';
+

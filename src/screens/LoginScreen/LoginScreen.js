@@ -14,7 +14,7 @@ import { CHECK_LOGIN, useActionsAuthen } from '../../redux/modules/authenticatio
 import { createAction, toast, size, validateEmail, jwtDecode, listenerEventEmitter, get } from '../../configs/utils';
 import { useDispatch } from "react-redux"
 import { pushSingleScreenApp, REGISTER_SCREEN, LOGIN_SCREEN, RESET_SCREEN } from '../../navigation';
-import { pop } from '../../navigation/Navigation';
+import { pop, pushSingleHiddenTopBarApp } from '../../navigation/Navigation';
 import ButtonBack from '../../components/Button/ButtonBack';
 import { constant } from '../../configs/constant';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -110,7 +110,7 @@ const LoginScreen = ({
         
         <ButtonWithTitle
           space={10}
-          color={colors.highlight} onPress={() => pushSingleScreenApp(componentId, REGISTER_SCREEN)} title={"REGISTER".t()} />
+          color={colors.highlight} onPress={() => pushSingleHiddenTopBarApp(componentId, REGISTER_SCREEN)} title={"REGISTER".t()} />
       </View>
       <View style={stylest.title}>
         <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"LOGIN".t()} />
@@ -148,7 +148,7 @@ const LoginScreen = ({
         
         <ButtonWithTitle
           space={10}
-          color={colors.highlight} onPress={() => pushSingleScreenApp(componentId, RESET_SCREEN)} title={"FORGOT_PASSWORD".t()} />
+          color={colors.highlight} onPress={() => pushSingleHiddenTopBarApp(componentId, RESET_SCREEN)} title={"FORGOT_PASSWORD".t()} />
       </View>
      
       <ButtonFooterAuth textLeft="" hasBack={hasBack} componentId={componentId} />

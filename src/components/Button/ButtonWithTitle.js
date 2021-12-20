@@ -5,10 +5,13 @@ import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/
 
 import PropTypes from 'prop-types'
 import TextFnx from '../Text/TextFnx';
+import { spacingApp } from '../../configs/constant';
 const ButtonWithTitle = ({
     textStyle,
     title,
-    style,
+    style={
+        marginRight:spacingApp
+    },
     onPress,
     color,
     size,
@@ -17,6 +20,7 @@ const ButtonWithTitle = ({
     space,
     width,
     height,
+    spaceRight,
     ...rest
 }) => (
         <View style={{

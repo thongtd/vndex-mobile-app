@@ -18,6 +18,7 @@ import { REGISTER_SCREEN } from '../../navigation';
 import { constant } from '../../configs/constant';
 import { useActionsMarket } from '../../redux';
 import { GET_ASSET_SUMARY, GET_WITHDRAW_COIN_LOG, GET_WITHDRAW_FIAT_LOG, GET_DEPOSIT_COIN_LOG, GET_DEPOSIT_FIAT_LOG } from '../../redux/modules/wallet/actions';
+import Container from '../../components/Container';
 const ConfirmLoginScreen = ({
   componentId,
   email,
@@ -96,11 +97,13 @@ const ConfirmLoginScreen = ({
     dispatcher(createAction(CHECK_LOGIN, dataLogin))
   }
   return (
-    <LayoutSplashScreen
-      isLoadding={disabled}
-      componentId={componentId}
+    <Container 
+    isLoadding={disabled}
+    componentId={componentId}
+    isTopBar={true}
+    title={"security verification".t()}
     >
-      <View style={stylest.title}>
+<View style={stylest.title}>
         {/* <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"LOGIN".t()} /> */}
       </View>
       <Input
@@ -137,7 +140,7 @@ const ConfirmLoginScreen = ({
         <TextFnx value={` ${"BACK".t()}`} />
       </ButtonWithTitle>
       <ButtonFooterAuth /> */}
-    </LayoutSplashScreen>
+    </Container>
   );
 }
 const stylest = StyleSheet.create({

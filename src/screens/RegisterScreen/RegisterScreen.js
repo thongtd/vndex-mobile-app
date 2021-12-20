@@ -8,7 +8,7 @@ import Button from '../../components/Button/Button';
 import { LayoutSplashScreen } from '../../components';
 import ButtonWithTitle from '../../components/Button/ButtonWithTitle';
 import { Navigation } from 'react-native-navigation';
-import { PICKER_SEARCH, WALLET_SCREEN, LOGIN_SCREEN, CONFIRM_REGISTER_SCREEN, pushSingleScreenApp } from '../../navigation';
+import { PICKER_SEARCH, WALLET_SCREEN, LOGIN_SCREEN, CONFIRM_REGISTER_SCREEN, pushSingleHiddenTopBarApp } from '../../navigation';
 import { hiddenModal, createAction, get, toast, validateEmail, size } from '../../configs/utils';
 import ItemList from '../../components/Item/ItemList';
 import { constant, IdNavigation } from '../../configs/constant';
@@ -67,7 +67,7 @@ const RegisterScreen = ({
                         return toast("Email Address already exists".t());
                     } else {
                         setDisabled(false);
-                        pushSingleScreenApp(componentId,CONFIRM_REGISTER_SCREEN,{
+                        pushSingleHiddenTopBarApp(componentId,CONFIRM_REGISTER_SCREEN,{
                             email:email,
                             countryCode:get(country,"code")
                         })
@@ -86,7 +86,7 @@ const RegisterScreen = ({
         >
              <View style={stylest.textRegister}>
                 {/* <TextFnx space={10} value={`${"I_HAVE_ACCOUNT".t()} `} /> */}
-                <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
+                <ButtonWithTitle space={10} onPress={() => pushSingleHiddenTopBarApp(componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
             </View>
             <View style={stylest.title}>
                 <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"REGISTER".t()} />
