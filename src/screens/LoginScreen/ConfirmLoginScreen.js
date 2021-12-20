@@ -98,7 +98,7 @@ const ConfirmLoginScreen = ({
   return (
     <LayoutSplashScreen
       isLoadding={disabled}
-      
+      componentId={componentId}
     >
       <View style={stylest.title}>
         {/* <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"LOGIN".t()} /> */}

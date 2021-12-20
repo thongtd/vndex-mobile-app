@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, Image, NativeModules, ImageBackground } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import icons from "../../configs/icons"
@@ -11,14 +11,28 @@ import { fullHeight, isIos } from '../../configs/utils';
 import DeviceInfo from 'react-native-device-info';
 import Spinner from './Spinner';
 import { StatusBar } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 const { StatusBarManager } = NativeModules;
 let hasNotch = DeviceInfo.hasNotch();
 const LayoutSplashScreen = ({
     isSplashScreen,
     children,
     isLoadding,
+    componentId,
     ...rest
 }) => {
+    useEffect(() => {
+        
+        Navigation.mergeOptions(componentId,{
+            topBar:{
+                visible:false
+            }
+        })
+        return () => {
+            
+        }
+    }, [])
+    
     return (
         // <LinearGradient
         //     start={{ x: 0.0, y: 0.25 }}

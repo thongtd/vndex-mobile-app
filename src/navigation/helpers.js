@@ -17,24 +17,33 @@ export const switchLangTabbar = () => {
     let tabbarArrays = [
         {
             id: IdNavigation.Swap.Menu,
-            text: 'SWAP'.t()
+            text: 'SWAP'.t(),
+            title:"title"
         },
         {
             id: IdNavigation.Wallet.menu,
-            text: 'WALLET'.t()
+            text: 'WALLET'.t(),
+            title:"title"
         },
         {
             id: IdNavigation.Dapp.menu,
-            text: 'Dapp'
+            text: 'Dapp',
+            title:"title"
         },
         {
             id: IdNavigation.Setting.menu,
-            text: 'SETTING'.t()
+            text: 'SETTING'.t(),
+            title:"title"
         },
 
     ];
     tabbarArrays.map((item, index) => {
         Navigation.mergeOptions(item.id, {
+            topBar:{
+                title:{
+                    text:item.title
+                }
+            },
             bottomTab: {
                 text: item.text
             }
@@ -52,6 +61,11 @@ export const itemScreen = ( nameScreen) => {
                     drawBehind: true,
                     visible: true
                 },
+                topBar:{
+                    title:{
+                        text:""
+                    }
+                }
             }
         }
     }
@@ -128,9 +142,6 @@ export const Tabbar = (nameScreen, ic, text, id) => {
             id:id,
             children:[itemScreen(nameScreen)],
             options: {
-                topBar: {
-                    visible: false
-                },
                 bottomTab: {
                     icon: ic,
                     text: text,

@@ -46,10 +46,14 @@ export function pushTutorialScreen() {
       push: {
         waitForRender: true,
       },
+      showModal: {
+        waitForRender: true,
+      },
     },
     topBar: {
+      visible:true,
       background: {
-        color: 'red',
+        color: colors.navigation,
       },
       title: {
         color: 'white',
@@ -68,6 +72,7 @@ export function pushTutorialScreen() {
     },
     bottomTabs: {
       titleDisplayMode: 'alwaysShow',
+      backgroundColor:"#252424"
     },
     bottomTab: {
       textColor: 'gray',
@@ -110,14 +115,14 @@ export function pushSingleScreenApp(
   options = {},
   hiddenTab = true,
 ) {
-  if (isSameScreen(screen)) {
-    return;
-  }
+  // if (isSameScreen(screen)) {
+  //   return;
+  // }
   return Navigation.push(componentId, {
     component: {
       name: screen,
       passProps,
-      options: hiddenTab ? hiddenTabbar() : options,
+      options: {...hiddenTabbar(),...options},
     },
   });
 }
@@ -128,9 +133,9 @@ export function pushWithHeaderSingleScreenApp(
   title,
   options = {},
 ) {
-  if (isSameScreen(screen)) {
-    return;
-  }
+  // if (isSameScreen(screen)) {
+  //   return;
+  // }
   return Navigation.push(componentId, {
     component: {
       name: screen,
@@ -140,25 +145,25 @@ export function pushWithHeaderSingleScreenApp(
   });
 }
 export function pop(componentId) {
-  resetScreenGlobal();
+  // resetScreenGlobal();
   return Navigation.pop(componentId);
 }
 export function popTo(componentId) {
   return Navigation.popTo(componentId);
 }
 export function showModal(screen, passProps, isHidden = false) {
-  if (isSameScreen(screen)) {
-    return;
-  }
+  // if (isSameScreen(screen)) {
+  //   return;
+  // }
   return Navigation.showModal(hiddenModal(screen, passProps, isHidden));
 }
 export function dismissAllModal() {
-  resetScreenGlobal();
+  // resetScreenGlobal();
   return Navigation.dismissAllModals();
 }
 
 export function pushTabBasedApp(currenIndex = 0) {
-  resetScreenGlobal();
+  // resetScreenGlobal();
   return Navigation.setRoot({
     root: {
       bottomTabs: {
@@ -190,7 +195,6 @@ export function pushTabBasedApp(currenIndex = 0) {
         ],
         options: {
           bottomTabs: {currentTabIndex: currenIndex},
-          topBar: {visible: false},
         },
       },
     },

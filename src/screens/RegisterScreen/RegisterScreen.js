@@ -82,6 +82,7 @@ const RegisterScreen = ({
     return (
         <LayoutSplashScreen
         isLoadding={disabled}
+        componentId={componentId}
         >
              <View style={stylest.textRegister}>
                 {/* <TextFnx space={10} value={`${"I_HAVE_ACCOUNT".t()} `} /> */}

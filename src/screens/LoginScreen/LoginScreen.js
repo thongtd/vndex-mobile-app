@@ -104,6 +104,7 @@ const LoginScreen = ({
   return (
     <LayoutSplashScreen
       isLoadding={disabled}
+      componentId={componentId}
     >
        <View style={[stylest.textRegister,{justifyContent:"flex-end"}]}>
         

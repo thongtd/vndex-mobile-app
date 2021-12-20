@@ -80,7 +80,7 @@ const ListCoin = ({
             renderItem={({
                 item
             }) => {
-                return <ItemCoin key={item.pair} componentId={componentId} item={item} />
+                return <ItemCoin key={item.symbol} componentId={componentId} item={item} />
             }}
         />
     );

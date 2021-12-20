@@ -51,6 +51,7 @@ const ResetScreen = ({
     return (
         <LayoutSplashScreen
         isLoadding={disabled}
+        componentId={componentId}
         >
              <View style={stylest.textRegister}>
                 <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />

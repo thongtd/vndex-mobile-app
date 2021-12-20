@@ -463,7 +463,7 @@ export function hiddenTabbarShowHeader(title) {
     },
   };
 }
-export function hiddenTabbar() {
+export function hiddenTabbar(title="") {
   return {
     animations: {
       setRoot: {
@@ -485,6 +485,12 @@ export function hiddenTabbar() {
       drawBehind: true,
       visible: true,
     },
+    topBar:{
+      visible:true,
+      title:{
+        text:title
+      }
+    }
   };
 }
 export function hiddenModal(nameScreen, props, isHiddenLayout = true) {

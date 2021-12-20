@@ -1,52 +1,52 @@
 // @flow
 
 
-export const LOGIN_SCREEN = 'fnx.LoginScreen';
-export const SEND_REG_SCREEN = 'fnx.SendRegScreen';
-export const STEP2KYC_SCREEN = 'fnx.Step2KycScreen';
-export const STEP3KYC_SCREEN = 'fnx.Step3KycScreen';
+export const LOGIN_SCREEN = 'vndex.title.LoginScreen';
+export const SEND_REG_SCREEN = 'vndex.title.SendRegScreen';
+export const STEP2KYC_SCREEN = 'vndex.title.Step2KycScreen';
+export const STEP3KYC_SCREEN = 'vndex.title.Step3KycScreen';
 
-export const KYC_SCREEN = 'fnx.KycScreen';
-export const CONFIRM_LOGIN_SCREEN = 'fnx.ConfirmLoginScreen';
-export const SPLASH_SCREEN = 'fnx.SplashScreen';
-export const WALLET_SCREEN = 'fnx.WalletScreen';
-export const SETTING_SCREEN = 'fnx.SettingScreen';
-export const DAPP_SCREEN = 'fnx.DappScreen';
-export const SWAP_SCREEN = 'fnx.SwapScreen';
-export const REGISTER_SCREEN = 'fnx.RegisterScreen';
-export const CONFIRM_REGISTER_SCREEN = 'fnx.ConfirmRegister';
-export const RESET_SCREEN = 'fnx.ResetScreen';
-export const CONFIRM_RESET_SCREEN = 'fnx.ConfirmResetScreen';
-export const SUPPORT_SCREEN = 'fnx.supportScreen';
-export const PASSCODE_SCREEN = 'fnx.passcodeScreen';
-export const PASSCODE_AUTH_SCREEN = 'fnx.passcodeAuthScreen';
-export const CHANGE_PASSWORD = 'fnx.changePasswordScreen';
-export const SECURITY_SCREEN = 'fnx.securityScreen';
-export const REF_SCREEN = 'fnx.RefScreen';
-export const TOTAL_COMMISSION_SCREEN = 'fnx.totalCommission';
-export const ROSE_DETAIL_SCREEN = 'fnx.RoseDetails';
-export const REFFERAL_FRIEND_SCREEN = 'fnx.RefferalFriend';
-export const PAYMENT_METHOD_SCREEN = 'fnx.paymentMethod';
-export const ACCOUNTP2P_SCREEN = 'fnx.AccountP2p';
-export const HISTORY_LOGIN_SCREEN = 'fnx.HistoryLogin';
-export const FA_CODE_EMAIL = 'fnx.faCodeEmail';
+export const KYC_SCREEN = 'vndex.title.KycScreen';
+export const CONFIRM_LOGIN_SCREEN = 'vndex.title.ConfirmLoginScreen';
+export const SPLASH_SCREEN = 'vndex.title.SplashScreen';
+export const WALLET_SCREEN = 'vndex.title.WalletScreen';
+export const SETTING_SCREEN = 'vndex.title.SettingScreen';
+export const DAPP_SCREEN = 'vndex.title.DappScreen';
+export const SWAP_SCREEN = 'vndex.title.SwapScreen';
+export const REGISTER_SCREEN = 'vndex.title.RegisterScreen';
+export const CONFIRM_REGISTER_SCREEN = 'vndex.title.ConfirmRegister';
+export const RESET_SCREEN = 'vndex.title.ResetScreen';
+export const CONFIRM_RESET_SCREEN = 'vndex.title.ConfirmResetScreen';
+export const SUPPORT_SCREEN = 'vndex.title.supportScreen';
+export const PASSCODE_SCREEN = 'vndex.title.passcodeScreen';
+export const PASSCODE_AUTH_SCREEN = 'vndex.title.passcodeAuthScreen';
+export const CHANGE_PASSWORD = 'vndex.title.changePasswordScreen';
+export const SECURITY_SCREEN = 'vndex.title.securityScreen';
+export const REF_SCREEN = 'vndex.title.RefScreen';
+export const TOTAL_COMMISSION_SCREEN = 'vndex.title.totalCommission';
+export const ROSE_DETAIL_SCREEN = 'vndex.title.RoseDetails';
+export const REFFERAL_FRIEND_SCREEN = 'vndex.title.RefferalFriend';
+export const PAYMENT_METHOD_SCREEN = 'vndex.title.paymentMethod';
+export const ACCOUNTP2P_SCREEN = 'vndex.title.AccountP2p';
+export const HISTORY_LOGIN_SCREEN = 'vndex.title.HistoryLogin';
+export const FA_CODE_EMAIL = 'vndex.title.faCodeEmail';
 
-export const ENABLE_2FA_GG = 'fnx.enable2FaGG';
-export const BACK_UP_KEY = 'fnx.backupkey';
-export const SET_UP_CODE = 'fnx.setupCode';
-export const GUIDE_SET_UP_GG = 'fnx.guideSetupGg';
-export const SWAP_CONFIRM_SCREEN = 'fnx.swapConfirmScreen';
-export const HISTORY_SWAP_SCREEN = 'fnx.historySwapScreen';
-export const CALENDAR_SCREEN = 'fnx.calendarScreen';
-export const INFO_COIN_SCREEN = 'fnx.InfoCoinScreen';
-export const INFO_FIAT_SCREEN = 'fnx.InfoFiatScreen';
-export const DEPOSIT_FIAT_SCREEN = 'fnx.DepositFiatScreen';
-export const DEPOSIT_COIN_SCREEN = 'fnx.DepositCoinScreen';
-export const HISTORY_DEPOSIT_COIN_SCREEN = 'fnx.HistoryDepositCoinScreen';
-export const HISTORY_DEPOSIT_FIAT_SCREEN = 'fnx.HistoryDepositFiatScreen';
-export const WITHDRAW_COIN_SCREEN = 'fnx.WithdrawCoinScreen';
-export const WITHDRAW_FIAT_SCREEN = 'fnx.WithdrawFiatScreen';
-export const TRANSACTION_HISTORY = 'fnx.TransactionHistory';
+export const ENABLE_2FA_GG = 'vndex.title.enable2FaGG';
+export const BACK_UP_KEY = 'vndex.title.backupkey';
+export const SET_UP_CODE = 'vndex.title.setupCode';
+export const GUIDE_SET_UP_GG = 'vndex.title.guideSetupGg';
+export const SWAP_CONFIRM_SCREEN = 'vndex.title.swapConfirmScreen';
+export const HISTORY_SWAP_SCREEN = 'vndex.title.historySwapScreen';
+export const CALENDAR_SCREEN = 'vndex.title.calendarScreen';
+export const INFO_COIN_SCREEN = 'vndex.title.InfoCoinScreen';
+export const INFO_FIAT_SCREEN = 'vndex.title.InfoFiatScreen';
+export const DEPOSIT_FIAT_SCREEN = 'vndex.title.DepositFiatScreen';
+export const DEPOSIT_COIN_SCREEN = 'vndex.title.DepositCoinScreen';
+export const HISTORY_DEPOSIT_COIN_SCREEN = 'vndex.title.HistoryDepositCoinScreen';
+export const HISTORY_DEPOSIT_FIAT_SCREEN = 'vndex.title.HistoryDepositFiatScreen';
+export const WITHDRAW_COIN_SCREEN = 'vndex.title.WithdrawCoinScreen';
+export const WITHDRAW_FIAT_SCREEN = 'vndex.title.WithdrawFiatScreen';
+export const TRANSACTION_HISTORY = 'vndex.title.TransactionHistory';
 
 
 // register Modal

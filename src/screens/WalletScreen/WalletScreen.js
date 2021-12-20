@@ -41,7 +41,7 @@ const WalletScreen = ({
     const isPasscode = useSelector(state => state.authentication.isPasscode);
     const [IsActive, setIsActive] = useState("C");
     const [isSort, setSort] = React.useState(false);
-    const cryptoWallet = useSelector(state => state.wallet.cryptoWallet);
+    const cryptoWallet = useSelector(state => state.market.cryptoWallet);
     const fiatsWallet = useSelector(state => state.wallet.fiatsWallet);
     const dispatcher = useDispatch();
     const [HiddenCrypto, setHiddenCrypto] = useState(cryptoWallet.filter((item,index)=>get(item,"available")+get(item,"pending") !== 0));
@@ -132,12 +132,12 @@ const WalletScreen = ({
                 <SearchInput 
                  />
             </View>
-            {logged && <CheckBox
+            {/* {logged && <CheckBox
                 onClick={onHidden}
                 checkBoxColor={colors.green}
                 isChecked={isCheck}
                 rightText={"HIDE_BALANCE".t()}
-            />}
+            />} */}
             
             <LayoutSpaceBetween style={stylest.spaceSorting}>
                 <ButtonSortSymbol
@@ -148,12 +148,13 @@ const WalletScreen = ({
                     color={colors.description}
                     value={"AVAILABLE".t()} />
             </LayoutSpaceBetween>
-            {IsActive === "C" ?
+            {/* {IsActive === "C" ?
                 <ListCoin componentId={componentId} isCheck={isCheck} 
                 data={HiddenCrypto} 
                 /> :
-                <ListFiat componentId={componentId} isCheck={isCheck} data={HiddenFiat} />}
-
+                <ListFiat componentId={componentId} isCheck={isCheck} data={HiddenFiat} />} */}
+ <ListCoin componentId={componentId} isCheck={isCheck} 
+                data={cryptoWallet} />
         </Container>
     );
 }

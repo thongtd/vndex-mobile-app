@@ -48,7 +48,7 @@ const VerifyRegScreen = ({componentId, email}) => {
     return () => BackgroundTimer.clearInterval(intervalId);
   }, [isTimer, timer]);
   return (
-    <LayoutSplashScreen isLoadding={loading}>
+    <LayoutSplashScreen componentId={componentId} isLoadding={loading}>
       <View style={stylest.textRegister}>
         {/* <TextFnx space={10} value={`${"I_HAVE_ACCOUNT".t()} `} /> */}
         <ButtonWithTitle

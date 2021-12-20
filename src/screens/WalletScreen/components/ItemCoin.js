@@ -30,10 +30,10 @@ const ItemCoin = ({
         >
             <View style={stylest.container}>
                 <View style={stylest.itemLeft}>
-                    <Image source={{ uri: get(item,"image") }} style={stylest.imgCoin} />
+                    <Image source={{ uri: get(item,"images") }} style={stylest.imgCoin} />
                     <View style={stylest.spacing}>
                         <TextFnx style={stylest.spacingCenter} weight="bold" color={colors.text}>
-                            {logged? get(item,"currency"):get(item,"symbol")} <TextFnx color={colors.subText} size={13}>({get(item,"name")})</TextFnx>
+                            {logged&& get(item,"symbol")} <TextFnx color={colors.subText} size={13}>({get(item,"name")})</TextFnx>
                         </TextFnx>
                         <View style={stylest.lanscape}>
                             <TextFnx value={get(item,"lastestPrice")?formatCurrency(get(item,"lastestPrice"),"VND",currencyList):0} color={colors.text} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Text, View, StyleSheet,RefreshControl } from 'react-native';
 import TopBarView from './TopBarView';
 import SafeAreaViewFnx from './SafeAreaView';
@@ -10,6 +10,8 @@ import LayoutSplashScreen from './Layout/LayoutSplashScreen';
 import TaskBackground from '../redux/Provider/TaskBackground';
 import { StatusBar } from 'react-native';
 import colors from '../configs/styles/colors';
+import { Navigation } from 'react-native-navigation';
+
 const Container = ({
     children,
     isTopBar = true,
@@ -39,7 +41,29 @@ const Container = ({
     refreshing=false,
     onRefresh,
     isFilter
-}) => (
+}) => {
+    useEffect(() => {
+        if(isTopBar){
+            Navigation.mergeOptions(componentId,{
+                topBar:{
+                    title:{
+                        text:title.t()
+                    }
+                }
+            })
+        }else{
+            Navigation.mergeOptions(componentId,{
+                topBar:{
+                    visible:false
+                }
+            })
+        }
+        
+        return () => {
+            
+        }
+    }, [isTopBar,componentId])
+    return (
         <>
         <StatusBar barStyle="light-content" />
             <TaskBackground
@@ -54,7 +78,7 @@ const Container = ({
                 </LayoutSplashScreen>
             ) : (
                     <>
-                        {isTopBar && <TopBarView
+                        {/* {isTopBar && <TopBarView
                             title={title}
                             onClickRight={onClickRight}
                             onClickLeft={onClickLeft}
@@ -71,7 +95,7 @@ const Container = ({
                             hasBack={hasBack}
                             componentId={componentId}
                             isFilter={isFilter}
-                        />}
+                        />} */}
                         {customTopBar && customTopBar}
                         <View style={[stylest.container, { paddingTop: space, backgroundColor:colors.baseBg }, isFlex && { flex: 1 }, style]}>
                             <Spinner visible={isLoadding} />
@@ -92,6 +116,7 @@ const Container = ({
         </>
 
     );
+}
 Container.propTypes = {
     onClickRight: PropTypes.func,
     onClickLeft: PropTypes.func,

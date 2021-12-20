@@ -73,7 +73,7 @@ const ConfirmScreen = ({countryCode="VN", componentId}) => {
     }
   };
   return (
-    <LayoutSplashScreen isLoadding={disabled}>
+    <LayoutSplashScreen componentId={componentId} isLoadding={disabled}>
       <View style={stylest.textRegister}>
         <ButtonWithTitle
           space={10}
