@@ -58,6 +58,7 @@ export const itemScreen = ( nameScreen) => {
             options: {
                 statusBar: {
                     backgroundColor: colors.baseBg,
+                    style:'dark',
                     // drawBehind: true,
                     visible: true
                 },

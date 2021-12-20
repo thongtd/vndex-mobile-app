@@ -64,7 +64,7 @@ export function pushTutorialScreen() {
       buttonColor: 'white',
     },
     statusBar: {
-      style: 'light',
+      style: 'dark',
       backgroundColor: colors.baseBg,
       visible: true
     },
@@ -95,7 +95,7 @@ export function pushTutorialScreen() {
                   visible: false,
                 },
                 statusBar: {
-                  style: 'light',
+                  style: 'dark',
                   backgroundColor: colors.baseBg,
                   // drawBehind: true,
                   visible: true,
@@ -159,6 +159,7 @@ export function pushSingleHiddenTopBarApp(
           drawBehind: true,
         },
         statusBar: {
+          style: 'dark',
           backgroundColor: colors.baseBg,
           // drawBehind: true,
           visible: true,
