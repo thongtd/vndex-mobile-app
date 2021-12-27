@@ -44,7 +44,7 @@ const HeaderSettingScreen = ({
         removeTokenAndUserInfo();
         dispatcher(createAction(CHECK_STATE_LOGIN, false));
         dispatcher(createAction(SET_USER_INFO, null));
-        // dispatcher(createAction(GET_ASSET_CRYPTO_WALLETS_SUCCESS),[])
+        dispatcher(createAction(GET_ASSET_CRYPTO_WALLETS_SUCCESS),[])
         // dispatcher(createAction(GET_ASSET_FIAT_WALLET_SUCCESS),[])
     }
     

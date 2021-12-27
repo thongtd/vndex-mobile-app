@@ -11,6 +11,7 @@ import TaskBackground from '../redux/Provider/TaskBackground';
 import { StatusBar } from 'react-native';
 import colors from '../configs/styles/colors';
 import { Navigation } from 'react-native-navigation';
+import { BUTTON_ICON_RIGHT_NAV } from '../navigation';
 
 const Container = ({
     children,
@@ -49,7 +50,8 @@ const Container = ({
                     animate: true,
                     title:{
                         text:title.t()
-                    }
+                    },
+                   
                 }
             })
         }else{

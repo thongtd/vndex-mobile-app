@@ -13,6 +13,7 @@ const InfoCoinScreen = ({
             item={item}
             componentId={componentId}
             isCoinData={isCoin}
+            title={get(item,"symbol")}
              />
     );
 }

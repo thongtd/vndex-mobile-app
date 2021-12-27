@@ -58,7 +58,7 @@ const SplashScreen = ({
         status:""
     }))
     dispatcher(createAction(LANGUAGES, lang));
-    if (isArray(marketWatch) && size(marketWatch) > 0 && size(UserId) > 0) {
+    if (size(UserId) > 0) {
         dispatcher(createAction(GET_ASSET_SUMARY, {
             UserId,
             marketWatch
@@ -73,8 +73,9 @@ const SplashScreen = ({
     }, [lang]);
     useEffect(() => {
         jwtDecode().then(user => {
-            if(get(user,"id")){
-                setUserId(get(user, "id"))
+            console.log(user,"usersss");
+            if(get(user,"UserId")){
+                setUserId(get(user, "UserId"))
             }
             
         })

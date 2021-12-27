@@ -16,26 +16,30 @@ import { IdNavigation } from "../configs/constant";
 export const switchLangTabbar = () => {
     let tabbarArrays = [
         {
-            id: IdNavigation.Swap.Menu,
-            text: 'SWAP'.t(),
+            id: IdNavigation.Home.Menu,
+            text: 'HOME'.t(),
+            title:"title"
+        },
+        {
+            id: IdNavigation.Sto.menu,
+            text: 'STO'.t(),
+            title:"title"
+        },
+        {
+            id: IdNavigation.LiquidSwap.menu,
+            text: 'LIQUID_SWAP'.t(),
+            title:"title"
+        },
+        {
+            id: IdNavigation.Command.menu,
+            text: 'COMMAND'.t(),
             title:"title"
         },
         {
             id: IdNavigation.Wallet.menu,
             text: 'WALLET'.t(),
-            title:"title"
+            title:"Property Overview".t()
         },
-        {
-            id: IdNavigation.Dapp.menu,
-            text: 'Dapp',
-            title:"title"
-        },
-        {
-            id: IdNavigation.Setting.menu,
-            text: 'SETTING'.t(),
-            title:"title"
-        },
-
     ];
     tabbarArrays.map((item, index) => {
         Navigation.mergeOptions(item.id, {
@@ -51,7 +55,31 @@ export const switchLangTabbar = () => {
     })
 }
 
-export const itemScreen = ( nameScreen) => {
+export const itemScreen = ( nameScreen,title="") => {
+    if((nameScreen == WALLET_SCREEN)){
+        return {
+            component: {
+                name: nameScreen,
+                options: {
+                    statusBar: {
+                        backgroundColor: colors.baseBg,
+                        style:'dark',
+                        // drawBehind: true,
+                        visible: true
+                    },
+                    topBar:{
+                        title:{
+                            text:title
+                        },
+                        rightButtons:[{
+                            id: IdNavigation.PressIn.historyTransaction,
+                            icon:require("assets/icons/timer.png")
+                          }]
+                    }
+                }
+            }
+        }
+    }
     return {
         component: {
             name: nameScreen,
@@ -64,7 +92,7 @@ export const itemScreen = ( nameScreen) => {
                 },
                 topBar:{
                     title:{
-                        text:""
+                        text:title
                     }
                 }
             }
@@ -95,7 +123,7 @@ export const stackCommons = (typeScreen) => {
             name: LOGIN_SCREEN
         },
         {
-            id: IdNavigation.Setting.menu,
+            id: IdNavigation.Home.menu,
             name: SETTING_SCREEN
         },
     ]
@@ -107,50 +135,21 @@ export const stackCommons = (typeScreen) => {
 }
 
 
-export const getChildrenNavigation = (Navigation) => {
-    let children;
-    switch (Navigation) {
-        case IdNavigation.Dapp.menu:
-            children = [
-                ...stackCommons("Dapp")
-            ]
-            break;
-        case IdNavigation.Setting.menu:
-            children = [
-                itemScreen(IdNavigation.Setting.Login, LOGIN_SCREEN),
-                itemScreen(IdNavigation.Setting.confirmLogin, CONFIRM_LOGIN_SCREEN),
-                itemScreen(IdNavigation.Setting.menu, SETTING_SCREEN),
-            ]
-            break;
-        case IdNavigation.Wallet.menu:
-            children = [
-                ...stackCommons("Wallet")
-            ]
-            break;
-        case IdNavigation.Swap.Menu:
-            children = [
-                ...stackCommons("Swap")
-            ]
-            break;
-        default:
-            break;
-    }
-    return children;
-}
-export const Tabbar = (nameScreen, ic, text, id) => {
+
+export const Tabbar = (nameScreen, ic, text, id,title) => {
     return {
         stack: {
             id:id,
-            children:[itemScreen(nameScreen)],
+            children:[itemScreen(nameScreen, title)],
             options: {
                 bottomTab: {
                     icon: ic,
                     text: text,
-                    iconColor: colors.tabbar,
-                    selectedIconColor: colors.tabbarActive,
+                    iconColor: colors.subText,
+                    selectedIconColor: colors.iconButton,
                     fontSize: 12,
                     selectedFontSize: 12,
-                    selectedTextColor: colors.tabbarActive,
+                    selectedTextColor: colors.iconButton,
                     testID: id,
                 }
             },

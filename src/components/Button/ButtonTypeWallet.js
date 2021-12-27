@@ -17,16 +17,20 @@ const ButtonTypeWallet = ({
             <ButtonWithTitle
                 onPress={() => onIsActive("C")}
                 title={title1}
+                // width={"50%"}
+                weight={"bold"}
                 style={IsActive === "C" ? stylest.activeButton : stylest.button}
                 size={IsActive === "C" ? 15 : 14}
-                color={IsActive === "C" ? colors.tabbarActive : colors.description}
+                color={IsActive === "C" ? colors.iconButton : colors.subText}
             />
             <ButtonWithTitle
                 onPress={() => onIsActive("F")}
                 title={title2}
+                // width={"50%"}
+                weight={"bold"}
                 style={IsActive === "F" ? stylest.activeButton : stylest.button}
                 size={IsActive === "F" ? 15 : 14}
-                color={IsActive === "F" ? colors.tabbarActive : colors.description}
+                color={IsActive === "F" ? colors.iconButton : colors.subText}
             />
         </View>
 
@@ -35,14 +39,14 @@ const ButtonTypeWallet = ({
 const stylest = StyleSheet.create({
     button: {
         borderColor: colors.description,
-        borderBottomWidth: 1.5,
+        borderBottomWidth: 0,
         width: 80,
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',
     },
     activeButton: {
-        borderColor: colors.tabbarActive,
+        borderColor: colors.iconButton,
         borderBottomWidth: 2,
         width: 80,
         height: 30,
@@ -50,7 +54,10 @@ const stylest = StyleSheet.create({
         alignItems: 'center',
     },
     flexRow: {
-        flexDirection: "row"
+        flexDirection: "row",
+        justifyContent:"space-around",
+        alignItems:"center",
+        flex:1
     }
 })
 export default ButtonTypeWallet;

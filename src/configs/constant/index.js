@@ -120,25 +120,34 @@ export  const constant = {
     }
 }
 export const IdNavigation = {
-    Swap:{
-        Menu:'Id.menuSwap',
-        Login:'Id.swap.login'
+    Home:{
+        Menu:'Id.homeSwap',
+        Login:'Id.home.login'
     },
     Wallet:{
         menu:"Id.wallet",
         Login:'Id.wallet.login'
     },
-    Dapp:{
-        menu:'Id.dapp'
+    Sto:{
+        menu:'Id.Sto',
+        Login:'Id.Sto.loin',
     },
-    Setting:{
-        menu:'Id.setting',
-        Login:'Id.setting.login',
-        confirmLogin:'Id.setting.confirmLogin',
+    LiquidSwap:{
+        menu:'Id.LiquidSwap',
+        Login:'Id.LiquidSwap.loin',
+    },
+    Command:{
+        menu:'Id.Command',
+        Login:'Id.Command.login',
+        confirmLogin:'Id.Command.confirmLogin',
     },
     Auth:{
         confirmLogin:'Id.Auth.confirmLogin',
         login:'Id.Auth.login'
+    },
+    PressIn:{
+        historyTransaction:'Id.PressIn.historyTransaction',
+        filterTransaction:'Id.PressIn.filterTransaction'
     }
 }
 

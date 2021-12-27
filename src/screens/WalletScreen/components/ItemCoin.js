@@ -33,17 +33,17 @@ const ItemCoin = ({
                     <Image source={{ uri: get(item,"images") }} style={stylest.imgCoin} />
                     <View style={stylest.spacing}>
                         <TextFnx style={stylest.spacingCenter} weight="bold" color={colors.text}>
-                            {logged&& get(item,"symbol")} <TextFnx color={colors.subText} size={13}>({get(item,"name")})</TextFnx>
+                            {logged&& get(item,"symbol")} 
                         </TextFnx>
                         <View style={stylest.lanscape}>
-                            <TextFnx value={get(item,"lastestPrice")?formatCurrency(get(item,"lastestPrice"),"VND",currencyList):0} color={colors.text} />
-                            <TextFnx color={colorPriceChange} value={valuePriceChange} />
+                            <TextFnx size={12} value={get(item,"name")} color={colors.text} />
+                            {/* <TextFnx color={colorPriceChange} value={get(item,"name")} /> */}
                         </View>
                     </View>
                 </View>
                 <View style={stylest.itemRight}>
-                    {logged?<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={formatCurrency(get(item,"available"),get(item,"currency"),currencyList)} />:<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={"--"} />}
-                    {logged?<TextSeparators suffix="VND" color={colors.subText} value={get(item,"lastestPrice")?formatCurrencyFnx((get(item,"available")+get(item,"pending"))*get(item,"lastestPrice"),0):0} />:<TextFnx color={colors.subText} value="--" />}
+                    {logged?<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={get(item,"available")} />:<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={"--"} />}
+                    {/* {logged?<TextSeparators suffix="VND" color={colors.subText} value={get(item,"lastestPrice")?formatCurrencyFnx((get(item,"available")+get(item,"pending"))*get(item,"lastestPrice"),0):0} />:<TextFnx color={colors.subText} value="--" />} */}
                 </View>
             </View>
         </TouchablePreview>

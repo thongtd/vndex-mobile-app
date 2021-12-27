@@ -7,6 +7,7 @@ const HistoryTransactions = ({
         <LayoutInfoWallet
             componentId={componentId}
             isHistoryTransaction
+            title={"History".t()}
         />
     );
 }

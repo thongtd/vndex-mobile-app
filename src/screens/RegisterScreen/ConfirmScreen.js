@@ -142,8 +142,8 @@ const ConfirmScreen = ({countryCode="VN", componentId}) => {
         <CheckBox
           style={{height: 20, width: 20}}
           boxType="square"
-          onTintColor="orange"
-          onCheckColor="orange"
+          onTintColor={colors.iconButton}
+          onCheckColor={colors.iconButton}
           value={isCheck}
           onValueChange={() => {
             setCheck(!isCheck);

@@ -25,6 +25,7 @@ import {
   isSameScreen,
   resetScreenGlobal,
 } from '../configs/utils';
+import { COMMAND_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, STO_SCREEN } from '.';
 
 // Register all screens on launch
 // registerScreens();
@@ -181,7 +182,7 @@ export function pop(componentId) {
 export function popTo(componentId) {
   return Navigation.popTo(componentId);
 }
-export function showModal(screen, passProps, isHidden = false) {
+export function showModal(screen, passProps, isHidden = true) {
   // if (isSameScreen(screen)) {
   //   return;
   // }
@@ -199,28 +200,35 @@ export function pushTabBasedApp(currenIndex = 0) {
       bottomTabs: {
         children: [
           Tabbar(
+            HOME_SCREEN,
+            require('assets/icons/Home.png'),
+            'HOME'.t(),
+            IdNavigation.Home.menu,
+          ),
+          Tabbar(
+            STO_SCREEN,
+            require('assets/icons/Sto.png'),
+            'STO'.t(),
+            IdNavigation.Sto.Menu,
+          ),
+          Tabbar(
+            LIQUID_SWAP_SCREEN,
+            require('assets/icons/swap.png'),
+            'LIQUID_SWAP'.t(),
+            IdNavigation.LiquidSwap.menu,
+          ),
+          Tabbar(
+            COMMAND_SCREEN,
+            require('assets/icons/History.png'),
+            'COMMAND'.t(),
+            IdNavigation.Command.menu,
+          ),
+          Tabbar(
             WALLET_SCREEN,
-            require('assets/icons/XWallet_menu_wallet.png'),
+            require('assets/icons/Union.png'),
             'WALLET'.t(),
             IdNavigation.Wallet.menu,
-          ),
-          Tabbar(
-            SWAP_SCREEN,
-            require('assets/icons/XWallet_menuSwap.png'),
-            'Swap',
-            IdNavigation.Swap.Menu,
-          ),
-          Tabbar(
-            DAPP_SCREEN,
-            require('assets/icons/XWallet_menuDapp.png'),
-            'Dapp',
-            IdNavigation.Dapp.menu,
-          ),
-          Tabbar(
-            SETTING_SCREEN,
-            require('assets/icons/XWallet_menu_setting.png'),
-            'Setting',
-            IdNavigation.Setting.menu,
+            "Property Overview".t()
           ),
         ],
         options: {

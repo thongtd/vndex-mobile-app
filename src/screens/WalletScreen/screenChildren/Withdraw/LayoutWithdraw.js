@@ -257,10 +257,7 @@ const LayoutWithdraw = ({
                             isCopy={false}
                         />
                     })}
-                    <NoteImportant
-                        isRed
-                        arrNote={["NOTE_WITHDRAWAL".t()]}
-                    />
+                   
                 </>}
 
 

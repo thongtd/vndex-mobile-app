@@ -20,7 +20,7 @@ const Button = ({
     onSubmit,
     onClose,
     isInputCircle,
-    isButtonCircle = true,
+    isButtonCircle = false,
     spaceVertical,
     placeholder = "placeholder",
     textSubmit,
@@ -39,18 +39,23 @@ const Button = ({
     spaceHorizontal,
     sizeIconRight,
     label,
+    isReverse,
+    iconLeftSubmit,
+    iconLeftClose,
     ...rest
 }) => (
         <>
         {rest.isLabel && <TextFnx style={stylest.label} value={label} />}
             {(isSubmit || isClose) && (
-                <View style={[stylest.flexRow, { marginVertical: spaceVertical }]}>
+                <View style={[stylest.flexRow, { marginVertical: spaceVertical },isReverse &&{flexDirection:"row-reverse"}]}>
                      {isClose && <ButtonSubmitClose
                         bgButtonColor={bgButtonColor}
                         title={textClose}
                         isClose
                         isButtonCircle={isButtonCircle}
                         onPress={onClose}
+                        iconLeftSvg={iconLeftClose}
+                        // iconLeft={iconLeftClose}
                         style={style}
                         {...rest}
                     />}
@@ -59,6 +64,8 @@ const Button = ({
                     }
                   {isSubmit && <ButtonSubmitClose
                         title={textSubmit}
+                        // iconLeft={iconLeftSubmit}
+                        iconLeftSvg={iconLeftSubmit}
                         isSubmit
                         isButtonCircle={isButtonCircle}
                         onPress={onSubmit}

@@ -11,7 +11,7 @@ import colors from '../../configs/styles/colors';
 const ButtonFooterAuth = ({
     hasBack,
     componentId,
-    IdNavigate = IdNavigation.Setting.menu,
+    IdNavigate = IdNavigation.Home.menu,
     textRight = "SKIP".t(),
     textLeft = "FORGOT_PASSWORD".t(),
     onRight = () => {

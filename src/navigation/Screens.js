@@ -2,6 +2,11 @@
 
 
 export const LOGIN_SCREEN = 'vndex.title.LoginScreen';
+export const HOME_SCREEN = 'vndex.title.HomeScreen';
+export const LIQUID_SWAP_SCREEN = 'vndex.title.LiquidSwapScreen';
+export const COMMAND_SCREEN = 'vndex.title.CommandScreen';
+export const STO_SCREEN = 'vndex.title.StoScreen';
+
 export const SEND_REG_SCREEN = 'vndex.title.SendRegScreen';
 export const STEP2KYC_SCREEN = 'vndex.title.Step2KycScreen';
 export const STEP3KYC_SCREEN = 'vndex.title.Step3KycScreen';
@@ -56,5 +61,5 @@ export const ALERT_ACCOUNT_ACTIVE = 'modal.AlertAccountActive'
 export const MODAL_ALERT = 'modal.Alert'
 
 // register Component
-export const BUTTON_RIGHT_NAV = 'nav.btnRight';
+export const BUTTON_ICON_RIGHT_NAV = 'nav.btnIconRight';
 

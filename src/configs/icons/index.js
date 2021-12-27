@@ -2,6 +2,7 @@ import React from "react"
 import Lock from "assets/svg/ic_lock.svg"
 import Email from "assets/svg/ic_email.svg"
 export default {
+    bgWallet:require("../../assets/images/bg_wallet.png"),
     copy:require("../../assets/icons/ic_copy.png"),
     ggAuthenL: require("../../assets/images/gg_authen_l.png"),
     ggAuthenL2: require("../../assets/images/gg_authen2_l.png"),

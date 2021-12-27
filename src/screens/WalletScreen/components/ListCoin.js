@@ -53,9 +53,9 @@ const ListCoin = ({
             walletType:2
         }))
         jwtDecode().then(user => {
-            if (get(user, "id")) {
+            if (get(user, "UserId")) {
                 dispatcher(createAction(GET_ASSET_SUMARY, {
-                    UserId: get(user, "id"),
+                    UserId: get(user, "UserId"),
                     marketWatch
                 }))
             }

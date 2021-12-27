@@ -315,16 +315,19 @@ export const removeTokenAndUserInfo = () => {
 export function checkIndexSetting(x) {
   let index;
   switch (x) {
-    case IdNavigation.Setting.menu:
+    case IdNavigation.Home.menu:
+      index = 4;
+      break;
+    case IdNavigation.Sto.menu:
       index = 3;
       break;
-    case IdNavigation.Dapp.menu:
+    case IdNavigation.LiquidSwap.menu:
       index = 2;
       break;
-    case IdNavigation.Swap.menu:
+    case IdNavigation.Command.menu:
       index = 1;
       break;
-    case IdNavigation.Wallet.menu:
+      case IdNavigation.Wallet.menu:
       index = 0;
       break;
   }
