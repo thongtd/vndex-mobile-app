@@ -6257,11 +6257,6 @@ react-native-tab-view@^3.1.1:
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz#1f8d7a835ab4f5b1b1407ec8dddc1053b53fa3c6"
   integrity sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw==
 
-react-native-user-agent@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-user-agent/-/react-native-user-agent-2.1.0.tgz#254ca743da254896f527095ec5eb173843306cc2"
-  integrity sha512-uH3AFrEmTteQyh7cqv/CyCa2ayTuGVGZx5AeetITc7h0okzCdGObISCGGLMouXty70SOWzbtLbBlob0a9z7gbQ==
-
 react-native-vector-icons@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-9.0.0.tgz#ab38ec6941f3f340d39846f1e8300e59863e2fb1"

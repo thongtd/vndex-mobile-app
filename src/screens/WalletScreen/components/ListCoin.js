@@ -15,7 +15,7 @@ const ListCoin = ({
 }) => {
     const logged = useSelector(state=>state.authentication.logged);
     const coinsWalletType = useSelector(state => state.wallet.coinsWalletType);
-    const cryptoWallet = useSelector(state => state.wallet.cryptoWallet);
+    const cryptoWallet = useSelector(state => state.market.cryptoWallet);
     const [Source, setSource] = useState(logged?(isCheck ? data : cryptoWallet): coinsWalletType);
     const [Disabled, setDisabled] = useState(false);
     const marketWatch = useSelector(state => state.market.marketWatch);

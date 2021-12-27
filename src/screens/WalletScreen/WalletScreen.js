@@ -61,7 +61,7 @@ const WalletScreen = ({componentId}) => {
   const isPasscode = useSelector(state => state.authentication.isPasscode);
   const [IsActive, setIsActive] = useState('C');
   const [isSort, setSort] = React.useState(false);
-  const cryptoWallet = useSelector(state => state.wallet.cryptoWallet);
+  const cryptoWallet = useSelector(state => state.market.cryptoWallet);
   const fiatsWallet = useSelector(state => state.wallet.fiatsWallet);
   const dispatcher = useDispatch();
   const [HiddenCrypto, setHiddenCrypto] = useState(
@@ -69,14 +69,9 @@ const WalletScreen = ({componentId}) => {
       (item, index) => get(item, 'available') + get(item, 'pending') !== 0,
     ),
   );
-  const [HiddenFiat, setHiddenFiat] = useState(
-    fiatsWallet.filter(
-      (item, index) => get(item, 'available') + get(item, 'pending') !== 0,
-    ),
-  );
+  
   useEffect(() => {
     const navigationButtonEventListener = Navigation.events().registerNavigationButtonPressedListener(({ buttonId }) => {
-      console.log(buttonId,"buttonId");
       if(buttonId == IdNavigation.PressIn.historyTransaction){
         pushSingleScreenApp(componentId,TRANSACTION_HISTORY,null, {
           topBar:{
@@ -92,71 +87,26 @@ const WalletScreen = ({componentId}) => {
       navigationButtonEventListener.remove();
     }
   }, [])
-  const fiatsWalletType = useSelector(state => state.wallet.fiatsWalletType);
-  const coinsWalletType = useSelector(state => state.wallet.coinsWalletType);
+  // const fiatsWalletType = useSelector(state => state.wallet.fiatsWalletType);
+  // const coinsWalletType = useSelector(state => state.wallet.coinsWalletType);
   useEffect(() => {
-    backHandler(() => resetScreenGlobal());
+    // backHandler(() => resetScreenGlobal());
     switchLangTabbar();
-    if (isPasscode && Timer == 60) {
-      showModal(PASSCODE_AUTH_SCREEN);
-    }
+    // if (isPasscode && Timer == 60) {
+    //   showModal(PASSCODE_AUTH_SCREEN);
+    // }
   }, []);
   useEffect(() => {
     let availableZeroCrypto = cryptoWallet.filter(
       (item, index) => get(item, 'available') + get(item, 'pending') !== 0,
     );
-    let availableZeroFiat = fiatsWallet.filter(
-      (item, index) => get(item, 'available') + get(item, 'pending') !== 0,
-    );
+    // let availableZeroFiat = fiatsWallet.filter(
+    //   (item, index) => get(item, 'available') + get(item, 'pending') !== 0,
+    // );
     setHiddenCrypto(availableZeroCrypto);
-    setHiddenFiat(availableZeroFiat);
-  }, [cryptoWallet, fiatsWallet]);
-  const {appState} = useAppState({
-    onChange: newAppState => {},
-    onForeground: () => console.log('App went to Foreground'),
-    onBackground: () => console.log('App went to background'),
-  });
-  useEffect(() => {
-    listenerEventEmitter('timer', timer => {
-      setTimer(timer - 1);
-    });
-    if (appState === 'background') {
-      if (isPasscode && Timer == 60) {
-        showModal(PASSCODE_AUTH_SCREEN);
-      }
-    }
-    return () => {
-      removeEventEmitter('timer');
-    };
-  }, [appState, isPasscode]);
-  const onSort = log => {
-    var sortCrypto;
-    var sortFiat;
-    if (log) {
-      if (isSort) {
-        sortCrypto = orderBy(cryptoWallet, ['currency'], ['asc']);
-        sortFiat = orderBy(fiatsWallet, ['currency'], ['asc']);
-      } else {
-        sortCrypto = orderBy(cryptoWallet, ['currency'], ['desc']);
-        sortFiat = orderBy(fiatsWallet, ['currency'], ['desc']);
-      }
-      dispatcher(createAction(GET_ASSET_CRYPTO_WALLETS_SUCCESS, sortCrypto));
-      dispatcher(createAction(GET_ASSET_FIAT_WALLET_SUCCESS, sortFiat));
-    } else {
-      if (isSort) {
-        sortCrypto = orderBy(coinsWalletType, ['symbol'], ['asc']);
-        sortFiat = orderBy(fiatsWalletType, ['symbol'], ['asc']);
-      } else {
-        sortCrypto = orderBy(coinsWalletType, ['symbol'], ['desc']);
-        sortFiat = orderBy(fiatsWalletType, ['symbol'], ['desc']);
-      }
-      dispatcher(createAction(GET_COIN_BY_TYPE_COIN_SUCCESS, sortCrypto));
-      dispatcher(createAction(GET_COIN_BY_TYPE_FIATS_SUCCESS, sortFiat));
-    }
-
-    setSort(!isSort);
-    emitEventEmitter('checkSort', !isSort);
-  };
+    // setHiddenFiat(availableZeroFiat);
+  }, [cryptoWallet]);
+  
 
   const onHidden = () => {
     setCheck(!isCheck);

@@ -61,6 +61,7 @@ import Logo from 'assets/svg/Logo.svg';
 import {
   GET_CRYPTO_WALLET_SUCCESS,
   GET_FIAT_WALLET_SUCCESS,
+  GET_ASSET_CRYPTO_WALLETS_SUCCESS
 } from '../../redux/modules/market/actions';
 import TextFnx from '../../components/Text/TextFnx';
 import colors from '../../configs/styles/colors';

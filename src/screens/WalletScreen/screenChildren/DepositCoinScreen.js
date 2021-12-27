@@ -41,6 +41,7 @@ const DepositCoinScreen = ({componentId, data}) => {
     )
       .then(res => {
         setDisabled(false);
+        console.log(res,"Ress");
         if (res) {
           setInfoCurrency(res);
           if (
@@ -141,35 +142,24 @@ const DepositCoinScreen = ({componentId, data}) => {
             size={170}
           />
         </View>
-        <ItemDepositCoin
+        {/* <ItemDepositCoin
           addressWallet={'Ethereum (ERC 20)'}
           label={'Mạng lưới'}
-        />
+        /> */}
         <ItemDepositCoin
           addressWallet={get(InfoCurrency, 'cryptoAddress')}
           label={formatMessageByArray('DEPOSIT_ADDRESS'.t(), [CurrencyActive])}
         />
-        <ItemDepositCoin addressWallet={'C2f1EfEf36Bf'} label={'Tag'} />
-        {/* {
+        {/* <ItemDepositCoin addressWallet={'C2f1EfEf36Bf'} label={'Tag'} /> */}
+        {
                     get(InfoCurrency, "extraFields") && size(get(InfoCurrency, "extraFields")) > 0 && get(InfoCurrency, "extraFields").map((item, index) => {
                         return (<ItemDepositCoin
                             key={`key-${index}`}
                             addressWallet={get(item, "value")}
                             label={get(item, "name")}
-                            onShare={async () => {
-                                const shareOptions = {
-                                    title: 'Share'.t(),
-                                    failOnCancel: false,
-                                    message: get(item, "value"),
-                                };
-                                try {
-                                    await Share.open(shareOptions);
-                                } catch (error) {
-                                    console.log('Error =>', error);
-                                }
-                            }} />)
+                             />)
                     })
-                } */}
+                }
                 <View style={{
                     borderBottomWidth:1,
                     borderBottomColor:colors.line

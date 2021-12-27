@@ -92,6 +92,7 @@ const LayoutInfoWallet = ({
   const cryptoWallet = useSelector(state => state.wallet.cryptoWallet);
   const fiatsWallet = useSelector(state => state.wallet.fiatsWallet);
   const [InfoCoin, setInfoCoin] = useState(item);
+  
   const currencyList = useSelector(state => state.market.currencyList);
   const coinWithdrawLog = useSelector(state => state.wallet.coinWithdrawLog);
   const coinDepositLog = useSelector(state => state.wallet.coinDepositLog);
@@ -126,28 +127,28 @@ const LayoutInfoWallet = ({
   const [InfoDataSearch, setInfoDataSearch] = useState('');
   // var Page = 1;
   // const [Item, setItem] = useState(item)
-  useEffect(() => {
-    console.log(fiatWithdrawLog, 'fiatWithdrawLog');
+  // useEffect(() => {
+  //   // console.log(get(InfoCoin,"pending"), 'fiatWithdrawLog');
 
-    if (isCoin && IsActive === 'C') {
-      setSource(coinDepositLog);
-    } else if (isCoin && IsActive === 'F') {
-      setSource(coinWithdrawLog);
-    } else if (!isCoin && IsActive === 'C') {
-      setSource(fiatDepositLog);
-    } else if (!isCoin && IsActive === 'F') {
-      setSource(fiatWithdrawLog);
-    }
-  }, [
-    isHistoryTransaction,
-    coinDepositLogLoadMore,
-    coinWithdrawLog,
-    coinDepositLog,
-    fiatDepositLog,
-    fiatWithdrawLog,
-    IsActive,
-    isCoin,
-  ]);
+  //   if (isCoin && IsActive === 'C') {
+  //     setSource(coinDepositLog);
+  //   } else if (isCoin && IsActive === 'F') {
+  //     setSource(coinWithdrawLog);
+  //   } else if (!isCoin && IsActive === 'C') {
+  //     setSource(fiatDepositLog);
+  //   } else if (!isCoin && IsActive === 'F') {
+  //     setSource(fiatWithdrawLog);
+  //   }
+  // }, [
+  //   isHistoryTransaction,
+  //   coinDepositLogLoadMore,
+  //   coinWithdrawLog,
+  //   coinDepositLog,
+  //   fiatDepositLog,
+  //   fiatWithdrawLog,
+  //   IsActive,
+  //   isCoin,
+  // ]);
   
   useEffect(() => {
     const navigationButtonEventListener = Navigation.events().registerNavigationButtonPressedListener(({ buttonId }) => {
@@ -160,52 +161,45 @@ const LayoutInfoWallet = ({
       navigationButtonEventListener.remove();
     }
   }, [])
-  useEffect(() => {
-    dispatcher(createAction(GET_BALANCE_BY_CURRENCY_SUCCESS, {}));
-    WalletService.getWalletBalanceByCurrency(
-      get(UserInfo, 'id'),
-      CurrencyActive,
-    ).then(res => {
-      setInfoCurrency(res);
-    });
-  }, [CurrencyActive]);
-  useEffect(() => {
-    onRefresh();
-    setPage(1);
-    setInfoDataSearch('');
-  }, [IsActive]);
-  useEffect(() => {
-    if (isArray(cryptoWallet) && size(cryptoWallet) > 0) {
-      let cryptoFilter = cryptoWallet.filter(
-        (crypto, index) => get(crypto, 'currency') == get(InfoCoin, 'currency'),
-      );
-      if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
-        setInfoCoin(cryptoFilter[0]);
-        setCurrencyActive(get(cryptoFilter[0], 'currency'));
-      }
-    }
-    if (isArray(fiatsWallet) && size(fiatsWallet) > 0) {
-      let cryptoFilter = fiatsWallet.filter(
-        (crypto, index) => get(crypto, 'currency') == get(InfoCoin, 'currency'),
-      );
-      if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
-        setInfoCoin(cryptoFilter[0]);
-        setCurrencyActive(get(cryptoFilter[0], 'currency'));
-      }
-    }
-  }, [cryptoWallet, fiatsWallet]);
+  // useEffect(() => {
+  //   dispatcher(createAction(GET_BALANCE_BY_CURRENCY_SUCCESS, {}));
+  //   WalletService.getWalletBalanceByCurrency(
+  //     get(UserInfo, 'id'),
+  //     CurrencyActive,
+  //   ).then(res => {
+  //     setInfoCurrency(res);
+  //   });
+  // }, [CurrencyActive]);
+  // useEffect(() => {
+  //   onRefresh();
+  //   setPage(1);
+  //   setInfoDataSearch('');
+  // }, [IsActive]);
+  // useEffect(() => {
+  //   if (isArray(cryptoWallet) && size(cryptoWallet) > 0) {
+  //     let cryptoFilter = cryptoWallet.filter(
+  //       (crypto, index) => get(crypto, 'currency') == get(InfoCoin, 'currency'),
+  //     );
+  //     if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
+  //       setInfoCoin(cryptoFilter[0]);
+  //       setCurrencyActive(get(cryptoFilter[0], 'currency'));
+  //     }
+  //   }
+  //   if (isArray(fiatsWallet) && size(fiatsWallet) > 0) {
+  //     let cryptoFilter = fiatsWallet.filter(
+  //       (crypto, index) => get(crypto, 'currency') == get(InfoCoin, 'currency'),
+  //     );
+  //     if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
+  //       setInfoCoin(cryptoFilter[0]);
+  //       setCurrencyActive(get(cryptoFilter[0], 'currency'));
+  //     }
+  //   }
+  // }, [cryptoWallet, fiatsWallet]);
 
   const onRefresh = (loadMore = false) => {
     // setDisabled(true);
     dispatcher(
       createAction(GET_WITHDRAW_COIN_LOG, {
-        UserId,
-        pageIndex: 1,
-        loadMore: loadMore,
-      }),
-    );
-    dispatcher(
-      createAction(GET_WITHDRAW_FIAT_LOG, {
         UserId,
         pageIndex: 1,
         loadMore: loadMore,
@@ -218,168 +212,161 @@ const LayoutInfoWallet = ({
         loadMore: loadMore,
       }),
     );
-    dispatcher(
-      createAction(GET_DEPOSIT_FIAT_LOG, {
-        UserId,
-        pageIndex: 1,
-        loadMore: loadMore,
-      }),
-    );
   };
 
-  useEffect(() => {
-    jwtDecode().then(user => {
-      if (get(user, 'UserId')) {
-        setUserId(get(user, 'UserId'));
-        setUserSub(get(user, 'Username'));
-      }
-    });
+  // useEffect(() => {
+  //   jwtDecode().then(user => {
+  //     if (get(user, 'UserId')) {
+  //       setUserId(get(user, 'UserId'));
+  //       setUserSub(get(user, 'Username'));
+  //     }
+  //   });
 
-    listenerEventEmitter('doneWCoinLog', () => {
-      setDisabled(false);
-      setLoading(false);
-    });
-    listenerEventEmitter('doneDFiatLog', () => {
-      setLoading(false);
-      setDisabled(false);
-    });
-    listenerEventEmitter('doneDCoinLog', () => {
-      setLoading(false);
-      setDisabled(false);
-    });
-    listenerEventEmitter('doneWFiatLog', () => {
-      setLoading(false);
-      setDisabled(false);
-    });
-  }, []);
-  useEffect(() => {
-    // listenerEventEmitter('pushData', (data) => {
+  //   listenerEventEmitter('doneWCoinLog', () => {
+  //     setDisabled(false);
+  //     setLoading(false);
+  //   });
+  //   listenerEventEmitter('doneDFiatLog', () => {
+  //     setLoading(false);
+  //     setDisabled(false);
+  //   });
+  //   listenerEventEmitter('doneDCoinLog', () => {
+  //     setLoading(false);
+  //     setDisabled(false);
+  //   });
+  //   listenerEventEmitter('doneWFiatLog', () => {
+  //     setLoading(false);
+  //     setDisabled(false);
+  //   });
+  // }, []);
+  // useEffect(() => {
+  //   // listenerEventEmitter('pushData', (data) => {
 
-    //     let SourceData = [...Source,...data]
-    //     console.log(SourceData,"dataPush");
-    //     setLoading(false);
-    //     setSource(SourceData)
-    // })
-    return () => {
-      removeEventEmitter('pushData');
-    };
-  }, [Source]);
-  const onCancel = (data, rowMap) => {
-    var passProps;
-    var sessionId;
-    var verifyCode;
-    if (!isCoin && IsActive === 'C') {
-      WalletService.cancelDepositFiat(get(data, 'item.id')).then(res => {
-        if (get(res, 'result.status')) {
-          dispatcher(
-            createAction(GET_DEPOSIT_FIAT_LOG, {
-              UserId,
-              pageIndex: 1,
-            }),
-          );
-        }
-      });
-    } else {
-      var dataSubmit = {
-        sessionId,
-        verifyCode,
-        accId: UserId,
-        requestId: '',
-      };
-      if (
-        twoFactorEnable &&
-        twoFactorySerice === constant.TWO_FACTOR_TYPE.GG2FA
-      ) {
-        passProps = {
-          placeholder: '2FA_CODE'.t(),
-          isResend: false,
-          isIconLeft: false,
-          title: 'Cancel',
-          textFirst: 'Please enter 2FA code'.t(),
-        };
-      } else if (
-        twoFactorEnable &&
-        twoFactorySerice === constant.TWO_FACTOR_TYPE.EMAIL_2FA
-      ) {
-        passProps = {
-          onChangeText: text => {
-            verifyCode = text;
-          },
-          onSubmit: () => {
-            set(dataSubmit, 'verifyCode', verifyCode);
-            set(dataSubmit, 'sessionId', sessionId);
-            set(dataSubmit, 'requestId', get(data, 'item.id'));
-            WalletService.cancelWithdrawCoin(dataSubmit).then(res => {
-              console.log(dataSubmit, res, 'reas');
-              if (res) {
-                if (get(res, 'status')) {
-                  return toast(get(res, 'message'));
-                } else {
-                  return toast(get(res, 'message'));
-                }
-              } else {
-                return toast(get(res, 'message'));
-              }
-            });
-            // console.log(dataSubmit,"dataSubmit");
-          },
-          placeholder: '2FA_CODE'.t(),
-          isResend: true,
-          isIconLeft: true,
-          onResend: () => {
-            authService.getTwoFactorEmailCode(UserSub).then(res => {
-              sessionId = get(res, 'data.sessionId');
-              // console.log(res,"val ka")
-            });
-          },
-          title: 'Cancel',
-          textFirst: `${'The 2fa code has been sent to email'.t()} ${UserSub}`,
-        };
-      } else {
-        rowMap[data.index].closeRow();
-        return toast('Please enable 2FA code'.t());
-      }
-      showModal(MODAL_ALERT, passProps, true);
-    }
+  //   //     let SourceData = [...Source,...data]
+  //   //     console.log(SourceData,"dataPush");
+  //   //     setLoading(false);
+  //   //     setSource(SourceData)
+  //   // })
+  //   return () => {
+  //     removeEventEmitter('pushData');
+  //   };
+  // }, [Source]);
+  // const onCancel = (data, rowMap) => {
+  //   var passProps;
+  //   var sessionId;
+  //   var verifyCode;
+  //   if (!isCoin && IsActive === 'C') {
+  //     WalletService.cancelDepositFiat(get(data, 'item.id')).then(res => {
+  //       if (get(res, 'result.status')) {
+  //         dispatcher(
+  //           createAction(GET_DEPOSIT_FIAT_LOG, {
+  //             UserId,
+  //             pageIndex: 1,
+  //           }),
+  //         );
+  //       }
+  //     });
+  //   } else {
+  //     var dataSubmit = {
+  //       sessionId,
+  //       verifyCode,
+  //       accId: UserId,
+  //       requestId: '',
+  //     };
+  //     if (
+  //       twoFactorEnable &&
+  //       twoFactorySerice === constant.TWO_FACTOR_TYPE.GG2FA
+  //     ) {
+  //       passProps = {
+  //         placeholder: '2FA_CODE'.t(),
+  //         isResend: false,
+  //         isIconLeft: false,
+  //         title: 'Cancel',
+  //         textFirst: 'Please enter 2FA code'.t(),
+  //       };
+  //     } else if (
+  //       twoFactorEnable &&
+  //       twoFactorySerice === constant.TWO_FACTOR_TYPE.EMAIL_2FA
+  //     ) {
+  //       passProps = {
+  //         onChangeText: text => {
+  //           verifyCode = text;
+  //         },
+  //         onSubmit: () => {
+  //           set(dataSubmit, 'verifyCode', verifyCode);
+  //           set(dataSubmit, 'sessionId', sessionId);
+  //           set(dataSubmit, 'requestId', get(data, 'item.id'));
+  //           WalletService.cancelWithdrawCoin(dataSubmit).then(res => {
+  //             console.log(dataSubmit, res, 'reas');
+  //             if (res) {
+  //               if (get(res, 'status')) {
+  //                 return toast(get(res, 'message'));
+  //               } else {
+  //                 return toast(get(res, 'message'));
+  //               }
+  //             } else {
+  //               return toast(get(res, 'message'));
+  //             }
+  //           });
+  //           // console.log(dataSubmit,"dataSubmit");
+  //         },
+  //         placeholder: '2FA_CODE'.t(),
+  //         isResend: true,
+  //         isIconLeft: true,
+  //         onResend: () => {
+  //           authService.getTwoFactorEmailCode(UserSub).then(res => {
+  //             sessionId = get(res, 'data.sessionId');
+  //             // console.log(res,"val ka")
+  //           });
+  //         },
+  //         title: 'Cancel',
+  //         textFirst: `${'The 2fa code has been sent to email'.t()} ${UserSub}`,
+  //       };
+  //     } else {
+  //       rowMap[data.index].closeRow();
+  //       return toast('Please enable 2FA code'.t());
+  //     }
+  //     showModal(MODAL_ALERT, passProps, true);
+  //   }
 
-    rowMap[data.index].closeRow();
-  };
-  const onSelectCoin = () => {
-    if (isCoin) {
-      let data = orderBy(
-        uniqBy(cryptoWallet, 'currency'),
-        ['currency'],
-        ['asc'],
-      );
-      let propsData = getPropData(
-        data,
-        'image',
-        'currency',
-        CurrencyActive,
-        item => handleActive(item),
-      );
-      showModal(PICKER_SEARCH, propsData);
-    } else {
-      let data = orderBy(
-        uniqBy(fiatsWallet, 'currency'),
-        ['currency'],
-        ['asc'],
-      );
-      let propsData = getPropData(
-        data,
-        'image',
-        'currency',
-        CurrencyActive,
-        item => handleActive(item),
-      );
-      showModal(PICKER_SEARCH, propsData);
-    }
-  };
-  const handleActive = item => {
-    setCurrencyActive(get(item, 'currency'));
-    setInfoCoin(item);
-    dismissAllModal();
-  };
+  //   rowMap[data.index].closeRow();
+  // };
+  // const onSelectCoin = () => {
+  //   if (isCoin) {
+  //     let data = orderBy(
+  //       uniqBy(cryptoWallet, 'currency'),
+  //       ['currency'],
+  //       ['asc'],
+  //     );
+  //     let propsData = getPropData(
+  //       data,
+  //       'image',
+  //       'currency',
+  //       CurrencyActive,
+  //       item => handleActive(item),
+  //     );
+  //     showModal(PICKER_SEARCH, propsData);
+  //   } else {
+  //     let data = orderBy(
+  //       uniqBy(fiatsWallet, 'currency'),
+  //       ['currency'],
+  //       ['asc'],
+  //     );
+  //     let propsData = getPropData(
+  //       data,
+  //       'image',
+  //       'currency',
+  //       CurrencyActive,
+  //       item => handleActive(item),
+  //     );
+  //     showModal(PICKER_SEARCH, propsData);
+  //   }
+  // };
+  // const handleActive = item => {
+  //   setCurrencyActive(get(item, 'currency'));
+  //   setInfoCoin(item);
+  //   dismissAllModal();
+  // };
   const onDeposit = InfoCoin => {
     pushSingleScreenApp(componentId, DEPOSIT_COIN_SCREEN, {
       data: InfoCoin,
@@ -390,187 +377,188 @@ const LayoutInfoWallet = ({
       data: InfoCoin,
     });
   };
-  const onHistory = item => {
-    if (isCoin && IsActive === 'C') {
-      pushSingleScreenApp(componentId, HISTORY_DEPOSIT_COIN_SCREEN, {
-        data: item,
-      });
-    } else if (!isCoin && IsActive === 'C') {
-      pushSingleScreenApp(componentId, HISTORY_DEPOSIT_FIAT_SCREEN, {
-        InfoBank: item,
-      });
-    } else if (isCoin && IsActive === 'F') {
-      var extraData = {};
+  // const onHistory = item => {
+  //   if (isCoin && IsActive === 'C') {
+  //     pushSingleScreenApp(componentId, HISTORY_DEPOSIT_COIN_SCREEN, {
+  //       data: item,
+  //     });
+  //   } else if (!isCoin && IsActive === 'C') {
+  //     pushSingleScreenApp(componentId, HISTORY_DEPOSIT_FIAT_SCREEN, {
+  //       InfoBank: item,
+  //     });
+  //   } else if (isCoin && IsActive === 'F') {
+  //     var extraData = {};
 
-      if (
-        isArray(get(item, 'toExtraFields')) &&
-        size(get(item, 'toExtraFields'))
-      ) {
-        get(item, 'toExtraFields').map((extra, index) => {
-          if (get(extra, 'value')) {
-            let fieldName = get(
-              extra,
-              `localizations.${checkLang(lang)}.FieldName`,
-            );
-            set(extraData, fieldName, {
-              title: fieldName,
-              value: get(extra, 'value'),
-            });
-          }
-        });
-      }
-      pushSingleScreenApp(componentId, WITHDRAW_COIN_SCREEN, {
-        step: CheckStepStatus(get(item, 'statusLable')),
-        data: item,
-        dataInfo: {
-          amount: {
-            title: 'AMOUNT'.t(),
-            value: formatTrunc(
-              currencyList,
-              get(item, 'amount'),
-              get(item, 'currency'),
-            ),
-          },
-          address: {
-            title: 'RECEIVED_ADDRESS'.t(),
-            value: get(item, 'toAddress'),
-          },
-          ...extraData,
-        },
-        isHistory: true,
-        requestId: get(item, 'id'),
-      });
-    } else {
-      pushSingleScreenApp(componentId, WITHDRAW_FIAT_SCREEN, {
-        step: CheckStepStatus(get(item, 'statusLable')),
-        data: {...item, currency: get(item, 'walletCurrency')},
-        dataInfo: {
-          amount: {
-            title: 'AMOUNT'.t(),
-            value: formatTrunc(
-              currencyList,
-              get(item, 'amount'),
-              get(item, 'currency'),
-            ),
-          },
-          bank: {
-            title: 'BANK_NAME'.t(),
-            value: get(item, 'bankName'),
-          },
-          branch: {
-            title: 'BRACH_NAME'.t(),
-            value: get(item, 'bankBranchName'),
-          },
-          nameBankAccount: {
-            title: 'RECEIVING_BANK_ACCOUNT_NAME'.t(),
-            value: get(item, 'bankAccountName'),
-          },
-          numberBankAccount: {
-            title: 'RECEIVING_BANK_ACCOUNT_NO'.t(),
-            value: get(item, 'bankAccountNo'),
-          },
-          amount: {
-            title: 'AMOUNT'.t(),
-            value: formatTrunc(
-              currencyList,
-              get(item, 'amount'),
-              get(item, 'currency'),
-            ),
-          },
-        },
-        isHistory: true,
-        requestId: get(item, 'id'),
-      });
-    }
-  };
-  const renderFooter = () => {
-    if (!Loading) return null;
-    return <ActivityIndicator style={{color: '#000'}} />;
-  };
-  const handleLoadMore = () => {
-    console.log(Page, 'cuoi');
+  //     if (
+  //       isArray(get(item, 'toExtraFields')) &&
+  //       size(get(item, 'toExtraFields'))
+  //     ) {
+  //       get(item, 'toExtraFields').map((extra, index) => {
+  //         if (get(extra, 'value')) {
+  //           let fieldName = get(
+  //             extra,
+  //             `localizations.${checkLang(lang)}.FieldName`,
+  //           );
+  //           set(extraData, fieldName, {
+  //             title: fieldName,
+  //             value: get(extra, 'value'),
+  //           });
+  //         }
+  //       });
+  //     }
+  //     pushSingleScreenApp(componentId, WITHDRAW_COIN_SCREEN, {
+  //       step: CheckStepStatus(get(item, 'statusLable')),
+  //       data: item,
+  //       dataInfo: {
+  //         amount: {
+  //           title: 'AMOUNT'.t(),
+  //           value: formatTrunc(
+  //             currencyList,
+  //             get(item, 'amount'),
+  //             get(item, 'currency'),
+  //           ),
+  //         },
+  //         address: {
+  //           title: 'RECEIVED_ADDRESS'.t(),
+  //           value: get(item, 'toAddress'),
+  //         },
+  //         ...extraData,
+  //       },
+  //       isHistory: true,
+  //       requestId: get(item, 'id'),
+  //     });
+  //   } else {
+  //     pushSingleScreenApp(componentId, WITHDRAW_FIAT_SCREEN, {
+  //       step: CheckStepStatus(get(item, 'statusLable')),
+  //       data: {...item, currency: get(item, 'walletCurrency')},
+  //       dataInfo: {
+  //         amount: {
+  //           title: 'AMOUNT'.t(),
+  //           value: formatTrunc(
+  //             currencyList,
+  //             get(item, 'amount'),
+  //             get(item, 'currency'),
+  //           ),
+  //         },
+  //         bank: {
+  //           title: 'BANK_NAME'.t(),
+  //           value: get(item, 'bankName'),
+  //         },
+  //         branch: {
+  //           title: 'BRACH_NAME'.t(),
+  //           value: get(item, 'bankBranchName'),
+  //         },
+  //         nameBankAccount: {
+  //           title: 'RECEIVING_BANK_ACCOUNT_NAME'.t(),
+  //           value: get(item, 'bankAccountName'),
+  //         },
+  //         numberBankAccount: {
+  //           title: 'RECEIVING_BANK_ACCOUNT_NO'.t(),
+  //           value: get(item, 'bankAccountNo'),
+  //         },
+  //         amount: {
+  //           title: 'AMOUNT'.t(),
+  //           value: formatTrunc(
+  //             currencyList,
+  //             get(item, 'amount'),
+  //             get(item, 'currency'),
+  //           ),
+  //         },
+  //       },
+  //       isHistory: true,
+  //       requestId: get(item, 'id'),
+  //     });
+  //   }
+  // };
+  // const renderFooter = () => {
+  //   if (!Loading) return null;
+  //   return <ActivityIndicator style={{color: '#000'}} />;
+  // };
+  // const handleLoadMore = () => {
+  //   console.log(Page, 'cuoi');
 
-    if (!Loading) {
-      setPage(Page + 1);
-      // method for API call
-    }
-  };
-  useEffect(() => {
-    fetchData(Page, InfoDataSearch);
-    return () => {};
-  }, [Page, InfoDataSearch]);
-  const fetchData = (
-    page = 1,
-    data = {
-      fromDate: '',
-      toDate: '',
-      walletCurrency: '',
-      status: '',
-    },
-  ) => {
-    setLoading(true);
-    if (isCoin && IsActive === 'C') {
-      dispatcher(
-        createAction(GET_DEPOSIT_COIN_LOG, {
-          UserId,
-          pageIndex: page,
-          loadMore: true,
-          fromDate: data.startDate,
-          toDate: data.endDate,
-          walletCurrency: data.symbol,
-          status: data.status,
-        }),
-      );
-    } else if (isCoin && IsActive === 'F') {
-      dispatcher(
-        createAction(GET_WITHDRAW_COIN_LOG, {
-          UserId,
-          pageIndex: page,
-          loadMore: true,
-          fromDate: data.startDate,
-          toDate: data.endDate,
-          walletCurrency: data.symbol,
-          status: data.status,
-        }),
-      );
-    } else if (!isCoin && IsActive === 'C') {
-      dispatcher(
-        createAction(GET_DEPOSIT_FIAT_LOG, {
-          UserId,
-          pageIndex: page,
-          loadMore: true,
-          fromDate: data.startDate,
-          toDate: data.endDate,
-          walletCurrency: data.symbol,
-          status: data.status,
-        }),
-      );
-    } else if (!isCoin && IsActive === 'F') {
-      dispatcher(
-        createAction(GET_WITHDRAW_FIAT_LOG, {
-          UserId,
-          pageIndex: page,
-          loadMore: true,
-          fromDate: data.startDate,
-          toDate: data.endDate,
-          walletCurrency: data.symbol,
-          status: data.status,
-        }),
-      );
-    }
-  };
-  const onSubmitSearch = data => {
-    fetchData(1, data);
-    setInfoDataSearch(data);
-    setHiddenShow(false);
-  };
-  const onActiveWalletType = active => {
-    if (get(active, 'value') == 1) {
-      setIsCoin(false);
-    } else {
-      setIsCoin(true);
-    }
-  };
+  //   if (!Loading) {
+  //     setPage(Page + 1);
+  //     // method for API call
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchData(Page, InfoDataSearch);
+  //   return () => {};
+  // }, [Page, InfoDataSearch]);
+  // const fetchData = (
+  //   page = 1,
+  //   data = {
+  //     fromDate: '',
+  //     toDate: '',
+  //     walletCurrency: '',
+  //     status: '',
+  //   },
+  // ) => {
+  //   setLoading(true);
+  //   if (isCoin && IsActive === 'C') {
+  //     dispatcher(
+  //       createAction(GET_DEPOSIT_COIN_LOG, {
+  //         UserId,
+  //         pageIndex: page,
+  //         loadMore: true,
+  //         fromDate: data.startDate,
+  //         toDate: data.endDate,
+  //         walletCurrency: data.symbol,
+  //         status: data.status,
+  //       }),
+  //     );
+  //   } else if (isCoin && IsActive === 'F') {
+  //     dispatcher(
+  //       createAction(GET_WITHDRAW_COIN_LOG, {
+  //         UserId,
+  //         pageIndex: page,
+  //         loadMore: true,
+  //         fromDate: data.startDate,
+  //         toDate: data.endDate,
+  //         walletCurrency: data.symbol,
+  //         status: data.status,
+  //       }),
+  //     );
+  //   } else if (!isCoin && IsActive === 'C') {
+  //     dispatcher(
+  //       createAction(GET_DEPOSIT_FIAT_LOG, {
+  //         UserId,
+  //         pageIndex: page,
+  //         loadMore: true,
+  //         fromDate: data.startDate,
+  //         toDate: data.endDate,
+  //         walletCurrency: data.symbol,
+  //         status: data.status,
+  //       }),
+  //     );
+  //   } else if (!isCoin && IsActive === 'F') {
+  //     dispatcher(
+  //       createAction(GET_WITHDRAW_FIAT_LOG, {
+  //         UserId,
+  //         pageIndex: page,
+  //         loadMore: true,
+  //         fromDate: data.startDate,
+  //         toDate: data.endDate,
+  //         walletCurrency: data.symbol,
+  //         status: data.status,
+  //       }),
+  //     );
+  //   }
+  // };
+  // const onSubmitSearch = data => {
+  //   fetchData(1, data);
+  //   setInfoDataSearch(data);
+  //   setHiddenShow(false);
+  // };
+  // const onActiveWalletType = active => {
+  //   if (get(active, 'value') == 1) {
+  //     setIsCoin(false);
+  //   } else {
+  //     setIsCoin(true);
+  //   }
+  // };
+  // console.log(get(InfoCoin,"available"),"InfoCoin");
   return (
     <Container
       onClickRight={() => setHiddenShow(!HiddenShow)}
@@ -600,7 +588,7 @@ const LayoutInfoWallet = ({
           Tổng Cộng
         </TextFnx>
         <TextFnx space={10} color={colors.buy} size={20}>
-          24,500.12664600
+          {`${get(item,"available") + get(item,"pending")}`}
         </TextFnx>
       </View>
       <View
@@ -614,7 +602,7 @@ const LayoutInfoWallet = ({
           <TextFnx space={3} color={colors.subText} size={12}>
             Khả dụng
           </TextFnx>
-          <TextFnx>952.51000000</TextFnx>
+          <TextFnx>{`${get(item,"available")}`}</TextFnx>
         </View>
         <View
           style={{
@@ -623,7 +611,7 @@ const LayoutInfoWallet = ({
           <TextFnx space={3} color={colors.subText} size={12}>
             Đang đặt lệnh
           </TextFnx>
-          <TextFnx>952.51000000</TextFnx>
+          <TextFnx>{`${get(item,"pending")}`}</TextFnx>
         </View>
       </View>
       <Button

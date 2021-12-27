@@ -146,7 +146,7 @@ const LayoutWithdraw = ({
     return (
         <Container
             hasBack
-            title={`${"Withdrawal".t()} ${get(InfoCoin, "currency")}`}
+            title={`${"Withdrawal".t()} ${get(InfoCoin, "symbol")}`}
             componentId={componentId}
             onClickRight={step === 0 ? onSelectCoin : null}
             sizeIconRight={19}
@@ -161,7 +161,7 @@ const LayoutWithdraw = ({
                 stepCount={4}
             />
             <Available
-                data={{ currency: get(InfoCoin, "currency"), amount: get(InfoCoin, "available") }}
+                data={{ currency: get(InfoCoin, "symbol"), amount: get(InfoCoin, "available") }}
             />
 
             {children}

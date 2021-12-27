@@ -15,7 +15,7 @@ import TextFnx from '../../components/Text/TextFnx';
 import { useActionsMarket } from '../../redux/modules/market';
 import { GET_ASSET_SUMARY, GET_WITHDRAW_COIN_LOG, GET_WITHDRAW_FIAT_LOG, GET_DEPOSIT_COIN_LOG, GET_DEPOSIT_FIAT_LOG, GET_DEPOSIT_BANK_ACCOUNT, GET_COIN_BY_TYPE } from '../../redux/modules/wallet/actions';
 import { GET_SWAP_ORDERS_BOOK } from '../../redux/modules/market/actions';
-
+import Logo from "assets/svg/Logo.svg";
 const SplashScreen = ({
     componentId
 }) => {
@@ -107,10 +107,11 @@ const SplashScreen = ({
             componentId={componentId}
         >
             <View style={stylest.blockLogoWallet}>
-                <Image resizeMode="contain" source={icons.logoXwallet} style={stylest.logoXwallet} />
+                <Logo />
+                {/* <Image resizeMode="contain" source={icons.logoXwallet} style={stylest.logoXwallet} /> */}
             </View>
             <View style={stylest.coppyRight}>
-                <TextFnx space={5} align="center" value={"© 2018 FinanceX.com. All Rights Reserved"} />
+                <TextFnx space={5} align="center" value={"© 2021 Vndex.com. All Rights Reserved"} />
             </View>
         </LayoutSplashScreen>
         // <HistoryTransactions />

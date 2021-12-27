@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { storageService } from './storage.service'
 import { constant } from "../configs/constant";
-import UserAgent from 'react-native-user-agent';
 import publicIP from 'react-native-public-ip';
 // import DeviceInfo from 'react-native-device-info';
 export const httpService = {
@@ -12,7 +11,6 @@ export const httpService = {
             let headers = new Headers({
                 'Authorization': 'Bearer ' + token.authToken,
                 'Content-Type': 'application/json;charset=UTF-8',
-                'user-agent': UserAgent.userAgent,
                 'FNX-IP-ADDRESS': publicIp
                 
             })
@@ -34,7 +32,6 @@ export const httpService = {
             let headers = new Headers({
                 'Authorization': 'Bearer ' + token.authToken,
                 'Content-Type': 'application/json',
-                'user-agent': UserAgent.userAgent,
                 'FNX-IP-ADDRESS': publicIp
             })
             console.log(token.authToken,"header autoken")
@@ -51,7 +48,6 @@ export const httpService = {
         let headers = new Headers({
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded',
-            'user-agent': UserAgent.userAgent,
             'FNX-IP-ADDRESS': publicIp
         })
         return fetch(url, {
@@ -66,7 +62,6 @@ export const httpService = {
         let publicIp = await publicIP();
         let headers = {
             'Content-Type': 'application/json',
-            'user-agent': UserAgent.userAgent,
             'FNX-IP-ADDRESS': publicIp
         }
         try {
@@ -90,7 +85,6 @@ export const httpService = {
         let publicIp = await publicIP();
         let headers = {
             'Content-Type': 'application/json',
-            'user-agent': UserAgent.userAgent,
             'FNX-IP-ADDRESS': publicIp
         }
         try {
