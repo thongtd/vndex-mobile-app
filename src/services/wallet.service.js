@@ -292,7 +292,7 @@ export const WalletService = {
     },
     getDepositCoinLog: async (
         customerId,
-        pageIndex,
+        pageIndex=1,
         pageSize,
         fromDate = "",
         toDate = "",
@@ -300,9 +300,12 @@ export const WalletService = {
         status = ""
     ) => {
         try {
-            let res = await httpService.get(XWALLET_API.GET_COIN_DEPOSIT_LOG + `${customerId}/${pageIndex}/${pageSize}?fromDate=${fromDate}&toDate=${toDate}&walletCurrency=${walletCurrency}&status=${status}`);
-
+            // console.log(XWALLET_API.GET_COIN_DEPOSIT_LOG + `${customerId}/${pageIndex}/${pageSize}?fromDate=${fromDate}&toDate=${toDate}&walletCurrency=${walletCurrency}&status=${status}`,"link");
+            let res = await httpService.post(XWALLET_API.GET_COIN_DEPOSIT_LOG + `${customerId}/${pageIndex}/${pageSize}`);
+            
+            console.log(res,"res tren deposit log");
             if (res.status === 200) {
+                console.log(res,"res deposit log");
                 let data = res.data.source;
                 return {
                     result: 'ok',
@@ -315,7 +318,7 @@ export const WalletService = {
                 };
             }
         } catch (error) {
-
+            console.log(error,"error deposit log");
             return {
                 result: 'err',
                 message: 'Please check your internet connection!',
@@ -367,7 +370,7 @@ export const WalletService = {
         status = ""
     ) => {
         try {
-            let res = await httpService.get(XWALLET_API.GET_COIN_WITHDRAW_LOG + `${customerId}/${pageIndex}/${pageSize}?fromDate=${fromDate}&toDate=${toDate}&currency=${currency}&status=${status}`);
+            let res = await httpService.post(XWALLET_API.GET_COIN_WITHDRAW_LOG + `${customerId}/${pageIndex}/${pageSize}?fromDate=${fromDate}&toDate=${toDate}&currency=${currency}&status=${status}`);
             if (res.status === 200) {
                 let data = res.data.source;
                 return {

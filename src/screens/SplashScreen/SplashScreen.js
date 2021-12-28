@@ -24,7 +24,7 @@ const SplashScreen = ({
     const logged = useSelector(state => state.authentication.logged);
     const [UserId, setUserId] = useState("");
     const dispatcher = useDispatch();
-
+    const UserInfo = useSelector(state => state.authentication.userInfo);
     useActionsAuthen().handleGetCountries();
     useActionsMarket().handleGetMarketWatch();
     useActionsMarket().handleGetCurrencyList();
@@ -33,34 +33,28 @@ const SplashScreen = ({
     useActionsMarket().handleGetCryptoWallet(UserId);
     useActionsMarket().handleGetFiatWallet(UserId);
     dispatcher(createAction(GET_WITHDRAW_COIN_LOG,{
-        UserId,
+        UserId:get(UserInfo,"id"),
         pageIndex:1
     }))
-    dispatcher(createAction(GET_WITHDRAW_FIAT_LOG,{
-        UserId,
-        pageIndex:1
-    }))
+
     dispatcher(createAction(GET_DEPOSIT_COIN_LOG,{
-        UserId,
+        UserId:get(UserInfo,"id"),
         pageIndex:1
     }))
-    dispatcher(createAction(GET_DEPOSIT_FIAT_LOG,{
-        UserId,
-        pageIndex:1
-    }))
-    dispatcher(createAction(GET_SWAP_ORDERS_BOOK,{
-        UserId,
-        pageIndex:1,
-        pageSize:15,
-        fromDate:getOneMonthAgoDate(),
-        toDate:getCurrentDate(),
-        walletCurrency:"",
-        status:""
-    }))
+
+    // dispatcher(createAction(GET_SWAP_ORDERS_BOOK,{
+    //     UserId,
+    //     pageIndex:1,
+    //     pageSize:15,
+    //     fromDate:getOneMonthAgoDate(),
+    //     toDate:getCurrentDate(),
+    //     walletCurrency:"",
+    //     status:""
+    // }))
     dispatcher(createAction(LANGUAGES, lang));
     if (size(UserId) > 0) {
         dispatcher(createAction(GET_ASSET_SUMARY, {
-            UserId,
+            UserId:get(UserInfo,"id"),
             marketWatch
         }))
     }

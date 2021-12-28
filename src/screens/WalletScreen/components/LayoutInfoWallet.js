@@ -122,7 +122,7 @@ const LayoutInfoWallet = ({
   const [UserSub, setUserSub] = useState('');
   const [InfoCurrency, setInfoCurrency] = useState('');
   const [HiddenShow, setHiddenShow] = useState(false);
-  const [Page, setPage] = useState(0);
+  const [Page, setPage] = useState(1);
   const [Loading, setLoading] = useState(false);
   const [InfoDataSearch, setInfoDataSearch] = useState('');
   // var Page = 1;
@@ -161,20 +161,20 @@ const LayoutInfoWallet = ({
       navigationButtonEventListener.remove();
     }
   }, [])
-  // useEffect(() => {
-  //   dispatcher(createAction(GET_BALANCE_BY_CURRENCY_SUCCESS, {}));
-  //   WalletService.getWalletBalanceByCurrency(
-  //     get(UserInfo, 'id'),
-  //     CurrencyActive,
-  //   ).then(res => {
-  //     setInfoCurrency(res);
-  //   });
-  // }, [CurrencyActive]);
-  // useEffect(() => {
-  //   onRefresh();
-  //   setPage(1);
-  //   setInfoDataSearch('');
-  // }, [IsActive]);
+  useEffect(() => {
+    // dispatcher(createAction(GET_BALANCE_BY_CURRENCY_SUCCESS, {}));
+    WalletService.getWalletBalanceByCurrency(
+      get(UserInfo, 'id'),
+      CurrencyActive,
+    ).then(res => {
+      setInfoCurrency(res);
+    });
+  }, [CurrencyActive]);
+  useEffect(() => {
+    onRefresh();
+    setPage(1);
+    setInfoDataSearch('');
+  }, [IsActive]);
   // useEffect(() => {
   //   if (isArray(cryptoWallet) && size(cryptoWallet) > 0) {
   //     let cryptoFilter = cryptoWallet.filter(
@@ -200,45 +200,28 @@ const LayoutInfoWallet = ({
     // setDisabled(true);
     dispatcher(
       createAction(GET_WITHDRAW_COIN_LOG, {
-        UserId,
+        UserId:get(UserInfo, 'id'),
         pageIndex: 1,
         loadMore: loadMore,
       }),
     );
     dispatcher(
       createAction(GET_DEPOSIT_COIN_LOG, {
-        UserId,
+        UserId:get(UserInfo, 'id'),
         pageIndex: 1,
         loadMore: loadMore,
       }),
     );
   };
 
-  // useEffect(() => {
-  //   jwtDecode().then(user => {
-  //     if (get(user, 'UserId')) {
-  //       setUserId(get(user, 'UserId'));
-  //       setUserSub(get(user, 'Username'));
-  //     }
-  //   });
-
-  //   listenerEventEmitter('doneWCoinLog', () => {
-  //     setDisabled(false);
-  //     setLoading(false);
-  //   });
-  //   listenerEventEmitter('doneDFiatLog', () => {
-  //     setLoading(false);
-  //     setDisabled(false);
-  //   });
-  //   listenerEventEmitter('doneDCoinLog', () => {
-  //     setLoading(false);
-  //     setDisabled(false);
-  //   });
-  //   listenerEventEmitter('doneWFiatLog', () => {
-  //     setLoading(false);
-  //     setDisabled(false);
-  //   });
-  // }, []);
+  useEffect(() => {
+    jwtDecode().then(user => {
+      if (get(user, 'UserId')) {
+        setUserId(get(user, 'UserId'));
+        setUserSub(get(user, 'Username'));
+      }
+    });
+  }, []);
   // useEffect(() => {
   //   // listenerEventEmitter('pushData', (data) => {
 
@@ -251,86 +234,73 @@ const LayoutInfoWallet = ({
   //     removeEventEmitter('pushData');
   //   };
   // }, [Source]);
-  // const onCancel = (data, rowMap) => {
-  //   var passProps;
-  //   var sessionId;
-  //   var verifyCode;
-  //   if (!isCoin && IsActive === 'C') {
-  //     WalletService.cancelDepositFiat(get(data, 'item.id')).then(res => {
-  //       if (get(res, 'result.status')) {
-  //         dispatcher(
-  //           createAction(GET_DEPOSIT_FIAT_LOG, {
-  //             UserId,
-  //             pageIndex: 1,
-  //           }),
-  //         );
-  //       }
-  //     });
-  //   } else {
-  //     var dataSubmit = {
-  //       sessionId,
-  //       verifyCode,
-  //       accId: UserId,
-  //       requestId: '',
-  //     };
-  //     if (
-  //       twoFactorEnable &&
-  //       twoFactorySerice === constant.TWO_FACTOR_TYPE.GG2FA
-  //     ) {
-  //       passProps = {
-  //         placeholder: '2FA_CODE'.t(),
-  //         isResend: false,
-  //         isIconLeft: false,
-  //         title: 'Cancel',
-  //         textFirst: 'Please enter 2FA code'.t(),
-  //       };
-  //     } else if (
-  //       twoFactorEnable &&
-  //       twoFactorySerice === constant.TWO_FACTOR_TYPE.EMAIL_2FA
-  //     ) {
-  //       passProps = {
-  //         onChangeText: text => {
-  //           verifyCode = text;
-  //         },
-  //         onSubmit: () => {
-  //           set(dataSubmit, 'verifyCode', verifyCode);
-  //           set(dataSubmit, 'sessionId', sessionId);
-  //           set(dataSubmit, 'requestId', get(data, 'item.id'));
-  //           WalletService.cancelWithdrawCoin(dataSubmit).then(res => {
-  //             console.log(dataSubmit, res, 'reas');
-  //             if (res) {
-  //               if (get(res, 'status')) {
-  //                 return toast(get(res, 'message'));
-  //               } else {
-  //                 return toast(get(res, 'message'));
-  //               }
-  //             } else {
-  //               return toast(get(res, 'message'));
-  //             }
-  //           });
-  //           // console.log(dataSubmit,"dataSubmit");
-  //         },
-  //         placeholder: '2FA_CODE'.t(),
-  //         isResend: true,
-  //         isIconLeft: true,
-  //         onResend: () => {
-  //           authService.getTwoFactorEmailCode(UserSub).then(res => {
-  //             sessionId = get(res, 'data.sessionId');
-  //             // console.log(res,"val ka")
-  //           });
-  //         },
-  //         title: 'Cancel',
-  //         textFirst: `${'The 2fa code has been sent to email'.t()} ${UserSub}`,
-  //       };
-  //     } else {
-  //       rowMap[data.index].closeRow();
-  //       return toast('Please enable 2FA code'.t());
-  //     }
-  //     showModal(MODAL_ALERT, passProps, true);
-  //   }
+  const onCancel = (data, rowMap) => {
+    var passProps;
+    var sessionId;
+    var verifyCode;
+    
+      var dataSubmit = {
+        sessionId,
+        verifyCode,
+        accId: get(UserInfo, 'id'),
+        requestId: '',
+      };
+      if (
+        twoFactorEnable &&
+        twoFactorySerice === constant.TWO_FACTOR_TYPE.GG2FA
+      ) {
+        passProps = {
+          placeholder: '2FA_CODE'.t(),
+          isResend: false,
+          isIconLeft: false,
+          title: 'Cancel',
+          textFirst: 'Please enter 2FA code'.t(),
+        };
+      } else if (
+        twoFactorEnable &&
+        twoFactorySerice === constant.TWO_FACTOR_TYPE.EMAIL_2FA
+      ) {
+        passProps = {
+          onChangeText: text => {
+            verifyCode = text;
+          },
+          onSubmit: () => {
+            set(dataSubmit, 'verifyCode', verifyCode);
+            set(dataSubmit, 'sessionId', sessionId);
+            set(dataSubmit, 'requestId', get(data, 'item.id'));
+            WalletService.cancelWithdrawCoin(dataSubmit).then(res => {
+              if (res) {
+                if (get(res, 'status')) {
+                  return toast(get(res, 'message'));
+                } else {
+                  return toast(get(res, 'message'));
+                }
+              } else {
+                return toast(get(res, 'message'));
+              }
+            });
+            // console.log(dataSubmit,"dataSubmit");
+          },
+          placeholder: '2FA_CODE'.t(),
+          isResend: true,
+          isIconLeft: true,
+          onResend: () => {
+            authService.getTwoFactorEmailCode(UserSub).then(res => {
+              sessionId = get(res, 'data.sessionId');
+            });
+          },
+          title: 'Cancel',
+          textFirst: `${'The 2fa code has been sent to email'.t()} ${UserSub}`,
+        };
+      } else {
+        rowMap[data.index].closeRow();
+        return toast('Please enable 2FA code'.t());
+      }
+      showModal(MODAL_ALERT, passProps, true);
+    
 
-  //   rowMap[data.index].closeRow();
-  // };
+    rowMap[data.index].closeRow();
+  };
   // const onSelectCoin = () => {
   //   if (isCoin) {
   //     let data = orderBy(
@@ -482,70 +452,46 @@ const LayoutInfoWallet = ({
   //     // method for API call
   //   }
   // };
-  // useEffect(() => {
-  //   fetchData(Page, InfoDataSearch);
-  //   return () => {};
-  // }, [Page, InfoDataSearch]);
-  // const fetchData = (
-  //   page = 1,
-  //   data = {
-  //     fromDate: '',
-  //     toDate: '',
-  //     walletCurrency: '',
-  //     status: '',
-  //   },
-  // ) => {
-  //   setLoading(true);
-  //   if (isCoin && IsActive === 'C') {
-  //     dispatcher(
-  //       createAction(GET_DEPOSIT_COIN_LOG, {
-  //         UserId,
-  //         pageIndex: page,
-  //         loadMore: true,
-  //         fromDate: data.startDate,
-  //         toDate: data.endDate,
-  //         walletCurrency: data.symbol,
-  //         status: data.status,
-  //       }),
-  //     );
-  //   } else if (isCoin && IsActive === 'F') {
-  //     dispatcher(
-  //       createAction(GET_WITHDRAW_COIN_LOG, {
-  //         UserId,
-  //         pageIndex: page,
-  //         loadMore: true,
-  //         fromDate: data.startDate,
-  //         toDate: data.endDate,
-  //         walletCurrency: data.symbol,
-  //         status: data.status,
-  //       }),
-  //     );
-  //   } else if (!isCoin && IsActive === 'C') {
-  //     dispatcher(
-  //       createAction(GET_DEPOSIT_FIAT_LOG, {
-  //         UserId,
-  //         pageIndex: page,
-  //         loadMore: true,
-  //         fromDate: data.startDate,
-  //         toDate: data.endDate,
-  //         walletCurrency: data.symbol,
-  //         status: data.status,
-  //       }),
-  //     );
-  //   } else if (!isCoin && IsActive === 'F') {
-  //     dispatcher(
-  //       createAction(GET_WITHDRAW_FIAT_LOG, {
-  //         UserId,
-  //         pageIndex: page,
-  //         loadMore: true,
-  //         fromDate: data.startDate,
-  //         toDate: data.endDate,
-  //         walletCurrency: data.symbol,
-  //         status: data.status,
-  //       }),
-  //     );
-  //   }
-  // };
+  useEffect(() => {
+    fetchData(Page, InfoDataSearch);
+    return () => {};
+  }, [Page, InfoDataSearch]);
+  const fetchData = (
+    page = 1,
+    data = {
+      fromDate: '',
+      toDate: '',
+      walletCurrency: '',
+      status: '',
+    },
+  ) => {
+    setLoading(true);
+    if (IsActive === 'C') {
+      dispatcher(
+        createAction(GET_DEPOSIT_COIN_LOG, {
+          UserId:get(UserInfo,"id"),
+          pageIndex: page,
+          loadMore: true,
+          fromDate: data.startDate,
+          toDate: data.endDate,
+          walletCurrency: data.symbol,
+          status: data.status,
+        }),
+      );
+    } else if (IsActive === 'F') {
+      dispatcher(
+        createAction(GET_WITHDRAW_COIN_LOG, {
+          UserId:get(UserInfo,"id"),
+          pageIndex: page,
+          loadMore: true,
+          fromDate: data.startDate,
+          toDate: data.endDate,
+          walletCurrency: data.symbol,
+          status: data.status,
+        }),
+      );
+    }
+  };
   // const onSubmitSearch = data => {
   //   fetchData(1, data);
   //   setInfoDataSearch(data);
@@ -669,8 +615,8 @@ const LayoutInfoWallet = ({
         // }}
         ListEmptyComponent={<Empty />}
         data={
-          [{}, {}, {}, {}, {}]
-          // eval(checkDataShowLoadMore(isCoin,IsActive))
+          // [{}, {}, {}, {}, {}]
+          eval(checkDataShowLoadMore(isCoin,IsActive))
         }
         renderItem={(data, rowMap) => {
           return (
@@ -690,9 +636,9 @@ const LayoutInfoWallet = ({
                     get(data, 'item.createdDate'),
                     'hh:mm:ss',
                   )}
-                  valueCenter={'Từ chối'}
-                  titleEnd={'AIFT'}
-                  valueEnd={'0.5000000'}
+                  valueCenter={get(data, 'item.statusLable')}
+                  titleEnd={get(data, 'item.currency')}
+                  valueEnd={get(data, 'item.amount')}
                   style={{
                     backgroundColor: colors.navigation,
                     paddingHorizontal: 15,
@@ -828,14 +774,10 @@ const getPropData = (data, image, value, Active, cb) => {
   };
 };
 const checkDataShowLoadMore = (isCoin, IsActive) => {
-  if (isCoin && IsActive === 'C') {
+  if (IsActive === 'C') {
     return 'coinDepositLogLoadMore';
-  } else if (isCoin && IsActive === 'F') {
+  } else{
     return 'coinWithdrawLogLoadMore';
-  } else if (!isCoin && IsActive === 'C') {
-    return 'fiatDepositLogLoadMore';
-  } else if (!isCoin && IsActive === 'F') {
-    return 'fiatWithdrawLogLoadMore';
   }
 };
 export default LayoutInfoWallet;

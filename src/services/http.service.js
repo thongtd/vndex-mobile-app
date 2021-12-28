@@ -35,11 +35,12 @@ export const httpService = {
                 'FNX-IP-ADDRESS': publicIp
             })
             console.log(token.authToken,"header autoken")
+            console.log(url,data,"url,data autoken")
             return axios.post(url, data, {
                 headers: headers.map
             });
         } catch (error) {
-
+            console.log(error,"error post")
         }
 
     },

@@ -142,7 +142,6 @@ const LayoutWithdraw = ({
         dismissAllModal();
         InfoDataGlobal(item);
     }
-    console.log(InfoCoinCreated, "InfoCoinCreated");
     return (
         <Container
             hasBack
