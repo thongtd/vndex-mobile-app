@@ -15,6 +15,8 @@ import {get} from 'lodash';
 import Empty from '../../components/Item/Empty';
 import {authService} from '../../services/authentication.service';
 import {useSelector} from 'react-redux';
+import { fontSize } from '../../configs/constant';
+import { to_UTCDate } from '../../configs/utils';
 
 const ReferralFriends = ({componentId}) => {
   const [data, setData] = useState([]);
@@ -88,12 +90,18 @@ const ReferralFriends = ({componentId}) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                height: 50,
-                borderBottomWidth: 1,
-                borderBottomColor: colors.line,
+                height: 80,
+                backgroundColor: colors.app.backgroundLevel2,
+                borderRadius: 8,
+                paddingHorizontal: 15,
+                marginVertical: 8,
+                // borderBottomWidth: 1,
+                // borderBottomColor: colors.line,
               }}>
-              <TextFnx>{get(item, 'email')}</TextFnx>
-              <TextFnx>
+              <TextFnx weight="400"
+                  size={fontSize.f16}
+                  color={colors.text}>{get(item, 'email')}</TextFnx>
+              <TextFnx weight="400" size={fontSize.f12}>
                 {to_UTCDate(get(item, 'createdDate'), 'DD-MM-YYYY HH:mm:ss')}
               </TextFnx>
             </View>

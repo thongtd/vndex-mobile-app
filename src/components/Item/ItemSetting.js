@@ -41,6 +41,7 @@ const ItemSetting = ({
   weightvalue,
   sizeValue,
   colorTitle=colors.app.textDisabled,
+  style,
   ...rest
 }) => {
   return (
@@ -60,6 +61,7 @@ const ItemSetting = ({
               stylest.container,
               {height: height},
               isBorder && {borderBottomWidth: 0.5},
+              style
             ]}>
             <View style={stylest.blockLeft}>
               {iconLeftSvg && iconLeftSvg}

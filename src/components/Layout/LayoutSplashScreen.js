@@ -99,7 +99,7 @@ const LayoutSplashScreen = ({
       style={{flex: 1}}>
       {/* <View style={{
             flex: 1,
-            backgroundColor:colors.baseBg
+            backgroundColor:colors.app.backgroundLevel1
         }}> */}
 
       <SafeAreaView

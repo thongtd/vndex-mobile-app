@@ -62,7 +62,7 @@ export const itemScreen = ( nameScreen,title="") => {
                 name: nameScreen,
                 options: {
                     statusBar: {
-                        backgroundColor: colors.baseBg,
+                        backgroundColor: colors.app.backgroundLevel2,
                         style:'dark',
                         // drawBehind: true,
                         visible: true
@@ -85,7 +85,7 @@ export const itemScreen = ( nameScreen,title="") => {
             name: nameScreen,
             options: {
                 statusBar: {
-                    backgroundColor: colors.baseBg,
+                    backgroundColor: colors.app.backgroundLevel1,
                     style:'dark',
                     // drawBehind: true,
                     visible: true
@@ -145,11 +145,11 @@ export const Tabbar = (nameScreen, ic, text, id,title) => {
                 bottomTab: {
                     icon: ic,
                     text: text,
-                    iconColor: colors.subText,
-                    selectedIconColor: colors.iconButton,
+                    iconColor: colors.app.grey700,
+                    selectedIconColor: colors.app.yellowHightlight,
                     fontSize: 12,
                     selectedFontSize: 12,
-                    selectedTextColor: colors.iconButton,
+                    selectedTextColor: colors.app.grey700,
                     testID: id,
                 }
             },

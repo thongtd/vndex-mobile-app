@@ -169,6 +169,7 @@ export const BankTransfer = "BankTransfer";
 export const fontSize ={
     f14:14,
     f18:18,
+    f20:20,
     f16:16,
     f12:12,
 }

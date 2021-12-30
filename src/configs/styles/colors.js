@@ -10,6 +10,9 @@ export default {
     backgroundLevel3: '#2F2F2F',
     sell: '#D23131',
     backgroundLevel2: '#1D1D1D',
+    backgroundLevel1: '#121212',
+    grey700:'#646464',
+    buy:"#3A9232"
   },
   red: '#D23131',
   yellow: '#f9ca06',

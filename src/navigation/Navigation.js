@@ -56,7 +56,7 @@ export function pushTutorialScreen() {
     topBar: {
       visible: true,
       background: {
-        color: colors.navigation,
+        color: colors.app.backgroundLevel1,
       },
       title: {
         color: 'white',
@@ -69,7 +69,7 @@ export function pushTutorialScreen() {
     },
     statusBar: {
       style: 'dark',
-      backgroundColor: colors.baseBg,
+      backgroundColor: colors.app.backgroundLevel1,
       visible: true,
     },
     layout: {
@@ -100,7 +100,7 @@ export function pushTutorialScreen() {
                 },
                 statusBar: {
                   style: 'dark',
-                  backgroundColor: colors.baseBg,
+                  backgroundColor: colors.app.backgroundLevel1,
                   // drawBehind: true,
                   visible: true,
                 },
@@ -164,7 +164,7 @@ export function pushSingleHiddenTopBarApp(
         },
         statusBar: {
           style: 'dark',
-          backgroundColor: colors.baseBg,
+          backgroundColor: colors.app.backgroundLevel1,
           // drawBehind: true,
           visible: true,
         },

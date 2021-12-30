@@ -6,6 +6,7 @@ export const HOME_SCREEN = 'vndex.title.HomeScreen';
 export const LIQUID_SWAP_SCREEN = 'vndex.title.LiquidSwapScreen';
 export const COMMAND_SCREEN = 'vndex.title.CommandScreen';
 export const STO_SCREEN = 'vndex.title.StoScreen';
+export const UPDATE_ACCOUNT_SCREEN = 'vndex.title.UpdateAccountScreen';
 
 export const SEND_REG_SCREEN = 'vndex.title.SendRegScreen';
 export const STEP2KYC_SCREEN = 'vndex.title.Step2KycScreen';

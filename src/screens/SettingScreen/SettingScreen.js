@@ -32,6 +32,7 @@ import {
   ACCOUNTP2P_SCREEN,
   PAYMENT_METHOD_SCREEN,
   HISTORY_LOGIN_SCREEN,
+  UPDATE_ACCOUNT_SCREEN,
 } from '../../navigation';
 import {Navigation} from 'react-native-navigation';
 import i18n from 'react-native-i18n';
@@ -60,7 +61,7 @@ import St7 from 'assets/svg/st7.svg';
 import Close from 'assets/svg/ic_close.svg';
 import Accp2p from 'assets/svg/accp2p.svg';
 import CopyIC from 'assets/svg/ic_copy.svg';
-import HistoryLogin from 'assets/svg/historyLogin.svg';
+
 import PaymentMethod from 'assets/svg/paymentMethod.svg';
 import TickIc from 'assets/svg/tick.svg';
 import Logo from 'assets/svg/Logo.svg';
@@ -124,10 +125,10 @@ const SettingScreen = ({componentId}) => {
           onPress: onKyc,
         },
         {
-          textLeft: 'Change Password',
+          textLeft: 'Upgrade your account',
           iconLeft: <St2 />,
           iconRight: true,
-          onPress: onChangePassword,
+          onPress: onUpdateAccount,
         },
         {
           textLeft: 'Security',
@@ -217,14 +218,12 @@ const SettingScreen = ({componentId}) => {
   const onPaymentMethod = () => {
     pushSingleScreenApp(componentId, PAYMENT_METHOD_SCREEN);
   };
-  const onHistoryLogin = () => {
-    pushSingleScreenApp(componentId, HISTORY_LOGIN_SCREEN);
-  };
+
   const onSupport = () => {
     pushSingleScreenApp(componentId, SUPPORT_SCREEN, hiddenTabbar());
   };
-  const onChangePassword = () => {
-    pushSingleScreenApp(componentId, CHANGE_PASSWORD);
+  const onUpdateAccount = () => {
+    pushSingleScreenApp(componentId, UPDATE_ACCOUNT_SCREEN);
   };
   const onSecurity = () => {
     pushSingleScreenApp(componentId, SECURITY_SCREEN);

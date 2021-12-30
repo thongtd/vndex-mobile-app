@@ -445,7 +445,7 @@ export function hiddenTabbarShowHeader(title) {
       drawBehind: true,
     },
     statusBar: {
-      backgroundColor: colors.baseBg,
+      backgroundColor: colors.app.backgroundLevel1,
       style: 'dark',
       // drawBehind: true,
       visible: true,
@@ -485,7 +485,7 @@ export function hiddenTabbar(title="") {
       drawBehind: true,
     },
     statusBar: {
-      backgroundColor: colors.baseBg,
+      backgroundColor: colors.app.backgroundLevel1,
       style: 'dark',
       // drawBehind: true,
       visible: true,
@@ -513,7 +513,7 @@ export function hiddenModal(nameScreen, props, isHiddenLayout = true) {
               animate: true,
           },
           statusBar: {
-            backgroundColor: colors.baseBg,
+            backgroundColor: colors.app.backgroundLevel1,
             style: 'dark',
             // drawBehind: true,
             visible: true,
@@ -528,7 +528,7 @@ export function hiddenModal(nameScreen, props, isHiddenLayout = true) {
         passProps: props,
         options: {
           statusBar: {
-            backgroundColor: colors.baseBg,
+            backgroundColor: colors.app.backgroundLevel1,
             style: 'dark',
             // drawBehind: true,
             visible: true,

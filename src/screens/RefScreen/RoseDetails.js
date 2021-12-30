@@ -15,6 +15,8 @@ import {get} from 'lodash';
 import Empty from '../../components/Item/Empty';
 import {authService} from '../../services/authentication.service';
 import {useSelector} from 'react-redux';
+import {to_UTCDate} from '../../configs/utils';
+import {fontSize} from '../../configs/constant';
 
 const RoseDetails = ({componentId}) => {
   const [data, setData] = useState([]);
@@ -69,6 +71,7 @@ const RoseDetails = ({componentId}) => {
         setLoading(false);
       });
   };
+
   return (
     <Container
       title={'Rose details'.t()}
@@ -84,27 +87,39 @@ const RoseDetails = ({componentId}) => {
           return (
             <View
               style={{
-                borderBottomWidth: 1,
-                borderColor: colors.line,
-                paddingVertical: 10,
+                // borderBottomWidth: 1,
+                // borderColor: colors.line,
+                paddingVertical: 15,
+                backgroundColor: colors.app.backgroundLevel2,
+                marginVertical: 8,
+                borderRadius: 8,
+                paddingHorizontal: 15,
               }}>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <TextFnx color={colors.greyLight}>{get(item, 'email')}</TextFnx>
-                <TextFnx size={16} color={colors.greyLight}>
+                <TextFnx
+                  weight="400"
+                  size={fontSize.f16}
+                  color={colors.text}>
+                  {get(item, 'email')}
+                </TextFnx>
+                <TextFnx spaceTop={3} size={12} color={colors.app.textDisabled}>
+                  {to_UTCDate(get(item, 'createdDate'), 'YYYY-MM-DD hh:mm:ss')}
+                </TextFnx>
+              </View>
+              <View>
+                <TextFnx
+                  spaceTop={8}
+                  weight="500"
+                  size={fontSize.f16}
+                  color={colors.app.buy}>
                   {`${get(item, 'commissionAmount')} ${get(
                     item,
                     'paymentUnit',
                   )}`}
-                </TextFnx>
-              </View>
-              <View>
-                <TextFnx spaceTop={5} size={12} color={colors.description}>
-                  {/* 2021-11-07 09:25:49 */}
-                  {to_UTCDate(get(item, 'createdDate'), 'YYYY-MM-DD hh:mm:ss')}
                 </TextFnx>
               </View>
             </View>

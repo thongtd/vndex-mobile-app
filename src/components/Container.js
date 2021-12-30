@@ -102,7 +102,7 @@ const Container = ({
                             isFilter={isFilter}
                         />} */}
                         {customTopBar && customTopBar}
-                        <View style={[stylest.container, { paddingTop: space, backgroundColor:colors.baseBg, paddingHorizontal:spaceHorizontal }, isFlex && { flex: 1 }, style]}>
+                        <View style={[stylest.container, { paddingTop: space, backgroundColor:colors.app.backgroundLevel1, paddingHorizontal:spaceHorizontal }, isFlex && { flex: 1 }, style]}>
                             <Spinner visible={isLoadding} />
                             {isScroll ? (
                                 <KeyboardAwareScrollView
