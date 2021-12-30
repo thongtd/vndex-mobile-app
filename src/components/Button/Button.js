@@ -42,27 +42,18 @@ const Button = ({
     isReverse,
     iconLeftSubmit,
     iconLeftClose,
+    colorTitleSubmit,
+    colorTitleClose,
+    spaceTop,
+    spaceBottom,
     ...rest
 }) => (
         <>
         {rest.isLabel && <TextFnx style={stylest.label} value={label} />}
             {(isSubmit || isClose) && (
-                <View style={[stylest.flexRow, { marginVertical: spaceVertical },isReverse &&{flexDirection:"row-reverse"}]}>
-                     {isClose && <ButtonSubmitClose
-                        bgButtonColor={bgButtonColor}
-                        title={textClose}
-                        isClose
-                        isButtonCircle={isButtonCircle}
-                        onPress={onClose}
-                        iconLeftSvg={iconLeftClose}
-                        // iconLeft={iconLeftClose}
-                        style={style}
-                        {...rest}
-                    />}
-                    
-                    {isSubmit && isClose && <View style={{ flex: 0.05 }} />
-                    }
-                  {isSubmit && <ButtonSubmitClose
+                <View style={[{ marginVertical: spaceVertical, marginTop: spaceTop, marginBottom: spaceBottom },isReverse &&{flexDirection:"row-reverse"}]}>
+                     {isSubmit && <ButtonSubmitClose
+                     
                         title={textSubmit}
                         // iconLeft={iconLeftSubmit}
                         iconLeftSvg={iconLeftSubmit}
@@ -71,8 +62,26 @@ const Button = ({
                         onPress={onSubmit}
                         bgButtonColor={bgButtonColor}
                         style={style}
+                        colorTitle={colorTitleSubmit}
                         {...rest}
                     />}
+                     {isSubmit && isClose && <View style={{ flex: 0.05 }} />
+                    }
+                     {isClose && <ButtonSubmitClose
+                        bgButtonColor={bgButtonColor}
+                        title={textClose}
+                        isClose
+                        isButtonCircle={isButtonCircle}
+                        onPress={onClose}
+                        iconLeftSvg={iconLeftClose}
+                        colorTitle={colorTitleClose}
+                        // iconLeft={iconLeftClose}
+                        style={style}
+                        {...rest}
+                    />}
+                    
+                   
+                  
 
                 </View>
             )}

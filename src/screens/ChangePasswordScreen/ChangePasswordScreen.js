@@ -99,10 +99,9 @@ const ChangePasswordScreen = ({
             componentId={componentId}
             isLoadding={Disabled}
             isScroll={true}
+            space={20}
         >
             <Input
-                isLabel
-                label={"Old password".t()}
                 value={OldPassword}
                 isSecurity
                 placeholder={"Old password".t()}
@@ -110,8 +109,6 @@ const ChangePasswordScreen = ({
                 onChangeText={(text) => setOldPassword(text)}
             />
             <Input
-                isLabel
-                label={"New Password".t()}
                 value={NewPassword}
                 isSecurity
                 placeholder={"New Password".t()}
@@ -119,8 +116,6 @@ const ChangePasswordScreen = ({
                 onChangeText={(text) => setNewPassword(text)}
             />
             <Input
-                isLabel
-                label={"Confirm New Password".t()}
                 value={ReNewPassword}
                 isSecurity
                 placeholder={"Confirm New Password".t()}

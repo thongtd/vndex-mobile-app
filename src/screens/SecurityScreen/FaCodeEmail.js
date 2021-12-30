@@ -130,6 +130,7 @@ const FaCodeEmail = ({
     }
     return (
         <Container
+            space={20}
             isScroll={true}
             isLoadding={Disabled}
             componentId={componentId}
@@ -137,8 +138,8 @@ const FaCodeEmail = ({
             title={`${disable ? "Disable".t() : "Enable".t()} ${"Email Verification".t().toLowerCase()}`}
         >
             <Input
-                isLabel
-                label={"PASSWORD".t()}
+                // isLabel
+                // label={"PASSWORD".t()}
                 spaceVertical={10}
                 isSecurity
                 value={Password}
@@ -146,8 +147,8 @@ const FaCodeEmail = ({
                 onChangeText={(text) => setPassword(text)}
             />
             <Input
-                isLabel
-                label={"Email"}
+                // isLabel
+                // label={"Email"}
                 spaceVertical={10}
                 value={Email}
                 placeholder={"Email"}
@@ -165,7 +166,7 @@ const FaCodeEmail = ({
                 handleResend={handleResend2Fa}
             />}
             
-            <TextFnx space={10} color={colors.description}>{"Enter the 6 numbers sent to the email".t()} {Email}</TextFnx>
+            {disable && <TextFnx space={10} color={colors.description}>{"Enter the 6 numbers sent to the email".t()} {Email}</TextFnx>}
             <Button
                 spaceVertical={10}
                 isSubmit

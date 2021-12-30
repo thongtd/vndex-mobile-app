@@ -6,7 +6,7 @@ import i18n from "react-native-i18n"
 export const DEFAULT = {
   countries: [],
   logged: false,
-  lang: i18n.currentLocale(),
+  lang: "vi-VN",
   isPasscode: false,
   passPasscode: false,
   userInfo: "",

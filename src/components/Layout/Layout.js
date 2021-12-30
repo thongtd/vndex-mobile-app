@@ -11,6 +11,7 @@ const Layout = ({
     space=0,
     spaceHorizontal=0,
     isTransparent,
+    isLineCenter,
     ...rest
 }) => (
         <View 
@@ -24,6 +25,9 @@ const Layout = ({
                 isCenter && {
                     alignItems: 'center',
                     justifyContent: 'center',
+                },
+                isLineCenter && {
+                    alignItems: 'center',
                 },
                 isSpaceBetween && {
                     justifyContent: "space-between",

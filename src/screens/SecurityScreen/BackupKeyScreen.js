@@ -58,6 +58,7 @@ const BackupKeyScreen = ({
                 flex: 1,
             }}
             isLoadding={Disabled}
+            space={10}
         >
             <View style={{
                 height: "93%",

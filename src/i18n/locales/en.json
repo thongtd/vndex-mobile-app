@@ -1,4 +1,5 @@
 {
+  "Individual":"Individual",
   "LOGIN_NOW":"Login now",
   "Do not have an account":"Do not have an account",
   "REGISTER_NOW":"Register now",
@@ -29,7 +30,7 @@
   "Referred friends":"Referred friends",
   "Your total commission":"Your total commission",
   "Referral link":"Referral link",
-  "Come back":"Come back",
+  "Come back":"Back",
   "Portrait":"Portrait",
   "Update portraits":"Update portraits",
   "Valid":"Valid",

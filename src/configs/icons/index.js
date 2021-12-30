@@ -2,6 +2,7 @@ import React from "react"
 import Lock from "assets/svg/ic_lock.svg"
 import Email from "assets/svg/ic_email.svg"
 export default {
+    avatar:require("assets/images/avatar.png"),
     bgLogin:require("assets/images/bg_login.jpeg"),
     bgSignup:require("assets/images/bg_signup.jpeg"),
     bgWallet:require("../../assets/images/bg_wallet.png"),

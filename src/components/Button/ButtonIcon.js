@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 
 import PropTypes from 'prop-types';
@@ -13,7 +13,7 @@ const ButtonIcon = ({
     name = "arrow-left",
     size = 15,
     color = colors.background,
-    style = [stylest.icon],
+    style,
     type = constant.TYPE_ICON.FontAwesome,
     titleIcon = "",
     styleBlockIcon = {},
@@ -24,10 +24,11 @@ const ButtonIcon = ({
     width,
     height,
     source,
+    iconComponent,
     ...rest
 }) => (
-        <View style={style} >
-            {!isHidden && <TouchablePreview
+        <View style={[stylest.icon,style]} >
+            {!isHidden && <TouchableOpacity
                 onPress={onPress}
                 {...rest}
             >
@@ -39,7 +40,7 @@ const ButtonIcon = ({
                             <TextWhite>{titleIcon}</TextWhite> :(hasImage?<Image source={source} style={{
                                 width:width,
                                 height:height
-                            }} />:<Icon
+                            }} />:iconComponent?iconComponent:<Icon
                                 name={name}
                                 size={size}
                                 color={color}
@@ -48,7 +49,7 @@ const ButtonIcon = ({
                     </View>
                 </View>
 
-            </TouchablePreview>}
+            </TouchableOpacity>}
         </View>
 
     );

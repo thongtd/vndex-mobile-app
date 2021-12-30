@@ -5,7 +5,7 @@ import Button from '../../components/Button/Button';
 import Container from '../../components/Container';
 import Input from '../../components/Input';
 import ItemList from '../../components/Item/ItemList';
-import {constant} from '../../configs/constant';
+import {constant, fontSize, spacingApp} from '../../configs/constant';
 import {dismissAllModal} from '../../navigation/Navigation';
 import {isEmpty} from "lodash";
 import {
@@ -26,6 +26,10 @@ import DatePicker from 'react-native-date-picker';
 import {authService} from '../../services/authentication.service';
 import moment from 'moment';
 import { useActionsAuthen } from '../../redux/modules/authentication';
+import colors from '../../configs/styles/colors';
+import StepIndicator from "react-native-step-indicator";
+import Layout from '../../components/Layout/Layout';
+import TextFnx from '../../components/Text/TextFnx';
 const KycScreen = ({componentId}) => {
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const userKyc = useSelector(state => state.authentication.userKyc);
@@ -118,29 +122,46 @@ const KycScreen = ({componentId}) => {
     <Container
       title={'Personal Information'.t()}
       isScroll={true}
-      // nameRight={"search"}
-      // nameLeft={"bars"}
-      // typeLeft={constant.TYPE_ICON.AntDesign}
-      // sizeIconLeft={19}
-      // onClickRight={() => alert("kaka")}
-      // onClickLeft={() => alert("left")}
       componentId={componentId}
-      hasBack>
+      hasBack
+      space={20}
+      spaceHorizontal={0}
+      >
+        <View style={{
+          marginBottom:20
+        }} >
+          <TextFnx size={fontSize.f16} weight='bold' spaceBottom={20} spaceLeft={spacingApp} color={colors.app.yellowHightlight}>
+          {'Personal Information'.t()}
+          </TextFnx>
+        <StepIndicator 
+        customStyles={customStyles}
+        currentPosition={0}
+        stepCount={3}
+        />
+        </View>
+        
+      <View  style={{
+        backgroundColor:colors.app.backgroundLevel2,
+        paddingHorizontal:spacingApp,
+        paddingTop:20,
+        borderTopLeftRadius:20,
+        borderTopRightRadius:20
+      }}>
       <Input
-        isLabel
+        spaceVertical={10}
         value={lastName}
         onChangeText={text => setLastName(text)}
-        label={'LastName'.t()}
+        placeholder={'LastName'.t()}
       />
       <Input
-        isLabel
+        spaceVertical={10}
         value={firstName}
         onChangeText={text => setFirstName(text)}
-        label={'FirstName'.t()}
+        placeholder={'FirstName'.t()}
       />
       <Button
-        isLabel
-        label={'Date of birth'.t()}
+        
+        placeholder={'Date of birth'.t()}
         isPlaceholder={false}
         spaceVertical={10}
         onInput={() => setOpen(true)}
@@ -150,8 +171,6 @@ const KycScreen = ({componentId}) => {
         placeholder={moment(birthDate).format('YYYY-MM-DD')}
       />
       <Button
-        isLabel
-        label={'Sex'.t()}
         isPlaceholder={false}
         spaceVertical={10}
         onInput={handleSelectSex}
@@ -161,38 +180,27 @@ const KycScreen = ({componentId}) => {
         placeholder={get(sex, 'name')}
       />
       <Input
-        isLabel
+        spaceVertical={10}
         value={identityCard}
         onChangeText={text => setIdentityCard(text)}
-        label={'Citizen identification number'.t()}
+        placeholder={'Citizen identification number'.t()}
       />
       <Input
-        isLabel
+        spaceVertical={10}
         value={postalCode}
         onChangeText={text => setPostalCode(text)}
-        label={'Area code'.t()}
+        placeholder={'Area code'.t()}
       />
       <Input
         editable={false}
-        isLabel
-        label={'Country'.t()}
+        spaceVertical={10}
+        placeholder={'Country'.t()}
         hasValue
         value="Việt Nam"
       />
-      {/* <Button
-        isLabel
-        label={'District'.t()}
-        isPlaceholder={false}
-        spaceVertical={10}
-        onInput={handleSelectDistrict}
-        isInput
-        iconRight="caret-down"
-        // iconLeft="globe-americas"
-        placeholder={get(district, 'name')}
-      /> */}
       <Input
-        isLabel
-        label={'City'.t()}
+        spaceVertical={10}
+        placeholder={'City'.t()}
         value={city}
         onChangeText={text => setCity(text)}
       />
@@ -229,10 +237,28 @@ const KycScreen = ({componentId}) => {
         isButtonCircle={false}
         isSubmit
         isClose
-        spaceVertical={30}
+        spaceVertical={10}
       />
+      </View>
     </Container>
   );
 };
-
+const customStyles = {
+  stepIndicatorSize: 35,
+  currentStepIndicatorSize: 35,
+  separatorStrokeWidth: 1,
+  currentStepStrokeWidth: 1,
+  stepStrokeCurrentColor: colors.app.yellowHightlight,
+  stepStrokeWidth: 1,
+  stepStrokeFinishedColor: colors.app.yellowHightlight,
+  stepStrokeUnFinishedColor: colors.app.backgroundLevel2,
+  separatorFinishedColor: colors.app.yellowHightlight,
+  separatorUnFinishedColor: colors.app.backgroundLevel2,
+  stepIndicatorFinishedColor: colors.app.yellowHightlight,
+  stepIndicatorUnFinishedColor: colors.app.backgroundLevel2,
+  stepIndicatorCurrentColor: colors.app.backgroundLevel2,
+  stepIndicatorLabelFontSize: 14,
+  stepIndicatorLabelCurrentColor:colors.app.yellowHightlight,
+  currentStepIndicatorLabelFontSize: 14,
+}
 export default KycScreen;

@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {LayoutSplashScreen} from '../../components';
 import Button from '../../components/Button/Button';
 import { LOGIN_SCREEN, SETTING_SCREEN } from '../../navigation';
-import {pushSingleHiddenTopBarApp, pushSingleScreenApp} from '../../navigation/Navigation';
+import {pushSingleHiddenTopBarApp, pushSingleScreenApp, showModal} from '../../navigation/Navigation';
 import {useSelector} from "react-redux"
 const HomeScreen = ({
     componentId
@@ -18,7 +18,7 @@ const HomeScreen = ({
         <Text>HomeScreen</Text>
         {logged?<Button 
           onSubmit={() => {
-            pushSingleScreenApp(componentId,SETTING_SCREEN);
+            pushSingleHiddenTopBarApp(componentId,SETTING_SCREEN);
           }}
           isSubmit
           textSubmit={'Thông tin tài khoản'}

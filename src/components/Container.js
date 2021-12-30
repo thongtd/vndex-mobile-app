@@ -41,7 +41,8 @@ const Container = ({
     style,
     refreshing=false,
     onRefresh,
-    isFilter
+    isFilter,
+    spaceHorizontal=spacingApp
 }) => {
     useEffect(() => {
         if(isTopBar){
@@ -101,7 +102,7 @@ const Container = ({
                             isFilter={isFilter}
                         />} */}
                         {customTopBar && customTopBar}
-                        <View style={[stylest.container, { paddingTop: space, backgroundColor:colors.baseBg }, isFlex && { flex: 1 }, style]}>
+                        <View style={[stylest.container, { paddingTop: space, backgroundColor:colors.baseBg, paddingHorizontal:spaceHorizontal }, isFlex && { flex: 1 }, style]}>
                             <Spinner visible={isLoadding} />
                             {isScroll ? (
                                 <KeyboardAwareScrollView
@@ -165,7 +166,6 @@ Container.propTypes = {
 }
 const stylest = StyleSheet.create({
     container: {
-        paddingHorizontal: spacingApp,
         zIndex: 1,
         
     }

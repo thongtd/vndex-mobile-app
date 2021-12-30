@@ -83,10 +83,11 @@ const Enable2FaGG = ({
                 flex: 1,
             }}
             isLoadding={Disabled}
+            space={20}
         >
             <Input
-                isLabel
-                label={"PASSWORD".t()}
+                // isLabel
+                // label={"PASSWORD".t()}
                 value={Password}
                 onChangeText={(text) => setPassword(text)}
                 placeholder={"PASSWORD".t()}
@@ -94,8 +95,8 @@ const Enable2FaGG = ({
                 isSecurity
             />
             <Input
-            isLabel
-            label={"Google authenticator code".t()}
+            // isLabel
+            // label={"Google authenticator code".t()}
                 hasValue
                 isPaste
                 keyboardType={"number-pad"}

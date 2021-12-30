@@ -13,14 +13,20 @@ import Checked from 'assets/svg/checked.svg';
 import TextFnx from '../../components/Text/TextFnx';
 import Button from '../../components/Button/Button';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {pushSingleScreenApp, SETTING_SCREEN, STEP3KYC_SCREEN} from '../../navigation';
+import {
+  pushSingleScreenApp,
+  SETTING_SCREEN,
+  STEP3KYC_SCREEN,
+} from '../../navigation';
 import {get, isEmpty} from 'lodash';
 import {toast} from '../../configs/utils';
 import FastImage from 'react-native-fast-image';
 import {pop, popTo} from '../../navigation/Navigation';
 import {authService} from '../../services/authentication.service';
-import { Navigation } from 'react-native-navigation';
-import { useSelector } from 'react-redux';
+import {Navigation} from 'react-native-navigation';
+import {useSelector} from 'react-redux';
+import {fontSize, spacingApp} from '../../configs/constant';
+import StepIndicator from 'react-native-step-indicator';
 export default function Step3Kyc({
   componentId,
   frontIdentityCardBytes,
@@ -35,13 +41,13 @@ export default function Step3Kyc({
   identityCard,
   postalCode,
   sex,
-  identityUserId
+  identityUserId,
 }) {
   const [assetSelfieSide, setAssetSelfieSide] = useState('');
-  
+
   const userKyc = useSelector(state => state.authentication.userKyc);
   const handleSubmit = selfieSide => {
-    if (isEmpty(selfieSide) && isEmpty(get(userKyc,"selfie"))) {
+    if (isEmpty(selfieSide) && isEmpty(get(userKyc, 'selfie'))) {
       toast('PLEASE_SELECT_SELFIE_IMAGE'.t());
     } else {
       let data = {
@@ -54,8 +60,8 @@ export default function Step3Kyc({
         identityUserId,
         postalCode,
         sex,
-        selfieBytes:get(selfieSide,"base64"),
-        selfieFileName:get(selfieSide,"fileName"),
+        selfieBytes: get(selfieSide, 'base64'),
+        selfieFileName: get(selfieSide, 'fileName'),
         frontIdentityCardBytes,
         frontIdentityCardFileName,
         backIdentityCardBytes,
@@ -63,15 +69,15 @@ export default function Step3Kyc({
       };
 
       authService.updateUserInfo(data).then(res => {
-        console.log(res,"REss");
-        if(get(res,"status")){
+        console.log(res, 'REss');
+        if (get(res, 'status')) {
           // popToRoo(componentId,SETTING_SCREEN);
-          toast(get(res,"message"));
+          toast(get(res, 'message'));
           Navigation.popToRoot(componentId);
-        }else{
-          toast(get(res,"message"));
+        } else {
+          toast(get(res, 'message'));
         }
-      })
+      });
     }
   };
   const handleSelfieSide = () => {
@@ -91,39 +97,70 @@ export default function Step3Kyc({
       isScroll
       componentId={componentId}
       hasBack
+      space={20}
+      spaceHorizontal={0}
       title={'Update portraits'.t()}>
-      <TouchableOpacity
-        onPress={handleSelfieSide}
-        style={[stylest.box, {marginTop: 15}]}>
-        <View style={stylest.centerFlex}>
-          {(get(assetSelfieSide, 'uri') || get(userKyc,"selfie")) ? (
-            <FastImage
-              style={{width: 200, height: 200}}
-              source={{
-                uri:get(userKyc,"selfie")?get(userKyc,"selfie"): get(assetSelfieSide, 'uri'),
-                priority: FastImage.priority.high,
-              }}
-              resizeMode={FastImage.resizeMode.contain}
-            />
-          ) : (
-            <>
-              <Gallerry />
-              <TextFnx color={colors.description}>{'Portrait'.t()}</TextFnx>
-            </>
-          )}
-        </View>
-      </TouchableOpacity>
-      <TextFnx space={10} color={colors.description}>
-        {'RuleUploadImage'.t()}
-      </TextFnx>
-      <View>
+      <View
+        style={{
+          marginBottom: 20,
+        }}>
+        <TextFnx
+          size={fontSize.f16}
+          weight="bold"
+          spaceBottom={20}
+          spaceLeft={spacingApp}
+          color={colors.app.yellowHightlight}>
+          {'Update KYC'.t()}
+        </TextFnx>
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={2}
+          stepCount={3}
+        />
+      </View>
+      <View
+        style={{
+          backgroundColor: colors.app.backgroundLevel2,
+          paddingHorizontal: spacingApp,
+          paddingTop: 20,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          paddingBottom:200
+        }}>
+        <TouchableOpacity
+          onPress={handleSelfieSide}
+          style={[stylest.box, {marginTop: 15}]}>
+          <View style={stylest.centerFlex}>
+            {get(assetSelfieSide, 'uri') || get(userKyc, 'selfie') ? (
+              <FastImage
+                style={{width: 200, height: 200}}
+                source={{
+                  uri: get(userKyc, 'selfie')
+                    ? get(userKyc, 'selfie')
+                    : get(assetSelfieSide, 'uri'),
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            ) : (
+              <>
+                <Gallerry />
+                <TextFnx color={colors.description}>{'Portrait'.t()}</TextFnx>
+              </>
+            )}
+          </View>
+        </TouchableOpacity>
+        <TextFnx space={10} size={fontSize.f12} color={colors.description}>
+          {'RuleUploadImage'.t()}
+        </TextFnx>
+        {/* <View>
         <Mtcmt1 />
         <View style={stylest.cmt}>
           <Checked />
           <TextFnx color={colors.description}>{'Valid'.t()}</TextFnx>
         </View>
-      </View>
-      <View
+      </View> */}
+        {/* <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -149,16 +186,17 @@ export default function Step3Kyc({
             <TextFnx color={colors.description}>{'Not cut'.t()}</TextFnx>
           </View>
         </View>
+      </View> */}
+        <Button
+          textClose={'Come back'.t()}
+          onSubmit={() => handleSubmit(assetSelfieSide)}
+          isButtonCircle={false}
+          isSubmit
+          isClose
+          spaceVertical={30}
+          onClose={() => pop(componentId)}
+        />
       </View>
-      <Button
-        textClose={'Come back'.t()}
-        onSubmit={() => handleSubmit(assetSelfieSide)}
-        isButtonCircle={false}
-        isSubmit
-        isClose
-        spaceVertical={30}
-        onClose={() => pop(componentId)}
-      />
     </Container>
   );
 }
@@ -182,3 +220,21 @@ const stylest = StyleSheet.create({
     marginLeft: -5,
   },
 });
+const customStyles = {
+  stepIndicatorSize: 35,
+  currentStepIndicatorSize: 35,
+  separatorStrokeWidth: 1,
+  currentStepStrokeWidth: 1,
+  stepStrokeCurrentColor: colors.app.yellowHightlight,
+  stepStrokeWidth: 1,
+  stepStrokeFinishedColor: colors.app.yellowHightlight,
+  stepStrokeUnFinishedColor: colors.app.backgroundLevel2,
+  separatorFinishedColor: colors.app.yellowHightlight,
+  separatorUnFinishedColor: colors.app.backgroundLevel2,
+  stepIndicatorFinishedColor: colors.app.yellowHightlight,
+  stepIndicatorUnFinishedColor: colors.app.backgroundLevel2,
+  stepIndicatorCurrentColor: colors.app.backgroundLevel2,
+  stepIndicatorLabelFontSize: 14,
+  stepIndicatorLabelCurrentColor: colors.app.yellowHightlight,
+  currentStepIndicatorLabelFontSize: 14,
+};

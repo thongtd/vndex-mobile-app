@@ -1,4 +1,10 @@
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import Container from '../../components/Container';
 
 import React, {useState, useCallback, useEffect} from 'react';
@@ -19,7 +25,10 @@ import {get, isEmpty} from 'lodash';
 import {toast} from '../../configs/utils';
 import FastImage from 'react-native-fast-image';
 import {pop} from '../../navigation/Navigation';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
+import StepIndicator from 'react-native-step-indicator';
+import {fontSize, spacingApp} from '../../configs/constant';
+import Layout from '../../components/Layout/Layout';
 
 export default function Step2Kyc({
   componentId,
@@ -31,7 +40,7 @@ export default function Step2Kyc({
   identityCard,
   postalCode,
   sex,
-  identityUserId
+  identityUserId,
 }) {
   const [assetFrontSide, setAssetFrontSide] = useState('');
   const [assetBackSide, setAssetBackSide] = useState('');
@@ -62,9 +71,12 @@ export default function Step2Kyc({
     });
   };
   const handleNext = (assetBackSide, assetFrontSide) => {
-    if (isEmpty(assetFrontSide) && isEmpty(get(userKyc,"frontIdentityCard"))) {
+    if (isEmpty(assetFrontSide) && isEmpty(get(userKyc, 'frontIdentityCard'))) {
       toast('PLEASE_SELECT_FRONT_OF_IDENTITY_CARD'.t());
-    } else if (isEmpty(assetBackSide) && isEmpty(get(userKyc,"backIdentityCard"))) {
+    } else if (
+      isEmpty(assetBackSide) &&
+      isEmpty(get(userKyc, 'backIdentityCard'))
+    ) {
       toast('PLEASE_SELECT_BACK_OF_IDENTITY_CARD'.t());
     } else {
       pushSingleScreenApp(componentId, STEP3KYC_SCREEN, {
@@ -80,7 +92,7 @@ export default function Step2Kyc({
         identityCard,
         postalCode,
         sex,
-        identityUserId
+        identityUserId,
       });
     }
   };
@@ -89,100 +101,170 @@ export default function Step2Kyc({
       isScroll
       componentId={componentId}
       hasBack
+      space={20}
+      spaceHorizontal={0}
       title={'Update KYC'.t()}>
-      <TouchableOpacity
-        onPress={handleFrontSide}
-        style={[stylest.box, {marginTop: 15}]}>
-        <View style={stylest.centerFlex}>
-          {(get(assetFrontSide, 'uri') || get(userKyc,"frontIdentityCard")) ? (
-            <FastImage
-              style={{width: 200, height: 200}}
-              source={{
-                uri:get(userKyc,"frontIdentityCard")?get(userKyc,"frontIdentityCard"): get(assetFrontSide, 'uri'),
-                priority: FastImage.priority.high,
-              }}
-              resizeMode={FastImage.resizeMode.contain}
-            />
-          ) : (
-            <>
-              <Gallerry />
-              <TextFnx color={colors.description}>
-                {'Front side of ID card'.t()}
-              </TextFnx>
-            </>
-          )}
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={handleBackSide}
-        style={[stylest.box, {marginTop: 15}]}>
-        <View style={stylest.centerFlex}>
-          {(get(assetBackSide, 'uri') || get(userKyc,"backIdentityCard")) ? (
-            <FastImage
-              style={{width: 200, height: 200}}
-              source={{
-                uri:get(userKyc,"backIdentityCard")?get(userKyc,"backIdentityCard"): get(assetBackSide, 'uri'),
-                priority: FastImage.priority.high,
-              }}
-              resizeMode={FastImage.resizeMode.contain}
-            />
-          ) : (
-            <>
-              <Gallerry />
-              <TextFnx color={colors.description}>
-                {'The back of the ID card'.t()}
-              </TextFnx>
-            </>
-          )}
-        </View>
-      </TouchableOpacity>
-      <TextFnx space={10} color={colors.description}>
-        {'RuleUploadImage'.t()}
-      </TextFnx>
-      <View>
-        <Mtcmt1 />
-        <View style={stylest.cmt}>
-          <Checked />
-          <TextFnx color={colors.description}>{'Valid'.t()}</TextFnx>
-        </View>
-      </View>
       <View
         style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
+          marginBottom: 20,
         }}>
-        <View>
-          <Mtcmt2 />
-          <View style={stylest.cmt}>
-            <Close />
-            <TextFnx color={colors.description}>{'Not blurred'.t()}</TextFnx>
-          </View>
-        </View>
-        <View>
-          <Mtcmt3 />
-          <View style={stylest.cmt}>
-            <Close />
-            <TextFnx color={colors.description}>{'No match'.t()}</TextFnx>
-          </View>
-        </View>
-        <View>
-          <Mtcmt4 />
-          <View style={stylest.cmt}>
-            <Close />
-            <TextFnx color={colors.description}>{'Not cut'.t()}</TextFnx>
-          </View>
-        </View>
+        <TextFnx
+          size={fontSize.f16}
+          weight="bold"
+          spaceBottom={20}
+          spaceLeft={spacingApp}
+          color={colors.app.yellowHightlight}>
+          {'Update KYC'.t()}
+        </TextFnx>
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={1}
+          stepCount={3}
+        />
       </View>
-      <Button
-        onClose={() => pop(componentId)}
-        textSubmit={'NEXT'.t()}
-        textClose={'Come back'.t()}
-        onSubmit={() => handleNext(assetBackSide, assetFrontSide)}
-        isButtonCircle={false}
-        isSubmit
-        isClose
-        spaceVertical={30}
-      />
+
+      <View
+        style={{
+          backgroundColor: colors.app.backgroundLevel2,
+          paddingHorizontal: spacingApp,
+          paddingTop: 20,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        }}>
+        <TouchableOpacity
+          onPress={handleFrontSide}
+          style={[stylest.box, {marginTop: 15}]}>
+          <View style={stylest.centerFlex}>
+            {get(assetFrontSide, 'uri') || get(userKyc, 'frontIdentityCard') ? (
+              <FastImage
+                style={{width: 200, height: 200}}
+                source={{
+                  uri: get(userKyc, 'frontIdentityCard')
+                    ? get(userKyc, 'frontIdentityCard')
+                    : get(assetFrontSide, 'uri'),
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            ) : (
+              <>
+                <Gallerry />
+                <TextFnx color={colors.description}>
+                  {'Front side of ID card'.t()}
+                </TextFnx>
+              </>
+            )}
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleBackSide}
+          style={[stylest.box, {marginTop: 15}]}>
+          <View style={stylest.centerFlex}>
+            {get(assetBackSide, 'uri') || get(userKyc, 'backIdentityCard') ? (
+              <FastImage
+                style={{width: 200, height: 200}}
+                source={{
+                  uri: get(userKyc, 'backIdentityCard')
+                    ? get(userKyc, 'backIdentityCard')
+                    : get(assetBackSide, 'uri'),
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            ) : (
+              <>
+                <Gallerry />
+                <TextFnx color={colors.description}>
+                  {'The back of the ID card'.t()}
+                </TextFnx>
+              </>
+            )}
+          </View>
+        </TouchableOpacity>
+        <TextFnx space={10} size={fontSize.f12} color={colors.description}>
+          {'RuleUploadImage'.t()}
+        </TextFnx>
+        <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+          <View style={stylest.boxImg}>
+            <Mtcmt1 />
+            <View style={stylest.cmt}>
+              <Checked />
+              <TextFnx size={fontSize.f12} color={colors.description}>
+                {'Valid'.t()}
+              </TextFnx>
+            </View>
+          </View>
+          <View style={stylest.boxImg}>
+            <Mtcmt2 />
+            <View style={stylest.cmt}>
+              <Close />
+              <TextFnx size={fontSize.f12} color={colors.description}>
+                {'Not blurred'.t()}
+              </TextFnx>
+            </View>
+          </View>
+          <View style={stylest.boxImg}>
+            <Mtcmt3 />
+            <View style={stylest.cmt}>
+              <Close />
+              <TextFnx size={fontSize.f12} color={colors.description}>
+                {'No match'.t()}
+              </TextFnx>
+            </View>
+          </View>
+          <View style={stylest.boxImg}>
+            <Mtcmt4 />
+            <View style={stylest.cmt}>
+              <Close />
+              <TextFnx size={fontSize.f12} color={colors.description}>
+                {'Not cut'.t()}
+              </TextFnx>
+            </View>
+          </View>
+        </ScrollView>
+        <View>
+          <Layout style={stylest.marginLeft} isLineCenter>
+            <Checked />
+            <TextFnx size={fontSize.f14} color={colors.app.textContentLevel2}>
+              Do chính phủ cấp
+            </TextFnx>
+          </Layout>
+          <Layout style={stylest.marginLeft} isLineCenter>
+            <Checked />
+            <TextFnx size={fontSize.f14} color={colors.app.textContentLevel2}>
+              Giấy tờ nguyên gốc có kích thước đầy đủ, chưa qua chỉnh sửa
+            </TextFnx>
+          </Layout>
+          <Layout style={stylest.marginLeft} isLineCenter>
+            <Checked />
+            <TextFnx size={fontSize.f14} color={colors.app.textContentLevel2}>
+              Hình ảnh có màu, đủ ánh sáng, có thể đọc được
+            </TextFnx>
+          </Layout>
+          <Layout style={stylest.marginLeft} isLineCenter>
+            <Close />
+            <TextFnx size={fontSize.f14} color={colors.app.textContentLevel2}>
+              Không chấp nhận hình ảnh đen trắng
+            </TextFnx>
+          </Layout>
+          <Layout style={stylest.marginLeft} isLineCenter>
+            <Close />
+            <TextFnx size={fontSize.f14} color={colors.app.textContentLevel2}>
+              Không chấp nhận giấy tờ đã qua chỉnh sửa hoặc hết hạn
+            </TextFnx>
+          </Layout>
+        </View>
+        <Button
+          onClose={() => pop(componentId)}
+          textSubmit={'NEXT'.t()}
+          textClose={'Come back'.t()}
+          onSubmit={() => handleNext(assetBackSide, assetFrontSide)}
+          isButtonCircle={false}
+          isSubmit
+          isClose
+          spaceVertical={30}
+        />
+      </View>
     </Container>
   );
 }
@@ -195,6 +277,7 @@ const stylest = StyleSheet.create({
     backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 8,
   },
   centerFlex: {
     justifyContent: 'center',
@@ -206,4 +289,28 @@ const stylest = StyleSheet.create({
     marginVertical: 7,
     marginLeft: -5,
   },
+  boxImg: {
+    paddingRight: 30,
+  },
+  marginLeft: {
+    marginLeft: -5,
+  },
 });
+const customStyles = {
+  stepIndicatorSize: 35,
+  currentStepIndicatorSize: 35,
+  separatorStrokeWidth: 1,
+  currentStepStrokeWidth: 1,
+  stepStrokeCurrentColor: colors.app.yellowHightlight,
+  stepStrokeWidth: 1,
+  stepStrokeFinishedColor: colors.app.yellowHightlight,
+  stepStrokeUnFinishedColor: colors.app.backgroundLevel2,
+  separatorFinishedColor: colors.app.yellowHightlight,
+  separatorUnFinishedColor: colors.app.backgroundLevel2,
+  stepIndicatorFinishedColor: colors.app.yellowHightlight,
+  stepIndicatorUnFinishedColor: colors.app.backgroundLevel2,
+  stepIndicatorCurrentColor: colors.app.backgroundLevel2,
+  stepIndicatorLabelFontSize: 14,
+  stepIndicatorLabelCurrentColor: colors.app.yellowHightlight,
+  currentStepIndicatorLabelFontSize: 14,
+};
