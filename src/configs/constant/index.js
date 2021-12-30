@@ -168,5 +168,7 @@ export const spacingApp ='5%'
 export const BankTransfer = "BankTransfer";
 export const fontSize ={
     f14:14,
-    f18:18
+    f18:18,
+    f16:16,
+    f12:12,
 }

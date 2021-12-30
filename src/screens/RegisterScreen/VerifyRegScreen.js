@@ -49,18 +49,10 @@ const VerifyRegScreen = ({componentId, email}) => {
   }, [isTimer, timer]);
   return (
     <LayoutSplashScreen componentId={componentId} isLoadding={loading}>
-      <View style={stylest.textRegister}>
-        {/* <TextFnx space={10} value={`${"I_HAVE_ACCOUNT".t()} `} /> */}
-        <ButtonWithTitle
-          space={10}
-          onPress={() => pushSingleHiddenTopBarApp(componentId, LOGIN_SCREEN)}
-          color={colors.highlight}
-          title={'LOGIN'.t()}
-        />
-      </View>
+     
       <View style={stylest.title}>
         <TextFnx
-          size={25}
+          size={30}
           color={colors.tabbarActive}
           weight={'bold'}
           value={'REGISTER'.t()}
@@ -101,8 +93,7 @@ const VerifyRegScreen = ({componentId, email}) => {
 const stylest = StyleSheet.create({
   blockCheckbox: {flexDirection: 'row', alignItems: 'center'},
   title: {
-    alignItems: 'center',
-    paddingTop: 31,
+    paddingTop: 40,
     paddingBottom: 32,
   },
   textRegister: {

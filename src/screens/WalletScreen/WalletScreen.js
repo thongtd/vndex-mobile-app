@@ -26,6 +26,9 @@ import {
   PASSCODE_SCREEN,
   PASSCODE_AUTH_SCREEN,
   TRANSACTION_HISTORY,
+  PICKER_SEARCH,
+  DEPOSIT_COIN_SCREEN,
+  WITHDRAW_COIN_SCREEN,
 } from '../../navigation';
 import {IdNavigation} from '../../configs/constant';
 import {
@@ -37,13 +40,16 @@ import {
   emitEventEmitter,
   backHandler,
   resetScreenGlobal,
+  getPropsData,
 } from '../../configs/utils';
+
 import useAppState from 'react-native-appstate-hook';
-import {showModal} from '../../navigation/Navigation';
+import {showModal, dismissAllModal,} from '../../navigation/Navigation';
 import {useDispatch, useSelector} from 'react-redux';
 import GuideSetupGG from '../SecurityScreen/GuideSetupGG';
 import SignalRService from '../../services/signalr.service';
 import {orderBy} from 'lodash';
+
 import {
   GET_ASSET_CRYPTO_WALLETS_SUCCESS,
   GET_ASSET_FIAT_WALLET_SUCCESS,
@@ -64,6 +70,7 @@ const WalletScreen = ({componentId}) => {
   const cryptoWallet = useSelector(state => state.market.cryptoWallet);
   const fiatsWallet = useSelector(state => state.wallet.fiatsWallet);
   const dispatcher = useDispatch();
+  const [CurrencyActive, setCurrencyActive] = useState("");
   const [HiddenCrypto, setHiddenCrypto] = useState(
     cryptoWallet.filter(
       (item, index) => get(item, 'available') + get(item, 'pending') !== 0,
@@ -96,6 +103,25 @@ const WalletScreen = ({componentId}) => {
     //   showModal(PASSCODE_AUTH_SCREEN);
     // }
   }, []);
+  const onSelectCoin = (isDeposit) => {
+    
+        let data = orderBy(cryptoWallet, ['symbol'], ['asc']);
+        let propsData = getPropsData(data, "images", "symbol", CurrencyActive, (item) => handleActive(item,isDeposit))
+        showModal(PICKER_SEARCH, propsData)
+    
+}
+const handleActive = (item,isDeposit) => {
+  setCurrencyActive(get(item, "symbol"));
+  // setInfoCoin(item);
+  if(isDeposit){
+    pushSingleScreenApp(componentId, DEPOSIT_COIN_SCREEN,{data:item})
+  }else{
+    pushSingleScreenApp(componentId, WITHDRAW_COIN_SCREEN,{data:item})
+  }
+  
+  dismissAllModal();
+  // InfoDataGlobal(item);
+}
   useEffect(() => {
     let availableZeroCrypto = cryptoWallet.filter(
       (item, index) => get(item, 'available') + get(item, 'pending') !== 0,
@@ -122,6 +148,8 @@ const WalletScreen = ({componentId}) => {
         spaceVertical={20}
         isReverse
         isSubmit
+        onClose={()=>onSelectCoin(false)}
+        onSubmit={()=>onSelectCoin(true)}
         isClose
         textSubmit={"DEPOSIT".t()}
         textClose={"WITHDRAW".t()}

@@ -113,7 +113,7 @@ const Input = ({
                         editable={editable}
                         maxLength={rest.isResend ? 6 : maxLength}
                         keyboardType={rest.isResend ? "number-pad" : keyboardType}
-                        secureTextEntry={isSecurity || rest.secureTextEntry}
+                        secureTextEntry={isSecurity}
                         onChangeText={handleChange}
                         value={hasValue ? value : valueInput}
                         style={[{color:colors.text},style]}
@@ -173,7 +173,7 @@ const stylest = StyleSheet.create({
     },
     btnMax: {
         backgroundColor: colors.iconButton,
-        height: 40,
+        height: 52,
         width: 60,
         alignItems: 'center',
         justifyContent: "center"
@@ -189,8 +189,8 @@ const stylest = StyleSheet.create({
     inputView: {
         width: "100%",
         // borderColor: colors.line,
-        borderWidth: 0.5,
-        height: 40,
+        borderWidth: 0,
+        height: 52,
         flexDirection: "row",
         alignItems: "center",
         paddingLeft: 10,
@@ -200,8 +200,8 @@ const stylest = StyleSheet.create({
     inputCircle: {
         width: "100%",
         borderColor: colors.line,
-        borderWidth: 0.5,
-        height: 40,
+        borderWidth: 0,
+        height: 52,
         flexDirection: "row",
         alignItems: "center",
         paddingLeft: 10,
@@ -209,10 +209,10 @@ const stylest = StyleSheet.create({
         backgroundColor: colors.background
     },
     inputCore: {
-        height: 40, flex: 1
+        height: 52, flex: 1
     },
     label: {
-        paddingTop: 10,
+        paddingVertical: 10,
         color: colors.subText,
 
     },

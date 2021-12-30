@@ -5,6 +5,7 @@ import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/
 import TextFnx from '../Text/TextFnx';
 import colors from '../../configs/styles/colors';
 import Icon from '../Icon';
+import { fontSize } from '../../configs/constant';
 
 const ButtonSubmitClose = ({
     style,
@@ -24,7 +25,7 @@ const ButtonSubmitClose = ({
         >
             <View style={[isButtonCircle?stylest.btnCircle:stylest.btn,{backgroundColor:bgButtonColor, flexDirection:"row"},style]}>
                 {iconLeftSvg && iconLeftSvg}
-                <TextFnx spaceLeft={iconLeftSvg?5:0} color={isSubmit?colors.black:colors.textBtnClose} value={title} />
+                <TextFnx size={fontSize.f16} weight='bold' spaceLeft={iconLeftSvg?5:0} color={isSubmit?colors.black:colors.textBtnClose} value={title} />
             </View>
         </TouchableOpacity>
     </View>
@@ -34,14 +35,14 @@ const stylest = StyleSheet.create({
         flex: 1
     },
     btn:{
-        height: 40,
+        height: 48,
         justifyContent:"center",
         alignItems:"center",
         borderRadius: 8,
         
     },
     btnCircle:{
-        height: 40,
+        height: 48,
         justifyContent:"center",
         alignItems:"center",
         borderRadius: 25,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Platform } from 'react-native';
 import colors from '../../configs/styles/colors';
 import TextFnx from '../../components/Text/TextFnx';
 import Input from '../../components/Input';
@@ -57,42 +57,42 @@ const ConfirmResetScreen = ({
         isLoadding={disabled}
         componentId={rest.componentId}
         >
-            <View style={stylest.textRegister}>
+            {/* <View style={stylest.textRegister}>
                 <ButtonWithTitle space={10} onPress={() => pushSingleHiddenTopBarApp(rest.componentId,LOGIN_SCREEN)} color={colors.highlight} title={"LOGIN".t()} />
-            </View>
+            </View> */}
             <View style={stylest.title}>
-                <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"RESET_PASSWORD".t()} />
+                <TextFnx spaceTop={Platform.OS == 'android' && 40} size={30} color={colors.tabbarActive} weight={"bold"} value={"RESET_PASSWORD".t()} />
             </View>
             <Input
-                label={"PASSWORD".t()}
-                isLabel
+                // label={"PASSWORD".t()}
+                // isLabel
                 isSecurity
                 value={password}
                 onChangeText={(pass) => setPassword(pass)}
                 onPressButtonRight={handleButtonRight}
-                nameIconLeft="lock"
+                // nameIconLeft="lock"
                 spaceVertical={10}
-                isIconLeft
+                // isIconLeft
                 placeholder={"PASSWORD".t()}
                 // isCircle
                 isButtonRight
                 nameIconRight="exclamation-circle"
             />
             <Input
-                label={"CONFIRM_PASSWORD".t()}
-                isLabel
+                // label={"CONFIRM_PASSWORD".t()}
+                // isLabel
                 isSecurity
                 value={rePassword}
                 onChangeText={(pass) => setRePassword(pass)}
                 spaceVertical={10}
-                isIconLeft
-                nameIconLeft={"lock"}
+                // isIconLeft
+                // nameIconLeft={"lock"}
                 placeholder={"CONFIRM_PASSWORD".t()}
                 // isCircle 
                 />
             <Input
-                label={"OTP_CODE".t()}
-                isLabel
+                // label={"OTP_CODE".t()}
+                // isLabel
                 onSubmitEditing={handleConfirm}
                 handleResend={handleResend}
                 value={otp}
@@ -114,9 +114,9 @@ const ConfirmResetScreen = ({
                 <Icon name="arrow-left" color={colors.background} />
                 <TextFnx value={` ${"BACK".t()}`} />
             </ButtonWithTitle> */}
-            <ButtonFooterAuth
+            {/* <ButtonFooterAuth
                 textLeft=""
-            />
+            /> */}
         </LayoutSplashScreen>
     )
 }
@@ -124,8 +124,7 @@ const ConfirmResetScreen = ({
 const stylest = StyleSheet.create({
     blockCheckbox: { flexDirection: "row", alignItems: "center" },
     title: {
-        alignItems: "center",
-        paddingTop: 65,
+        paddingTop: 40,
         paddingBottom: 10
     },
     textRegister: {

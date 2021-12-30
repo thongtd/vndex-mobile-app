@@ -15,7 +15,7 @@ const AlertNoticePassword = ({
                     <TextDot color={colors.black} value={"8 or more characters".t()} />
                     <TextDot color={colors.black} value={"Uppercase & Lower letters".t()} />
                     <TextDot color={colors.black} value={"At least one number & special character".t()} />
-                    <TextDot color={colors.black} value={"Uppercase & Lower letters".t()} />
+                    {/* <TextDot color={colors.black} value={"Uppercase & Lower letters".t()} /> */}
                 </>
             }
         />

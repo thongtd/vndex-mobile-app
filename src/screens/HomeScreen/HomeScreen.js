@@ -24,7 +24,7 @@ const HomeScreen = ({
           textSubmit={'Thông tin tài khoản'}
         />:<Button 
           onSubmit={() => {
-            pushSingleHiddenTopBarApp(componentId,LOGIN_SCREEN);
+            pushSingleScreenApp(componentId,LOGIN_SCREEN);
           }}
           isSubmit
           textSubmit={'Login'}

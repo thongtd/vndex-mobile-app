@@ -111,8 +111,8 @@ const stylest = StyleSheet.create({
     inputView: {
         width: "100%",
         borderColor: colors.line,
-        borderWidth: 0.5,
-        height: 40,
+        borderWidth: 0,
+        height: 52,
         flexDirection: "row",
         alignItems: "center",
         paddingLeft: 10,
@@ -122,8 +122,8 @@ const stylest = StyleSheet.create({
     inputCircle: {
         width: "100%",
         borderColor: colors.line,
-        borderWidth: 0.5,
-        height: 40,
+        borderWidth: 0,
+        height: 52,
         flexDirection: "row",
         alignItems: "center",
         paddingLeft: 10,
@@ -131,23 +131,23 @@ const stylest = StyleSheet.create({
         backgroundColor: colors.background
     },
     inputCore: {
-        height: 40,
+        height: 52,
         flex: 1,
         justifyContent: "center"
     },
     iconLeft: {
         color: colors.description,
-        height: 40,
-        lineHeight: 40,
+        height: 52,
+        lineHeight: 52,
         paddingRight: 10
     },
     iconRight: {
         color: colors.description,
     },
     icon: {
-        width: 40,
-        height: 40,
-        lineHeight: 40,
+        width: 52,
+        height: 52,
+        lineHeight: 52,
         textAlign: "center"
     },
     label: {

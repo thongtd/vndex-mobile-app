@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet, Linking} from 'react-native';
+import {Text, View, StyleSheet, Linking, Platform} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import colors from '../../configs/styles/colors';
 import TextFnx from '../../components/Text/TextFnx';
@@ -20,12 +20,13 @@ import {
 } from '../../navigation';
 
 import {hiddenModal, toast, get, _validateAuth} from '../../configs/utils';
-import {IdNavigation} from '../../configs/constant';
+import {fontSize, IdNavigation} from '../../configs/constant';
 import {authService} from '../../services/authentication.service';
 import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
-import { pushSingleHiddenTopBarApp } from '../../navigation/Navigation';
+import {pop, pushSingleHiddenTopBarApp} from '../../navigation/Navigation';
+import Layout from '../../components/Layout/Layout';
 
-const ConfirmScreen = ({countryCode="VN", componentId}) => {
+const ConfirmScreen = ({countryCode = 'VN', componentId}) => {
   const [isCheck, setCheck] = useState(false);
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
@@ -61,7 +62,7 @@ const ConfirmScreen = ({countryCode="VN", componentId}) => {
           if (get(res, 'status') === 'OK') {
             setDisabled(false);
             toast(get(res, 'message').t());
-            pushSingleHiddenTopBarApp(componentId, SEND_REG_SCREEN,{email});
+            pushSingleHiddenTopBarApp(componentId, SEND_REG_SCREEN, {email});
           } else {
             setDisabled(false);
             toast(get(res, 'message'));
@@ -74,26 +75,27 @@ const ConfirmScreen = ({countryCode="VN", componentId}) => {
     }
   };
   return (
-    <LayoutSplashScreen componentId={componentId} isLoadding={disabled}>
-      <View style={stylest.textRegister}>
+    <LayoutSplashScreen title={"REGISTER".t()} componentId={componentId} isLoadding={disabled}>
+      {/* <View style={stylest.textRegister}>
         <ButtonWithTitle
           space={10}
           onPress={() => pushSingleHiddenTopBarApp(componentId, LOGIN_SCREEN)}
           color={colors.highlight}
           title={'LOGIN'.t()}
         />
-      </View>
-      <View style={stylest.title}>
+      </View> */}
         <TextFnx
-          size={25}
+          spaceTop={Platform.OS == 'android' ? 80:40}
+          size={30}
+          spaceBottom={7}
           color={colors.tabbarActive}
           weight={'bold'}
           value={'REGISTER'.t()}
         />
-      </View>
+         <TextFnx size={fontSize.f12} spaceBottom={20} color={colors.app.textDisabled}>
+        {'Please login with your Email account'.t()}
+      </TextFnx>
       <Input
-        isLabel
-        label="Email"
         value={email}
         onChangeText={handleChangeEmail}
         keyboardType={'email-address'}
@@ -102,8 +104,6 @@ const ConfirmScreen = ({countryCode="VN", componentId}) => {
         // isCircle
       />
       <Input
-        isLabel
-        label={'PASSWORD'.t()}
         styleRight={{
           borderRightWidth: 1,
           borderRightColor: colors.iconButton,
@@ -112,30 +112,20 @@ const ConfirmScreen = ({countryCode="VN", componentId}) => {
         isSecurity
         onChangeText={text => setPassword(text)}
         onPressButtonRight={handleButtonRight}
-        nameIconLeft="lock"
         spaceVertical={10}
-        isIconLeft
         placeholder={'PASSWORD'.t()}
         isButtonRight
         nameIconRight="exclamation-circle"
       />
       <Input
-        isLabel
-        label={'CONFIRM_PASSWORD'.t()}
         isSecurity
         onChangeText={text => setRePassword(text)}
         spaceVertical={10}
-        isIconLeft
-        nameIconLeft={'lock'}
         placeholder={'CONFIRM_PASSWORD'.t()}
       />
       <Input
-        isLabel
-        label={'REFERRAL_ID'.t()}
         onChangeText={text => setReferralId(text)}
         spaceVertical={10}
-        isIconLeft
-        nameIconLeft={'user-friends'}
         placeholder={'REFERRAL_ID'.t()}
       />
       <View style={[stylest.blockCheckbox, {height: 20, marginTop: 10}]}>
@@ -168,7 +158,17 @@ const ConfirmScreen = ({countryCode="VN", componentId}) => {
         isSubmit
         isButtonCircle={false}
       />
-      <ButtonFooterAuth textLeft={''} />
+      <Layout>
+      <TextFnx size={fontSize.f16} color={colors.app.textContentLevel3}>
+        {"I_HAVE_ACCOUNT".t() }{"  "}
+      </TextFnx>
+      <ButtonWithTitle
+          size={fontSize.f16}
+          onPress={() => pop(componentId, LOGIN_SCREEN)}
+          color={colors.highlight}
+          title={'LOGIN_NOW'.t()}
+        />
+      </Layout>
     </LayoutSplashScreen>
   );
 };
@@ -177,7 +177,7 @@ const stylest = StyleSheet.create({
   blockCheckbox: {flexDirection: 'row', alignItems: 'center'},
   title: {
     alignItems: 'center',
-    paddingTop: 65,
+    paddingTop: 40,
     paddingBottom: 10,
   },
   textRegister: {

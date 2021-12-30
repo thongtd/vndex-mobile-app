@@ -25,13 +25,16 @@ import {
   isSameScreen,
   resetScreenGlobal,
 } from '../configs/utils';
-import { COMMAND_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, STO_SCREEN } from '.';
+import {COMMAND_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, STO_SCREEN} from '.';
 
 // Register all screens on launch
 // registerScreens();
 export function pushTutorialScreen() {
   Navigation.setDefaultOptions({
-    layout: {backgroundColor: 'transparent',componentBackgroundColor: 'transparent'},
+    layout: {
+      backgroundColor: 'transparent',
+      componentBackgroundColor: 'transparent',
+    },
     screenBackgroundColor: 'transparent',
     modalPresentationStyle: 'overCurrentContext',
     animations: {
@@ -51,30 +54,30 @@ export function pushTutorialScreen() {
       },
     },
     topBar: {
-      visible:true,
+      visible: true,
       background: {
         color: colors.navigation,
       },
       title: {
         color: 'white',
       },
+
       backButton: {
-        title: '', // Remove previous screen name from back button
-        color: 'white',
+        color: '#8A8779',
       },
       buttonColor: 'white',
     },
     statusBar: {
       style: 'dark',
       backgroundColor: colors.baseBg,
-      visible: true
+      visible: true,
     },
     layout: {
       orientation: ['portrait'],
     },
     bottomTabs: {
       titleDisplayMode: 'alwaysShow',
-      backgroundColor:"#252424"
+      backgroundColor: '#252424',
     },
     bottomTab: {
       textColor: 'gray',
@@ -124,7 +127,7 @@ export function pushSingleScreenApp(
     component: {
       name: screen,
       passProps,
-      options: {...hiddenTabbar(),...options},
+      options: {...hiddenTabbar(), ...options},
     },
   });
 }
@@ -165,11 +168,11 @@ export function pushSingleHiddenTopBarApp(
           // drawBehind: true,
           visible: true,
         },
-        topBar:{
+        topBar: {
           animate: true,
-          visible:false,
-        }
-        ,...options
+          visible: false,
+        },
+        ...options,
       },
     },
   });
@@ -228,7 +231,7 @@ export function pushTabBasedApp(currenIndex = 0) {
             require('assets/icons/Union.png'),
             'WALLET'.t(),
             IdNavigation.Wallet.menu,
-            "Property Overview".t()
+            'Property Overview'.t(),
           ),
         ],
         options: {

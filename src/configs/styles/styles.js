@@ -1,8 +1,8 @@
 import RN from "react-native"
 const styles = RN.StyleSheet.create({
     icon:{
-        width:40,
-        height:40,
+        width:50,
+        height:50,
         justifyContent:"center",
         alignItems:"center"
     }
