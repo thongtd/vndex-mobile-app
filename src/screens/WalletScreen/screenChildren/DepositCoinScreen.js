@@ -26,7 +26,7 @@ import {PICKER_SEARCH, MODAL_ALERT} from '../../../navigation';
 import Icon from '../../../components/Icon';
 import Button from '../../../components/Button/Button';
 const DepositCoinScreen = ({componentId, data}) => {
-  const cryptoWallet = useSelector(state => state.wallet.cryptoWallet);
+  const cryptoWallet = useSelector(state => state.market.cryptoWallet);
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const lang = useSelector(state => state.authentication.lang);
   const [InfoCurrency, setInfoCurrency] = useState('');
@@ -35,15 +35,18 @@ const DepositCoinScreen = ({componentId, data}) => {
 
   useEffect(() => {
     setDisabled(true);
+    console.log(CurrencyActive, 'CurrencyActive');
     WalletService.getWalletBalanceByCurrency(
       get(UserInfo, 'id'),
       CurrencyActive,
     )
       .then(res => {
+        console.log(data, 'REss');
+        setInfoCurrency(get(res, 'addressQrCode') ? res : data);
         setDisabled(false);
-        console.log(res,"Ress");
         if (res) {
-          setInfoCurrency(res);
+         
+
           if (
             isArray(get(res, 'extraFields')) &&
             size(get(res, 'extraFields')) > 0
@@ -59,7 +62,7 @@ const DepositCoinScreen = ({componentId, data}) => {
                       alignItems: 'center',
                     }}>
                     <TextFnx
-                      color={colors.app.yellowHightlight}
+                      color={colors.tabbarActive}
                       size={16}
                       value={'Notice'.t().toUpperCase()}
                       weight="bold"
@@ -73,7 +76,7 @@ const DepositCoinScreen = ({componentId, data}) => {
                     <TextFnx
                       align="center"
                       space={5}
-                      color={colors.black}
+                      color={colors.text}
                       value={get(
                         res,
                         `extraFields[0].localizations.${checkLang(
@@ -84,7 +87,7 @@ const DepositCoinScreen = ({componentId, data}) => {
                     <TextFnx
                       align="center"
                       space={5}
-                      color={colors.app.yellowHightlight}
+                      color={colors.tabbarActive}
                       value={get(
                         res,
                         `extraFields[0].localizations.${checkLang(
@@ -108,14 +111,16 @@ const DepositCoinScreen = ({componentId, data}) => {
           }
         }
       })
-      .catch(() => setDisabled(false));
+      .catch(() => {
+        setDisabled(false)
+      });
   }, [CurrencyActive]);
   const onSelectCoin = () => {
-    let data = orderBy(uniqBy(cryptoWallet, 'currency'), ['currency'], ['asc']);
+    let data = orderBy(uniqBy(cryptoWallet, 'symbol'), ['symbol'], ['asc']);
     let propsData = getPropsData(
       data,
-      'image',
-      'currency',
+      'images',
+      'symbol',
       CurrencyActive,
       item => handleActive(item),
     );
@@ -138,38 +143,53 @@ const DepositCoinScreen = ({componentId, data}) => {
       <Layout type="column">
         <View style={stylest.containerQrcode}>
           <QRCode
-            value={get(InfoCurrency, 'cryptoAddress') || '0'}
+            value={get(InfoCurrency, 'cryptoAddress') ||get(InfoCurrency, 'address') || '0'}
             size={170}
           />
         </View>
-        {/* <ItemDepositCoin
-          addressWallet={'Ethereum (ERC 20)'}
-          label={'Mạng lưới'}
-        /> */}
         <ItemDepositCoin
-          addressWallet={get(InfoCurrency, 'cryptoAddress')}
+          addressWallet={get(InfoCurrency, 'cryptoAddress') || get(InfoCurrency, 'address')}
           label={formatMessageByArray('DEPOSIT_ADDRESS'.t(), [CurrencyActive])}
+          onShare={async () => {
+            const shareOptions = {
+              title: 'Share'.t(),
+              failOnCancel: false,
+              message: get(InfoCurrency, 'cryptoAddress'),
+            };
+            try {
+              await Share.open(shareOptions);
+            } catch (error) {
+              console.log('Error =>', error);
+            }
+          }}
         />
-        {/* <ItemDepositCoin addressWallet={'C2f1EfEf36Bf'} label={'Tag'} /> */}
-        {
-                    get(InfoCurrency, "extraFields") && size(get(InfoCurrency, "extraFields")) > 0 && get(InfoCurrency, "extraFields").map((item, index) => {
-                        return (<ItemDepositCoin
-                            key={`key-${index}`}
-                            addressWallet={get(item, "value")}
-                            label={get(item, "name")}
-                             />)
-                    })
-                }
-                <View style={{
-                    borderBottomWidth:1,
-                    borderBottomColor:colors.line
-                }}>
-
-                </View>
+        {get(InfoCurrency, 'extraFields') &&
+          size(get(InfoCurrency, 'extraFields')) > 0 &&
+          get(InfoCurrency, 'extraFields').map((item, index) => {
+            return (
+              <ItemDepositCoin
+                key={`key-${index}`}
+                addressWallet={get(item, 'value')}
+                label={get(item, 'name')}
+                onShare={async () => {
+                  const shareOptions = {
+                    title: 'Share'.t(),
+                    failOnCancel: false,
+                    message: get(item, 'value'),
+                  };
+                  try {
+                    await Share.open(shareOptions);
+                  } catch (error) {
+                    console.log('Error =>', error);
+                  }
+                }}
+              />
+            );
+          })}
         <NoteImportant
           arrNote={[
             'NOTE_HAS_TAG'.t(),
-            formatMessageByArray('COIN_DEPOSIT_WARNING'.t(), ['AIFT']),
+            formatMessageByArray('COIN_DEPOSIT_WARNING'.t(), ['XRP']),
           ]}
         />
       </Layout>
@@ -186,22 +206,25 @@ const ItemDepositCoin = ({onShare, addressWallet = '  ', label}) => {
         }}>
         <TextFnx
           space={10}
-          color={colors.iconButton}
-          value={
-            addressWallet
-              ? `${addressWallet} `
-              : '0xcfe625b9df4070DbcC2f1EfEf36Bf2c302b490955618118'
-          }
+          color={colors.tabbarActive}
+          value={addressWallet ? `${addressWallet} ` : ''}
         />
         <ButtonIcon
           style={stylest.icon}
           size={18}
-          color={colors.iconButton}
+          color={colors.tabbarActive}
           name={'copy'}
           onPress={() => {
             Clipboard.setString(addressWallet);
             toast('COPY_TO_CLIPBOARD'.t());
           }}
+        />
+        <ButtonIcon
+          style={stylest.icon}
+          size={18}
+          color={colors.tabbarActive}
+          name={'share-alt'}
+          onPress={onShare}
         />
       </Layout>
     </Layout>

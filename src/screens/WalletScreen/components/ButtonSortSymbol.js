@@ -1,9 +1,9 @@
 import React from 'react';
-import RN, { Text, View } from 'react-native';
+import RN, { Text, TouchableOpacity, View } from 'react-native';
 import TextFnx from '../../../components/Text/TextFnx';
 import colors from '../../../configs/styles/colors';
 import Icon from '../../../components/Icon';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
+// import { TouchablePreview } from 'react-native-navigation';
 
 const ButtonSortSymbol = ({
     onCheck,
@@ -11,7 +11,7 @@ const ButtonSortSymbol = ({
 }) => {
     
     return (
-        <TouchablePreview
+        <TouchableOpacity
             onPress={onCheck}
         >
             <TextFnx
@@ -20,7 +20,7 @@ const ButtonSortSymbol = ({
                 {"Symbol"}{" "}
                 <Icon name={isCheck ? "arrow-up" : "arrow-down"} />
             </TextFnx>
-        </TouchablePreview>
+        </TouchableOpacity>
     );
 }
 

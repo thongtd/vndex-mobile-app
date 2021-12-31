@@ -30,7 +30,7 @@ const WithdrawCoinScreen = ({
     const cryptoWallet = useSelector(state => state.market.cryptoWallet);
     const [Step, setStep] = useState(step);
     const [InfoCoin, setInfoCoin] = useState(data);
-    const [InfoCoinFull, setInfoCoinFull] = useState(getInfoCoinFull(cryptoWallet, get(InfoCoin, "currency")));
+    const [InfoCoinFull, setInfoCoinFull] = useState(getInfoCoinFull(cryptoWallet, get(InfoCoin, "symbol")));
     const [Amount, setAmount] = useState("");
     const [Address, setAddress] = useState("");
     const currencyList = useSelector(state => state.market.currencyList);
@@ -47,15 +47,15 @@ const WithdrawCoinScreen = ({
     const [RequestId, setRequestId] = useState(requestId);
     const [DataInfo, setDataInfo] = useState(dataInfo);
     const onMax = (InfoCoin) => {
-        setAmount(formatTrunc(currencyList, get(InfoCoin, "available"), get(InfoCoin, "currency")))
-        setDataInfo({ ...DataInfo, amount: { ...DataInfo.amount, value: formatTrunc(currencyList, get(InfoCoin, "available"), get(InfoCoin, "currency")) } })
+        setAmount(formatTrunc(currencyList, get(InfoCoin, "available"), get(InfoCoin, "symbol")))
+        setDataInfo({ ...DataInfo, amount: { ...DataInfo.amount, value: formatTrunc(currencyList, get(InfoCoin, "available"), get(InfoCoin, "symbol")) } })
     }
     const onChangeAmount = (txt) => {
-        setAmount(formatNumberOnChange(currencyList, txt, get(InfoCoin, "currency")))
-        setDataInfo({ ...DataInfo, amount: { ...DataInfo.amount, value: formatNumberOnChange(currencyList, txt, get(InfoCoin, "currency")) } })
+        setAmount(formatNumberOnChange(currencyList, txt, get(InfoCoin, "symbol")))
+        setDataInfo({ ...DataInfo, amount: { ...DataInfo.amount, value: formatNumberOnChange(currencyList, txt, get(InfoCoin, "symbol")) } })
     }
     useEffect(() => {
-        setInfoCoinFull(getInfoCoinFull(cryptoWallet, get(InfoCoin, "currency")));
+        setInfoCoinFull(getInfoCoinFull(cryptoWallet, get(InfoCoin, "symbol")));
     }, [cryptoWallet, InfoCoin]);
     const onChangeAddress = (txt) => {
         setAddress(txt);
@@ -131,8 +131,10 @@ const WithdrawCoinScreen = ({
             fromExtraFields,
             toExtraFields
         }
+        console.log(data,"data req")
         setDisabled(true)
         WalletService.createWithdrawalCoin(data).then(res => {
+            console.log(res,"ress");
             setDisabled(false)
             if (res.status === "OK") {
                 setSessionId(get(res, "data.otpToken.sessionId"));
@@ -141,7 +143,8 @@ const WithdrawCoinScreen = ({
             } else {
                 return toast(res.message)
             }
-        }).catch(() => {
+        }).catch((err) => {
+            console.log(err,"err ress");
             setDisabled(false);
         })
     }
@@ -212,7 +215,7 @@ const WithdrawCoinScreen = ({
     const onCancelWithdraw = ()=>{
         alert("on Cancel");
     }
-    
+    console.log(InfoCoinFull,"InfoCoinFull");
     return (
         <LayoutWithdraw
             onCancelWithdraw={onCancelWithdraw}

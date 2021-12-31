@@ -145,6 +145,7 @@ export const WalletService = {
     createWithdrawalCoin: async (data) => {
         try {
             let response = await httpService.post(EXCHANGE_API.COIN_WITHDRAW_REQUEST, data);
+            console.log(response,"response");
             if (response.status === 200) {
                 if (response.data.code === 1) {
                     return {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TextInput, StyleSheet, Platform } from 'react-native';
+import { Text, View, TextInput, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import Container from '../../../components/Container';
 import Recommended from '../components/Recommend';
 import NoteImportant from '../../../components/Text/NoteImportant';
@@ -11,7 +11,6 @@ import ButtonIcon from '../../../components/Button/ButtonIcon';
 import ItemConfirmDepositFiat from '../components/ItemConfirmDepositFiat';
 import CheckBox from 'react-native-check-box';
 import Icon from '../../../components/Icon';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 import { to_UTCDate, get, toast, formatMessageByArray } from '../../../configs/utils';
 import { pop } from '../../../navigation/Navigation';
 import Image from '../../../components/Image/Image';
@@ -155,7 +154,7 @@ const ConfirmDepositFiatScreen = ({
         />
         {Check &&
             <>
-                <TouchablePreview
+                <TouchableOpacity
                     onPress={onUploadImage}
                 >
                     <Layout
@@ -173,7 +172,7 @@ const ConfirmDepositFiatScreen = ({
                             )}
 
                     </Layout>
-                </TouchablePreview>
+                </TouchableOpacity>
 
                 <TextInput
                     value={Des}

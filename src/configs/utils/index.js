@@ -276,7 +276,7 @@ export function convertToCurr(symbol, currencyConversion, totalAmount, curr) {
 }
 
 export const formatCurrency = (price, code, currencyList) => {
-  let decimal = getDecimal(code, currencyList);
+  let decimal = getDecimal(code, currencyList) || 0;
   return thousandsSeparators(truncate(price, decimal));
 };
 export function thousandsSeparators(x) {

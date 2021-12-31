@@ -16,7 +16,6 @@ export function* asyncGetAssetSumary({ payload }) {
       const marketWatch = yield select(state => state.market.marketWatch);
 
       const res = yield call(WalletService.getAssetSummary, UserId);
-      console.log(res,"ressAssets")
       if (res.result === "ok") {
         if (size(res.data) > 0 && size(marketWatch) > 0 && isArray(marketWatch)) {
           let cryptoWallet = res.data.filter((item, index) => get(item, "walletType") === 2);

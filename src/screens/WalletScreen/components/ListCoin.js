@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import RN, { Text, View, RefreshControl } from 'react-native';
 import _ from "lodash"
-import ItemCoin from './ItemCoin';
+import {ItemCoin} from './ItemCoin';
 import { useDispatch, useSelector } from "react-redux"
 import { get, listenerEventEmitter, createAction, removeEventEmitter, jwtDecode, size } from '../../../configs/utils';
 import { GET_MARKET_WATCH, GET_CURRENCY_LIST, GET_CONVERSION } from '../../../redux/modules/market/actions';
 import { GET_ASSET_SUMARY, GET_COIN_BY_TYPE } from '../../../redux/modules/wallet/actions';
 import Empty from '../../../components/Item/Empty';
+import TextFnx from '../../../components/Text/TextFnx';
 
 const ListCoin = ({
     data,
@@ -23,7 +24,7 @@ const ListCoin = ({
     
     const searchFilterFunction = (text, ArrSrc,log) => {
         const newData = ArrSrc.filter(item => {
-            const itemData = `${log?get(item, "currency").toUpperCase():get(item, "symbol").toUpperCase()}`;
+            const itemData = `${log?get(item, "symbol").toUpperCase():get(item, "symbol").toUpperCase()}`;
             const textData = text.toUpperCase();
             return itemData.indexOf(textData) > -1;
         });
@@ -53,9 +54,9 @@ const ListCoin = ({
             walletType:2
         }))
         jwtDecode().then(user => {
-            if (get(user, "UserId")) {
+            if (get(user, "id")) {
                 dispatcher(createAction(GET_ASSET_SUMARY, {
-                    UserId: get(user, "UserId"),
+                    UserId: get(user, "id"),
                     marketWatch
                 }))
             }
@@ -78,9 +79,9 @@ const ListCoin = ({
             keyExtractor={(item, index) => index.toString()}
             data={Source}
             renderItem={({
-                item
+                item,index
             }) => {
-                return <ItemCoin key={item.symbol} componentId={componentId} item={item} />
+                return <ItemCoin key={index.toString()} componentId={componentId} item={item} />
             }}
         />
     );

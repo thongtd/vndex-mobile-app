@@ -16,7 +16,7 @@ const SearchInput = ({
             <View style={stylest.blockInputSearch}>
                 <TextInput
                     value={Search}
-                    onChangeText={(text)=>{setSearch(text)}}
+                    onChangeText={(text)=>emitEventEmitter('textSearch',text)}
                     style={stylest.inputSearch}
                 />
             </View>
@@ -38,8 +38,7 @@ const stylest = StyleSheet.create({
         height: 35,
         position: "absolute",
         top: -4,
-        width: "100%",
-        color:colors.text
+        width: "100%"
     },
     widthBlock: {
         width: "33%"

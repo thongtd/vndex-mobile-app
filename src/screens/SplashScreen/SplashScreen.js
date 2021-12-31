@@ -24,7 +24,7 @@ const SplashScreen = ({
     const logged = useSelector(state => state.authentication.logged);
     const [UserId, setUserId] = useState("");
     const dispatcher = useDispatch();
-    const UserInfo = useSelector(state => state.authentication.userInfo);
+
     useActionsAuthen().handleGetCountries();
     useActionsMarket().handleGetMarketWatch();
     useActionsMarket().handleGetCurrencyList();
@@ -33,15 +33,21 @@ const SplashScreen = ({
     useActionsMarket().handleGetCryptoWallet(UserId);
     useActionsMarket().handleGetFiatWallet(UserId);
     dispatcher(createAction(GET_WITHDRAW_COIN_LOG,{
-        UserId:get(UserInfo,"id"),
+        UserId,
         pageIndex:1
     }))
-
+    dispatcher(createAction(GET_WITHDRAW_FIAT_LOG,{
+        UserId,
+        pageIndex:1
+    }))
     dispatcher(createAction(GET_DEPOSIT_COIN_LOG,{
-        UserId:get(UserInfo,"id"),
+        UserId,
         pageIndex:1
     }))
-
+    dispatcher(createAction(GET_DEPOSIT_FIAT_LOG,{
+        UserId,
+        pageIndex:1
+    }))
     // dispatcher(createAction(GET_SWAP_ORDERS_BOOK,{
     //     UserId,
     //     pageIndex:1,
@@ -52,9 +58,9 @@ const SplashScreen = ({
     //     status:""
     // }))
     dispatcher(createAction(LANGUAGES, lang));
-    if (size(UserId) > 0) {
+    if (isArray(marketWatch) && size(marketWatch) > 0 && size(UserId) > 0) {
         dispatcher(createAction(GET_ASSET_SUMARY, {
-            UserId:get(UserInfo,"id"),
+            UserId,
             marketWatch
         }))
     }
@@ -67,9 +73,8 @@ const SplashScreen = ({
     }, [lang]);
     useEffect(() => {
         jwtDecode().then(user => {
-            console.log(user,"usersss");
-            if(get(user,"UserId")){
-                setUserId(get(user, "UserId"))
+            if(get(user,"id")){
+                setUserId(get(user, "id"))
             }
             
         })
