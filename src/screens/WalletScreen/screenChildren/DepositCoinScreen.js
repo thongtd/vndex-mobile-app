@@ -59,7 +59,7 @@ const DepositCoinScreen = ({componentId, data}) => {
                       alignItems: 'center',
                     }}>
                     <TextFnx
-                      color={colors.tabbarActive}
+                      color={colors.app.yellowHightlight}
                       size={16}
                       value={'Notice'.t().toUpperCase()}
                       weight="bold"
@@ -73,7 +73,7 @@ const DepositCoinScreen = ({componentId, data}) => {
                     <TextFnx
                       align="center"
                       space={5}
-                      color={colors.text}
+                      color={colors.black}
                       value={get(
                         res,
                         `extraFields[0].localizations.${checkLang(
@@ -84,7 +84,7 @@ const DepositCoinScreen = ({componentId, data}) => {
                     <TextFnx
                       align="center"
                       space={5}
-                      color={colors.tabbarActive}
+                      color={colors.app.yellowHightlight}
                       value={get(
                         res,
                         `extraFields[0].localizations.${checkLang(
