@@ -28,24 +28,25 @@ export const ItemCoin = ({
         <TouchableOpacity
             onPress={logged?onHandleToInfo:()=>{}}
         >
-            <View style={stylest.container}>
+             <View style={stylest.container}>
                 <View style={stylest.itemLeft}>
                     <Image source={{ uri: get(item,"images") }} style={stylest.imgCoin} />
                     <View style={stylest.spacing}>
                         <TextFnx style={stylest.spacingCenter} weight="bold" color={colors.text}>
-                            {logged? get(item,"symbol"):get(item,"symbol")} <TextFnx color={colors.subText} size={13}>({get(item,"name")})</TextFnx>
+                            {logged&& get(item,"symbol")} 
                         </TextFnx>
                         <View style={stylest.lanscape}>
-                            {/* <TextFnx value={get(item,"lastestPrice")?formatCurrency(get(item,"lastestPrice"),"VND",currencyList):0} color={colors.text} /> */}
-                            {/* <TextFnx color={colorPriceChange} value={valuePriceChange} /> */}
+                            <TextFnx size={12} value={get(item,"name")} color={colors.text} />
+                            {/* <TextFnx color={colorPriceChange} value={get(item,"name")} /> */}
                         </View>
                     </View>
                 </View>
                 <View style={stylest.itemRight}>
-                    {logged?<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={formatCurrency(get(item,"available"),get(item,"symbol"),currencyList)} />:<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={"--"} />}
+                    {logged?<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={get(item,"available")} />:<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={"--"} />}
                     {/* {logged?<TextSeparators suffix="VND" color={colors.subText} value={get(item,"lastestPrice")?formatCurrencyFnx((get(item,"available")+get(item,"pending"))*get(item,"lastestPrice"),0):0} />:<TextFnx color={colors.subText} value="--" />} */}
                 </View>
             </View>
+           
         </TouchableOpacity>
 
     );
@@ -56,7 +57,7 @@ const stylest = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         height: 60,
-        borderBottomColor: colors.line,
+        borderBottomColor: colors.app.lineSetting,
         borderBottomWidth: 0.5
     },
     itemLeft: {

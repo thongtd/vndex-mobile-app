@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import ButtonWithTitle from './ButtonWithTitle';
 import colors from '../../configs/styles/colors';
 import I18n from "react-native-i18n"
@@ -36,6 +36,7 @@ const ButtonTypeWallet = ({
 
     );
 }
+var width = Dimensions.get('window').width;
 const stylest = StyleSheet.create({
     button: {
         borderColor: colors.description,
@@ -48,7 +49,7 @@ const stylest = StyleSheet.create({
     activeButton: {
         borderColor: colors.iconButton,
         borderBottomWidth: 2,
-        width: 80,
+        width: width/2-50,
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',

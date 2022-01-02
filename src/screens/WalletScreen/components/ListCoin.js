@@ -17,7 +17,7 @@ const ListCoin = ({
     const logged = useSelector(state=>state.authentication.logged);
     const coinsWalletType = useSelector(state => state.wallet.coinsWalletType);
     const cryptoWallet = useSelector(state => state.market.cryptoWallet);
-    const [Source, setSource] = useState(logged?(isCheck ? data : cryptoWallet): coinsWalletType);
+    const [Source, setSource] = useState(logged?cryptoWallet: coinsWalletType);
     const [Disabled, setDisabled] = useState(false);
     const marketWatch = useSelector(state => state.market.marketWatch);
     const dispatcher = useDispatch();
@@ -32,8 +32,8 @@ const ListCoin = ({
     };
     useEffect(() => {
         if(logged){
-            setSource(isCheck ? data : cryptoWallet);
-            listenerEventEmitter('textSearch', (text) => searchFilterFunction(text, isCheck ? data : cryptoWallet,logged))
+            setSource(cryptoWallet);
+            listenerEventEmitter('textSearch', (text) => searchFilterFunction(text, cryptoWallet,logged))
         }else{
             setSource(coinsWalletType)
             listenerEventEmitter('textSearch', (text) => searchFilterFunction(text,coinsWalletType,logged))
@@ -44,21 +44,18 @@ const ListCoin = ({
     const onRefresh = () => {
         
         setDisabled(true);
-        dispatcher(createAction(GET_MARKET_WATCH));
+        // dispatcher(createAction(GET_MARKET_WATCH));
         dispatcher(createAction(GET_CURRENCY_LIST));
-        dispatcher(createAction(GET_CONVERSION));
-        dispatcher(createAction(GET_COIN_BY_TYPE,{
-            walletType:1
-        }))
-        dispatcher(createAction(GET_COIN_BY_TYPE,{
-            walletType:2
-        }))
+        // dispatcher(createAction(GET_CONVERSION));
+        // dispatcher(createAction(GET_COIN_BY_TYPE,{
+        //     walletType:1
+        // }))
+        // dispatcher(createAction(GET_COIN_BY_TYPE,{
+        //     walletType:2
+        // }))
         jwtDecode().then(user => {
-            if (get(user, "id")) {
-                dispatcher(createAction(GET_ASSET_SUMARY, {
-                    UserId: get(user, "id"),
-                    marketWatch
-                }))
+            if (get(user, "UserId")) {
+                dispatcher(createAction(GET_CRYPTO_WALLET, get(user, "UserId")))
             }
         })
     }

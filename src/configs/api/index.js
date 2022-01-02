@@ -119,7 +119,7 @@ export const XWALLET_API = {
     GET_FIAT_DEPOSIT_LOGS:`${EXCHANGE_URL}api/v1/package/get-fiat-deposit-logs/`,//{accId}/{pageIndex}/{pageSize}
     GET_COIN_DEPOSIT_LOG:`${EXCHANGE_URL}api/v1/package/get-coin-deposit-logs/`,//{accId}/{pageIndex}/{pageSize}
     GET_FIAT_WITHDRAW_LOGS:`${EXCHANGE_URL}api/v1/package/get-fiat-withdrawal-logs/`,//{accId}/{pageIndex}/{pageSize}
-    GET_COIN_WITHDRAW_LOG:`${EXCHANGE_URL}api/v1/package/get-coin-withdrawals-logs`,//{accId}/{pageIndex}/{pageSize}
+    GET_COIN_WITHDRAW_LOG:`${EXCHANGE_URL}api/v1/package/get-coin-withdrawals-logs/`,//{accId}/{pageIndex}/{pageSize}
     GET_COIN_BY_TYPE:`${EXCHANGE_URL}api/v1/package/get-coin-by-type/`,//{WalletType}
     GET_SWAP_ORDER_BOOKS:`${EXCHANGE_URL}api/v1/package/get-swap-order-books/`,//{accId}/{pageIndex}/{pageSize}
 }

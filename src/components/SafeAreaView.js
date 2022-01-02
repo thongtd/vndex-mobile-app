@@ -3,9 +3,9 @@ import { Text, View,SafeAreaView,StyleSheet } from 'react-native';
 
 const SafeAreaViewFnx = ({
     children,
-    style=styles.container
+    style
 }) => (
-    <SafeAreaView style={style}>
+    <SafeAreaView style={[styles.container,style]}>
        {children}
     </SafeAreaView>
 );

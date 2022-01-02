@@ -32,22 +32,7 @@ const SplashScreen = ({
     useActionsMarket().handleGetConfigSwap();
     useActionsMarket().handleGetCryptoWallet(UserId);
     useActionsMarket().handleGetFiatWallet(UserId);
-    dispatcher(createAction(GET_WITHDRAW_COIN_LOG,{
-        UserId,
-        pageIndex:1
-    }))
-    dispatcher(createAction(GET_WITHDRAW_FIAT_LOG,{
-        UserId,
-        pageIndex:1
-    }))
-    dispatcher(createAction(GET_DEPOSIT_COIN_LOG,{
-        UserId,
-        pageIndex:1
-    }))
-    dispatcher(createAction(GET_DEPOSIT_FIAT_LOG,{
-        UserId,
-        pageIndex:1
-    }))
+    
     // dispatcher(createAction(GET_SWAP_ORDERS_BOOK,{
     //     UserId,
     //     pageIndex:1,
@@ -58,12 +43,12 @@ const SplashScreen = ({
     //     status:""
     // }))
     dispatcher(createAction(LANGUAGES, lang));
-    if (isArray(marketWatch) && size(marketWatch) > 0 && size(UserId) > 0) {
-        dispatcher(createAction(GET_ASSET_SUMARY, {
-            UserId,
-            marketWatch
-        }))
-    }
+    // if (isArray(marketWatch) && size(marketWatch) > 0 && size(UserId) > 0) {
+    //     dispatcher(createAction(GET_ASSET_SUMARY, {
+    //         UserId,
+    //         marketWatch
+    //     }))
+    // }
     useEffect(() => {
         i18n.locale = lang;
         const timer = setTimeout(() => {
@@ -73,8 +58,25 @@ const SplashScreen = ({
     }, [lang]);
     useEffect(() => {
         jwtDecode().then(user => {
-            if(get(user,"id")){
-                setUserId(get(user, "id"))
+            console.log(user,"userrr");
+            if(get(user,"UserId")){
+                setUserId(get(user, "UserId"))
+                dispatcher(createAction(GET_WITHDRAW_COIN_LOG,{
+                    UserId:get(user, "UserId"),
+                    pageIndex:1
+                }))
+                dispatcher(createAction(GET_WITHDRAW_FIAT_LOG,{
+                    UserId:get(user, "UserId"),
+                    pageIndex:1
+                }))
+                dispatcher(createAction(GET_DEPOSIT_COIN_LOG,{
+                    UserId:get(user, "UserId"),
+                    pageIndex:1
+                }))
+                dispatcher(createAction(GET_DEPOSIT_FIAT_LOG,{
+                    UserId:get(user, "UserId"),
+                    pageIndex:1
+                }))
             }
             
         })
