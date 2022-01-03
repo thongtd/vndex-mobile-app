@@ -205,7 +205,7 @@ export function pushTabBasedApp(currenIndex = 0) {
           Tabbar(
             HOME_SCREEN,
             require('assets/icons/Home.png'),
-            'HOME'.t(),
+            'P2P',
             IdNavigation.Home.menu,
           ),
           Tabbar(
