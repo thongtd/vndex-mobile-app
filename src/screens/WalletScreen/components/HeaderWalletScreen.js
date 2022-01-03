@@ -73,14 +73,13 @@ const HeaderWalletScreen = ({componentId}) => {
     <TopBarWallet>
       <View
         style={{
-          justifyContent: 'center',
-          alignItems: 'center',
           flex: 1,
+          padding:30
         }}>
-        <TextFnx weight="bold" size={16} color={colors.iconButton}>
+        <TextFnx weight="500" size={20} color={colors.iconButton}>
           Số dư token
         </TextFnx>
-        <TextFnx spaceTop={8} color={colors.buy} size={30}>
+        <TextFnx weight='700' spaceTop={8} color={colors.text} size={30}>
           {TotalValue}
         </TextFnx>
       </View>
