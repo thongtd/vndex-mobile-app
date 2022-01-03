@@ -102,6 +102,7 @@ const RefScreen = ({componentId}) => {
       title={'Refferal'}
       isLoadding={loading}
       space={20}
+      isScroll
       // nameRight={"search"}
       // nameLeft={"bars"}
       // typeLeft={constant.TYPE_ICON.AntDesign}

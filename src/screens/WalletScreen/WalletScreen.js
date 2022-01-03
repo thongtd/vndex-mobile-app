@@ -171,8 +171,20 @@ const WalletScreen = ({componentId}) => {
       isTopBar={false}
       customTopBar={<HeaderWalletScreen componentId={componentId} />}>
       <SignalRService />
-      <Button
-        spaceVertical={20}
+     <View style={{
+       flexDirection:"row",
+       paddingBottom:20,
+       marginTop:-30
+     }}>
+       <View style={{
+         flex:0.5
+       }}>
+
+       </View>
+       <View style={{
+         flex:1.5
+       }}>
+       <Button
         isReverse
         onSubmit={() => onSelectCoin(false)}
         onClose={() => onSelectCoin(true)}
@@ -185,6 +197,8 @@ const WalletScreen = ({componentId}) => {
         iconLeftSubmit={<WithdrawSvg />}
         iconLeftClose={<DepsitSvg />}
       />
+       </View>
+     </View>
       <View style={{
           backgroundColor:colors.app.backgroundLevel2,
           marginHorizontal:-spacingApp,
