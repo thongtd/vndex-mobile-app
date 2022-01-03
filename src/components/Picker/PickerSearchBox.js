@@ -49,6 +49,7 @@ const PickerSearchBox = ({
           style={{
             height: hasNotch ? 100 : StatusBar.currentHeight > 24 ? 95 : 75,
             paddingTop: isAndroid() && StatusBar.currentHeight > 24 ? 35 : 25,
+           
           }}>
           <SafeAreaViewFnx>
             <LayoutSpaceHorizontal space={15}>
@@ -58,6 +59,7 @@ const PickerSearchBox = ({
                   height: 40,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  
                 }}
                 nameIconLeft="search"
                 isIconLeft

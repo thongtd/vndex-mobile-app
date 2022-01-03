@@ -23,64 +23,67 @@ import {
 } from '../../../navigation';
 const HeaderWalletScreen = ({componentId}) => {
   const logged = useSelector(state => state.authentication.logged);
-  const cryptos = useSelector(state => state.wallet.cryptoWallet);
+  const cryptos = useSelector(state => state.market.cryptoWallet);
   const fiats = useSelector(state => state.wallet.fiatsWallet);
   const conversion = useSelector(state => state.market.conversion);
   const currencyList = useSelector(state => state.market.currencyList);
   const [TotalValue, setTotalValue] = useState(0);
-  //   const marketWatch = useSelector(state => state.market.marketWatch);
-  //   var curr = 'VND';
-  //   useEffect(() => {
-  //     if (
-  //       isArray(cryptos) &&
-  //       size(cryptos) > 0
-  //     ) {
-  //       calculateAsset(cryptos, fiats);
-  //       // console.log(marketWatch,"marketWatchmarketWatch")
-  //     }
-  //   }, [cryptos, fiats, marketWatch]);
-  //   const calculateAsset = async (cryptos, fiats) => {
-  //     var totalCryptoValue = 0;
-  //     var totalFiatValue = 0;
+  const marketWatch = useSelector(state => state.market.marketWatch);
+  var curr = 'VND';
+  useEffect(() => {
+    if (
+      isArray(cryptos) &&
+      size(cryptos) > 0
+    ) {
+      calculateAsset(cryptos, fiats);
+      // console.log(marketWatch,"marketWatchmarketWatch")
+    }
+  }, [cryptos, fiats, marketWatch]);
+  const calculateAsset = async (cryptos, fiats) => {
+    var totalCryptoValue = 0;
+    var totalFiatValue = 0;
 
-  //     for (let i = 0; i <= size(cryptos); i++) {
-  //       if (get(cryptos[i], 'lastestPrice')) {
-  //         totalCryptoValue += formatCurrencyFnx(
-  //           (get(cryptos[i], 'available') + get(cryptos[i], 'pending')) *
-  //             get(cryptos[i], 'lastestPrice'),
-  //           0,
-  //         ).str2Number();
-  //       }
-  //     }
+    for (let i = 0; i <= size(cryptos); i++) {
+      if (get(cryptos[i], 'available')) {
+        totalCryptoValue += get(cryptos[i], 'available');
+      }
+        // formatCurrencyFnx(
+        //   (get(cryptos[i], 'available') + get(cryptos[i], 'pending')) *
+        //     get(cryptos[i], 'lastestPrice'),
+        //   0,
+        // ).str2Number();
+    //   }
+    }
 
-  //     for (let j = 0; j <= size(fiats); j++) {
-  //       if (get(fiats[j], 'currency') === curr) {
-  //         totalFiatValue += get(fiats[j], 'totalAmount');
-  //       } else {
-  //         totalFiatValue += convertToCurr(
-  //           get(fiats[j], 'currency'),
-  //           conversion,
-  //           get(fiats[j], 'totalAmount'),
-  //           curr,
-  //         );
-  //       }
-  //     }
-  //     setTotalValue(totalFiatValue + totalCryptoValue);
-  //   };
+    // for (let j = 0; j <= size(fiats); j++) {
+    //   if (get(fiats[j], 'currency') === curr) {
+    //     totalFiatValue += get(fiats[j], 'totalAmount');
+    //   } else {
+    //     totalFiatValue += convertToCurr(
+    //       get(fiats[j], 'currency'),
+    //       conversion,
+    //       get(fiats[j], 'totalAmount'),
+    //       curr,
+    //     );
+    //   }
+    // }
+    setTotalValue(totalCryptoValue);
+  };
   return (
     <TopBarWallet>
-     <View style={{
-         justifyContent:"center",
-         alignItems:"center",
-         flex:1
-     }}>
-     <TextFnx weight="bold" size={16} color={colors.iconButton}>
-        Số dư token
-      </TextFnx>
-      <TextFnx spaceTop={8} color={colors.buy} size={30}>
-        0
-      </TextFnx>
-     </View>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+        }}>
+        <TextFnx weight="bold" size={16} color={colors.iconButton}>
+          Số dư token
+        </TextFnx>
+        <TextFnx spaceTop={8} color={colors.buy} size={30}>
+          {TotalValue}
+        </TextFnx>
+      </View>
     </TopBarWallet>
   );
 };

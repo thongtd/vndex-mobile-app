@@ -4,10 +4,10 @@ import { View } from 'react-native';
 const LayoutSpaceHorizontal = ({
     children,
     space,
-    style={paddingHorizontal: space,flex:1},
+    style,
     ...rest
 }) => (
-        <View style={style}>
+        <View style={[{paddingHorizontal: space,flex:1},style]}>
             {children}
         </View>
     );

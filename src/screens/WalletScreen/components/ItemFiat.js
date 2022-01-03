@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+
 import PropTypes from 'prop-types';
 import colors from '../../../configs/styles/colors';
 import TextSeparators from '../../../components/Text/TextSeparators';
@@ -19,7 +19,7 @@ const ItemFiat = ({
     }
     const currencyList = useSelector(state => state.market.currencyList)
     return (
-        <TouchablePreview
+        <TouchableOpacity
             onPress={logged?onHandleToInfo:()=>{}}
         >
             <View style={stylest.container}>
@@ -30,7 +30,7 @@ const ItemFiat = ({
                 </View>
                 {logged?<TextSeparators color={colors.text} value={formatCurrency(get(item,"available"),get(item,"currency"),currencyList)} />:<TextFnx color={colors.text} value={"--"} />}
             </View>
-        </TouchablePreview>
+        </TouchableOpacity>
     );
 }
 const stylest = StyleSheet.create({

@@ -16,7 +16,6 @@ export function* asyncGetAssetSumary({ payload }) {
       const marketWatch = yield select(state => state.market.marketWatch);
 
       const res = yield call(WalletService.getAssetSummary, UserId);
-      console.log(res,"ressAssets")
       if (res.result === "ok") {
         if (size(res.data) > 0 && size(marketWatch) > 0 && isArray(marketWatch)) {
           let cryptoWallet = res.data.filter((item, index) => get(item, "walletType") === 2);
@@ -125,6 +124,7 @@ export function* asyncGetDepositCoinLog({ payload }) {
             yield put(actionsReducerWallet.getDepositCoinsSuccess(get(res, "data")));
           }
         } else {
+          emitEventEmitter("stopDCoinLog", true)
           yield put(actionsReducerWallet.getDepositCoinsSuccess([]));
           yield put(createAction("GET_COIN_DEPOSIT_LOG_LOAD_MORE", { data: [], pageIndex }));
         }
@@ -151,6 +151,7 @@ export function* asyncGetDepositFiatLog({ payload }) {
           if (loadMore) {
             yield put(createAction("GET_FIAT_DEPOSIT_LOG_LOAD_MORE", { data: get(res, "data"), pageIndex }));
           } else {
+            emitEventEmitter("stopDCoinLog", true)
             yield put(createAction("GET_FIAT_DEPOSIT_LOG_LOAD_MORE", { data: get(res, "data"), pageIndex }));
             yield put(actionsReducerWallet.getDepositFiatsSuccess(get(res, "data")));
           }
@@ -197,6 +198,7 @@ function* asyncGetBalanceByCurrency({ payload }) {
     if (payload) {
       const { UserId, currency } = payload;
       const res = yield call(WalletService.getWalletBalanceByCurrency, UserId, currency);
+      console.log(res,"getWalletBalanceByCurrency");
       if (res) {
         yield put(actionsReducerWallet.getBalanceByCurrencySuccess(res));
       } else {

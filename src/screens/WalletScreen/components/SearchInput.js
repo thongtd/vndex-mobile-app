@@ -3,7 +3,8 @@ import { Text, View, TextInput, StyleSheet,Platform } from 'react-native';
 import colors from '../../../configs/styles/colors';
 import Icon from '../../../components/Icon';
 import { emitEventEmitter, listenerEventEmitter } from '../../../configs/utils';
-
+import Input from '../../../components/Input';
+import SearchIc from "assets/svg/ic_search.svg";
 const SearchInput = ({
     
 }) => {
@@ -12,16 +13,22 @@ const SearchInput = ({
         listenerEventEmitter("textSearch",(text)=>setSearch(text))
     }, [])
     return (
-        <View style={stylest.widthBlock}>
-            <View style={stylest.blockInputSearch}>
-                <TextInput
-                    value={Search}
-                    onChangeText={(text)=>{setSearch(text)}}
-                    style={stylest.inputSearch}
-                />
-            </View>
-            <Icon style={stylest.iconSearch} name="search" color={colors.iconButton} />
-        </View>
+        <Input 
+        placeholder='Nhập từ khoá'
+        isIconLeft
+        onChangeText={(text)=>emitEventEmitter('textSearch',text)}
+        iconComponentLeft={<SearchIc />}
+        />
+        // <View style={stylest.widthBlock}>
+        //     <View style={stylest.blockInputSearch}>
+        //         <TextInput
+        //             value={Search}
+        //             onChangeText={(text)=>emitEventEmitter('textSearch',text)}
+        //             style={stylest.inputSearch}
+        //         />
+        //     </View>
+        //     <Icon style={stylest.iconSearch} name="search" color={colors.iconButton} />
+        // </View>
     );
 }
 const stylest = StyleSheet.create({
@@ -38,8 +45,7 @@ const stylest = StyleSheet.create({
         height: 35,
         position: "absolute",
         top: -4,
-        width: "100%",
-        color:colors.text
+        width: "100%"
     },
     widthBlock: {
         width: "33%"

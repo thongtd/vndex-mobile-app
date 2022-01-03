@@ -7,7 +7,7 @@ import ButtonIcon from './Button/ButtonIcon';
 import RenderItem from './RenderItem';
 import PropTypes from 'prop-types';
 import TextWhite from './Text/TextWhite';
-import {constant} from '../configs/constant';
+import {constant, spacingApp} from '../configs/constant';
 
 const TopBarWallet = ({
   children,
@@ -36,8 +36,10 @@ const stylest = StyleSheet.create({
     alignItems: 'flex-end',
   },
   container: {
-    height: 120,
-    overflow: 'hidden',
+    height: 182,
+    paddingHorizontal:spacingApp,
+    backgroundColor:colors.app.backgroundLevel1
+    // overflow: 'hidden',
   },
   blockFeature: {
     flexDirection: 'row',

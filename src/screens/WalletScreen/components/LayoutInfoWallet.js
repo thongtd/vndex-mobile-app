@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
+  TouchableOpacity,
   Text,
   View,
   StyleSheet,
@@ -15,7 +16,7 @@ import {
   dismissAllModal,
   pushSingleScreenApp,
 } from '../../../navigation/Navigation';
-import {constant, IdNavigation} from '../../../configs/constant';
+import {constant, fontSize, spacingApp} from '../../../configs/constant';
 import Container from '../../../components/Container';
 import HeaderWalletScreen from './HeaderWalletScreen';
 import Layout from '../../../components/Layout/Layout';
@@ -42,7 +43,6 @@ import {
 } from '../../../configs/utils';
 import colors from '../../../configs/styles/colors';
 import icons from '../../../configs/icons';
-import {TouchablePreview} from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 import ButtonTypeWallet from '../../../components/Button/ButtonTypeWallet';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon';
@@ -69,7 +69,6 @@ import {
   WITHDRAW_COIN_SCREEN,
   WITHDRAW_FIAT_SCREEN,
   TRANSACTION_HISTORY,
-  ALERT_NOTICE_PASSWORD,
 } from '../../../navigation';
 import {authService} from '../../../services/authentication.service';
 import {WalletService} from '../../../services/wallet.service';
@@ -77,22 +76,18 @@ import ItemList from '../../../components/Item/ItemList';
 import FilterHistorySwapScreen from '../../SwapScreen/childrensScreens/FilterHistorySwapScreen';
 import DepsitSvg from 'assets/svg/deposit.svg';
 import WithdrawSvg from 'assets/svg/withdraw.svg';
-import { Navigation } from 'react-native-navigation';
-
 const LayoutInfoWallet = ({
   componentId,
   item,
   isCoinData,
   isHistoryTransaction,
-  title
 }) => {
   const lang = useSelector(state => state.authentication.lang);
   const logged = useSelector(state => state.authentication.logged);
   const [IsActive, setIsActive] = useState('C');
-  const cryptoWallet = useSelector(state => state.wallet.cryptoWallet);
+  const cryptoWallet = useSelector(state => state.market.cryptoWallet);
   const fiatsWallet = useSelector(state => state.wallet.fiatsWallet);
   const [InfoCoin, setInfoCoin] = useState(item);
-  
   const currencyList = useSelector(state => state.market.currencyList);
   const coinWithdrawLog = useSelector(state => state.wallet.coinWithdrawLog);
   const coinDepositLog = useSelector(state => state.wallet.coinDepositLog);
@@ -122,47 +117,32 @@ const LayoutInfoWallet = ({
   const [UserSub, setUserSub] = useState('');
   const [InfoCurrency, setInfoCurrency] = useState('');
   const [HiddenShow, setHiddenShow] = useState(false);
-  const [Page, setPage] = useState(1);
+  const [Page, setPage] = useState(0);
   const [Loading, setLoading] = useState(false);
+  const [Stop, setStop] = useState(false);
   const [InfoDataSearch, setInfoDataSearch] = useState('');
   // var Page = 1;
   // const [Item, setItem] = useState(item)
-  // useEffect(() => {
-  //   // console.log(get(InfoCoin,"pending"), 'fiatWithdrawLog');
+  useEffect(() => {
+    console.log(fiatWithdrawLog, 'fiatWithdrawLog');
 
-  //   if (isCoin && IsActive === 'C') {
-  //     setSource(coinDepositLog);
-  //   } else if (isCoin && IsActive === 'F') {
-  //     setSource(coinWithdrawLog);
-  //   } else if (!isCoin && IsActive === 'C') {
-  //     setSource(fiatDepositLog);
-  //   } else if (!isCoin && IsActive === 'F') {
-  //     setSource(fiatWithdrawLog);
-  //   }
-  // }, [
-  //   isHistoryTransaction,
-  //   coinDepositLogLoadMore,
-  //   coinWithdrawLog,
-  //   coinDepositLog,
-  //   fiatDepositLog,
-  //   fiatWithdrawLog,
-  //   IsActive,
-  //   isCoin,
-  // ]);
-  
-  useEffect(() => {
-    const navigationButtonEventListener = Navigation.events().registerNavigationButtonPressedListener(({ buttonId }) => {
-      if(buttonId == IdNavigation.PressIn.filterTransaction){
-        console.log(buttonId,"buttonId2");
-        showModal(ALERT_NOTICE_PASSWORD);
-      }
-    });
-    return () => {
-      navigationButtonEventListener.remove();
+    if (isCoin && IsActive === 'C') {
+      setSource(coinDepositLog);
+    } else if (isCoin && IsActive === 'F') {
+      setSource(coinWithdrawLog);
     }
-  }, [])
+  }, [
+    isHistoryTransaction,
+    coinDepositLogLoadMore,
+    coinWithdrawLog,
+    coinDepositLog,
+    fiatDepositLog,
+    fiatWithdrawLog,
+    IsActive,
+    isCoin,
+  ]);
   useEffect(() => {
-    // dispatcher(createAction(GET_BALANCE_BY_CURRENCY_SUCCESS, {}));
+    dispatcher(createAction(GET_BALANCE_BY_CURRENCY_SUCCESS, {}));
     WalletService.getWalletBalanceByCurrency(
       get(UserInfo, 'id'),
       CurrencyActive,
@@ -174,40 +154,35 @@ const LayoutInfoWallet = ({
     onRefresh();
     setPage(1);
     setInfoDataSearch('');
+    setStop(false);
+    setLoading(true);
+    setSource([]);
   }, [IsActive]);
-  // useEffect(() => {
-  //   if (isArray(cryptoWallet) && size(cryptoWallet) > 0) {
-  //     let cryptoFilter = cryptoWallet.filter(
-  //       (crypto, index) => get(crypto, 'currency') == get(InfoCoin, 'currency'),
-  //     );
-  //     if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
-  //       setInfoCoin(cryptoFilter[0]);
-  //       setCurrencyActive(get(cryptoFilter[0], 'currency'));
-  //     }
-  //   }
-  //   if (isArray(fiatsWallet) && size(fiatsWallet) > 0) {
-  //     let cryptoFilter = fiatsWallet.filter(
-  //       (crypto, index) => get(crypto, 'currency') == get(InfoCoin, 'currency'),
-  //     );
-  //     if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
-  //       setInfoCoin(cryptoFilter[0]);
-  //       setCurrencyActive(get(cryptoFilter[0], 'currency'));
-  //     }
-  //   }
-  // }, [cryptoWallet, fiatsWallet]);
+  useEffect(() => {
+    if (isArray(cryptoWallet) && size(cryptoWallet) > 0) {
+      let cryptoFilter = cryptoWallet.filter(
+        (crypto, index) => get(crypto, 'symbol') == get(InfoCoin, 'symbol'),
+      );
+      if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
+        setInfoCoin(cryptoFilter[0]);
+        setCurrencyActive(get(cryptoFilter[0], 'symbol'));
+      }
+    }
+  }, [cryptoWallet]);
 
   const onRefresh = (loadMore = false) => {
     // setDisabled(true);
     dispatcher(
       createAction(GET_WITHDRAW_COIN_LOG, {
-        UserId:get(UserInfo, 'id'),
+        UserId,
         pageIndex: 1,
         loadMore: loadMore,
       }),
     );
+
     dispatcher(
       createAction(GET_DEPOSIT_COIN_LOG, {
-        UserId:get(UserInfo, 'id'),
+        UserId,
         pageIndex: 1,
         loadMore: loadMore,
       }),
@@ -215,243 +190,277 @@ const LayoutInfoWallet = ({
   };
 
   useEffect(() => {
-    jwtDecode().then(user => {
-      if (get(user, 'UserId')) {
-        setUserId(get(user, 'UserId'));
-        setUserSub(get(user, 'Username'));
-      }
+    setUserId(get(UserInfo, 'id'));
+    setUserSub(get(UserInfo, 'email'));
+
+    listenerEventEmitter('doneWCoinLog', () => {
+      setDisabled(false);
+      setLoading(false);
+    });
+    listenerEventEmitter('doneDFiatLog', () => {
+      setLoading(false);
+      setDisabled(false);
+    });
+    listenerEventEmitter('doneDCoinLog', () => {
+      console.log('done Dcoin Log');
+      setLoading(false);
+      setDisabled(false);
+    });
+    listenerEventEmitter('stopDCoinLog', () => {
+      console.log('stopDCoinLog Dcoin Log');
+      setLoading(false);
+      setDisabled(false);
+      setStop(true);
+    });
+    listenerEventEmitter('doneWFiatLog', () => {
+      setLoading(false);
+      setDisabled(false);
     });
   }, []);
-  // useEffect(() => {
-  //   // listenerEventEmitter('pushData', (data) => {
 
-  //   //     let SourceData = [...Source,...data]
-  //   //     console.log(SourceData,"dataPush");
-  //   //     setLoading(false);
-  //   //     setSource(SourceData)
-  //   // })
-  //   return () => {
-  //     removeEventEmitter('pushData');
-  //   };
-  // }, [Source]);
+  useEffect(() => {
+    // listenerEventEmitter('pushData', (data) => {
+
+    //     let SourceData = [...Source,...data]
+    //     console.log(SourceData,"dataPush");
+    //     setLoading(false);
+    //     setSource(SourceData)
+    // })
+    return () => {
+      removeEventEmitter('pushData');
+    };
+  }, [Source]);
   const onCancel = (data, rowMap) => {
     var passProps;
     var sessionId;
     var verifyCode;
-    
-      var dataSubmit = {
-        sessionId,
-        verifyCode,
-        accId: get(UserInfo, 'id'),
-        requestId: '',
+
+    var dataSubmit = {
+      sessionId,
+      verifyCode,
+      accId: UserId,
+      requestId: '',
+    };
+    if (
+      twoFactorEnable &&
+      twoFactorySerice === constant.TWO_FACTOR_TYPE.GG2FA
+    ) {
+      passProps = {
+        placeholder: '2FA_CODE'.t(),
+        isResend: false,
+        isIconLeft: false,
+        title: 'Cancel',
+        textFirst: 'Please enter 2FA code'.t(),
       };
-      if (
-        twoFactorEnable &&
-        twoFactorySerice === constant.TWO_FACTOR_TYPE.GG2FA
-      ) {
-        passProps = {
-          placeholder: '2FA_CODE'.t(),
-          isResend: false,
-          isIconLeft: false,
-          title: 'Cancel',
-          textFirst: 'Please enter 2FA code'.t(),
-        };
-      } else if (
-        twoFactorEnable &&
-        twoFactorySerice === constant.TWO_FACTOR_TYPE.EMAIL_2FA
-      ) {
-        passProps = {
-          onChangeText: text => {
-            verifyCode = text;
-          },
-          onSubmit: () => {
-            set(dataSubmit, 'verifyCode', verifyCode);
-            set(dataSubmit, 'sessionId', sessionId);
-            set(dataSubmit, 'requestId', get(data, 'item.id'));
-            WalletService.cancelWithdrawCoin(dataSubmit).then(res => {
-              if (res) {
-                if (get(res, 'status')) {
-                  return toast(get(res, 'message'));
-                } else {
-                  return toast(get(res, 'message'));
-                }
+    } else if (
+      twoFactorEnable &&
+      twoFactorySerice === constant.TWO_FACTOR_TYPE.EMAIL_2FA
+    ) {
+      passProps = {
+        onChangeText: text => {
+          verifyCode = text;
+        },
+        onSubmit: () => {
+          set(dataSubmit, 'verifyCode', verifyCode);
+          set(dataSubmit, 'sessionId', sessionId);
+          set(dataSubmit, 'requestId', get(data, 'item.id'));
+          WalletService.cancelWithdrawCoin(dataSubmit).then(res => {
+            console.log(dataSubmit, res, 'reas');
+            if (res) {
+              if (get(res, 'status')) {
+                return toast(get(res, 'message'));
               } else {
                 return toast(get(res, 'message'));
               }
-            });
-            // console.log(dataSubmit,"dataSubmit");
-          },
-          placeholder: '2FA_CODE'.t(),
-          isResend: true,
-          isIconLeft: true,
-          onResend: () => {
-            authService.getTwoFactorEmailCode(UserSub).then(res => {
-              sessionId = get(res, 'data.sessionId');
-            });
-          },
-          title: 'Cancel',
-          textFirst: `${'The 2fa code has been sent to email'.t()} ${UserSub}`,
-        };
-      } else {
-        rowMap[data.index].closeRow();
-        return toast('Please enable 2FA code'.t());
-      }
-      showModal(MODAL_ALERT, passProps, true);
-    
+            } else {
+              return toast(get(res, 'message'));
+            }
+          });
+          // console.log(dataSubmit,"dataSubmit");
+        },
+        placeholder: '2FA_CODE'.t(),
+        isResend: true,
+        isIconLeft: true,
+        onResend: () => {
+          authService.getTwoFactorEmailCode(UserSub).then(res => {
+            sessionId = get(res, 'data.sessionId');
+            // console.log(res,"val ka")
+          });
+        },
+        title: 'Cancel',
+        textFirst: `${'The 2fa code has been sent to email'.t()} ${UserSub}`,
+      };
+    } else {
+      rowMap[data.index].closeRow();
+      return toast('Please enable 2FA code'.t());
+    }
+    showModal(MODAL_ALERT, passProps, true);
 
     rowMap[data.index].closeRow();
   };
-  // const onSelectCoin = () => {
-  //   if (isCoin) {
-  //     let data = orderBy(
-  //       uniqBy(cryptoWallet, 'currency'),
-  //       ['currency'],
-  //       ['asc'],
-  //     );
-  //     let propsData = getPropData(
-  //       data,
-  //       'image',
-  //       'currency',
-  //       CurrencyActive,
-  //       item => handleActive(item),
-  //     );
-  //     showModal(PICKER_SEARCH, propsData);
-  //   } else {
-  //     let data = orderBy(
-  //       uniqBy(fiatsWallet, 'currency'),
-  //       ['currency'],
-  //       ['asc'],
-  //     );
-  //     let propsData = getPropData(
-  //       data,
-  //       'image',
-  //       'currency',
-  //       CurrencyActive,
-  //       item => handleActive(item),
-  //     );
-  //     showModal(PICKER_SEARCH, propsData);
-  //   }
-  // };
-  // const handleActive = item => {
-  //   setCurrencyActive(get(item, 'currency'));
-  //   setInfoCoin(item);
-  //   dismissAllModal();
-  // };
+  const onSelectCoin = () => {
+    if (isCoin) {
+      let data = orderBy(
+        uniqBy(cryptoWallet, 'currency'),
+        ['currency'],
+        ['asc'],
+      );
+      let propsData = getPropData(
+        data,
+        'image',
+        'symbol',
+        CurrencyActive,
+        item => handleActive(item),
+      );
+      showModal(PICKER_SEARCH, propsData);
+    } else {
+      let data = orderBy(
+        uniqBy(fiatsWallet, 'currency'),
+        ['currency'],
+        ['asc'],
+      );
+      let propsData = getPropData(
+        data,
+        'image',
+        'symbol',
+        CurrencyActive,
+        item => handleActive(item),
+      );
+      showModal(PICKER_SEARCH, propsData);
+    }
+  };
+  const handleActive = item => {
+    setCurrencyActive(get(item, 'symbol'));
+    setInfoCoin(item);
+    dismissAllModal();
+  };
   const onDeposit = InfoCoin => {
-    pushSingleScreenApp(componentId, DEPOSIT_COIN_SCREEN, {
-      data: InfoCoin,
-    });
+    if (isCoin) {
+      pushSingleScreenApp(componentId, DEPOSIT_COIN_SCREEN, {
+        data: InfoCoin,
+      });
+    } else {
+      pushSingleScreenApp(componentId, DEPOSIT_FIAT_SCREEN, {
+        data: InfoCoin,
+      });
+    }
   };
-  const onWithdraw = (InfoCoin) => {
-    pushSingleScreenApp(componentId, WITHDRAW_COIN_SCREEN, {
-      data: InfoCoin,
-    });
+  const onWithdraw = () => {
+    if (isCoin) {
+      pushSingleScreenApp(componentId, WITHDRAW_COIN_SCREEN, {
+        data: InfoCoin,
+      });
+    } else {
+      pushSingleScreenApp(componentId, WITHDRAW_FIAT_SCREEN, {
+        data: InfoCoin,
+      });
+    }
   };
-  // const onHistory = item => {
-  //   if (isCoin && IsActive === 'C') {
-  //     pushSingleScreenApp(componentId, HISTORY_DEPOSIT_COIN_SCREEN, {
-  //       data: item,
-  //     });
-  //   } else if (!isCoin && IsActive === 'C') {
-  //     pushSingleScreenApp(componentId, HISTORY_DEPOSIT_FIAT_SCREEN, {
-  //       InfoBank: item,
-  //     });
-  //   } else if (isCoin && IsActive === 'F') {
-  //     var extraData = {};
+  const onHistory = item => {
+    if (isCoin && IsActive === 'C') {
+      pushSingleScreenApp(componentId, HISTORY_DEPOSIT_COIN_SCREEN, {
+        data: item,
+      });
+    } else if (!isCoin && IsActive === 'C') {
+      pushSingleScreenApp(componentId, HISTORY_DEPOSIT_FIAT_SCREEN, {
+        InfoBank: item,
+      });
+    } else if (isCoin && IsActive === 'F') {
+      var extraData = {};
 
-  //     if (
-  //       isArray(get(item, 'toExtraFields')) &&
-  //       size(get(item, 'toExtraFields'))
-  //     ) {
-  //       get(item, 'toExtraFields').map((extra, index) => {
-  //         if (get(extra, 'value')) {
-  //           let fieldName = get(
-  //             extra,
-  //             `localizations.${checkLang(lang)}.FieldName`,
-  //           );
-  //           set(extraData, fieldName, {
-  //             title: fieldName,
-  //             value: get(extra, 'value'),
-  //           });
-  //         }
-  //       });
-  //     }
-  //     pushSingleScreenApp(componentId, WITHDRAW_COIN_SCREEN, {
-  //       step: CheckStepStatus(get(item, 'statusLable')),
-  //       data: item,
-  //       dataInfo: {
-  //         amount: {
-  //           title: 'AMOUNT'.t(),
-  //           value: formatTrunc(
-  //             currencyList,
-  //             get(item, 'amount'),
-  //             get(item, 'currency'),
-  //           ),
-  //         },
-  //         address: {
-  //           title: 'RECEIVED_ADDRESS'.t(),
-  //           value: get(item, 'toAddress'),
-  //         },
-  //         ...extraData,
-  //       },
-  //       isHistory: true,
-  //       requestId: get(item, 'id'),
-  //     });
-  //   } else {
-  //     pushSingleScreenApp(componentId, WITHDRAW_FIAT_SCREEN, {
-  //       step: CheckStepStatus(get(item, 'statusLable')),
-  //       data: {...item, currency: get(item, 'walletCurrency')},
-  //       dataInfo: {
-  //         amount: {
-  //           title: 'AMOUNT'.t(),
-  //           value: formatTrunc(
-  //             currencyList,
-  //             get(item, 'amount'),
-  //             get(item, 'currency'),
-  //           ),
-  //         },
-  //         bank: {
-  //           title: 'BANK_NAME'.t(),
-  //           value: get(item, 'bankName'),
-  //         },
-  //         branch: {
-  //           title: 'BRACH_NAME'.t(),
-  //           value: get(item, 'bankBranchName'),
-  //         },
-  //         nameBankAccount: {
-  //           title: 'RECEIVING_BANK_ACCOUNT_NAME'.t(),
-  //           value: get(item, 'bankAccountName'),
-  //         },
-  //         numberBankAccount: {
-  //           title: 'RECEIVING_BANK_ACCOUNT_NO'.t(),
-  //           value: get(item, 'bankAccountNo'),
-  //         },
-  //         amount: {
-  //           title: 'AMOUNT'.t(),
-  //           value: formatTrunc(
-  //             currencyList,
-  //             get(item, 'amount'),
-  //             get(item, 'currency'),
-  //           ),
-  //         },
-  //       },
-  //       isHistory: true,
-  //       requestId: get(item, 'id'),
-  //     });
-  //   }
-  // };
-  // const renderFooter = () => {
-  //   if (!Loading) return null;
-  //   return <ActivityIndicator style={{color: '#000'}} />;
-  // };
-  // const handleLoadMore = () => {
-  //   console.log(Page, 'cuoi');
+      if (
+        isArray(get(item, 'toExtraFields')) &&
+        size(get(item, 'toExtraFields'))
+      ) {
+        get(item, 'toExtraFields').map((extra, index) => {
+          if (get(extra, 'value')) {
+            let fieldName = get(
+              extra,
+              `localizations.${checkLang(lang)}.FieldName`,
+            );
+            set(extraData, fieldName, {
+              title: fieldName,
+              value: get(extra, 'value'),
+            });
+          }
+        });
+      }
+      pushSingleScreenApp(componentId, WITHDRAW_COIN_SCREEN, {
+        step: CheckStepStatus(get(item, 'statusLable')),
+        data: item,
+        dataInfo: {
+          amount: {
+            title: 'AMOUNT'.t(),
+            value: formatTrunc(
+              currencyList,
+              get(item, 'amount'),
+              get(item, 'symbol'),
+            ),
+          },
+          address: {
+            title: 'RECEIVED_ADDRESS'.t(),
+            value: get(item, 'toAddress'),
+          },
+          ...extraData,
+        },
+        isHistory: true,
+        requestId: get(item, 'id'),
+      });
+    } else {
+      pushSingleScreenApp(componentId, WITHDRAW_FIAT_SCREEN, {
+        step: CheckStepStatus(get(item, 'statusLable')),
+        data: {...item, currency: get(item, 'walletCurrency')},
+        dataInfo: {
+          amount: {
+            title: 'AMOUNT'.t(),
+            value: formatTrunc(
+              currencyList,
+              get(item, 'amount'),
+              get(item, 'symbol'),
+            ),
+          },
+          bank: {
+            title: 'BANK_NAME'.t(),
+            value: get(item, 'bankName'),
+          },
+          branch: {
+            title: 'BRACH_NAME'.t(),
+            value: get(item, 'bankBranchName'),
+          },
+          nameBankAccount: {
+            title: 'RECEIVING_BANK_ACCOUNT_NAME'.t(),
+            value: get(item, 'bankAccountName'),
+          },
+          numberBankAccount: {
+            title: 'RECEIVING_BANK_ACCOUNT_NO'.t(),
+            value: get(item, 'bankAccountNo'),
+          },
+          amount: {
+            title: 'AMOUNT'.t(),
+            value: formatTrunc(
+              currencyList,
+              get(item, 'amount'),
+              get(item, 'symbol'),
+            ),
+          },
+        },
+        isHistory: true,
+        requestId: get(item, 'id'),
+      });
+    }
+  };
+  const renderFooter = () => {
+    if (!Loading) return null;
+    return <ActivityIndicator style={{color: '#000'}} />;
+  };
+  const handleLoadMore = () => {
+    console.log(Page, 'cuoi');
 
-  //   if (!Loading) {
-  //     setPage(Page + 1);
-  //     // method for API call
-  //   }
-  // };
+    if (!Loading && !Stop) {
+      setPage(Page + 1);
+      // method for API call
+    }
+  };
   useEffect(() => {
     fetchData(Page, InfoDataSearch);
     return () => {};
@@ -469,7 +478,7 @@ const LayoutInfoWallet = ({
     if (IsActive === 'C') {
       dispatcher(
         createAction(GET_DEPOSIT_COIN_LOG, {
-          UserId:get(UserInfo,"id"),
+          UserId,
           pageIndex: page,
           loadMore: true,
           fromDate: data.startDate,
@@ -481,7 +490,7 @@ const LayoutInfoWallet = ({
     } else if (IsActive === 'F') {
       dispatcher(
         createAction(GET_WITHDRAW_COIN_LOG, {
-          UserId:get(UserInfo,"id"),
+          UserId,
           pageIndex: page,
           loadMore: true,
           fromDate: data.startDate,
@@ -492,104 +501,126 @@ const LayoutInfoWallet = ({
       );
     }
   };
-  // const onSubmitSearch = data => {
-  //   fetchData(1, data);
-  //   setInfoDataSearch(data);
-  //   setHiddenShow(false);
-  // };
-  // const onActiveWalletType = active => {
-  //   if (get(active, 'value') == 1) {
-  //     setIsCoin(false);
-  //   } else {
-  //     setIsCoin(true);
-  //   }
-  // };
-  // console.log(get(InfoCoin,"available"),"InfoCoin");
+  const onSubmitSearch = data => {
+    fetchData(1, data);
+    setInfoDataSearch(data);
+    setHiddenShow(false);
+  };
+  const onActiveWalletType = active => {
+    if (get(active, 'value') == 1) {
+      setIsCoin(false);
+    } else {
+      setIsCoin(true);
+    }
+  };
   return (
     <Container
       onClickRight={() => setHiddenShow(!HiddenShow)}
+      hasBack
       componentId={componentId}
+      isFilter={HiddenShow}
       isTopBar
-      title={title}
-      // nameRight="filter"
+      title={'Transaction History'.t()}
+      nameRight="filter"
+      // isTopBar={isHistoryTransaction ? true : false}
     >
-     
-      {/* {isHistoryTransaction && <FilterHistorySwapScreen
-                onSubmitSearch={onSubmitSearch}
-                isHistoryTransaction
-                HiddenShow={HiddenShow}
-                startDate={{ show: getOneMonthAgoDate(true), api: getOneMonthAgoDate() }}
-                endDate={{ show: getCurrentDate(true), api: getCurrentDate() }}
-                onHiddenShow={() => setHiddenShow(!HiddenShow)}
-                
-                onActiveWalletType={onActiveWalletType}
-            />} */}
-      {!isHistoryTransaction && <View>
-     <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <TextFnx spaceTop={10} color={colors.subText}>
-          Tổng Cộng
-        </TextFnx>
-        <TextFnx space={10} color={colors.buy} size={20}>
-          {`${get(item,"available") + get(item,"pending")}`}
-        </TextFnx>
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-        }}>
+      {isHistoryTransaction && (
+        <FilterHistorySwapScreen
+          onSubmitSearch={onSubmitSearch}
+          isHistoryTransaction
+          HiddenShow={HiddenShow}
+          startDate={{
+            show: getOneMonthAgoDate(true),
+            api: getOneMonthAgoDate(),
+          }}
+          endDate={{show: getCurrentDate(true), api: getCurrentDate()}}
+          onHiddenShow={() => setHiddenShow(!HiddenShow)}
+          onActiveWalletType={onActiveWalletType}
+        />
+      )}
+
+      {!isHistoryTransaction && (
         <View
           style={{
-            flex: 1,
+            backgroundColor: colors.app.backgroundLevel2,
+            paddingHorizontal: 16,
+            paddingBottom: 16,
+            borderRadius: 8,
           }}>
-          <TextFnx space={3} color={colors.subText} size={12}>
-            Khả dụng
-          </TextFnx>
-          <TextFnx>{`${get(item,"available")}`}</TextFnx>
+          <Layout
+            isLineCenter
+            style={{
+              borderBottomWidth: 0.5,
+              borderBottomColor: colors.app.lineSetting,
+              marginVertical: 15,
+            }}>
+            <Image
+              source={{uri: get(item, 'images')}}
+              style={{width: 32, height: 32, marginRight: 18}}
+            />
+            <View>
+              <TextFnx
+                size={fontSize.f16}
+                weight="700"
+                //   spaceTop={10}
+                color={colors.subText}>
+                {get(item, 'symbol')}
+              </TextFnx>
+              <TextFnx space={10} weight="700" color={colors.buy} size={21}>
+                {`${get(item, 'available') + get(item, 'pending')}`}
+              </TextFnx>
+            </View>
+          </Layout>
+          <View>
+            <Layout isSpaceBetween>
+              <TextFnx space={3} color={colors.app.textContentLevel3}>
+                Khả dụng
+              </TextFnx>
+              <TextFnx>{`${get(item, 'available')}`}</TextFnx>
+            </Layout>
+            <Layout isSpaceBetween>
+              <TextFnx color={colors.app.textContentLevel3} space={3}>
+                Đang đặt lệnh
+              </TextFnx>
+              <TextFnx>{`${get(item, 'pending')}`}</TextFnx>
+            </Layout>
+          </View>
         </View>
-        <View
-          style={{
-            flex: 1,
-          }}>
-          <TextFnx space={3} color={colors.subText} size={12}>
-            Đang đặt lệnh
-          </TextFnx>
-          <TextFnx>{`${get(item,"pending")}`}</TextFnx>
-        </View>
-      </View>
+      )}
       <Button
         spaceVertical={20}
         isReverse
-        onSubmit={()=>onDeposit(item)}
-        onClose={()=>onWithdraw(item)}
+        onSubmit={() => onWithdraw(item)}
+        onClose={() => onDeposit(item)}
         isSubmit
         isClose
-        textSubmit={'DEPOSIT'.t()}
-        textClose={'WITHDRAW'.t()}
-        iconLeftSubmit={<DepsitSvg />}
-        iconLeftClose={<WithdrawSvg />}
+        textSubmit={'WITHDRAW'.t()}
+        textClose={'DEPOSIT'.t()}
+        colorTitleClose={colors.black}
+        bgButtonColor={colors.app.yellowHightlight}
+        iconLeftSubmit={<WithdrawSvg />}
+        iconLeftClose={<DepsitSvg />}
       />
-     </View>}
-     
-      <Layout isSpaceBetween>
-        <ButtonTypeWallet
-          title1={'Deposits'.t()}
-          title2={'Withdrawal'.t()}
-          style={[
-            !isHistoryTransaction && {
-              marginTop: 10,
-            },
-            {marginBottom: 10},
-          ]}
-          IsActive={IsActive}
-          onIsActive={active => {
-            setIsActive(active);
-          }}
-        />
-        {/* {!isHistoryTransaction && <Button
+      <View
+        style={{
+          backgroundColor: colors.app.backgroundLevel2,
+          marginHorizontal: -spacingApp,
+          paddingHorizontal: spacingApp,
+          paddingTop: 20,
+          borderTopLeftRadius: 15,
+          borderTopRightRadius: 15,
+        }}>
+        <Layout isSpaceBetween>
+          <ButtonTypeWallet
+            title1={'Deposits'.t()}
+            title2={'Withdrawal'.t()}
+            style={[{marginBottom: 10}]}
+            IsActive={IsActive}
+            onIsActive={active => {
+              setIsActive(active);
+            }}
+          />
+          {/* {!isHistoryTransaction && <Button
                     onTitle={()=>pushSingleScreenApp(componentId,TRANSACTION_HISTORY)}
                     isTitle
                     title={
@@ -604,78 +635,83 @@ const LayoutInfoWallet = ({
                         marginBottom: 10
                     }]}
                 />} */}
-      </Layout>
-      <SwipeListView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={Disabled} onRefresh={onRefresh} />
-        }
-        // contentContainerStyle={(!logged || size(Source) == 0) && {
-        //     flex: 1
-        // }}
-        ListEmptyComponent={<Empty />}
-        data={
-          // [{}, {}, {}, {}, {}]
-          eval(checkDataShowLoadMore(isCoin,IsActive))
-        }
-        renderItem={(data, rowMap) => {
-          return (
-            <View
-              style={{
-                paddingVertical: 5,
-              }}>
-              <TouchablePreview
-                onPress={() => onHistory(get(data, 'item'), rowMap)}>
-                <ItemHistorySwap
-                  titleStart={to_UTCDate(
-                    get(data, 'item.createdDate'),
-                    'DD/MM/YYYY',
-                  )}
-                  titleCenter={'Status'.t()}
-                  valueStart={to_UTCDate(
-                    get(data, 'item.createdDate'),
-                    'hh:mm:ss',
-                  )}
-                  valueCenter={get(data, 'item.statusLable')}
-                  titleEnd={get(data, 'item.currency')}
-                  valueEnd={get(data, 'item.amount')}
-                  style={{
-                    backgroundColor: colors.navigation,
-                    paddingHorizontal: 15,
-                  }}
-                  isWallet
-                />
-              </TouchablePreview>
-            </View>
-          );
-        }}
-        renderHiddenItem={(data, rowMap) => {
-          if (!CheckDisableStatus(get(data, 'item.status'))) {
-            return (
-              <TouchablePreview onPress={() => onCancel(data, rowMap)}>
-                <View style={[stylest.rowBack]}>
-                  <Icon color={colors.text} size={19} name={'trash-alt'} />
-                </View>
-              </TouchablePreview>
-            );
-          } else {
-            return null;
+        </Layout>
+        <SwipeListView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={Disabled} onRefresh={onRefresh} />
           }
-        }}
-        stopRightSwipe={-100}
-        disableRightSwipe
-        disableLeftSwipe={IsActive === 'C' ? true : false}
-        rightOpenValue={-60}
-        keyExtractor={(item, index) => index.toString()}
-        ListFooterComponent={ null}
-        onEndReachedThreshold={0.4}
-        onEndReached={() => {
-          console.log('cuoi roi');
-          // if (isHistoryTransaction) {
-          //   handleLoadMore();
-          // }
-        }}
-      />
+          // contentContainerStyle={(!logged || size(Source) == 0) && {
+          //     flex: 1
+          // }}
+          ListEmptyComponent={<Empty />}
+          data={eval(checkDataShowLoadMore(isCoin, IsActive))}
+          renderItem={(data, rowMap) => {
+            return (
+              <View
+                style={{
+                  paddingVertical: 5,
+                }}>
+                <TouchableOpacity
+                  onPress={() => onHistory(get(data, 'item'), rowMap)}>
+                  <ItemHistorySwap
+                    titleStart={to_UTCDate(
+                      get(data, 'item.createdDate'),
+                      'DD/MM/YYYY',
+                    )}
+                    titleCenter={'Status'.t()}
+                    valueStart={to_UTCDate(
+                      get(data, 'item.createdDate'),
+                      'hh:mm:ss',
+                    )}
+                    valueCenter={get(data, 'item.statusLable')}
+                    titleEnd={get(data, 'item.currency')}
+                    valueEnd={get(data, 'item.amount')}
+                    style={{
+                      backgroundColor: colors.navigation,
+                      paddingHorizontal: 15,
+                      borderBottomWidth:0.5,
+                      borderBottomColor:colors.app.lineSetting
+                    }}
+                    isWallet
+                    key={get(data, 'item.createdDate')}
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+          renderHiddenItem={(data, rowMap) => {
+            if (!CheckDisableStatus(get(data, 'item.status'))) {
+              return (
+                <TouchableOpacity onPress={() => onCancel(data, rowMap)}>
+                  <View style={[stylest.rowBack]}>
+                    <Icon
+                      color={colors.background}
+                      size={19}
+                      name={'trash-alt'}
+                    />
+                  </View>
+                </TouchableOpacity>
+              );
+            } else {
+              return null;
+            }
+          }}
+          stopRightSwipe={-100}
+          disableRightSwipe
+          disableLeftSwipe={isCoin && IsActive === 'C' ? true : false}
+          rightOpenValue={-60}
+          keyExtractor={(item, index) => index.toString()}
+          ListFooterComponent={isHistoryTransaction ? renderFooter : null}
+          onEndReachedThreshold={0.4}
+          onEndReached={() => {
+            console.log('cuoi roi');
+            if (isHistoryTransaction) {
+              handleLoadMore();
+            }
+          }}
+        />
+      </View>
     </Container>
   );
 };
@@ -685,12 +721,12 @@ const ButtonWithdraw = ({
   value = 'Withdrawal'.t(),
   onPress,
 }) => (
-  <TouchablePreview onPress={onPress}>
+  <TouchableOpacity onPress={onPress}>
     <View style={stylest.btn}>
       <Image source={image} style={{width: 30, height: 30}} />
       <TextFnx spaceTop={5} value={value} color={colors.statusBar} />
     </View>
-  </TouchablePreview>
+  </TouchableOpacity>
 );
 const stylest = StyleSheet.create({
   layoutBtn: {
@@ -776,7 +812,7 @@ const getPropData = (data, image, value, Active, cb) => {
 const checkDataShowLoadMore = (isCoin, IsActive) => {
   if (IsActive === 'C') {
     return 'coinDepositLogLoadMore';
-  } else{
+  } else if (IsActive === 'F') {
     return 'coinWithdrawLogLoadMore';
   }
 };

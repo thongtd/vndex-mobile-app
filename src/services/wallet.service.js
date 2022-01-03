@@ -120,7 +120,7 @@ export const WalletService = {
     },
     getOtp: async (email, feature, itemId) => {
         try {
-            let response = await httpService.post(EXCHANGE_API.GET_OTP + email + `/${feature}/${itemId}`, { email, feature, itemId });
+            let response = await httpService.get(EXCHANGE_API.GET_OTP + email + `/${feature}/${itemId}`, { email, feature, itemId });
             if (response) {
                 if (response.status == 200) {
                     return response.data
@@ -145,6 +145,7 @@ export const WalletService = {
     createWithdrawalCoin: async (data) => {
         try {
             let response = await httpService.post(EXCHANGE_API.COIN_WITHDRAW_REQUEST, data);
+            console.log(response,"response");
             if (response.status === 200) {
                 if (response.data.code === 1) {
                     return {
@@ -256,7 +257,7 @@ export const WalletService = {
         return null;
     },
     cancelWithdrawCoin: async (data) => {
-        let response = await httpService.post(EXCHANGE_API.CANCEL_WITHDRAW_COIN + `${data.accId}/${data.requestId}/${data.verifyCode}/${data.sessionId}`, data);
+        let response = await httpService.get(EXCHANGE_API.CANCEL_WITHDRAW_COIN + `${data.accId}/${data.requestId}/${data.verifyCode}/${data.sessionId}`, data);
         if (response.status === 200) {
             return response.data
         }
@@ -371,6 +372,7 @@ export const WalletService = {
     ) => {
         try {
             let res = await httpService.post(XWALLET_API.GET_COIN_WITHDRAW_LOG + `${customerId}/${pageIndex}/${pageSize}?fromDate=${fromDate}&toDate=${toDate}&currency=${currency}&status=${status}`);
+            console.log(res,"res get coint")
             if (res.status === 200) {
                 let data = res.data.source;
                 return {
@@ -384,7 +386,7 @@ export const WalletService = {
                 };
             }
         } catch (error) {
-
+            console.log(error,"error get coint")
             return {
                 result: 'err',
                 message: 'Please check your internet connection!',

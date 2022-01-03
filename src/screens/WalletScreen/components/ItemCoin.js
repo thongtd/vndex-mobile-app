@@ -1,16 +1,16 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import TextFnx from '../../../components/Text/TextFnx';
 import colors from '../../../configs/styles/colors';
 import TextSeparators from '../../../components/Text/TextSeparators';
-import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
+
 import PropTypes from 'prop-types';
 import Image from '../../../components/Image/Image';
 import { get, formatCurrency, convertToCurr, formatSCurrency, formatCurrencyFnx } from '../../../configs/utils';
 import {useSelector} from "react-redux"
 import { Navigation } from 'react-native-navigation';
 import { INFO_COIN_SCREEN, pushSingleScreenApp } from '../../../navigation';
-const ItemCoin = ({
+export const ItemCoin = ({
     item,
     componentId
 }) => {
@@ -25,10 +25,10 @@ const ItemCoin = ({
         pushSingleScreenApp(componentId,INFO_COIN_SCREEN,{item:item,isCoin:true})
     }
     return (
-        <TouchablePreview
+        <TouchableOpacity
             onPress={logged?onHandleToInfo:()=>{}}
         >
-            <View style={stylest.container}>
+             <View style={stylest.container}>
                 <View style={stylest.itemLeft}>
                     <Image source={{ uri: get(item,"images") }} style={stylest.imgCoin} />
                     <View style={stylest.spacing}>
@@ -46,7 +46,8 @@ const ItemCoin = ({
                     {/* {logged?<TextSeparators suffix="VND" color={colors.subText} value={get(item,"lastestPrice")?formatCurrencyFnx((get(item,"available")+get(item,"pending"))*get(item,"lastestPrice"),0):0} />:<TextFnx color={colors.subText} value="--" />} */}
                 </View>
             </View>
-        </TouchablePreview>
+           
+        </TouchableOpacity>
 
     );
 }
@@ -56,7 +57,7 @@ const stylest = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         height: 60,
-        borderBottomColor: colors.line,
+        borderBottomColor: colors.app.lineSetting,
         borderBottomWidth: 0.5
     },
     itemLeft: {
@@ -79,4 +80,4 @@ const stylest = StyleSheet.create({
 ItemCoin.propTypes = {
     item: PropTypes.object
 }
-export default ItemCoin;
+

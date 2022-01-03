@@ -40,6 +40,7 @@ const Input = ({
     styleRight,
     editable,
     defaultValue,
+    iconComponentLeft,
     ...rest
 }) => {
     const [valueInput, setValue] = useState(value);
@@ -103,6 +104,7 @@ const Input = ({
             <View style={[rest.isCircle ? stylest.inputCircle : styleView, { marginVertical: spaceVertical }]}>
                 {rest.isIconLeft && <ButtonIcon
                     name={nameIconLeft}
+                    iconComponent={iconComponentLeft}
                     onPress={onPressButtonLeft}
                     style={[stylest.iconLeft]}
                     color={colors.description}

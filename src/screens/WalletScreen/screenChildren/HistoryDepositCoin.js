@@ -35,7 +35,7 @@ const HistoryDepositCoin = ({
                 }}
             >
                 <TextFnx space={5} isDart size={16} weight={"600"} value={`+${formatCurrency(get(data, "amount"), get(data, "currency"), currencyList)} ${get(data, "currency")}`} />
-                <TextFnx isDart value={`${formatCurrencyFnx(get(data, "amount")*get(marketByCurrency,"lastestPrice"),0)} ${curr}`} />
+                {/* <TextFnx isDart value={`${formatCurrencyFnx(get(data, "amount")*get(marketByCurrency,"lastestPrice"),0)} ${curr}`} /> */}
             </Layout>
             <TextFnx spaceTop={25} space={15} isDart value={to_UTCDate(get(data, "createdDate"), "DD-MM-YYYY hh:mm:ss")} />
             <Label

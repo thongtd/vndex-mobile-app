@@ -15,7 +15,7 @@ const ButtonSubmitClose = ({
     isClose,
     isButtonCircle,
     title=isSubmit?"SUBMIT".t():"CLOSE".t(),
-    bgButtonColor=isSubmit?colors.iconButton:colors.btnClose,
+    bgButtonColor=isSubmit?colors.app.yellowHightlight:colors.btnClose,
     colorTitle,
     ...rest
 }) => (

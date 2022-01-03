@@ -155,8 +155,8 @@ const FaCodeEmail = ({
                 onChangeText={(text) => setEmail(text)}
             />
             {disable && <Input
-            isLabel
-            label={"2FA_CODE".t()}
+            // isLabel
+            // label={"2FA_CODE".t()}
                 isResend
                 isPaste
                 spaceVertical={10}

@@ -83,7 +83,7 @@ const stylest = StyleSheet.create({
     icon: {
         paddingHorizontal: 10,
         height: 45,
-        width: "20%",
+        width: 45,
         justifyContent: "center"
     }
 })

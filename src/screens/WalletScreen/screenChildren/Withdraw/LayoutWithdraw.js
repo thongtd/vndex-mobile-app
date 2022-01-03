@@ -40,7 +40,7 @@ const LayoutWithdraw = ({
     onCancelWithdraw,
     isHistory
 }) => {
-    const cryptoWallet = useSelector(state => state.wallet.cryptoWallet);
+    const cryptoWallet = useSelector(state => state.market.cryptoWallet);
     const fiatsWallet = useSelector(state => state.wallet.fiatsWallet);
     const [InfoCoin, setInfoCoin] = useState(data);
     const [CurrencyActive, setCurrencyActive] = useState("");
@@ -82,70 +82,45 @@ const LayoutWithdraw = ({
     useEffect(() => {
         console.log(cryptoWallet, "cryptosWallet2 moi ne");
         if (isArray(cryptoWallet) && size(cryptoWallet) > 0) {
-            let cryptoFilter = cryptoWallet.filter((crypto, index) => get(crypto, "currency") == get(InfoCoin, "currency"))
+            let cryptoFilter = cryptoWallet.filter((crypto, index) => get(crypto, "symbol") == get(InfoCoin, "symbol"))
             if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
                 setInfoCoin(cryptoFilter[0])
                 InfoDataGlobal(cryptoFilter[0])
-                setCurrencyActive(get(cryptoFilter[0], "currency"))
+                setCurrencyActive(get(cryptoFilter[0], "symbol"))
             }
         }
         if (isArray(fiatsWallet) && size(fiatsWallet) > 0) {
-            let cryptoFilter = fiatsWallet.filter((crypto, index) => get(crypto, "currency") == get(InfoCoin, "currency"))
+            let cryptoFilter = fiatsWallet.filter((crypto, index) => get(crypto, "symbol") == get(InfoCoin, "symbol"))
             if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
                 setInfoCoin(cryptoFilter[0]);
                 InfoDataGlobal(cryptoFilter[0])
-                setCurrencyActive(get(cryptoFilter[0], "currency"))
+                setCurrencyActive(get(cryptoFilter[0], "symbol"))
             }
         }
     }, [cryptoWallet, fiatsWallet]);
-    useEffect(() => {
-        listenerEventEmitter('assetsHub', (cryptoWallet) => {
-            if (isArray(cryptoWallet) && size(cryptoWallet) > 0) {
-                let cryptoFilter = cryptoWallet.filter((crypto, index) => get(crypto, "currency") == get(InfoCoin, "currency"))
-                if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
-                    setInfoCoin(cryptoFilter[0])
-                    InfoDataGlobal(cryptoFilter[0])
-                    setCurrencyActive(get(cryptoFilter[0], "currency"))
-                }
-            }
-        })
-        listenerEventEmitter('fiatsHub', (cryptoWallet) => {
-            if (isArray(fiatsWallet) && size(fiatsWallet) > 0) {
-                let cryptoFilter = fiatsWallet.filter((crypto, index) => get(crypto, "currency") == get(InfoCoin, "currency"))
-                if (isArray(cryptoFilter) && size(cryptoFilter) > 0) {
-                    setInfoCoin(cryptoFilter[0]);
-                    InfoDataGlobal(cryptoFilter[0])
-                    setCurrencyActive(get(cryptoFilter[0], "currency"))
-                }
-            }
-        })
-
-        return () => {
-            removeEventEmitter("assetsHub");
-            removeEventEmitter("fiatsHub");
-        };
-    }, [])
+   
     const onSelectCoin = () => {
         if (isCoin) {
             let data = orderBy(cryptoWallet, ['currency'], ['asc']);
-            let propsData = getPropsData(data, "image", "currency", CurrencyActive, (item) => handleActive(item))
+            let propsData = getPropsData(data, "image", "symbol", CurrencyActive, (item) => handleActive(item))
             showModal(PICKER_SEARCH, propsData)
         } else {
             let data = orderBy(fiatsWallet, ['currency'], ['asc']);
-            let propsData = getPropsData(data, "image", "currency", CurrencyActive, (item) => handleActive(item))
+            let propsData = getPropsData(data, "image", "symbol", CurrencyActive, (item) => handleActive(item))
             showModal(PICKER_SEARCH, propsData)
         }
     }
     const handleActive = (item) => {
-        setCurrencyActive(get(item, "currency"));
+        setCurrencyActive(get(item, "symbol"));
         setInfoCoin(item);
         dismissAllModal();
         InfoDataGlobal(item);
     }
+    console.log(InfoCoinCreated, "InfoCoinCreated");
     return (
         <Container
             hasBack
-            title={`${"Withdrawal".t()} ${get(InfoCoin, "symbol")}`}
+            title={`${"Withdrawal".t()} ${get(InfoCoin, "symbol") || get(InfoCoinCreated,"currency")}`}
             componentId={componentId}
             onClickRight={step === 0 ? onSelectCoin : null}
             sizeIconRight={19}
@@ -154,14 +129,23 @@ const LayoutWithdraw = ({
             isScroll
             isLoadding={Disabled}
         >
+            <View style={{
+                paddingBottom:20
+            }}>
+                
+                <TextFnx spaceTop={15} spaceBottom={10} color={colors.app.yellowHightlight}>
+                {step == 0?"Tạo yêu cầu rút":(step == 1)?"Xác minh 2FA":(step == 2)?"Xác minh OTP":"Hoàn thành"}
+                </TextFnx>
             <StepIndicator
                 customStyles={customStyles}
                 currentPosition={step}
                 stepCount={4}
             />
-            <Available
+            </View>
+            
+            {/* <Available
                 data={{ currency: get(InfoCoin, "symbol"), amount: get(InfoCoin, "available") }}
-            />
+            /> */}
 
             {children}
             {step === 1 &&
@@ -256,7 +240,10 @@ const LayoutWithdraw = ({
                             isCopy={false}
                         />
                     })}
-                   
+                    <NoteImportant
+                        isRed
+                        arrNote={["NOTE_WITHDRAWAL".t()]}
+                    />
                 </>}
 
 
@@ -293,7 +280,7 @@ const stylest = StyleSheet.create({
         alignItems: "center"
     },
     bgStep4: {
-        backgroundColor: colors.btnBlur,
+        backgroundColor: colors.app.backgroundLevel2,
         paddingVertical: 15,
         borderColor: colors.line,
         borderWidth: 0.5,
@@ -308,20 +295,21 @@ const stylest = StyleSheet.create({
 const customStyles = {
     stepIndicatorSize: 20,
     currentStepIndicatorSize: 23,
-    separatorStrokeWidth: 2,
-    currentStepStrokeWidth: 3,
-    stepStrokeCurrentColor: '#4aae4f',
-    stepStrokeWidth: 3,
-    stepStrokeFinishedColor: '#4aae4f',
-    stepStrokeUnFinishedColor: '#aaaaaa',
-    separatorFinishedColor: '#4aae4f',
-    separatorUnFinishedColor: '#aaaaaa',
-    stepIndicatorFinishedColor: '#4aae4f',
-    stepIndicatorUnFinishedColor: '#aaaaaa',
-    stepIndicatorCurrentColor: '#ffffff',
-    stepIndicatorLabelFontSize: 11,
-    currentStepIndicatorLabelFontSize: 11,
-}
+    separatorStrokeWidth: 1,
+    currentStepStrokeWidth: 1,
+    stepStrokeCurrentColor: colors.app.yellowHightlight,
+    stepStrokeWidth: 1,
+    stepStrokeFinishedColor: colors.app.yellowHightlight,
+    stepStrokeUnFinishedColor: colors.app.backgroundLevel2,
+    separatorFinishedColor: colors.app.yellowHightlight,
+    separatorUnFinishedColor: colors.app.backgroundLevel2,
+    stepIndicatorFinishedColor: colors.app.yellowHightlight,
+    stepIndicatorUnFinishedColor: colors.app.backgroundLevel2,
+    stepIndicatorCurrentColor: colors.app.backgroundLevel2,
+    stepIndicatorLabelFontSize: 14,
+    stepIndicatorLabelCurrentColor: colors.app.yellowHightlight,
+    currentStepIndicatorLabelFontSize: 14,
+  };
 
 const linkSupport = {
     fb: "https://www.facebook.com/FinanceX.io/",

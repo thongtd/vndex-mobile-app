@@ -108,10 +108,10 @@ const ConfirmLoginScreen = ({
       </View>
       <Input
         
-        isLabel
-        label={twoFactorType === constant.TWO_FACTOR_TYPE.EMAIL_2FA?"Verify by email".t():"Verify by gg".t()}
-        isIconLeft
-        nameIconLeft={"key"}
+        // isLabel
+        // label={twoFactorType === constant.TWO_FACTOR_TYPE.EMAIL_2FA?"Verify by email".t():"Verify by gg".t()}
+        // isIconLeft
+        // nameIconLeft={"key"}
         onSubmitEditing={handleLogin}
         handleResend={handleResend}
         value={otp}
