@@ -302,7 +302,7 @@ export const WalletService = {
     ) => {
         try {
             // console.log(XWALLET_API.GET_COIN_DEPOSIT_LOG + `${customerId}/${pageIndex}/${pageSize}?fromDate=${fromDate}&toDate=${toDate}&walletCurrency=${walletCurrency}&status=${status}`,"link");
-            let res = await httpService.post(XWALLET_API.GET_COIN_DEPOSIT_LOG + `${customerId}/${pageIndex}/${pageSize}`);
+            let res = await httpService.post(XWALLET_API.GET_COIN_DEPOSIT_LOG + `${customerId}/${pageIndex}/${pageSize}?fromDate=${fromDate}&toDate=${toDate}&walletCurrency=${walletCurrency}&status=${status}`);
             
             console.log(res,"res tren deposit log");
             if (res.status === 200) {

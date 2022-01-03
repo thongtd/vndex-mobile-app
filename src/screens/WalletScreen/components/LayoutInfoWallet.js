@@ -16,7 +16,12 @@ import {
   dismissAllModal,
   pushSingleScreenApp,
 } from '../../../navigation/Navigation';
-import {constant, fontSize, spacingApp} from '../../../configs/constant';
+import {
+  constant,
+  fontSize,
+  IdNavigation,
+  spacingApp,
+} from '../../../configs/constant';
 import Container from '../../../components/Container';
 import HeaderWalletScreen from './HeaderWalletScreen';
 import Layout from '../../../components/Layout/Layout';
@@ -76,6 +81,8 @@ import ItemList from '../../../components/Item/ItemList';
 import FilterHistorySwapScreen from '../../SwapScreen/childrensScreens/FilterHistorySwapScreen';
 import DepsitSvg from 'assets/svg/deposit.svg';
 import WithdrawSvg from 'assets/svg/withdraw.svg';
+import {Navigation} from 'react-native-navigation';
+var flagBtnId = true;
 const LayoutInfoWallet = ({
   componentId,
   item,
@@ -103,6 +110,27 @@ const LayoutInfoWallet = ({
   const fiatWithdrawLogLoadMore = useSelector(
     state => state.wallet.fiatWithdrawLogLoadMore,
   );
+  useEffect(() => {
+    console.log(HiddenShow, 'hiddeen tren show');
+    const navigationButtonEventListener =
+      Navigation.events().registerNavigationButtonPressedListener(
+        ({buttonId}) => {
+          if (buttonId == IdNavigation.PressIn.filterTransaction) {
+            console.log(flagBtnId, 'hiddeen show');
+            if (flagBtnId) {
+              setHiddenShow(true);
+              flagBtnId = false;
+            } else {
+              setHiddenShow(false);
+              flagBtnId = true;
+            }
+          }
+        },
+      );
+    return () => {
+      navigationButtonEventListener.remove();
+    };
+  }, [HiddenShow]);
   const [isCoin, setIsCoin] = useState(isCoinData);
   const fiatDepositLog = useSelector(state => state.wallet.fiatDepositLog);
   const fiatWithdrawLog = useSelector(state => state.wallet.fiatWithdrawLog);
@@ -357,15 +385,11 @@ const LayoutInfoWallet = ({
     }
   };
   const onHistory = item => {
-    if (isCoin && IsActive === 'C') {
+    if (IsActive === 'C') {
       pushSingleScreenApp(componentId, HISTORY_DEPOSIT_COIN_SCREEN, {
         data: item,
       });
-    } else if (!isCoin && IsActive === 'C') {
-      pushSingleScreenApp(componentId, HISTORY_DEPOSIT_FIAT_SCREEN, {
-        InfoBank: item,
-      });
-    } else if (isCoin && IsActive === 'F') {
+    } else if (IsActive === 'F') {
       var extraData = {};
 
       if (
@@ -406,52 +430,11 @@ const LayoutInfoWallet = ({
         isHistory: true,
         requestId: get(item, 'id'),
       });
-    } else {
-      pushSingleScreenApp(componentId, WITHDRAW_FIAT_SCREEN, {
-        step: CheckStepStatus(get(item, 'statusLable')),
-        data: {...item, currency: get(item, 'walletCurrency')},
-        dataInfo: {
-          amount: {
-            title: 'AMOUNT'.t(),
-            value: formatTrunc(
-              currencyList,
-              get(item, 'amount'),
-              get(item, 'symbol'),
-            ),
-          },
-          bank: {
-            title: 'BANK_NAME'.t(),
-            value: get(item, 'bankName'),
-          },
-          branch: {
-            title: 'BRACH_NAME'.t(),
-            value: get(item, 'bankBranchName'),
-          },
-          nameBankAccount: {
-            title: 'RECEIVING_BANK_ACCOUNT_NAME'.t(),
-            value: get(item, 'bankAccountName'),
-          },
-          numberBankAccount: {
-            title: 'RECEIVING_BANK_ACCOUNT_NO'.t(),
-            value: get(item, 'bankAccountNo'),
-          },
-          amount: {
-            title: 'AMOUNT'.t(),
-            value: formatTrunc(
-              currencyList,
-              get(item, 'amount'),
-              get(item, 'symbol'),
-            ),
-          },
-        },
-        isHistory: true,
-        requestId: get(item, 'id'),
-      });
     }
   };
   const renderFooter = () => {
     if (!Loading) return null;
-    return <ActivityIndicator style={{color: '#000'}} />;
+    return <ActivityIndicator style={{color: colors.text}} />;
   };
   const handleLoadMore = () => {
     console.log(Page, 'cuoi');
@@ -505,6 +488,7 @@ const LayoutInfoWallet = ({
     fetchData(1, data);
     setInfoDataSearch(data);
     setHiddenShow(false);
+    flagBtnId = true;
   };
   const onActiveWalletType = active => {
     if (get(active, 'value') == 1) {
@@ -515,7 +499,6 @@ const LayoutInfoWallet = ({
   };
   return (
     <Container
-      onClickRight={() => setHiddenShow(!HiddenShow)}
       hasBack
       componentId={componentId}
       isFilter={HiddenShow}
@@ -534,73 +517,79 @@ const LayoutInfoWallet = ({
             api: getOneMonthAgoDate(),
           }}
           endDate={{show: getCurrentDate(true), api: getCurrentDate()}}
-          onHiddenShow={() => setHiddenShow(!HiddenShow)}
+          onHiddenShow={() => {
+            setHiddenShow(false);
+            flagBtnId = true;
+          }}
           onActiveWalletType={onActiveWalletType}
         />
       )}
 
       {!isHistoryTransaction && (
-        <View
-          style={{
-            backgroundColor: colors.app.backgroundLevel2,
-            paddingHorizontal: 16,
-            paddingBottom: 16,
-            borderRadius: 8,
-          }}>
-          <Layout
-            isLineCenter
+        <>
+          <View
             style={{
-              borderBottomWidth: 0.5,
-              borderBottomColor: colors.app.lineSetting,
-              marginVertical: 15,
+              backgroundColor: colors.app.backgroundLevel2,
+              paddingHorizontal: 16,
+              paddingBottom: 16,
+              borderRadius: 8,
             }}>
-            <Image
-              source={{uri: get(item, 'images')}}
-              style={{width: 32, height: 32, marginRight: 18}}
-            />
+            <Layout
+              isLineCenter
+              style={{
+                borderBottomWidth: 0.5,
+                borderBottomColor: colors.app.lineSetting,
+                marginVertical: 15,
+              }}>
+              <Image
+                source={{uri: get(item, 'images')}}
+                style={{width: 32, height: 32, marginRight: 18}}
+              />
+              <View>
+                <TextFnx
+                  size={fontSize.f16}
+                  weight="700"
+                  //   spaceTop={10}
+                  color={colors.subText}>
+                  {get(item, 'symbol')}
+                </TextFnx>
+                <TextFnx space={10} weight="700" color={colors.buy} size={21}>
+                  {`${get(item, 'available') + get(item, 'pending')}`}
+                </TextFnx>
+              </View>
+            </Layout>
             <View>
-              <TextFnx
-                size={fontSize.f16}
-                weight="700"
-                //   spaceTop={10}
-                color={colors.subText}>
-                {get(item, 'symbol')}
-              </TextFnx>
-              <TextFnx space={10} weight="700" color={colors.buy} size={21}>
-                {`${get(item, 'available') + get(item, 'pending')}`}
-              </TextFnx>
+              <Layout isSpaceBetween>
+                <TextFnx space={3} color={colors.app.textContentLevel3}>
+                  Khả dụng
+                </TextFnx>
+                <TextFnx>{`${get(item, 'available')}`}</TextFnx>
+              </Layout>
+              <Layout isSpaceBetween>
+                <TextFnx color={colors.app.textContentLevel3} space={3}>
+                  Đang đặt lệnh
+                </TextFnx>
+                <TextFnx>{`${get(item, 'pending')}`}</TextFnx>
+              </Layout>
             </View>
-          </Layout>
-          <View>
-            <Layout isSpaceBetween>
-              <TextFnx space={3} color={colors.app.textContentLevel3}>
-                Khả dụng
-              </TextFnx>
-              <TextFnx>{`${get(item, 'available')}`}</TextFnx>
-            </Layout>
-            <Layout isSpaceBetween>
-              <TextFnx color={colors.app.textContentLevel3} space={3}>
-                Đang đặt lệnh
-              </TextFnx>
-              <TextFnx>{`${get(item, 'pending')}`}</TextFnx>
-            </Layout>
           </View>
-        </View>
+          <Button
+            spaceVertical={20}
+            isReverse
+            onSubmit={() => onWithdraw(item)}
+            onClose={() => onDeposit(item)}
+            isSubmit
+            isClose
+            textSubmit={'WITHDRAW'.t()}
+            textClose={'DEPOSIT'.t()}
+            colorTitleClose={colors.black}
+            bgButtonColor={colors.app.yellowHightlight}
+            iconLeftSubmit={<WithdrawSvg />}
+            iconLeftClose={<DepsitSvg />}
+          />
+        </>
       )}
-      <Button
-        spaceVertical={20}
-        isReverse
-        onSubmit={() => onWithdraw(item)}
-        onClose={() => onDeposit(item)}
-        isSubmit
-        isClose
-        textSubmit={'WITHDRAW'.t()}
-        textClose={'DEPOSIT'.t()}
-        colorTitleClose={colors.black}
-        bgButtonColor={colors.app.yellowHightlight}
-        iconLeftSubmit={<WithdrawSvg />}
-        iconLeftClose={<DepsitSvg />}
-      />
+
       <View
         style={{
           backgroundColor: colors.app.backgroundLevel2,
@@ -670,8 +659,8 @@ const LayoutInfoWallet = ({
                     style={{
                       backgroundColor: colors.navigation,
                       paddingHorizontal: 15,
-                      borderBottomWidth:0.5,
-                      borderBottomColor:colors.app.lineSetting
+                      borderBottomWidth: 0.5,
+                      borderBottomColor: colors.app.lineSetting,
                     }}
                     isWallet
                     key={get(data, 'item.createdDate')}

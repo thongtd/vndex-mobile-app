@@ -9,6 +9,7 @@ import { createAction, isArray, size, to_UTCDate, get, formatCurrency, getCurren
 import { constant, SELL } from '../../../configs/constant';
 import Empty from '../../../components/Item/Empty';
 import { GET_SWAP_ORDERS_BOOK } from '../../../redux/modules/market/actions';
+import colors from '../../../configs/styles/colors';
 
 const HistorySwapScreen = ({
     componentId,
@@ -108,7 +109,7 @@ const HistorySwapScreen = ({
         if(Disabled) return null;
         return (
             <ActivityIndicator
-                style={{ color: '#000' }}
+            style={{color: colors.text}}
             />
         );
     }

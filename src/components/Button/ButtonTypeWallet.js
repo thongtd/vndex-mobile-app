@@ -20,7 +20,7 @@ const ButtonTypeWallet = ({
                 // width={"50%"}
                 weight={"bold"}
                 style={IsActive === "C" ? stylest.activeButton : stylest.button}
-                size={IsActive === "C" ? 15 : 14}
+                size={14}
                 color={IsActive === "C" ? colors.iconButton : colors.subText}
             />
             <ButtonWithTitle
@@ -29,7 +29,7 @@ const ButtonTypeWallet = ({
                 // width={"50%"}
                 weight={"bold"}
                 style={IsActive === "F" ? stylest.activeButton : stylest.button}
-                size={IsActive === "F" ? 15 : 14}
+                size={14}
                 color={IsActive === "F" ? colors.iconButton : colors.subText}
             />
         </View>
@@ -39,9 +39,7 @@ const ButtonTypeWallet = ({
 var width = Dimensions.get('window').width;
 const stylest = StyleSheet.create({
     button: {
-        borderColor: colors.description,
-        borderBottomWidth: 0,
-        width: 80,
+        width: width/2-50,
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',
@@ -49,7 +47,7 @@ const stylest = StyleSheet.create({
     activeButton: {
         borderColor: colors.iconButton,
         borderBottomWidth: 2,
-        width: width/2-50,
+        width: width/2-40,
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',

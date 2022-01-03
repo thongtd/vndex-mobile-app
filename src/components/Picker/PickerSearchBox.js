@@ -12,6 +12,7 @@ import _ from 'lodash';
 import {isAndroid} from '../../configs/utils';
 import Empty from '../Item/Empty';
 import {dismissAllModal} from '../../navigation/Navigation';
+import Layout from '../Layout/Layout';
 let hasNotch = DeviceInfo.hasNotch();
 const PickerSearchBox = ({
   componentId,
@@ -42,12 +43,12 @@ const PickerSearchBox = ({
   };
   return (
     <Container
-      isFlex={false}
+      isScroll
       isTopBar={false}
       customTopBar={
         <TopBarView
           style={{
-            height: hasNotch ? 100 : StatusBar.currentHeight > 24 ? 95 : 75,
+            height: hasNotch ? 115 : StatusBar.currentHeight > 24 ? 110 : 90,
             paddingTop: isAndroid() && StatusBar.currentHeight > 24 ? 35 : 25,
            
           }}>
@@ -61,6 +62,7 @@ const PickerSearchBox = ({
                   alignItems: 'center',
                   
                 }}
+                
                 nameIconLeft="search"
                 isIconLeft
                 isCircle
@@ -79,7 +81,7 @@ const PickerSearchBox = ({
         ListEmptyComponent={<Empty />}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: '40%',
+          // paddingBottom: '40%',
           height:"100%"
         }}
         keyboardShouldPersistTaps="handled"

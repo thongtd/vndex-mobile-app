@@ -66,6 +66,7 @@ export function* asyncGetWithdrawCoinLog({ payload }) {
             yield put(actionsReducerWallet.getWithdrawCoinsSuccess(get(res, "data")));
           }
         } else {
+          emitEventEmitter("stopDCoinLog", true)
           yield put(actionsReducerWallet.getWithdrawCoinsSuccess([]));
           yield put(createAction("GET_COIN_WITHDRAW_LOG_LOAD_MORE", { data: [], pageIndex }));
         }
