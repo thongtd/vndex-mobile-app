@@ -255,7 +255,7 @@ const LayoutInfoWallet = ({
     //     setSource(SourceData)
     // })
     return () => {
-      removeEventEmitter('pushData');
+      // removeEventEmitter('pushData');
     };
   }, [Source]);
   const onCancel = (data, rowMap) => {

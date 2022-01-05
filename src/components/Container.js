@@ -16,7 +16,7 @@ import { BUTTON_ICON_RIGHT_NAV } from '../navigation';
 const Container = ({
     children,
     isTopBar = true,
-    title = "Title",
+    title = "",
     onClickRight,
     onClickLeft,
     nameLeft,

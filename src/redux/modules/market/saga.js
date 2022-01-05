@@ -114,6 +114,7 @@ export function* asyncGetCryptoWallet({ payload }) {
       if (get(res, "data")) {
         let data = get(res, "data");
         emitEventEmitter("doneSwap", true)
+        emitEventEmitter("doneAssets", true)
         yield put(
           actionsReducerMarket.getCryptoWalletSuccess(data)
         );

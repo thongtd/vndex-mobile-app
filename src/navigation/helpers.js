@@ -11,6 +11,7 @@ import {
 } from "./Screens"
 import { Navigation } from "react-native-navigation";
 import { IdNavigation } from "../configs/constant";
+import { HOME_SCREEN } from ".";
 
 
 export const switchLangTabbar = () => {
@@ -74,6 +75,37 @@ export const itemScreen = ( nameScreen,title="") => {
                         rightButtons:[{
                             id: IdNavigation.PressIn.historyTransaction,
                             icon:require("assets/icons/timer.png")
+                          }]
+                    }
+                }
+            }
+        }
+    }else if(nameScreen == HOME_SCREEN){
+        return {
+            component: {
+                name: nameScreen,
+                options: {
+                    statusBar: {
+                        backgroundColor: colors.app.backgroundLevel2,
+                        style:'dark',
+                        // drawBehind: true,
+                        visible: true
+                    },
+                    topBar:{
+                        title:{
+                            text:title
+                        },
+                        rightButtons:[{
+                            id: IdNavigation.PressIn.notification,
+                            icon:require("assets/icons/ic_notification.png")
+                          },
+                          {
+                            id: IdNavigation.PressIn.profile,
+                            icon:require("assets/icons/profile.png")
+                          }],
+                          leftButtons:[{
+                            id: IdNavigation.PressIn.menuLeft,
+                            icon:require("assets/icons/ic_Hamburger.png")
                           }]
                     }
                 }

@@ -147,7 +147,10 @@ export const IdNavigation = {
     },
     PressIn:{
         historyTransaction:'Id.PressIn.historyTransaction',
-        filterTransaction:'Id.PressIn.filterTransaction'
+        filterTransaction:'Id.PressIn.filterTransaction',
+        notification:'Id.PressIn.notification',
+        menuLeft:'Id.PressIn.menuLeft',
+        profile:'Id.PressIn.profile',
     }
 }
 
