@@ -19,12 +19,19 @@ import {
   SEND_REG_SCREEN,
 } from '../../navigation';
 
-import {hiddenModal, toast, get, _validateAuth} from '../../configs/utils';
+import {
+  hiddenModal,
+  toast,
+  get,
+  _validateAuth,
+  validateEmail,
+} from '../../configs/utils';
 import {fontSize, IdNavigation} from '../../configs/constant';
 import {authService} from '../../services/authentication.service';
 import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
 import {pop, pushSingleHiddenTopBarApp} from '../../navigation/Navigation';
 import Layout from '../../components/Layout/Layout';
+import { size } from 'lodash';
 
 const ConfirmScreen = ({countryCode = 'VN', componentId}) => {
   const [isCheck, setCheck] = useState(false);
@@ -43,6 +50,10 @@ const ConfirmScreen = ({countryCode = 'VN', componentId}) => {
     if (!isCheck) {
       toast('You must be accepted this condition'.t());
       return;
+    } else if (size(email) === 0) {
+      return toast('PLEASE_ENTER_EMAIL'.t());
+    } else if (!validateEmail(email)) {
+      return toast('PLEASE_INPUT_A_VALID_EMAIL'.t());
     }
     let register_model = {
       email: email,
@@ -75,7 +86,10 @@ const ConfirmScreen = ({countryCode = 'VN', componentId}) => {
     }
   };
   return (
-    <LayoutSplashScreen title={"REGISTER".t()} componentId={componentId} isLoadding={disabled}>
+    <LayoutSplashScreen
+      title={'REGISTER'.t()}
+      componentId={componentId}
+      isLoadding={disabled}>
       {/* <View style={stylest.textRegister}>
         <ButtonWithTitle
           space={10}
@@ -84,15 +98,18 @@ const ConfirmScreen = ({countryCode = 'VN', componentId}) => {
           title={'LOGIN'.t()}
         />
       </View> */}
-        <TextFnx
-          spaceTop={Platform.OS == 'android' ? 80:40}
-          size={30}
-          spaceBottom={7}
-          color={colors.tabbarActive}
-          weight={'bold'}
-          value={'REGISTER'.t()}
-        />
-         <TextFnx size={fontSize.f12} spaceBottom={20} color={colors.app.textDisabled}>
+      <TextFnx
+        spaceTop={Platform.OS == 'android' ? 80 : 40}
+        size={30}
+        spaceBottom={7}
+        color={colors.tabbarActive}
+        weight={'bold'}
+        value={'REGISTER'.t()}
+      />
+      <TextFnx
+        size={fontSize.f12}
+        spaceBottom={20}
+        color={colors.app.textDisabled}>
         {'Please login with your Email account'.t()}
       </TextFnx>
       <Input
@@ -159,10 +176,11 @@ const ConfirmScreen = ({countryCode = 'VN', componentId}) => {
         isButtonCircle={false}
       />
       <Layout>
-      <TextFnx size={fontSize.f16} color={colors.app.textContentLevel3}>
-        {"I_HAVE_ACCOUNT".t() }{"  "}
-      </TextFnx>
-      <ButtonWithTitle
+        <TextFnx size={fontSize.f16} color={colors.app.textContentLevel3}>
+          {'I_HAVE_ACCOUNT'.t()}
+          {'  '}
+        </TextFnx>
+        <ButtonWithTitle
           size={fontSize.f16}
           onPress={() => pop(componentId, LOGIN_SCREEN)}
           color={colors.highlight}

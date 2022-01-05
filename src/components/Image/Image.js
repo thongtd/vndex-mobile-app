@@ -6,7 +6,8 @@ import { isObject } from "lodash"
 import { get } from '../../configs/utils';
 const Image = ({
     style,
-    source
+    source,
+    resizeMode=FastImage.resizeMode.contain
 }) => {
     return (
         <>
@@ -16,7 +17,7 @@ const Image = ({
                     priority: FastImage.priority.high,
                     ...source
                 }}
-                resizeMode={FastImage.resizeMode.contain}
+                resizeMode={resizeMode}
             /> : <RN.Image source={source} style={style} resizeMode={"contain"} />}
         </>
     );

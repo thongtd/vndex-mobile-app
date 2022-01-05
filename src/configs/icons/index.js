@@ -2,8 +2,13 @@ import React from "react"
 import Lock from "assets/svg/ic_lock.svg"
 import Email from "assets/svg/ic_email.svg"
 import Copy from "assets/svg/ic_copy.svg"
+import Filter from "assets/svg/ic_filter.svg"
+import TickIc from 'assets/svg/tick.svg';
 export default {
+    icTick: <TickIc />,
     icCopy:<Copy />,
+    icFilter: <Filter />,
+    icMomo:require("assets/icons/momo.png"),
     avatar:require("assets/images/avatar.png"),
     bgLogin:require("assets/images/bg_login.jpeg"),
     bgSignup:require("assets/images/bg_signup.jpeg"),

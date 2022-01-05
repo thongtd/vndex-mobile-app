@@ -20,9 +20,13 @@ const Icon = ({
     style,
     name="search",
     size,
-    color
+    color,
+    iconComponent
 }) => {
     let Icon;
+    if(iconComponent){
+        return iconComponent;
+    }
     switch (type) {
         case constant.TYPE_ICON.FontAwesome:
             Icon = <FontAwesome style={style} name={name} size={size} color={color} />

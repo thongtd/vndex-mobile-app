@@ -186,11 +186,11 @@ const SettingScreen = ({componentId}) => {
           iconRight: true,
           onPress: onSupport,
         },
-        {
-          textLeft: 'About',
-          iconLeft: <St7 />,
-          textRight: `V ${constant.GOOGLE_VERSION}`,
-        },
+        // {
+        //   textLeft: 'About',
+        //   iconLeft: <St7 />,
+        //   textRight: `V ${constant.GOOGLE_VERSION}`,
+        // },
       ];
       return dataNoLogged;
     }

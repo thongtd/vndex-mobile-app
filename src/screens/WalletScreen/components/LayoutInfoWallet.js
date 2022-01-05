@@ -296,11 +296,13 @@ const LayoutInfoWallet = ({
             console.log(dataSubmit, res, 'reas');
             if (res) {
               if (get(res, 'status')) {
-                return toast(get(res, 'message'));
+                toast(get(res, 'message'));
+                return dismissAllModal()
               } else {
                 return toast(get(res, 'message'));
               }
             } else {
+              
               return toast(get(res, 'message'));
             }
           });

@@ -17,16 +17,19 @@ const ButtonSubmitClose = ({
     title=isSubmit?"SUBMIT".t():"CLOSE".t(),
     bgButtonColor=isSubmit?colors.app.yellowHightlight:colors.btnClose,
     colorTitle,
+    width,
+    height=48,
+    spaceHorizontal,
     ...rest
 }) => (
-    <View style={[stylest.flex,{paddingVertical:8}]}>
+    <View style={[stylest.flex,{paddingVertical:8, width:width}]}>
         <TouchableOpacity
             onPress={onPress}
             {...rest}
         >
-            <View style={[isButtonCircle?stylest.btnCircle:stylest.btn,{backgroundColor:bgButtonColor, flexDirection:"row"},style]}>
+            <View style={[isButtonCircle?stylest.btnCircle:stylest.btn,{backgroundColor:bgButtonColor,paddingHorizontal:spaceHorizontal, flexDirection:"row",height:height},style]}>
                 {iconLeftSvg && iconLeftSvg}
-                <TextFnx size={fontSize.f16} weight='bold' spaceLeft={iconLeftSvg?5:0} color={colorTitle?colorTitle:(isSubmit?colors.black:colors.textBtnClose)} value={title} />
+                <TextFnx size={fontSize.f16} weight={width?"500":"700"} spaceLeft={iconLeftSvg?5:0} color={colorTitle?colorTitle:(isSubmit?colors.black:colors.textBtnClose)} value={title} />
             </View>
         </TouchableOpacity>
     </View>

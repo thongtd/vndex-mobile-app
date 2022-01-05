@@ -11,8 +11,15 @@ export default {
     sell: '#D23131',
     backgroundLevel2: '#1D1D1D',
     backgroundLevel1: '#121212',
+    backgroundLevel4: '#52504A',
     grey700:'#646464',
-    buy:"#3A9232"
+    buy:"#3A9232",
+    secondary:"#FFBC0F",
+    backgroundButton:"#52504A",
+    sell:"#D23131",
+    dotBanner:"#393939",
+    bgBuy:"#274B1A",
+    bgSell:"#423131"
   },
   red: '#D23131',
   yellow: '#f9ca06',

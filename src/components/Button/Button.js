@@ -10,6 +10,7 @@ import ButtonSubmitClose from './ButtonSubmitClose';
 import PropTypes from 'prop-types'
 const Button = ({
     typeIconRight,
+    onPress,
     iconLeft,
     iconRight,
     isSubmit,
@@ -46,12 +47,34 @@ const Button = ({
     colorTitleClose,
     spaceTop,
     spaceBottom,
+    colorTitle,
+    isNormal,
     ...rest
 }) => (
         <>
+        
         {rest.isLabel && <TextFnx style={stylest.label} value={label} />}
+        
+           {
+               isNormal &&   <ButtonSubmitClose
+               spaceHorizontal={spaceHorizontal}
+               title={title}
+               width={width}
+               height={height}
+               // iconLeft={iconLeftSubmit}
+               iconLeftSvg={iconLeftSubmit}
+               isSubmit
+               isButtonCircle={false}
+               onPress={onPress}
+               bgButtonColor={bgButtonColor}
+               style={style}
+               colorTitle={colorTitle}
+               {...rest}
+           />
+           }
+        
             {(isSubmit || isClose) && (
-                <View style={[{ marginVertical: spaceVertical, marginTop: spaceTop, marginBottom: spaceBottom },isReverse &&{flexDirection:"row-reverse"}]}>
+                <View style={[{  marginVertical: spaceVertical, marginTop: spaceTop, marginBottom: spaceBottom },isReverse &&{flexDirection:"row-reverse"}]}>
                      {isSubmit && <ButtonSubmitClose
                      
                         title={textSubmit}
@@ -89,7 +112,7 @@ const Button = ({
                 {...rest}
                 onPress={onInput}
             >
-                <View style={[isInputCircle ? stylest.inputCircle : stylest.inputView, { marginVertical: spaceVertical }]}>
+                <View style={[isInputCircle ? stylest.inputCircle : stylest.inputView, { marginVertical: spaceVertical, marginHorizontal: spaceHorizontal, height:height }]}>
                     {iconLeft && <Icon name={iconLeft} style={[stylest.iconLeft]} />}
                     <View style={stylest.inputCore}>
                         <TextFnx value={placeholder} color={isPlaceholder ? colors.description : colors.text} />
