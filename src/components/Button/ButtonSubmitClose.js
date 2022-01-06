@@ -29,7 +29,7 @@ const ButtonSubmitClose = ({
         >
             <View style={[isButtonCircle?stylest.btnCircle:stylest.btn,{backgroundColor:bgButtonColor,paddingHorizontal:spaceHorizontal, flexDirection:"row",height:height},style]}>
                 {iconLeftSvg && iconLeftSvg}
-                <TextFnx size={fontSize.f16} weight={width?"500":"700"} spaceLeft={iconLeftSvg?5:0} color={colorTitle?colorTitle:(isSubmit?colors.black:colors.textBtnClose)} value={title} />
+                <TextFnx size={fontSize.f16} weight={"500"} spaceLeft={iconLeftSvg?5:0} color={colorTitle?colorTitle:(isSubmit?colors.black:colors.textBtnClose)} value={title} />
             </View>
         </TouchableOpacity>
     </View>

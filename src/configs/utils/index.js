@@ -473,8 +473,25 @@ export function hiddenTabbar(title="") {
       setRoot: {
         waitForRender: true,
       },
+      pop: {
+        content: {
+          translationX: {
+            from: 0,
+            to: require('react-native').Dimensions.get('window').width,
+            duration: 300
+          }
+        }
+      },
       push: {
         waitForRender: true,
+        content: {
+          translationX: {
+            from: require('react-native').Dimensions.get('window').width,
+            to: 0,
+            duration: 300
+          }
+        }
+  
       },
       showModal: {
         waitForRender: true,

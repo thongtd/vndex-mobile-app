@@ -69,6 +69,7 @@ export const itemScreen = ( nameScreen,title="") => {
                         visible: true
                     },
                     topBar:{
+                        
                         title:{
                             text:title
                         },
@@ -92,6 +93,12 @@ export const itemScreen = ( nameScreen,title="") => {
                         visible: true
                     },
                     topBar:{
+                        animate: true,
+                        visible: true,
+                        drawBehind: true,
+                        background: {
+                          color: 'transparent',
+                        },
                         title:{
                             text:title
                         },

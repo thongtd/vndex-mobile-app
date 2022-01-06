@@ -57,6 +57,7 @@ const Container = ({
   onRefresh,
   isFilter,
   spaceHorizontal = spacingApp,
+  backgroundColor=colors.app.backgroundLevel1
 }) => {
   const scrollRef = useRef();
   useEffect(() => {
@@ -101,7 +102,7 @@ const Container = ({
               stylest.container,
               {
                 paddingTop: space,
-                backgroundColor: colors.app.backgroundLevel1,
+                backgroundColor: backgroundColor,
                 paddingHorizontal: spaceHorizontal,
               },
               isFlex && {flex: 1},

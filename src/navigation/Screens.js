@@ -63,4 +63,5 @@ export const MODAL_ALERT = 'modal.Alert'
 
 // register Component
 export const BUTTON_ICON_RIGHT_NAV = 'nav.btnIconRight';
+export const BUTTON_ICON_LEFT_NAV = 'nav.btnIconLeft';
 

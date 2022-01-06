@@ -25,7 +25,7 @@ import {
   isSameScreen,
   resetScreenGlobal,
 } from '../configs/utils';
-import {COMMAND_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, STO_SCREEN} from '.';
+import {BUTTON_ICON_LEFT_NAV, COMMAND_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, STO_SCREEN} from '.';
 
 // Register all screens on launch
 // registerScreens();
@@ -46,8 +46,25 @@ export function pushTutorialScreen() {
           duration: 300,
         },
       },
+      pop: {
+        content: {
+          translationX: {
+            from:0,
+            to: require('react-native').Dimensions.get('window').width,
+            duration: 300
+          }
+        }
+      },
       push: {
         waitForRender: true,
+        content: {
+          translationX: {
+            from: require('react-native').Dimensions.get('window').width,
+            to: 0,
+            duration: 300
+          }
+        }
+  
       },
       showModal: {
         waitForRender: true,
@@ -151,8 +168,25 @@ export function pushSingleHiddenTopBarApp(
           setRoot: {
             waitForRender: true,
           },
+          pop: {
+            content: {
+              translationX: {
+                from: 0,
+                to: require('react-native').Dimensions.get('window').width,
+                duration: 300
+              }
+            }
+          },
           push: {
             waitForRender: true,
+            content: {
+              translationX: {
+                from: require('react-native').Dimensions.get('window').width,
+                to: 0,
+                duration: 300
+              }
+            }
+      
           },
           showModal: {
             waitForRender: true,
@@ -200,44 +234,69 @@ export function pushTabBasedApp(currenIndex = 0) {
   // resetScreenGlobal();
   return Navigation.setRoot({
     root: {
-      bottomTabs: {
-        children: [
-          Tabbar(
-            HOME_SCREEN,
-            require('assets/icons/Home.png'),
-            'P2P',
-            IdNavigation.Home.menu,
-          ),
-          Tabbar(
-            STO_SCREEN,
-            require('assets/icons/Sto.png'),
-            'STO'.t(),
-            IdNavigation.Sto.Menu,
-          ),
-          Tabbar(
-            LIQUID_SWAP_SCREEN,
-            require('assets/icons/swap.png'),
-            'LIQUID_SWAP'.t(),
-            IdNavigation.LiquidSwap.menu,
-          ),
-          Tabbar(
-            COMMAND_SCREEN,
-            require('assets/icons/History.png'),
-            'COMMAND'.t(),
-            IdNavigation.Command.menu,
-          ),
-          Tabbar(
-            WALLET_SCREEN,
-            require('assets/icons/Union.png'),
-            'WALLET'.t(),
-            IdNavigation.Wallet.menu,
-            'Property Overview'.t(),
-          ),
-        ],
-        options: {
-          bottomTabs: {currentTabIndex: currenIndex},
+      sideMenu:{
+        left: {
+          
+          component: {
+            id:BUTTON_ICON_LEFT_NAV,
+            name:BUTTON_ICON_LEFT_NAV,
+            options:{
+              topBar:{
+                visible:false
+              }
+            }
+          }
+         
         },
-      },
+        center: {
+          bottomTabs: {
+            children: [
+              Tabbar(
+                HOME_SCREEN,
+                require('assets/icons/Home.png'),
+                'P2P',
+                IdNavigation.Home.menu,
+              ),
+              Tabbar(
+                STO_SCREEN,
+                require('assets/icons/Sto.png'),
+                'STO'.t(),
+                IdNavigation.Sto.Menu,
+              ),
+              Tabbar(
+                LIQUID_SWAP_SCREEN,
+                require('assets/icons/swap.png'),
+                'LIQUID_SWAP'.t(),
+                IdNavigation.LiquidSwap.menu,
+              ),
+              Tabbar(
+                COMMAND_SCREEN,
+                require('assets/icons/History.png'),
+                'COMMAND'.t(),
+                IdNavigation.Command.menu,
+              ),
+              Tabbar(
+                WALLET_SCREEN,
+                require('assets/icons/Union.png'),
+                'WALLET'.t(),
+                IdNavigation.Wallet.menu,
+                'Property Overview'.t(),
+              ),
+            ],
+            options: {
+              bottomTabs: {currentTabIndex: currenIndex},
+            },
+          },
+        },
+        right: {
+          component: {
+            id:LOGIN_SCREEN,
+            name:LOGIN_SCREEN
+          }
+        }
+      }
+      
+      
     },
   });
 }

@@ -51,7 +51,7 @@ const ItemSetting = ({
             stylest.container,
             {height: height},{borderBottomWidth: 0.5},
           ]}>
- <TextFnx color={colorTitle}>{title}</TextFnx>
+ <TextFnx weight='700' color={colorTitle}>{title}</TextFnx>
           </View>
        
       ) : (
@@ -104,13 +104,13 @@ const ItemSetting = ({
                 spaceRight={10}
                 value={textRight}
               />
-            ) : (
+            ) : iconRight?(
               <Icon
                 size={sizeIconRight}
                 color={colorIcon}
                 name={'chevron-right'}
               />
-            )}
+            ):null}
           </View>
         </TouchableOpacity>
       )}

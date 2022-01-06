@@ -28,19 +28,47 @@ import ButtonIcon from '../../components/Button/ButtonIcon';
 import icons from '../../configs/icons';
 import Icon from '../../components/Icon';
 import {useRef} from 'react';
+import { get } from 'lodash';
+import { Dimensions , StatusBar } from 'react-native';
+
+const screenHeight = Dimensions.get('screen').height;
+const windowHeight = Dimensions.get('window').height;
+const navbarHeight = screenHeight - windowHeight + StatusBar.currentHeight;
+import { listenerEventEmitter, removeEventEmitter } from '../../configs/utils';
+var flagMenu = true;
 const HomeScreen = ({componentId}) => {
   const scrollRef = useRef();
 
   const [ActiveSymbol, setActiveSymbol] = useState('AIFT');
   useEffect(() => {
+   listenerEventEmitter('pushLogin',()=>{
+    
+      pushSingleScreenApp(componentId,LOGIN_SCREEN);
+    
+   })
     const navigationButtonEventListener =
       Navigation.events().registerNavigationButtonPressedListener(
         ({buttonId}) => {
+          if(buttonId == IdNavigation.PressIn.menuLeft){
+            
+              
+              
+              Navigation.mergeOptions(componentId, {
+                sideMenu: {
+                  left: {
+                    visible: true
+                  }
+                }
+              });
+            }
+            
+            
+           
           if (buttonId == IdNavigation.PressIn.profile) {
             if(logged){
-              pushSingleHiddenTopBarApp(componentId, SETTING_SCREEN);
+              pushSingleScreenApp(componentId, SETTING_SCREEN);
             }else{
-              pushSingleHiddenTopBarApp(componentId, LOGIN_SCREEN);
+              pushSingleScreenApp(componentId, LOGIN_SCREEN);
             }
             
             // pushSingleScreenApp(componentId, TRANSACTION_HISTORY, null, {
@@ -58,17 +86,24 @@ const HomeScreen = ({componentId}) => {
       );
     return () => {
       navigationButtonEventListener.remove();
+      removeEventEmitter('pushLogin');
     };
   }, []);
   const logged = useSelector(state => state.authentication.logged);
   return (
     <Container
+    
       ref={scrollRef}
       isScroll
       componentId={componentId}
       isTopBar
       isFooter
       title="P2P">
+        <View style={{
+          height:navbarHeight
+        }}>
+
+        </View>
       <Banner />
       {/* {logged ? (
           <Button

@@ -8,6 +8,7 @@ import { TextWhite } from '..';
 import Icon from '../Icon';
 import { constant } from '../../configs/constant';
 import Image from '../Image/Image';
+import TextFnx from '../Text/TextFnx';
 const ButtonIcon = ({
     onPress,
     name = "arrow-left",
@@ -25,6 +26,7 @@ const ButtonIcon = ({
     height,
     source,
     iconComponent,
+    title,
     ...rest
 }) => (
         <View style={[stylest.icon,style]} >
@@ -33,8 +35,9 @@ const ButtonIcon = ({
                 {...rest}
             >
                 <View style={[{
-                    paddingVertical:space
-                },styleView]}>
+                    paddingVertical:space,
+                    
+                },title &&{flexDirection:"row",alignItems:"center"}, styleView]}>
                     <View style={styleBlockIcon}>
                         {titleIcon ?
                             <TextWhite>{titleIcon}</TextWhite> :(hasImage?<Image source={source} style={{
@@ -46,9 +49,10 @@ const ButtonIcon = ({
                                 color={color}
                                 type={type} />)
                             }
+                            
                     </View>
+                    {title && <TextFnx spaceLeft={10}>{title}</TextFnx>}
                 </View>
-
             </TouchableOpacity>}
         </View>
 

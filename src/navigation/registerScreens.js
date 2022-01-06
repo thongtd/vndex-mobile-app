@@ -86,7 +86,7 @@ import HistoryTransactions from '../screens/WalletScreen/screenChildren/HistoryT
 import { KYC_SCREEN, REF_SCREEN } from './Screens';
 import {RefScreen}  from '../screens/RefScreen';
 import { KycScreen } from '../screens/KycScreen';
-import { ACCOUNTP2P_SCREEN, BUTTON_ICON_RIGHT_NAV, COMMAND_SCREEN, HISTORY_LOGIN_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, PAYMENT_METHOD_SCREEN, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, SEND_REG_SCREEN, STEP2KYC_SCREEN, STEP3KYC_SCREEN, STO_SCREEN, TOTAL_COMMISSION_SCREEN, UPDATE_ACCOUNT_SCREEN } from '.';
+import { ACCOUNTP2P_SCREEN, BUTTON_ICON_LEFT_NAV, BUTTON_ICON_RIGHT_NAV, COMMAND_SCREEN, HISTORY_LOGIN_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, PAYMENT_METHOD_SCREEN, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, SEND_REG_SCREEN, STEP2KYC_SCREEN, STEP3KYC_SCREEN, STO_SCREEN, TOTAL_COMMISSION_SCREEN, UPDATE_ACCOUNT_SCREEN } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
 import RoseDetails from '../screens/RefScreen/RoseDetails';
@@ -103,6 +103,7 @@ import StoScreen from '../screens/StoScreen/StoScreen';
 import LiquidSwapScreen from '../screens/LiquidSwapScreen/LiquidSwapScreen';
 import ButtonIcon from '../components/Button/ButtonIcon';
 import UpdateAccountScreen from '../screens/UpdateAccountScreen/UpdateAccountScreen';
+import Drawer from '../components/Drawer/Drawer';
 const WrapScreen = (ReduxScreen, store) => props => (
   <Provider store={store}>
     <ReduxScreen {...props} />
@@ -171,4 +172,6 @@ export const registerScreens = store => {
   
 //component screen
 Navigation.registerComponent(BUTTON_ICON_RIGHT_NAV,()=>withNavigationProvider(WrapScreen(ButtonIcon, store)),()=>ButtonIcon);
+Navigation.registerComponent(BUTTON_ICON_LEFT_NAV,()=>withNavigationProvider(WrapScreen(Drawer, store)),()=>Drawer);
+
 };

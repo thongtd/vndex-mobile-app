@@ -49,9 +49,22 @@ const Button = ({
     spaceBottom,
     colorTitle,
     isNormal,
+    marginTop,
+    marginHorizontal,
+    marginBottom,
+    marginVertical,
+    marginLeft,
+    marginRight,
     ...rest
 }) => (
-        <>
+        <View style={{
+            marginTop:marginTop,
+            marginHorizontal,
+            marginBottom,
+            marginRight,
+            marginLeft,
+            marginHorizontal
+        }}>
         
         {rest.isLabel && <TextFnx style={stylest.label} value={label} />}
         
@@ -133,7 +146,7 @@ const Button = ({
                 </TouchableOpacity>
             </View>}
 
-        </>
+        </View>
 
     );
 const stylest = StyleSheet.create({

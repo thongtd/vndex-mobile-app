@@ -4,7 +4,15 @@ import Email from "assets/svg/ic_email.svg"
 import Copy from "assets/svg/ic_copy.svg"
 import Filter from "assets/svg/ic_filter.svg"
 import TickIc from 'assets/svg/tick.svg';
+import IcMarketting from "assets/svg/ic_marketting.svg";
+import IcMarkettingTrans from "assets/svg/ic_marketting_trans.svg";
+import IcHistory from "assets/svg/ic_history.svg";
+import IcClose from "assets/svg/ic_close.svg";
 export default {
+    IcMarkettingTrans:<IcMarkettingTrans />,
+    IcClose:<IcClose />,
+    IcHistory:<IcHistory />,
+    IcMarketting:<IcMarketting/>,
     icTick: <TickIc />,
     icCopy:<Copy />,
     icFilter: <Filter />,
