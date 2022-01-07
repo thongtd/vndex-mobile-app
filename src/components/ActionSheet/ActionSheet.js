@@ -28,7 +28,7 @@ const BottomSheet = ({
             ref={actionRef}
             statusBarTranslucent
             bounceOnOpen={true}
-            bounciness={4}
+            bounciness={8}
             gestureEnabled={true}
             containerStyle={{
                 backgroundColor:colors.app.backgroundLevel2
@@ -55,7 +55,7 @@ export default BottomSheet
 
 const styles = StyleSheet.create({
     footer: {
-      height: 100,
+      paddingBottom:100
     },
     
   });

@@ -16,8 +16,10 @@ import IcViettelPay from 'assets/svg/ic_viettel_pay.svg';
 import IcMomoSvg from 'assets/svg/ic_momo_svg.svg';
 import IcBank2 from 'assets/svg/ic_bank_2.svg';
 
+import Checked from 'assets/svg/checked.svg';
 export default {
   IcTimer: <IcTimer />,
+  IcChecked:<Checked />,
   IcBank: <IcBank />,
   IcBank2: <IcBank2 />,
   IcViettelPay: <IcViettelPay />,
@@ -36,6 +38,7 @@ export default {
   bgLogin: require('assets/images/bg_login.jpeg'),
   bgSignup: require('assets/images/bg_signup.jpeg'),
   bgWallet: require('../../assets/images/bg_wallet.png'),
+  imgChecked:require("assets/images/checked.png"),
   copy: require('../../assets/icons/ic_copy.png'),
   ggAuthenL: require('../../assets/images/gg_authen_l.png'),
   ggAuthenL2: require('../../assets/images/gg_authen2_l.png'),

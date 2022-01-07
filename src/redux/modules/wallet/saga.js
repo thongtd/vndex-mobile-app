@@ -133,7 +133,7 @@ export function* asyncGetDepositCoinLog({ payload }) {
     }
   } catch (error) {
     emitEventEmitter("doneDCoinLog", true)
-    console.log(error, "payload");
+    
   }
 }
 
@@ -199,7 +199,7 @@ function* asyncGetBalanceByCurrency({ payload }) {
     if (payload) {
       const { UserId, currency } = payload;
       const res = yield call(WalletService.getWalletBalanceByCurrency, UserId, currency);
-      console.log(res,"getWalletBalanceByCurrency");
+      
       if (res) {
         yield put(actionsReducerWallet.getBalanceByCurrencySuccess(res));
       } else {
@@ -233,16 +233,16 @@ function* asyncGetCoinByType({ payload }) {
               }
             }
           }
-          console.log(coinData,"coinData");
+          
           yield put(actionsReducerWallet.getCoinByTypeCoinsSuccess([...orderBy(coinData, ['symbol'], ['asc'])]));
         }
 
       } else {
-        console.log(res, "by type")
+        
       }
     }
   } catch (error) {
-    console.log(error, "by type")
+    
   }
 }
 

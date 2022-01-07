@@ -107,6 +107,7 @@ import {
   STEP_2_BUY_SELL_SCREEN,
   STEP_3_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
+  STEP_5_BUY_SELL_SCREEN,
   STO_SCREEN,
   TOTAL_COMMISSION_SCREEN,
   UPDATE_ACCOUNT_SCREEN,
@@ -133,6 +134,7 @@ import Step1BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step1BuySell
 import Step2BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step2BuySellScreen';
 import Step3BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step3BuySellScreen';
 import Step4BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step4BuySellScreen';
+import Step5BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step5BuySellScreen';
 const WrapScreen = (ReduxScreen, store) => props =>
   (
     <Provider store={store}>
@@ -414,7 +416,11 @@ export const registerScreens = store => {
     () => withNavigationProvider(WrapScreen(Step4BuySellScreen, store)),
     () => Step4BuySellScreen,
   );
-
+  Navigation.registerComponent(
+    STEP_5_BUY_SELL_SCREEN,
+    () => withNavigationProvider(WrapScreen(Step5BuySellScreen, store)),
+    () => Step5BuySellScreen,
+  );
   //modal screen
   Navigation.registerComponent(
     ALERT_NOTICE_PASSWORD,
