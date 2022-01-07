@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
@@ -15,7 +15,9 @@ import Button from '../../../components/Button/Button';
 import {pushSingleScreenApp, STEP_2_BUY_SELL_SCREEN, STEP_3_BUY_SELL_SCREEN} from '../../../navigation';
 import ButtonIcon from '../../../components/Button/ButtonIcon';
 import Copy from "assets/svg/ic_copy.svg"
+import BottomSheet from '../../../components/ActionSheet/ActionSheet';
 const Step2BuySellScreen = ({componentId}) => {
+  const actionSheetRef = useRef(null);
   return (
     <Container
       space={15}
@@ -196,7 +198,7 @@ const Step2BuySellScreen = ({componentId}) => {
         <Button
           isSubmit
           isClose
-          onSubmit={()=>pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)}
+          onSubmit={() => actionSheetRef?.current?.show()}
           colorTitle={colors.text}
           weightTitle={'700'}
           textClose={'Huỷ lệnh'}
@@ -204,6 +206,21 @@ const Step2BuySellScreen = ({componentId}) => {
           //   te={'MUA USDT'}
         />
       </View>
+      
+      <BottomSheet title="KAKA" actionRef={actionSheetRef}>
+        <View
+          style={{
+            paddingVertical: 50,
+          }}>
+          <TextFnx>Hello</TextFnx>
+          <TextFnx>Hello</TextFnx>
+          <TextFnx>Hello</TextFnx>
+
+          <TextFnx>Hello</TextFnx>
+          <TextFnx>Hello</TextFnx>
+          <TextFnx>Hello</TextFnx>
+        </View>
+      </BottomSheet>
     </Container>
   );
 };

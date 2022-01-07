@@ -15,12 +15,12 @@ const BottomSheet = ({
     children
 }) => {
     // const actionSheetRef = useRef(null);
-    // useEffect(() => {
-    //     actionRef(actionSheetRef)
-    //     return () => {
+    useEffect(() => {
+        console.log("ok");
+        return () => {
             
-    //     }
-    // }, [actionSheetRef])
+        }
+    }, [actionRef])
     return (
         <ActionSheet
         
@@ -28,14 +28,14 @@ const BottomSheet = ({
             ref={actionRef}
             statusBarTranslucent
             bounceOnOpen={true}
-            drawUnderStatusBar={true}
             bounciness={4}
             gestureEnabled={true}
             containerStyle={{
                 backgroundColor:colors.app.backgroundLevel2
             }}
             indicatorColor={colors.app.backgroundLevel3}
-            defaultOverlayOpacity={0.3}>
+            defaultOverlayOpacity={0.3}
+            >
                 <Layout isCenter spaceBottom={10}>
                     <TextFnx weight='500' size={fontSize.f16}>{title}</TextFnx>
                 </Layout>

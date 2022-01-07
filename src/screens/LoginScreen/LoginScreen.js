@@ -147,7 +147,7 @@ const LoginScreen = ({componentId, hasBack}) => {
       </View> */}
       <View style={stylest.title}>
         <TextFnx
-          spaceTop={Platform.OS == 'android' && 40}
+          spaceTop={Platform.OS == 'android' ? 40:0}
           size={30}
           color={colors.tabbarActive}
           weight={'bold'}
