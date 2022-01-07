@@ -420,6 +420,7 @@ const stylest = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    
   },
 });
 export default SettingScreen;

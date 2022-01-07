@@ -33,6 +33,7 @@ export const TOTAL_COMMISSION_SCREEN = 'vndex.title.totalCommission';
 export const ROSE_DETAIL_SCREEN = 'vndex.title.RoseDetails';
 export const REFFERAL_FRIEND_SCREEN = 'vndex.title.RefferalFriend';
 export const PAYMENT_METHOD_SCREEN = 'vndex.title.paymentMethod';
+export const ADD_PAYMENT_METHOD_SCREEN = 'vndex.title.addPaymentMethod';
 export const ACCOUNTP2P_SCREEN = 'vndex.title.AccountP2p';
 export const HISTORY_LOGIN_SCREEN = 'vndex.title.HistoryLogin';
 export const FA_CODE_EMAIL = 'vndex.title.faCodeEmail';
