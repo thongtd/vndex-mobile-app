@@ -57,6 +57,7 @@ export const STEP_1_BUY_SELL_SCREEN = 'vndex.title.Step1BuySellScreen';
 export const STEP_2_BUY_SELL_SCREEN = 'vndex.title.Step2BuySellScreen';
 export const STEP_3_BUY_SELL_SCREEN = 'vndex.title.Step3BuySellScreen';
 export const STEP_4_BUY_SELL_SCREEN = 'vndex.title.Step4BuySellScreen';
+export const STEP_5_BUY_SELL_SCREEN = 'vndex.title.Step5BuySellScreen';
 // register Modal
 export const ALERT_NOTICE_PASSWORD = 'modal.AlertNoticePassword';
 export const PICKER_SEARCH = 'modal.PickerSearch'

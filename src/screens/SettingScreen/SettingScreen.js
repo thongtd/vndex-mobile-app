@@ -292,7 +292,7 @@ const SettingScreen = ({componentId}) => {
     <Container
       space={5}
       componentId={componentId}
-      isTopBar={true}
+      isTopBar={false}
       title={'Account'.t()}
       isScroll>
       <Layout space={10} isSpaceBetween>

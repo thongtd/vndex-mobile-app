@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
 import Layout from '../../../components/Layout/Layout';
@@ -18,6 +18,7 @@ import Copy from "assets/svg/ic_copy.svg"
 import BottomSheet from '../../../components/ActionSheet/ActionSheet';
 const Step2BuySellScreen = ({componentId}) => {
   const actionSheetRef = useRef(null);
+  
   return (
     <Container
       space={15}
@@ -25,7 +26,7 @@ const Step2BuySellScreen = ({componentId}) => {
       isTopBar
       isScroll
       componentId={componentId}
-      title="MUA USDT">
+      title="Thông tin thanh toán">
       <Layout
         isLineCenter
         style={{
@@ -41,7 +42,7 @@ const Step2BuySellScreen = ({componentId}) => {
         <TextFnx color={colors.app.yellowHightlight}>14:31</TextFnx>
       </Layout>
       <Layout type="column" spaceHorizontal={spacingApp}>
-        <TimelineBuySell step={1} title={'Thông tin chuyển tiền'} />
+        <TimelineBuySell step={1} title={'Chuyển tiền và Xác nhận chuyển tiền'} />
       </Layout>
       <View
         style={{
@@ -74,20 +75,20 @@ const Step2BuySellScreen = ({componentId}) => {
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>5,000 AIF</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>1.120000 AIF</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>1.120000 AIF</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
-          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>1234567890</TextFnx>
           <ButtonIcon 
           style={{
               height:25,
@@ -99,7 +100,7 @@ const Step2BuySellScreen = ({componentId}) => {
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>16-11-2021 11:20:35</TextFnx>
         </Layout>
         <Layout style={{
             backgroundColor:colors.app.lineSetting,
@@ -126,7 +127,9 @@ const Step2BuySellScreen = ({componentId}) => {
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
                 kkk
               </TextFnx>
-              <Layout>
+              <Layout style={{
+                paddingTop:5
+              }}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -180,7 +183,7 @@ const Step2BuySellScreen = ({componentId}) => {
         </Layout>
         <Layout space={5} isLineCenter>
             <Icon iconComponent={icons.IcChecked} />
-            <TextFnx>{" "}VNDEX đã khóa token của người bán</TextFnx>
+            <TextFnx>{" "}VNDEX hỗ trợ 24/7</TextFnx>
         </Layout>
         <Layout
           style={{
@@ -196,6 +199,7 @@ const Step2BuySellScreen = ({componentId}) => {
           </TextFnx>
         </Layout>
         <Button
+        spaceVertical={20}
           isSubmit
           isClose
           onSubmit={() => actionSheetRef?.current?.show()}
@@ -207,19 +211,144 @@ const Step2BuySellScreen = ({componentId}) => {
         />
       </View>
       
-      <BottomSheet title="KAKA" actionRef={actionSheetRef}>
-        <View
-          style={{
-            paddingVertical: 50,
+      <BottomSheet title="Chọn Phương thức thanh toán" actionRef={actionSheetRef}>
+        <ScrollView
+        contentContainerStyle={{
+          paddingBottom:100
+        }}
+        nestedScrollEnabled
+        showsVerticalScrollIndicator={false}
+        onScrollEndDrag={() =>
+          actionSheetRef.current?.handleChildScrollEnd()
+        }
+        onScrollAnimationEnd={() =>
+          actionSheetRef.current?.handleChildScrollEnd()
+        }
+        onMomentumScrollEnd={() =>
+          actionSheetRef.current?.handleChildScrollEnd()
+        }
+        >
+          <TouchableOpacity onPress={()=>{
+            actionSheetRef.current?.hide();
+            pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)
           }}>
-          <TextFnx>Hello</TextFnx>
-          <TextFnx>Hello</TextFnx>
-          <TextFnx>Hello</TextFnx>
-
-          <TextFnx>Hello</TextFnx>
-          <TextFnx>Hello</TextFnx>
-          <TextFnx>Hello</TextFnx>
-        </View>
+          <Layout style={{
+            paddingVertical:10,
+            borderBottomWidth:1,
+            borderColor:colors.app.lineSetting
+          }}>
+            <Icon name='credit-card' color={colors.app.textContentLevel3} size={14} />
+            <Layout spaceLeft={20} type='column'>
+              <TextFnx spaceBottom={3} color={colors.app.textContentLevel3}>
+              Chuyển khoản
+              </TextFnx>
+             
+             <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+             LU TUAN ANH
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              12345677767
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              Techcombank
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              18 Le van luong
+              </TextFnx>
+            </Layout>
+          </Layout>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            actionSheetRef.current?.hide();
+            pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)
+          }}>
+          <Layout style={{
+            paddingVertical:10,
+            borderBottomWidth:1,
+            borderColor:colors.app.lineSetting
+          }}>
+            <Icon name='credit-card' color={colors.app.textContentLevel3} size={14} />
+            <Layout spaceLeft={20} type='column'>
+              <TextFnx spaceBottom={3} color={colors.app.textContentLevel3}>
+              Chuyển khoản
+              </TextFnx>
+             
+             <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+             LU TUAN ANH
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              12345677767
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              Techcombank
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              18 Le van luong
+              </TextFnx>
+            </Layout>
+          </Layout>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            actionSheetRef.current?.hide();
+            pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)
+          }}>
+          <Layout style={{
+            paddingVertical:10,
+            borderBottomWidth:1,
+            borderColor:colors.app.lineSetting
+          }}>
+            <Icon name='credit-card' color={colors.app.textContentLevel3} size={14} />
+            <Layout spaceLeft={20} type='column'>
+              <TextFnx spaceBottom={3} color={colors.app.textContentLevel3}>
+              Chuyển khoản
+              </TextFnx>
+             
+             <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+             LU TUAN ANH
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              12345677767
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              Techcombank
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              18 Le van luong
+              </TextFnx>
+            </Layout>
+          </Layout>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            actionSheetRef.current?.hide();
+            pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)
+          }}>
+          <Layout style={{
+            paddingVertical:10,
+            borderBottomWidth:1,
+            borderColor:colors.app.lineSetting
+          }}>
+            <Icon name='credit-card' color={colors.app.textContentLevel3} size={14} />
+            <Layout spaceLeft={20} type='column'>
+              <TextFnx spaceBottom={3} color={colors.app.textContentLevel3}>
+              Chuyển khoản
+              </TextFnx>
+             
+             <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+             LU TUAN ANH
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              12345677767
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              Techcombank
+              </TextFnx>
+              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+              18 Le van luong
+              </TextFnx>
+            </Layout>
+          </Layout>
+          </TouchableOpacity>
+        </ScrollView>
       </BottomSheet>
     </Container>
   );

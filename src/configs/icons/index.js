@@ -25,6 +25,7 @@ export default {
     bgLogin:require("assets/images/bg_login.jpeg"),
     bgSignup:require("assets/images/bg_signup.jpeg"),
     bgWallet:require("../../assets/images/bg_wallet.png"),
+    imgChecked:require("assets/images/checked.png"),
     copy:require("../../assets/icons/ic_copy.png"),
     ggAuthenL: require("../../assets/images/gg_authen_l.png"),
     ggAuthenL2: require("../../assets/images/gg_authen2_l.png"),
