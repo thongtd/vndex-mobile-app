@@ -53,8 +53,10 @@ export const HISTORY_DEPOSIT_FIAT_SCREEN = 'vndex.title.HistoryDepositFiatScreen
 export const WITHDRAW_COIN_SCREEN = 'vndex.title.WithdrawCoinScreen';
 export const WITHDRAW_FIAT_SCREEN = 'vndex.title.WithdrawFiatScreen';
 export const TRANSACTION_HISTORY = 'vndex.title.TransactionHistory';
-
-
+export const STEP_1_BUY_SELL_SCREEN = 'vndex.title.Step1BuySellScreen';
+export const STEP_2_BUY_SELL_SCREEN = 'vndex.title.Step2BuySellScreen';
+export const STEP_3_BUY_SELL_SCREEN = 'vndex.title.Step3BuySellScreen';
+export const STEP_4_BUY_SELL_SCREEN = 'vndex.title.Step4BuySellScreen';
 // register Modal
 export const ALERT_NOTICE_PASSWORD = 'modal.AlertNoticePassword';
 export const PICKER_SEARCH = 'modal.PickerSearch'

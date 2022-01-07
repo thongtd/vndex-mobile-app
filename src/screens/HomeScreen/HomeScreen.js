@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {LayoutSplashScreen} from '../../components';
 import Button from '../../components/Button/Button';
-import {LOGIN_SCREEN, SETTING_SCREEN} from '../../navigation';
+import {LOGIN_SCREEN, SETTING_SCREEN, STEP_1_BUY_SELL_SCREEN} from '../../navigation';
 import {
   pushSingleHiddenTopBarApp,
   pushSingleScreenApp,
@@ -99,11 +99,7 @@ const HomeScreen = ({componentId}) => {
       isTopBar
       isFooter
       title="P2P">
-        <View style={{
-          height:navbarHeight
-        }}>
-
-        </View>
+      
       <Banner />
       {/* {logged ? (
           <Button
@@ -240,6 +236,7 @@ const HomeScreen = ({componentId}) => {
                 spaceHorizontal={20}
                 isNormal
                 // width={175}
+                onPress={()=>pushSingleScreenApp(componentId,STEP_1_BUY_SELL_SCREEN)}
                 title={'Mua USDT'}
                 height={40}
                 colorTitle={colors.app.buy}
@@ -247,23 +244,24 @@ const HomeScreen = ({componentId}) => {
               />
             </View>
           </Layout>
+      
           <Layout>
-            <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-              Khả dụng{' '}
-            </TextFnx>
-            <TextFnx size={fontSize.f12}>89.25 AIFT</TextFnx>
-          </Layout>
-
-          <Layout space={5} isSpaceBetween>
-            <Layout>
-              <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-                Giới hạn {'   '}
-              </TextFnx>
-              <TextFnx size={fontSize.f12}>
-                50,000,000 - 1,000,000,000 VND
-              </TextFnx>
-            </Layout>
-            <Layout>
+        <Layout type='column' spaceRight={10} >
+          <TextFnx space={3} size={fontSize.f12} color={colors.app.textDisabled}>
+            Khả dụng
+          </TextFnx>
+          <TextFnx space={3} size={fontSize.f12} color={colors.app.textDisabled}>
+            Giới hạn
+          </TextFnx>
+        </Layout>
+        <View style={{
+          flex:1
+        }}>
+          <TextFnx space={3} size={fontSize.f12}>89.23 AIFT</TextFnx>
+          <Layout isSpaceBetween>
+            <TextFnx space={3} size={fontSize.f12}>50,000,000 - 1,000,000,000 VND</TextFnx>
+          <Layout>
+          
               <Image
                 source={icons.icMomo}
                 style={{
@@ -278,6 +276,9 @@ const HomeScreen = ({componentId}) => {
               />
             </Layout>
           </Layout>
+          
+        </View>
+      </Layout>
         </View>
       ))}
     </Container>

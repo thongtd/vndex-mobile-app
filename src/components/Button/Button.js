@@ -55,6 +55,7 @@ const Button = ({
     marginVertical,
     marginLeft,
     marginRight,
+    weightTitle,
     ...rest
 }) => (
         <View style={{
@@ -74,6 +75,7 @@ const Button = ({
                title={title}
                width={width}
                height={height}
+               weightTitle={weightTitle}
                // iconLeft={iconLeftSubmit}
                iconLeftSvg={iconLeftSubmit}
                isSubmit
@@ -89,7 +91,7 @@ const Button = ({
             {(isSubmit || isClose) && (
                 <View style={[{  marginVertical: spaceVertical, marginTop: spaceTop, marginBottom: spaceBottom },isReverse &&{flexDirection:"row-reverse"}]}>
                      {isSubmit && <ButtonSubmitClose
-                     
+                     weightTitle={weightTitle}
                         title={textSubmit}
                         // iconLeft={iconLeftSubmit}
                         iconLeftSvg={iconLeftSubmit}
@@ -107,6 +109,7 @@ const Button = ({
                         bgButtonColor={bgButtonColor}
                         title={textClose}
                         isClose
+                        weightTitle={weightTitle}
                         isButtonCircle={isButtonCircle}
                         onPress={onClose}
                         iconLeftSvg={iconLeftClose}

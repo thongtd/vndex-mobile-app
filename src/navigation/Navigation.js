@@ -32,10 +32,11 @@ import {BUTTON_ICON_LEFT_NAV, COMMAND_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, S
 export function pushTutorialScreen() {
   Navigation.setDefaultOptions({
     layout: {
-      backgroundColor: 'transparent',
-      componentBackgroundColor: 'transparent',
+      backgroundColor: colors.app.backgroundLevel1,
+      componentBackgroundColor: colors.app.backgroundLevel1,
+      orientation: ['portrait'],
     },
-    screenBackgroundColor: 'transparent',
+    screenBackgroundColor: colors.app.backgroundLevel1,
     modalPresentationStyle: 'overCurrentContext',
     animations: {
       setRoot: {
@@ -88,9 +89,6 @@ export function pushTutorialScreen() {
       style: 'dark',
       backgroundColor: colors.app.backgroundLevel1,
       visible: true,
-    },
-    layout: {
-      orientation: ['portrait'],
     },
     bottomTabs: {
       titleDisplayMode: 'alwaysShow',

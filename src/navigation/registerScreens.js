@@ -86,7 +86,7 @@ import HistoryTransactions from '../screens/WalletScreen/screenChildren/HistoryT
 import { KYC_SCREEN, REF_SCREEN } from './Screens';
 import {RefScreen}  from '../screens/RefScreen';
 import { KycScreen } from '../screens/KycScreen';
-import { ACCOUNTP2P_SCREEN, BUTTON_ICON_LEFT_NAV, BUTTON_ICON_RIGHT_NAV, COMMAND_SCREEN, HISTORY_LOGIN_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, PAYMENT_METHOD_SCREEN, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, SEND_REG_SCREEN, STEP2KYC_SCREEN, STEP3KYC_SCREEN, STO_SCREEN, TOTAL_COMMISSION_SCREEN, UPDATE_ACCOUNT_SCREEN } from '.';
+import { ACCOUNTP2P_SCREEN, BUTTON_ICON_LEFT_NAV, BUTTON_ICON_RIGHT_NAV, COMMAND_SCREEN, HISTORY_LOGIN_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, PAYMENT_METHOD_SCREEN, REFFERAL_FRIEND_SCREEN, ROSE_DETAIL_SCREEN, SEND_REG_SCREEN, STEP2KYC_SCREEN, STEP3KYC_SCREEN, STEP_1_BUY_SELL_SCREEN, STEP_2_BUY_SELL_SCREEN, STEP_3_BUY_SELL_SCREEN, STEP_4_BUY_SELL_SCREEN, STO_SCREEN, TOTAL_COMMISSION_SCREEN, UPDATE_ACCOUNT_SCREEN } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
 import RoseDetails from '../screens/RefScreen/RoseDetails';
@@ -104,6 +104,10 @@ import LiquidSwapScreen from '../screens/LiquidSwapScreen/LiquidSwapScreen';
 import ButtonIcon from '../components/Button/ButtonIcon';
 import UpdateAccountScreen from '../screens/UpdateAccountScreen/UpdateAccountScreen';
 import Drawer from '../components/Drawer/Drawer';
+import Step1BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step1BuySellScreen';
+import Step2BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step2BuySellScreen';
+import Step3BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step3BuySellScreen';
+import Step4BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step4BuySellScreen';
 const WrapScreen = (ReduxScreen, store) => props => (
   <Provider store={store}>
     <ReduxScreen {...props} />
@@ -164,7 +168,12 @@ export const registerScreens = store => {
   Navigation.registerComponent(STO_SCREEN,()=>withNavigationProvider(WrapScreen(StoScreen, store)),()=>StoScreen);
   Navigation.registerComponent(LIQUID_SWAP_SCREEN,()=>withNavigationProvider(WrapScreen(LiquidSwapScreen, store)),()=>LiquidSwapScreen);
   Navigation.registerComponent(UPDATE_ACCOUNT_SCREEN,()=>withNavigationProvider(WrapScreen(UpdateAccountScreen, store)),()=>UpdateAccountScreen);
-//modal screen
+  Navigation.registerComponent(STEP_1_BUY_SELL_SCREEN,()=>withNavigationProvider(WrapScreen(Step1BuySellScreen, store)),()=>Step1BuySellScreen);
+  Navigation.registerComponent(STEP_2_BUY_SELL_SCREEN,()=>withNavigationProvider(WrapScreen(Step2BuySellScreen, store)),()=>Step2BuySellScreen);
+  Navigation.registerComponent(STEP_3_BUY_SELL_SCREEN,()=>withNavigationProvider(WrapScreen(Step3BuySellScreen, store)),()=>Step3BuySellScreen);
+  Navigation.registerComponent(STEP_4_BUY_SELL_SCREEN,()=>withNavigationProvider(WrapScreen(Step4BuySellScreen, store)),()=>Step4BuySellScreen);
+
+  //modal screen
   Navigation.registerComponent(ALERT_NOTICE_PASSWORD,()=>withNavigationProvider(WrapScreen(AlertNoticePassword, store)),()=>AlertNoticePassword);
   Navigation.registerComponent(PICKER_SEARCH,()=>withNavigationProvider(WrapScreen(PickerSearchBox, store)),()=>PickerSearchBox);
   Navigation.registerComponent(ALERT_ACCOUNT_ACTIVE,()=>withNavigationProvider(WrapScreen(AlertAccountActive, store)),()=>AlertAccountActive);

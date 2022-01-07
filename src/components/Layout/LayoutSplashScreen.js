@@ -34,7 +34,7 @@ const LayoutSplashScreen = ({
   ...rest
 }) => {
   useEffect(() => {
-    Navigation.mergeOptions(componentId, {
+      Navigation.mergeOptions(componentId, {
         animations: {
             setRoot: {
               waitForRender: true,
@@ -69,19 +69,7 @@ const LayoutSplashScreen = ({
         title:{
             text:title
         }
-        // rightButtons: [
-        //     {
-        //         id: 'CustomComponent',
-        //         component: {
-        //             name: BUTTON_ICON_RIGHT_NAV,
-        //             passProps: {
-        //                 originComponentId: componentId,
-        //                 title:"ok",
-        //                 color:colors.highlight
-        //                 // Any other prop you want to pass over
-        //             }
-        //         }
-        //     }]
+       
       },
     });
     return () => {};

@@ -8,7 +8,9 @@ import IcMarketting from "assets/svg/ic_marketting.svg";
 import IcMarkettingTrans from "assets/svg/ic_marketting_trans.svg";
 import IcHistory from "assets/svg/ic_history.svg";
 import IcClose from "assets/svg/ic_close.svg";
+import IcTimer from "assets/svg/ic_timer.svg";
 export default {
+    IcTimer:<IcTimer />,
     IcMarkettingTrans:<IcMarkettingTrans />,
     IcClose:<IcClose />,
     IcHistory:<IcHistory />,

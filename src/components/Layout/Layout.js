@@ -1,7 +1,8 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import colors from '../../configs/styles/colors';
-
+import { ViewPropTypes } from 'react-native';
+import PropTypes from 'prop-types';
 const Layout = ({
   children,
   type = 'row',
@@ -13,6 +14,10 @@ const Layout = ({
   isTransparent,
   isLineCenter,
   isRightColumn,
+  spaceRight,
+  spaceLeft,
+  spaceTop,
+  spaceBottom,
   ...rest
 }) => (
   <View
@@ -22,6 +27,10 @@ const Layout = ({
         flexDirection: type,
         paddingVertical: space,
         paddingHorizontal: spaceHorizontal,
+        paddingTop: spaceTop,
+        paddingBottom: spaceBottom,
+        paddingRight: spaceRight,
+        paddingLeft: spaceLeft
       },
       isCenter && {
         alignItems: 'center',
@@ -46,4 +55,8 @@ const Layout = ({
   </View>
 );
 
+
+Layout.propTypes = {
+  style: ViewPropTypes.style
+};
 export default Layout;

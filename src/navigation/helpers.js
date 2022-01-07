@@ -94,11 +94,11 @@ export const itemScreen = ( nameScreen,title="") => {
                     },
                     topBar:{
                         animate: true,
-                        visible: true,
-                        drawBehind: true,
-                        background: {
-                          color: 'transparent',
-                        },
+                        // visible: true,
+                        // drawBehind: true,
+                        // background: {
+                        //   color: 'transparent',
+                        // },
                         title:{
                             text:title
                         },
