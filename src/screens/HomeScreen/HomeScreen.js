@@ -37,11 +37,11 @@ const navbarHeight = screenHeight - windowHeight + StatusBar.currentHeight;
 import { listenerEventEmitter, removeEventEmitter } from '../../configs/utils';
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
-  const scrollRef = useRef();
+  
 
   const [ActiveSymbol, setActiveSymbol] = useState('AIFT');
   useEffect(() => {
-   listenerEventEmitter('pushLogin',()=>{
+   const listenerEmit = listenerEventEmitter('pushLogin',()=>{
     
       pushSingleScreenApp(componentId,LOGIN_SCREEN);
     
@@ -86,14 +86,13 @@ const HomeScreen = ({componentId}) => {
       );
     return () => {
       navigationButtonEventListener.remove();
-      removeEventEmitter('pushLogin');
+      listenerEmit.remove();
     };
   }, []);
   const logged = useSelector(state => state.authentication.logged);
   return (
     <Container
     
-      ref={scrollRef}
       isScroll
       componentId={componentId}
       isTopBar

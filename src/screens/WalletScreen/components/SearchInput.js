@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import { Text, View, TextInput, StyleSheet,Platform } from 'react-native';
 import colors from '../../../configs/styles/colors';
 import Icon from '../../../components/Icon';
-import { emitEventEmitter, listenerEventEmitter } from '../../../configs/utils';
+import { emitEventEmitter, listenerEventEmitter, removeEventEmitter } from '../../../configs/utils';
 import Input from '../../../components/Input';
 import SearchIc from "assets/svg/ic_search.svg";
 const SearchInput = ({
@@ -11,6 +11,9 @@ const SearchInput = ({
     const [Search, setSearch] = useState("");
     useEffect(() => {
         listenerEventEmitter("textSearch",(text)=>setSearch(text))
+        return () => {
+            removeEventEmitter("textSearch");
+        }
     }, [])
     return (
         <Input 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
@@ -12,9 +12,12 @@ import {Rating, AirbnbRating} from 'react-native-ratings';
 import Image from '../../../components/Image/Image';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
-import {pushSingleScreenApp, STEP_2_BUY_SELL_SCREEN} from '../../../navigation';
-
+import {pushSingleScreenApp, STEP_2_BUY_SELL_SCREEN, STEP_3_BUY_SELL_SCREEN} from '../../../navigation';
+import ButtonIcon from '../../../components/Button/ButtonIcon';
+import Copy from "assets/svg/ic_copy.svg"
+import BottomSheet from '../../../components/ActionSheet/ActionSheet';
 const Step2BuySellScreen = ({componentId}) => {
+  const actionSheetRef = useRef(null);
   return (
     <Container
       space={15}
@@ -47,73 +50,63 @@ const Step2BuySellScreen = ({componentId}) => {
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
           paddingHorizontal: spacingApp,
-          
         }}>
-       <TextFnx weight='700' color={colors.app.buy}>
-       Mua USDT
-       </TextFnx>
-       <Layout isLineCenter isSpaceBetween space={10} style={{
-           borderBottomWidth:1,
-           borderColor:colors.app.lineSetting
-       }}>
-           <TextFnx color={colors.app.textContentLevel3}>
-           Số tiền
-           </TextFnx>
-           <TextFnx size={16} weight='700' color={colors.app.buy}>
-           150.000.000{" "}
-           <TextFnx color={colors.app.textContentLevel3}>VND</TextFnx>
-           </TextFnx>
-           
-       </Layout>
-       <Layout isSpaceBetween space={8}>
-           <TextFnx color={colors.app.textContentLevel3}>
-               Giá
-           </TextFnx>
-           <TextFnx color={colors.app.textContentLevel2}>
-           24.525 VND
-           </TextFnx>
-       </Layout>
-       <Layout isSpaceBetween space={8}>
-           <TextFnx color={colors.app.textContentLevel3}>
-           Số lượng
-           </TextFnx>
-           <TextFnx color={colors.app.textContentLevel2}>
-           24.525 VND
-           </TextFnx>
-       </Layout>
-       <Layout isSpaceBetween space={8}>
-           <TextFnx color={colors.app.textContentLevel3}>
-           Phí
-           </TextFnx>
-           <TextFnx color={colors.app.textContentLevel2}>
-           24.525 VND
-           </TextFnx>
-       </Layout>
-       <Layout isSpaceBetween space={8}>
-           <TextFnx color={colors.app.textContentLevel3}>
-           Thuế
-           </TextFnx>
-           <TextFnx color={colors.app.textContentLevel2}>
-           24.525 VND
-           </TextFnx>
-       </Layout>
-       <Layout isSpaceBetween space={8}>
-           <TextFnx color={colors.app.textContentLevel3}>
-           Số Lệnh
-           </TextFnx>
-           <TextFnx color={colors.app.textContentLevel2}>
-           24.525 VND
-           </TextFnx>
-       </Layout>
-       <Layout isSpaceBetween space={8}>
-           <TextFnx color={colors.app.textContentLevel3}>
-           Thời gian tạo
-           </TextFnx>
-           <TextFnx color={colors.app.textContentLevel2}>
-           24.525 VND
-           </TextFnx>
-       </Layout>
-       <Layout isLineCenter space={15}>
+        <TextFnx weight="700" color={colors.app.buy}>
+          Mua USDT
+        </TextFnx>
+        <Layout
+          isLineCenter
+          isSpaceBetween
+          space={10}
+          style={{
+            borderBottomWidth: 1,
+            borderColor: colors.app.lineSetting,
+          }}>
+          <TextFnx color={colors.app.textContentLevel3}>Số tiền</TextFnx>
+          <TextFnx size={16} weight="700" color={colors.app.buy}>
+            150.000.000{' '}
+            <TextFnx color={colors.app.textContentLevel3}>VND</TextFnx>
+          </TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Giá</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
+          <Layout isLineCenter>
+          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+          <ButtonIcon 
+          style={{
+              height:25,
+              width:30
+          }}
+          iconComponent={<Copy height={20} width={20} />}
+          />
+          </Layout>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+        </Layout>
+        <Layout style={{
+            backgroundColor:colors.app.lineSetting,
+            borderRadius:10,
+            paddingLeft:16
+        }} isSpaceBetween space={15}>
+          <Layout>
             <View
               style={{
                 paddingRight: 15,
@@ -126,44 +119,74 @@ const Step2BuySellScreen = ({componentId}) => {
                 }}
               />
             </View>
-            <View>
-              <Layout type='column'>
-                  <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-                  Người bán
-                  </TextFnx>
-                <TextFnx
-                  color={colors.app.lightWhite}
-                  
-                  size={fontSize.f16}>
-                      kkk
-                  
-                </TextFnx>
+            <Layout type="column">
+              <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
+                Người bán
+              </TextFnx>
+              <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
+                kkk
+              </TextFnx>
+              <Layout>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    backgroundColor: '#3B2B2B',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingHorizontal: 5,
+                    paddingVertical: 2,
+                    borderRadius: 5,
+                    marginRight: 10,
+                  }}>
+                  <Image
+                    source={icons.icMomo}
+                    style={{
+                      marginLeft: 5,
+                      width: 10,
+                      height: 10,
+                    }}
+                  />
+                  <TextFnx spaceLeft={5}>Momo</TextFnx>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    backgroundColor: '#3B2B2B',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingHorizontal: 5,
+                    paddingVertical: 2,
+                    borderRadius: 5,
+                    marginRight: 10,
+                  }}>
+                  <Image
+                    source={icons.icMomo}
+                    style={{
+                      marginLeft: 5,
+                      width: 10,
+                      height: 10,
+                    }}
+                  />
+                  <TextFnx spaceLeft={5}>Momo</TextFnx>
+                </View>
               </Layout>
-              
-            </View>
+            </Layout>
           </Layout>
-        <Button
-          isNormal
-          bgButtonColor={colors.app.buy}
-          colorTitle={colors.text}
-          weightTitle={'700'}
-          title={'MUA USDT'}
-        />
-        <Layout
-          space={10}
-          style={{
-            borderBottomWidth: 0.5,
-            borderColor: colors.app.lineSetting,
-          }}
-          isCenter>
-          <TextFnx color={colors.app.textDisabled}>
-            Giới hạn thời gian thanh toán {'  '}
-            <TextFnx>15 phút</TextFnx>
-          </TextFnx>
+          <ButtonIcon name="eye" color={colors.app.yellowHightlight} />
+        </Layout>
+        <Layout space={5} spaceTop={20} isLineCenter>
+            <Icon iconComponent={icons.IcChecked} />
+            <TextFnx>{" "}VNDEX đã khóa token của người bán</TextFnx>
+        </Layout>
+        <Layout space={5} isLineCenter>
+            <Icon iconComponent={icons.IcChecked} />
+            <TextFnx>{" "}VNDEX đã khóa token của người bán</TextFnx>
         </Layout>
         <Layout
           style={{
             paddingTop: 15,
+            borderTopWidth:0.5,
+            borderTopColor:colors.app.lineSetting
           }}
           type="column">
           <TextFnx space={10}>Điều khoản</TextFnx>
@@ -172,7 +195,32 @@ const Step2BuySellScreen = ({componentId}) => {
             thanh toán bạn muốn, và bắt đầu giao dịch ngay trên Binance P2P.
           </TextFnx>
         </Layout>
+        <Button
+          isSubmit
+          isClose
+          onSubmit={() => actionSheetRef?.current?.show()}
+          colorTitle={colors.text}
+          weightTitle={'700'}
+          textClose={'Huỷ lệnh'}
+          colorTitleClose={colors.app.sell}
+          //   te={'MUA USDT'}
+        />
       </View>
+      
+      <BottomSheet title="KAKA" actionRef={actionSheetRef}>
+        <View
+          style={{
+            paddingVertical: 50,
+          }}>
+          <TextFnx>Hello</TextFnx>
+          <TextFnx>Hello</TextFnx>
+          <TextFnx>Hello</TextFnx>
+
+          <TextFnx>Hello</TextFnx>
+          <TextFnx>Hello</TextFnx>
+          <TextFnx>Hello</TextFnx>
+        </View>
+      </BottomSheet>
     </Container>
   );
 };

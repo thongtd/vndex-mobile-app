@@ -39,7 +39,9 @@ const ListCoin = ({
             listenerEventEmitter('textSearch', (text) => searchFilterFunction(text,coinsWalletType,logged))
         }
        
-        return () => removeEventEmitter('textSearch')
+        return () => {
+            
+        }
     }, [logged,isCheck, data, cryptoWallet,coinsWalletType]);
     const onRefresh = () => {
         
@@ -64,11 +66,11 @@ const ListCoin = ({
         listenerEventEmitter("doneAssets", () => setDisabled(false))
         return () => {
             removeEventEmitter("doneAssets");
+            removeEventEmitter('textSearch');
         }
     }, [])
     return (
         <RN.FlatList
-            
             ListEmptyComponent={
                 <Empty />
             }

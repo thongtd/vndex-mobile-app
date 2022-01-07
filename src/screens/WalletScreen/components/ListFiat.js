@@ -41,6 +41,10 @@ const ListFiat = ({
             setSource(fiatsWalletType);
             listenerEventEmitter('textSearch', (text) => searchFilterFunction(text, fiatsWalletType,logged))
         }
+        return () => {
+            
+            removeEventEmitter("textSearch");
+        }
        
     }, [isCheck, data, fiatsWallet,fiatsWalletType,logged]);
     const onRefresh = () => {

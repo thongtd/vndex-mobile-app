@@ -11,8 +11,17 @@ import IcClose from 'assets/svg/ic_close.svg';
 import IcTimer from 'assets/svg/ic_timer.svg';
 import IcEdit from 'assets/svg/ic_edit.svg';
 import IcNote from 'assets/svg/ic_note.svg';
+import IcBank from 'assets/svg/ic_bank.svg';
+import IcViettelPay from 'assets/svg/ic_viettel_pay.svg';
+import IcMomoSvg from 'assets/svg/ic_momo_svg.svg';
+import IcBank2 from 'assets/svg/ic_bank_2.svg';
+
 export default {
   IcTimer: <IcTimer />,
+  IcBank: <IcBank />,
+  IcBank2: <IcBank2 />,
+  IcViettelPay: <IcViettelPay />,
+  IcMomoSvg: <IcMomoSvg />,
   IcEdit: <IcEdit />,
   IcNote: <IcNote />,
   IcMarkettingTrans: <IcMarkettingTrans />,
