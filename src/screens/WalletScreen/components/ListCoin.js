@@ -68,7 +68,6 @@ const ListCoin = ({
     }, [])
     return (
         <RN.FlatList
-            
             ListEmptyComponent={
                 <Empty />
             }

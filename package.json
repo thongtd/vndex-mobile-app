@@ -24,6 +24,7 @@
     "prop-types": "^15.7.2",
     "react": "17.0.2",
     "react-native": "0.66.4",
+    "react-native-actions-sheet": "^0.5.8",
     "react-native-appstate-hook": "^1.0.6",
     "react-native-background-timer": "^2.4.1",
     "react-native-calendars": "^1.1273.0",

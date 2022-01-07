@@ -12,7 +12,7 @@ import {Rating, AirbnbRating} from 'react-native-ratings';
 import Image from '../../../components/Image/Image';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
-import {pushSingleScreenApp, STEP_2_BUY_SELL_SCREEN} from '../../../navigation';
+import {pushSingleScreenApp, STEP_2_BUY_SELL_SCREEN, STEP_3_BUY_SELL_SCREEN} from '../../../navigation';
 import ButtonIcon from '../../../components/Button/ButtonIcon';
 import Copy from "assets/svg/ic_copy.svg"
 const Step2BuySellScreen = ({componentId}) => {
@@ -196,6 +196,7 @@ const Step2BuySellScreen = ({componentId}) => {
         <Button
           isSubmit
           isClose
+          onSubmit={()=>pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)}
           colorTitle={colors.text}
           weightTitle={'700'}
           textClose={'Huỷ lệnh'}
