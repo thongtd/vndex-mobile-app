@@ -14,7 +14,7 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
 import {pushSingleScreenApp, STEP_2_BUY_SELL_SCREEN} from '../../../navigation';
 import ButtonIcon from '../../../components/Button/ButtonIcon';
-
+import Copy from "assets/svg/ic_copy.svg"
 const Step2BuySellScreen = ({componentId}) => {
   return (
     <Container
@@ -84,12 +84,14 @@ const Step2BuySellScreen = ({componentId}) => {
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
-          <Layout>
+          <Layout isLineCenter>
           <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
           <ButtonIcon 
-          iconComponent={icons.icCopy}
-          width={10}
-          height={10}
+          style={{
+              height:25,
+              width:30
+          }}
+          iconComponent={<Copy height={20} width={20} />}
           />
           </Layout>
         </Layout>
