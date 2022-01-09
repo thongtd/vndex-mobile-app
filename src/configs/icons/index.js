@@ -15,11 +15,18 @@ import IcBank from 'assets/svg/ic_bank.svg';
 import IcViettelPay from 'assets/svg/ic_viettel_pay.svg';
 import IcMomoSvg from 'assets/svg/ic_momo_svg.svg';
 import IcBank2 from 'assets/svg/ic_bank_2.svg';
+import IcChat from 'assets/svg/ic_chat.svg';
+import IcArrowRight from 'assets/svg/ic_arow_right_svg.svg';
+import IcEdit2 from 'assets/svg/ic_edit_2.svg';
 
 export default {
   IcTimer: <IcTimer />,
-  IcBank: <IcBank />,
   IcBank2: <IcBank2 />,
+  IcArrowRight: <IcArrowRight />,
+  IcEdit2: <IcEdit2 />,
+  IcBank: <IcBank />,
+  IcBank: <IcBank />,
+  IcChat: <IcChat />,
   IcViettelPay: <IcViettelPay />,
   IcMomoSvg: <IcMomoSvg />,
   IcEdit: <IcEdit />,
@@ -32,6 +39,8 @@ export default {
   icCopy: <Copy />,
   icFilter: <Filter />,
   icMomo: require('assets/icons/momo.png'),
+  icBankPng: require('assets/icons/ic_banks-png.png'),
+  icArrowRight: require('assets/icons/ic_arrow_right.png'),
   avatar: require('assets/images/avatar.png'),
   bgLogin: require('assets/images/bg_login.jpeg'),
   bgSignup: require('assets/images/bg_signup.jpeg'),

@@ -22,6 +22,9 @@ export default {
     bgSell: '#423131',
     bg363636: '#363636',
     bg3B2B2B: '#3B2B2B',
+    bgTransparent: 'transparent',
+    switchC: '#131419',
+    bgStepAds: '#50472e',
   },
   red: '#D23131',
   yellow: '#f9ca06',
@@ -51,4 +54,5 @@ export default {
   greyLight: '#E7E7E7',
   textTransfer: '#C3B58E',
   textMomo: '#C38E8E',
+  cl3A3A3A: '#3A3A3A',
 };

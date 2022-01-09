@@ -9,7 +9,13 @@ import {
 } from 'react-native';
 import {LayoutSplashScreen} from '../../components';
 import Button from '../../components/Button/Button';
-import {LOGIN_SCREEN, SETTING_SCREEN, STEP_1_BUY_SELL_SCREEN} from '../../navigation';
+import {
+  ADS_HISTORY_EXCHANGE_SCREEN,
+  ADS_MY_ADVERTISENMENT_SCREEN,
+  LOGIN_SCREEN,
+  SETTING_SCREEN,
+  STEP_1_BUY_SELL_SCREEN,
+} from '../../navigation';
 import {
   pushSingleHiddenTopBarApp,
   pushSingleScreenApp,
@@ -28,49 +34,50 @@ import ButtonIcon from '../../components/Button/ButtonIcon';
 import icons from '../../configs/icons';
 import Icon from '../../components/Icon';
 import {useRef} from 'react';
-import { get } from 'lodash';
-import { Dimensions , StatusBar } from 'react-native';
+import {get} from 'lodash';
+import {Dimensions, StatusBar} from 'react-native';
 
 const screenHeight = Dimensions.get('screen').height;
 const windowHeight = Dimensions.get('window').height;
 const navbarHeight = screenHeight - windowHeight + StatusBar.currentHeight;
-import { listenerEventEmitter, removeEventEmitter } from '../../configs/utils';
+import {listenerEventEmitter, removeEventEmitter} from '../../configs/utils';
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
-  
-
   const [ActiveSymbol, setActiveSymbol] = useState('AIFT');
   useEffect(() => {
-   const listenerEmit = listenerEventEmitter('pushLogin',()=>{
-    
-      pushSingleScreenApp(componentId,LOGIN_SCREEN);
-    
-   })
+    const listenerEmit = listenerEventEmitter('pushMyads', () => {
+      pushSingleScreenApp(componentId, ADS_MY_ADVERTISENMENT_SCREEN, null, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.filterMyAdvertisement,
+              icon: require('assets/icons/Filter.png'),
+            },
+          ],
+        },
+      });
+    });
+
     const navigationButtonEventListener =
       Navigation.events().registerNavigationButtonPressedListener(
         ({buttonId}) => {
-          if(buttonId == IdNavigation.PressIn.menuLeft){
-            
-              
-              
-              Navigation.mergeOptions(componentId, {
-                sideMenu: {
-                  left: {
-                    visible: true
-                  }
-                }
-              });
-            }
-            
-            
-           
+          if (buttonId == IdNavigation.PressIn.menuLeft) {
+            Navigation.mergeOptions(componentId, {
+              sideMenu: {
+                left: {
+                  visible: true,
+                },
+              },
+            });
+          }
+
           if (buttonId == IdNavigation.PressIn.profile) {
-            if(logged){
+            if (logged) {
               pushSingleScreenApp(componentId, SETTING_SCREEN);
-            }else{
+            } else {
               pushSingleScreenApp(componentId, LOGIN_SCREEN);
             }
-            
+
             // pushSingleScreenApp(componentId, TRANSACTION_HISTORY, null, {
             //   topBar: {
             //     rightButtons: [
@@ -91,14 +98,7 @@ const HomeScreen = ({componentId}) => {
   }, []);
   const logged = useSelector(state => state.authentication.logged);
   return (
-    <Container
-    
-      isScroll
-      componentId={componentId}
-      isTopBar
-      isFooter
-      title="P2P">
-      
+    <Container isScroll componentId={componentId} isTopBar isFooter title="P2P">
       <Banner />
       {/* {logged ? (
           <Button
@@ -235,7 +235,9 @@ const HomeScreen = ({componentId}) => {
                 spaceHorizontal={20}
                 isNormal
                 // width={175}
-                onPress={()=>pushSingleScreenApp(componentId,STEP_1_BUY_SELL_SCREEN)}
+                onPress={() =>
+                  pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN)
+                }
                 title={'Mua USDT'}
                 height={40}
                 colorTitle={colors.app.buy}
@@ -243,41 +245,50 @@ const HomeScreen = ({componentId}) => {
               />
             </View>
           </Layout>
-      
+
           <Layout>
-        <Layout type='column' spaceRight={10} >
-          <TextFnx space={3} size={fontSize.f12} color={colors.app.textDisabled}>
-            Khả dụng
-          </TextFnx>
-          <TextFnx space={3} size={fontSize.f12} color={colors.app.textDisabled}>
-            Giới hạn
-          </TextFnx>
-        </Layout>
-        <View style={{
-          flex:1
-        }}>
-          <TextFnx space={3} size={fontSize.f12}>89.23 AIFT</TextFnx>
-          <Layout isSpaceBetween>
-            <TextFnx space={3} size={fontSize.f12}>50,000,000 - 1,000,000,000 VND</TextFnx>
-          <Layout>
-          
-              <Image
-                source={icons.icMomo}
-                style={{
-                  marginLeft: 5,
-                }}
-              />
-              <Image
-                source={icons.icMomo}
-                style={{
-                  marginLeft: 5,
-                }}
-              />
+            <Layout type="column" spaceRight={10}>
+              <TextFnx
+                space={3}
+                size={fontSize.f12}
+                color={colors.app.textDisabled}>
+                Khả dụng
+              </TextFnx>
+              <TextFnx
+                space={3}
+                size={fontSize.f12}
+                color={colors.app.textDisabled}>
+                Giới hạn
+              </TextFnx>
             </Layout>
+            <View
+              style={{
+                flex: 1,
+              }}>
+              <TextFnx space={3} size={fontSize.f12}>
+                89.23 AIFT
+              </TextFnx>
+              <Layout isSpaceBetween>
+                <TextFnx space={3} size={fontSize.f12}>
+                  50,000,000 - 1,000,000,000 VND
+                </TextFnx>
+                <Layout>
+                  <Image
+                    source={icons.icMomo}
+                    style={{
+                      marginLeft: 5,
+                    }}
+                  />
+                  <Image
+                    source={icons.icMomo}
+                    style={{
+                      marginLeft: 5,
+                    }}
+                  />
+                </Layout>
+              </Layout>
+            </View>
           </Layout>
-          
-        </View>
-      </Layout>
         </View>
       ))}
     </Container>
