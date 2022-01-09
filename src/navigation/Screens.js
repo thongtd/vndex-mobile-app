@@ -61,6 +61,8 @@ export const STEP_4_BUY_SELL_SCREEN = 'vndex.title.Step4BuySellScreen';
 export const ADS_HISTORY_EXCHANGE_SCREEN = 'vndex.title.AdsHistoryExchangeScreen';
 export const ADS_ADD_NEW_SCREEN = 'vndex.title.AddNewAdvertisementScreen';
 export const ADS_MY_ADVERTISENMENT_SCREEN = 'vndex.title.AdvertisenmentScreen';
+export const STEP_5_BUY_SELL_SCREEN = 'vndex.title.Step5BuySellScreen';
+
 // register ModalMy
 export const ALERT_NOTICE_PASSWORD = 'modal.AlertNoticePassword';
 export const PICKER_SEARCH = 'modal.PickerSearch'

@@ -107,6 +107,7 @@ import {
   STEP_2_BUY_SELL_SCREEN,
   STEP_3_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
+  STEP_5_BUY_SELL_SCREEN,
   STO_SCREEN,
   TOTAL_COMMISSION_SCREEN,
   UPDATE_ACCOUNT_SCREEN,
@@ -135,6 +136,7 @@ import Step1BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step1BuySell
 import Step2BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step2BuySellScreen';
 import Step3BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step3BuySellScreen';
 import Step4BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step4BuySellScreen';
+import Step5BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step5BuySellScreen';
 import MyAdvertisenmentScreen from '../screens/Advertisement/MyAdvertisenment/MyAdvertisenmentScreen';
 import AddNewAdvertisementScreen from '../screens/Advertisement/AddNewAdvertisement/AddNewAdvertisementScreen';
 
@@ -428,6 +430,11 @@ export const registerScreens = store => {
     ADS_MY_ADVERTISENMENT_SCREEN,
     () => withNavigationProvider(WrapScreen(MyAdvertisenmentScreen, store)),
     () => MyAdvertisenmentScreen,
+  );
+  Navigation.registerComponent(
+    STEP_5_BUY_SELL_SCREEN,
+    () => withNavigationProvider(WrapScreen(Step5BuySellScreen, store)),
+    () => Step5BuySellScreen,
   );
 
   //modal screen

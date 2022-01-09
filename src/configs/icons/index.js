@@ -19,8 +19,11 @@ import IcChat from 'assets/svg/ic_chat.svg';
 import IcArrowRight from 'assets/svg/ic_arow_right_svg.svg';
 import IcEdit2 from 'assets/svg/ic_edit_2.svg';
 
+import Checked from 'assets/svg/checked.svg';
 export default {
   IcTimer: <IcTimer />,
+  IcChecked:<Checked />,
+  IcBank: <IcBank />,
   IcBank2: <IcBank2 />,
   IcArrowRight: <IcArrowRight />,
   IcEdit2: <IcEdit2 />,
@@ -45,6 +48,7 @@ export default {
   bgLogin: require('assets/images/bg_login.jpeg'),
   bgSignup: require('assets/images/bg_signup.jpeg'),
   bgWallet: require('../../assets/images/bg_wallet.png'),
+  imgChecked:require("assets/images/checked.png"),
   copy: require('../../assets/icons/ic_copy.png'),
   ggAuthenL: require('../../assets/images/gg_authen_l.png'),
   ggAuthenL2: require('../../assets/images/gg_authen2_l.png'),
