@@ -27,11 +27,30 @@ export const P2pService = {
     let response = await httpService.get_without_token(urlGetAdvertisment);
     return response;
   },
-  getTradingMarket: async data => {
+  getTradingMarket: async () => {
     let urlGetTradingMarket = `${P2P_API.GET_TRADING_MARKETS}`;
-
     let response = await httpService.post_without_token(urlGetTradingMarket);
-
     return response;
   },
+  getPaymentMethodByAcc: async () => {
+    let url = `${P2P_API.GET_PAYMENT_METHOD_BY_ACC}`;
+    let response = await httpService.get(url);
+    return response.data;
+  },
+  getExchangePaymentMethod: async () => {
+    let url = `${P2P_API.GET_EXCHANGE_PAYMENT_METHOD}`;
+    let response = await httpService.get_without_token(url);
+    return response;
+  },
+  addPaymentMethod: async (data) => {
+    let url = `${P2P_API.ADD_PAYMENT_METHOD}`;
+    let response = await httpService.post(url,data);
+    return response.data;
+  },
+  removePaymentMethod: async (data,accId) => {
+    let url = `${P2P_API.REMOVE_PAYMENT_METHOD}${accId}`;
+    let response = await httpService.post(url,data);
+    return response.data;
+  },
+  
 };

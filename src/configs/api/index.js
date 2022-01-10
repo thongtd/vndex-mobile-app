@@ -18,7 +18,11 @@ const EXCHANGE_URL = env === "dev" ? 'http://54.169.221.223:6870/' : 'http://54.
 export const P2P_API = {
     advertisments: `${EXCHANGE_URL}api/v1/p2p-order/advertisments`,
     GET_TRADING_MARKETS: `${EXCHANGE_URL}api/v1/trade/get-trading-markets`,
-    GET_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/advertisment`//orderId,
+    GET_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/advertisment`,//orderId,
+    GET_PAYMENT_METHOD_BY_ACC: `${EXCHANGE_URL}api/v1/payment-methods/payment-methods-by-account`,
+    GET_EXCHANGE_PAYMENT_METHOD: `${EXCHANGE_URL}api/v1/payment-methods/exchange-payment-methods`,
+    ADD_PAYMENT_METHOD: `${EXCHANGE_URL}api/v1/payment-methods/add-payment-methods`,
+    REMOVE_PAYMENT_METHOD: `${EXCHANGE_URL}api/v1/payment-methods/remove-payment-methods/`,//accountId
 }
 export const EXCHANGE_API = {
     CHECK_API: `${EXCHANGE_URL}api/health-check`,

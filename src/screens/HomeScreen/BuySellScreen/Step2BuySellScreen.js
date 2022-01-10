@@ -17,12 +17,13 @@ import ButtonIcon from '../../../components/Button/ButtonIcon';
 import Copy from "assets/svg/ic_copy.svg"
 import BottomSheet from '../../../components/ActionSheet/ActionSheet';
 import { useSelector } from 'react-redux';
-import { formatCurrency, get, toast, to_UTCDate } from '../../../configs/utils';
+import { formatCurrency, get, size, toast, to_UTCDate } from '../../../configs/utils';
+import { isEmpty } from 'lodash';
 const Step2BuySellScreen = ({componentId,item,data}) => {
   const actionSheetRef = useRef(null);
   const advertisment = useSelector(state => state.p2p.advertisment);
   const currencyList = useSelector(state => state.market.currencyList);
-  
+  const paymentMethods = useSelector(state => state.p2p.paymentMethods);
   return (
     <Container
       space={15}
@@ -142,7 +143,7 @@ const Step2BuySellScreen = ({componentId,item,data}) => {
               }}>
                 {(get(advertisment, 'paymentMethods') || []).map((it, ind) => {
             if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
-              <View
+              return (<View
                 style={{
                   flexDirection: 'row',
                   backgroundColor: '#3B2B2B',
@@ -162,8 +163,8 @@ const Step2BuySellScreen = ({componentId,item,data}) => {
                   }}
                 />
                 <TextFnx spaceLeft={5}>Momo</TextFnx>
-              </View>;
-            } else {
+              </View>);
+            } else if(get(it, 'code') == constant.CODE_PAYMENT_METHOD.BANK_TRANSFER){
               <View
                 style={{
                   flexDirection: 'row',
@@ -242,126 +243,45 @@ const Step2BuySellScreen = ({componentId,item,data}) => {
           actionSheetRef.current?.handleChildScrollEnd()
         }
         >
-          <TouchableOpacity onPress={()=>{
-            actionSheetRef.current?.hide();
-            pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)
-          }}>
-          <Layout style={{
-            paddingVertical:10,
-            borderBottomWidth:1,
-            borderColor:colors.app.lineSetting
-          }}>
-            <Icon name='credit-card' color={colors.app.textContentLevel3} size={14} />
-            <Layout spaceLeft={20} type='column'>
-              <TextFnx spaceBottom={3} color={colors.app.textContentLevel3}>
-              Chuyển khoản
-              </TextFnx>
-             
-             <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-             LU TUAN ANH
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              12345677767
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              Techcombank
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              18 Le van luong
-              </TextFnx>
-            </Layout>
-          </Layout>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{
-            actionSheetRef.current?.hide();
-            pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)
-          }}>
-          <Layout style={{
-            paddingVertical:10,
-            borderBottomWidth:1,
-            borderColor:colors.app.lineSetting
-          }}>
-            <Icon name='credit-card' color={colors.app.textContentLevel3} size={14} />
-            <Layout spaceLeft={20} type='column'>
-              <TextFnx spaceBottom={3} color={colors.app.textContentLevel3}>
-              Chuyển khoản
-              </TextFnx>
-             
-             <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-             LU TUAN ANH
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              12345677767
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              Techcombank
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              18 Le van luong
-              </TextFnx>
-            </Layout>
-          </Layout>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{
-            actionSheetRef.current?.hide();
-            pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)
-          }}>
-          <Layout style={{
-            paddingVertical:10,
-            borderBottomWidth:1,
-            borderColor:colors.app.lineSetting
-          }}>
-            <Icon name='credit-card' color={colors.app.textContentLevel3} size={14} />
-            <Layout spaceLeft={20} type='column'>
-              <TextFnx spaceBottom={3} color={colors.app.textContentLevel3}>
-              Chuyển khoản
-              </TextFnx>
-             
-             <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-             LU TUAN ANH
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              12345677767
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              Techcombank
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              18 Le van luong
-              </TextFnx>
-            </Layout>
-          </Layout>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{
-            actionSheetRef.current?.hide();
-            pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)
-          }}>
-          <Layout style={{
-            paddingVertical:10,
-            borderBottomWidth:1,
-            borderColor:colors.app.lineSetting
-          }}>
-            <Icon name='credit-card' color={colors.app.textContentLevel3} size={14} />
-            <Layout spaceLeft={20} type='column'>
-              <TextFnx spaceBottom={3} color={colors.app.textContentLevel3}>
-              Chuyển khoản
-              </TextFnx>
-             
-             <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-             LU TUAN ANH
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              12345677767
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              Techcombank
-              </TextFnx>
-              <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
-              18 Le van luong
-              </TextFnx>
-            </Layout>
-          </Layout>
-          </TouchableOpacity>
+          {paymentMethods && size(paymentMethods) > 0 && paymentMethods.map((item,index)=>{
+return (
+  <TouchableOpacity onPress={()=>{
+    actionSheetRef.current?.hide();
+    pushSingleScreenApp(componentId,STEP_3_BUY_SELL_SCREEN)
+  }}>
+  <Layout style={{
+    paddingVertical:10,
+    borderBottomWidth:1,
+    borderColor:colors.app.lineSetting
+  }}>
+    <Icon name='credit-card' color={colors.app.textContentLevel3} size={14} />
+    <Layout spaceLeft={20} type='column'>
+      <TextFnx spaceBottom={3} color={colors.app.textContentLevel3}>
+      {get(item,"name")}
+      </TextFnx>
+     
+     <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+     {get(item,"fullName")}
+      </TextFnx>
+      {!isEmpty(get(item,"backAccountNo")) && <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+      {get(item,"backAccountNo")}
+      </TextFnx>}
+      {!isEmpty(get(item,"bankName")) && <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+      {get(item,"bankName")}
+      </TextFnx>}
+      {!isEmpty(get(item,"bankBranchName")) && <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+      {get(item,"bankBranchName")}
+      </TextFnx>}
+      {!isEmpty(get(item,"phoneNumber")) && <TextFnx size={16} space={3} color={colors.app.textContentLevel2}>
+      {get(item,"phoneNumber")}
+      </TextFnx>}
+    </Layout>
+  </Layout>
+  </TouchableOpacity>
+);
+          })}
+          
+ 
         </ScrollView>
       </BottomSheet>
     </Container>

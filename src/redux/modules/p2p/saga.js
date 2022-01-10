@@ -7,9 +7,13 @@ import {
   GET_ADVERTISMENTS,
   GET_TRADING,
   GET_ADVERTISMENT,
+  GET_PAYMENT_METHOD_BY_ACC,
+  GET_EXCHANGE_PAYMENT_METHOD,
+  ADD_PAYMENT_METHOD,
+  REMOVE_PAYMENT_METHOD,
 } from './actions';
 
-import {emitEventEmitter, get} from '../../../configs/utils';
+import {createAction, emitEventEmitter, get} from '../../../configs/utils';
 import {P2pService} from '../../../services/p2p.service';
 import {size} from 'lodash';
 
@@ -30,10 +34,10 @@ export function* asyncGetAdvertisments({payload}) {
       createdTo: get(payload, 'createdTo') || '',
       status: get(payload, 'status') || '',
     });
-    emitEventEmitter('doneApi',true);
+    emitEventEmitter('doneApi', true);
     yield put(actionsReducerP2p.getAdvertismentsSuccess(get(res, 'source')));
   } catch (e) {
-    emitEventEmitter('doneApi',true);
+    emitEventEmitter('doneApi', true);
     console.log('e: ', e);
   }
 }
@@ -83,23 +87,103 @@ export function* watchGetTrading() {
   }
 }
 export function* asyncGetAdvertisment({payload}) {
-    try {
-      const res = yield call(P2pService.getAdvertisment, payload);
-      emitEventEmitter('doneApi',true);
-      yield put(actionsReducerP2p.getAdvertismentSuccess(res));
-    } catch (e) {
-      emitEventEmitter('doneApi',true);
-      console.log('e: ', e);
-    }
+  try {
+    const res = yield call(P2pService.getAdvertisment, payload);
+    emitEventEmitter('doneApi', true);
+    yield put(actionsReducerP2p.getAdvertismentSuccess(res));
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+    console.log('e: ', e);
   }
+}
 export function* watchGetAdvertisment() {
-    while (true) {
-      const action = yield take(GET_ADVERTISMENT);
-      yield* asyncGetAdvertisment(action);
-    }
+  while (true) {
+    const action = yield take(GET_ADVERTISMENT);
+    yield* asyncGetAdvertisment(action);
   }
+}
+export function* asyncGetExchangePaymentMethod({payload}) {
+  try {
+    const res = yield call(P2pService.getExchangePaymentMethod);
+    emitEventEmitter('doneApi', true);
+
+    yield put(actionsReducerP2p.getExchangePaymentMethodSuccess(res));
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+    console.log('e: ', e);
+  }
+}
+export function* watchGetExchangePaymentMethod() {
+  while (true) {
+    const action = yield take(GET_EXCHANGE_PAYMENT_METHOD);
+    yield* asyncGetExchangePaymentMethod(action);
+  }
+}
+export function* asyncGetPaymentMethod({payload}) {
+  try {
+    const res = yield call(P2pService.getPaymentMethodByAcc);
+    emitEventEmitter('doneApi', true);
+    console.log('easyncGetPaymentMethod: ', res);
+    if (get(res, 'success')) {
+      yield put(
+        actionsReducerP2p.getPaymentMethodByAccSuccess(get(res, 'data')),
+      );
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+    console.log('easyncGetPaymentMethod: ', e);
+  }
+}
+export function* watchGetPaymentMethod() {
+  while (true) {
+    const action = yield take(GET_PAYMENT_METHOD_BY_ACC);
+    yield* asyncGetPaymentMethod(action);
+  }
+}
+export function* asyncAddPaymentMethod({payload}) {
+  try {
+    const res = yield call(P2pService.addPaymentMethod,payload);
+    emitEventEmitter('doneApi', true);
+    console.log('easyncGetPaymentMethod: ', res);
+    if (get(res, 'success')) {
+      yield put(createAction(GET_PAYMENT_METHOD_BY_ACC));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+    console.log('easyncGetPaymentMethod: ', e);
+  }
+}
+export function* watchAddPaymentMethod() {
+  while (true) {
+    const action = yield take(ADD_PAYMENT_METHOD);
+    yield* asyncAddPaymentMethod(action);
+  }
+}
+export function* asyncRemovePaymentMethod({payload}) {
+  try {
+    const res = yield call(P2pService.removePaymentMethod,get(payload,"data"),get(payload,"accId"));
+    emitEventEmitter('doneApi', true);
+    console.log('easyncGetPaymentMethod: ', res);
+    if (get(res, 'success')) {
+      yield put(createAction(GET_PAYMENT_METHOD_BY_ACC));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+    console.log('easyncGetPaymentMethod: ', e);
+  }
+}
+export function* watchRemovePaymentMethod() {
+  while (true) {
+    const action = yield take(REMOVE_PAYMENT_METHOD);
+    yield* asyncRemovePaymentMethod(action);
+  }
+}
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
   yield all([fork(watchGetTrading)]);
   yield all([fork(watchGetAdvertisment)]);
+  yield all([fork(watchGetPaymentMethod)]);
+  yield all([fork(watchGetExchangePaymentMethod)]);
+  yield all([fork(watchAddPaymentMethod)]);
+  yield all([fork(watchRemovePaymentMethod)]);
 }

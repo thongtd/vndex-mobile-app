@@ -180,7 +180,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
           }}>
           {(get(advertisment, 'paymentMethods') || []).map((it, ind) => {
             if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
-              <View
+              return (<View
                 style={{
                   flexDirection: 'row',
                   backgroundColor: '#3B2B2B',
@@ -200,8 +200,8 @@ const Step1BuySellScreen = ({componentId, item}) => {
                   }}
                 />
                 <TextFnx spaceLeft={5}>Momo</TextFnx>
-              </View>;
-            } else {
+              </View>);
+            } else if(get(it, 'code') == constant.CODE_PAYMENT_METHOD.BANK_TRANSFER){
               <View
                 style={{
                   flexDirection: 'row',

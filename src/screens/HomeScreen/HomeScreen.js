@@ -333,19 +333,19 @@ const HomeScreen = ({componentId}) => {
                 <Layout>
                   {(get(item, 'paymentMethods') || []).map((it, ind) => {
                     if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
-                      <Image
+                      return (<Image
                         source={icons.icMomo}
                         style={{
                           marginLeft: 5,
                         }}
-                      />;
-                    } else {
-                      <Image
+                      />);
+                    } else if(get(it, 'code') == constant.CODE_PAYMENT_METHOD.BANK_TRANSFER) {
+                      return (<Image
                         source={icons.icBank}
                         style={{
                           marginLeft: 5,
                         }}
-                      />;
+                      />);
                     }
                   })}
                 </Layout>
