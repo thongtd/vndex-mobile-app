@@ -206,6 +206,7 @@ const WalletScreen = ({componentId}) => {
           paddingTop:20,
           borderTopLeftRadius:15,
           borderTopRightRadius:15,
+          flex:1
       }}>
         <SearchInput />
 

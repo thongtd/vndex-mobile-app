@@ -600,6 +600,7 @@ const LayoutInfoWallet = ({
           paddingTop: 20,
           borderTopLeftRadius: 15,
           borderTopRightRadius: 15,
+          flex:1
         }}>
         <Layout isSpaceBetween>
           <ButtonTypeWallet
@@ -632,6 +633,7 @@ const LayoutInfoWallet = ({
           refreshControl={
             <RefreshControl refreshing={Disabled} onRefresh={onRefresh} />
           }
+          scrollEnabled
           // contentContainerStyle={(!logged || size(Source) == 0) && {
           //     flex: 1
           // }}
@@ -690,7 +692,7 @@ const LayoutInfoWallet = ({
           }}
           stopRightSwipe={-100}
           disableRightSwipe
-          disableLeftSwipe={isCoin && IsActive === 'C' ? true : false}
+          disableLeftSwipe={IsActive === 'C' ? true : false}
           rightOpenValue={-60}
           keyExtractor={(item, index) => index.toString()}
           ListFooterComponent={isHistoryTransaction ? renderFooter : null}

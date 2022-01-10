@@ -83,6 +83,7 @@ export const httpService = {
 
     },
     get_without_token: async (url) => {
+        console.log('url: ', url);
         let publicIp = await publicIP();
         let headers = {
             'Content-Type': 'application/json',
@@ -93,10 +94,12 @@ export const httpService = {
                 headers: headers
             })
             if (response.data) {
+                
                 return response.data;
             }
             return null;
         } catch (error) {
+            console.log('error: ', error);
 
         }
 

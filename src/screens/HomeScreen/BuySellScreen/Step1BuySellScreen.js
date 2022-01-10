@@ -1,10 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
 import Layout from '../../../components/Layout/Layout';
 import TextFnx from '../../../components/Text/TextFnx';
-import {fontSize, spacingApp} from '../../../configs/constant';
+import {
+  BUY,
+  constant,
+  fontSize,
+  SELL,
+  spacingApp,
+} from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
 import TimelineBuySell from './TimelineBuySell';
@@ -13,8 +19,38 @@ import Image from '../../../components/Image/Image';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
 import {pushSingleScreenApp, STEP_2_BUY_SELL_SCREEN} from '../../../navigation';
-
-const Step1BuySellScreen = ({componentId}) => {
+import {useActionsP2p} from '../../../redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {get} from 'lodash';
+import {formatCurrency, formatNumberOnChange, formatSCurrency, formatTrunc, getItemWallet} from '../../../configs/utils';
+import BackgroundTimer from 'react-native-background-timer';
+const Step1BuySellScreen = ({componentId, item}) => {
+  const advertisment = useSelector(state => state.p2p.advertisment);
+  const currencyList = useSelector(state => state.market.currencyList);
+  const cryptoWallet = useSelector(state => state.market.cryptoWallet);
+  
+  const [timer, setTimer] = useState(30);
+  const [Pay, setPay] = useState('');
+  const [Receive, setReceive] = useState('');
+  const [isTimer, setIsTimer] = useState(true);
+  
+  const dispatch = useDispatch();
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'orderId'));
+    return () => {};
+  }, [dispatch, item]);
+  useEffect(() => {
+    var intervalId;
+    if (isTimer && timer) {
+      intervalId = BackgroundTimer.setInterval(() => {
+        setTimer(timer - 1);
+      }, 1000);
+    } else if (timer <= 0) {
+      useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'orderId'));
+      setTimer(30);
+    }
+    return () => BackgroundTimer.clearInterval(intervalId);
+  }, [isTimer, timer, dispatch, item]);
   return (
     <Container
       space={15}
@@ -22,9 +58,19 @@ const Step1BuySellScreen = ({componentId}) => {
       isTopBar
       isScroll
       componentId={componentId}
-      title="MUA USDT">
+      title={`${get(item, 'side') == SELL ? 'Mua' : 'Bán'} ${get(
+        item,
+        'symbol',
+      )}`}>
       <Layout type="column" spaceHorizontal={spacingApp}>
-        <TimelineBuySell step={0} title={'Tạo lệnh mua USDT'} />
+        <TimelineBuySell
+          side={get(item, 'side')}
+          step={0}
+          title={`Tạo lệnh ${get(item, 'side') == SELL ? 'mua' : 'bán'} ${get(
+            item,
+            'symbol',
+          )}`}
+        />
 
         <Layout
           type="column"
@@ -33,21 +79,24 @@ const Step1BuySellScreen = ({componentId}) => {
           }}>
           <Layout>
             <TextFnx weight="400" size={fontSize.f16} spaceRight={10}>
-              lutuananh94
+              {`${get(advertisment, 'traderInfo.emailAddress')}`}{' '}
             </TextFnx>
-            <Icon iconComponent={icons.icTick} />
+            {get(advertisment, 'requiredKyc') && (
+              <Icon iconComponent={icons.icTick} />
+            )}
           </Layout>
           <Layout isSpaceBetween>
             <Rating
               imageSize={12}
               fractions={1}
-              startingValue={1}
+              startingValue={get(advertisment, 'traderInfo.totalStar')}
               tintColor={colors.app.backgroundLevel1}
               readonly
               style={{paddingVertical: 2}}
             />
             <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-              2125 lệnh | 99.07% hoàn tất
+              {get(advertisment, 'traderInfo.totalCompleteOrder')} lệnh |{' '}
+              {get(advertisment, 'traderInfo.completePercent')}% hoàn tất
             </TextFnx>
           </Layout>
         </Layout>
@@ -61,12 +110,19 @@ const Step1BuySellScreen = ({componentId}) => {
             borderColor: colors.app.lineSetting,
           }}>
           <Layout isLineCenter>
-            <TextFnx weight="500" color={colors.app.buy} size={fontSize.f20}>
+            <TextFnx weight="500" color={get(item,"side") == SELL?colors.app.buy:colors.app.sell} size={fontSize.f20}>
               <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
                 Giá{'    '}
               </TextFnx>
-              53,083.14{' '}
-              <TextFnx color={colors.app.textContentLevel3}>VND</TextFnx>
+              {formatCurrency(
+                get(advertisment, 'price'),
+                get(advertisment, 'paymentUnit'),
+                currencyList,
+              )}{' '}
+              <TextFnx color={colors.app.textContentLevel3}>
+                {' '}
+                {get(advertisment, 'paymentUnit')}
+              </TextFnx>
             </TextFnx>
           </Layout>
           <Layout>
@@ -74,7 +130,7 @@ const Step1BuySellScreen = ({componentId}) => {
               <TextFnx color={colors.app.textDisabled} size={fontSize.f12}>
                 Làm mới sau{' '}
               </TextFnx>
-              30s
+              {timer}s
             </TextFnx>
           </Layout>
         </Layout>
@@ -95,10 +151,26 @@ const Step1BuySellScreen = ({componentId}) => {
           </Layout>
           <View>
             <TextFnx space={5} size={fontSize.f12}>
-              89.25 AIFT
+              {formatCurrency(
+                get(advertisment, 'quantity'),
+                get(advertisment, 'symbol'),
+                currencyList,
+              )}{' '}
+              {get(advertisment, 'symbol')}
             </TextFnx>
             <TextFnx space={5} size={fontSize.f12}>
-              50,000,000 - 1,000,000,000 VND
+              {formatCurrency(
+                get(advertisment, 'minOrderAmount'),
+                get(advertisment, 'paymentUnit'),
+                currencyList,
+              )}{' '}
+              -{' '}
+              {formatCurrency(
+                get(advertisment, 'maxOrderAmount'),
+                get(advertisment, 'paymentUnit'),
+                currencyList,
+              )}{' '}
+              {get(advertisment, 'paymentUnit')}
             </TextFnx>
           </View>
         </Layout>
@@ -106,47 +178,52 @@ const Step1BuySellScreen = ({componentId}) => {
           style={{
             marginTop: 7,
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              backgroundColor: '#3B2B2B',
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingHorizontal: 5,
-              paddingVertical: 2,
-              borderRadius: 5,
-              marginRight: 10,
-            }}>
-            <Image
-              source={icons.icMomo}
-              style={{
-                marginLeft: 5,
-                width: 10,
-                height: 10,
-              }}
-            />
-            <TextFnx spaceLeft={5}>Momo</TextFnx>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              backgroundColor: '#3B2B2B',
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingHorizontal: 5,
-              paddingVertical: 2,
-              borderRadius: 5,
-            }}>
-            <Image
-              source={icons.icMomo}
-              style={{
-                marginLeft: 5,
-                width: 10,
-                height: 10,
-              }}
-            />
-            <TextFnx>Momo</TextFnx>
-          </View>
+          {(get(advertisment, 'paymentMethods') || []).map((it, ind) => {
+            if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: '#3B2B2B',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
+                  paddingVertical: 2,
+                  borderRadius: 5,
+                  marginRight: 10,
+                }}>
+                <Image
+                  source={icons.icMomo}
+                  style={{
+                    marginLeft: 5,
+                    width: 10,
+                    height: 10,
+                  }}
+                />
+                <TextFnx spaceLeft={5}>Momo</TextFnx>
+              </View>;
+            } else {
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: '#3B2B2B',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
+                  paddingVertical: 2,
+                  borderRadius: 5,
+                }}>
+                <Image
+                  source={icons.icBank}
+                  style={{
+                    marginLeft: 5,
+                    width: 10,
+                    height: 10,
+                  }}
+                />
+                <TextFnx>Chuyển khoản</TextFnx>
+              </View>;
+            }
+          })}
         </Layout>
       </Layout>
       <View
@@ -164,23 +241,50 @@ const Step1BuySellScreen = ({componentId}) => {
             <TextFnx color={colors.app.textDisabled} size={12}>
               Số dư{'  '}{' '}
               <TextFnx size={12} color={colors.app.textContentLevel2}>
-                5,546,123 AIFT
+                {formatCurrency(
+                  get(
+                    getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
+                    'available',
+                  ),
+                  get(advertisment, 'symbol'),
+                  currencyList,
+                )}
+                {` ${get(advertisment, 'symbol')}`}
               </TextFnx>
             </TextFnx>
           </Layout>
         </Layout>
         <Input
           spaceVertical={8}
+          hasValue
+          onChangeText={(text)=>{
+            setPay(get(item,"side") == SELL? formatCurrency(text.str2Number(),get(advertisment,"paymentUnit"),currencyList):formatNumberOnChange(currencyList,text,get(advertisment,"symbol")))
+            setReceive(get(item,"side") == SELL ? formatCurrency(text.str2Number()/ get(advertisment, 'price'),get(advertisment,"paymentUnit"),currencyList):formatCurrency(text.str2Number() * (get(advertisment, 'price')),get(advertisment,"paymentUnit"),currencyList))
+          }}
+          value={`${Pay}`}
           titleBtnRight="Tất cả"
-          onBtnRight={() => alert('ok')}
-          placeholder="20,000,000 VND ~ 50,000,000 VND"
+          onBtnRight={() => {
+            setPay(get(item,"side") == SELL?formatCurrency(get(advertisment, 'maxOrderAmount'),get(advertisment,"paymentUnit"),currencyList):formatCurrency(get(advertisment, 'quantity'),get(advertisment,"symbol"),currencyList))
+            setReceive(get(item,"side") == SELL?formatCurrency(get(advertisment, 'maxOrderAmount') / (get(advertisment, 'price')),get(advertisment,"symbol"),currencyList):formatCurrency(get(advertisment, 'quantity') * (get(advertisment, 'price')),get(advertisment,"paymentUnit"),currencyList));
+          }
+            
+          }
+          placeholder={get(item,"side") == SELL?`${formatCurrency(
+            get(advertisment, 'minOrderAmount'),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'paymentUnit')} ~ ${formatCurrency(
+            get(advertisment, 'maxOrderAmount'),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'paymentUnit')}`:"0"}
         />
         <Layout space={5} isSpaceBetween>
           <Layout>
             <TextFnx color={colors.app.textDisabled} size={12}>
               Phí{'  '}{' '}
               <TextFnx size={12} color={colors.app.textContentLevel2}>
-                10.000000 AIFT
+                {formatCurrency(Pay.str2Number()*get(advertisment,"fee"),get(advertisment,"paymentUnit"),currencyList)} {get(item,"side")==BUY? get(advertisment,"symbol"):get(advertisment,"paymentUnit")}
               </TextFnx>
             </TextFnx>
           </Layout>
@@ -188,7 +292,7 @@ const Step1BuySellScreen = ({componentId}) => {
             <TextFnx color={colors.app.textDisabled} size={12}>
               Thuế{'  '}{' '}
               <TextFnx size={12} color={colors.app.textContentLevel2}>
-                0.000123 AIFT
+                0 {get(advertisment,"symbol")}
               </TextFnx>
             </TextFnx>
           </Layout>
@@ -199,21 +303,38 @@ const Step1BuySellScreen = ({componentId}) => {
           </TextFnx>
         </Layout>
         <Input
+        editable={false}
+        hasValue
+        value={Receive}
           spaceVertical={8}
-          titleRight="EUR"
+          titleRight={get(item,"side") == SELL?get(advertisment,"symbol"):get(advertisment,"paymentUnit")}
           //   onBtnRight={() => alert('ok')}
-          placeholder="20,000,000 VND ~ 50,000,000 VND"
+          placeholder={get(item,"side") == BUY ? `${formatCurrency(
+            get(advertisment, 'minOrderAmount'),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'paymentUnit')} ~ ${formatCurrency(
+            get(advertisment, 'maxOrderAmount'),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'paymentUnit')}`:"0"}
         />
 
         <Button
           isNormal
           onPress={() =>
-            pushSingleScreenApp(componentId, STEP_2_BUY_SELL_SCREEN)
+            pushSingleScreenApp(componentId, STEP_2_BUY_SELL_SCREEN,{
+              item,
+              data:{
+                price:get(item,"side")===SELL?Pay.str2Number():Receive.str2Number(),
+                quantity:get(item,"side")===SELL?Receive.str2Number():Pay.str2Number()
+              }
+            })
           }
-          bgButtonColor={colors.app.buy}
+          bgButtonColor={get(item,"side") == SELL?colors.app.buy:colors.app.sell}
           colorTitle={colors.text}
           weightTitle={'700'}
-          title={'MUA USDT'}
+          title={get(item,"side") == SELL?`MUA ${get(advertisment,"symbol")}`:`BÁN ${get(advertisment,"symbol")}`}
         />
         <Layout
           space={10}
@@ -224,12 +345,13 @@ const Step1BuySellScreen = ({componentId}) => {
           isCenter>
           <TextFnx color={colors.app.textDisabled}>
             Giới hạn thời gian thanh toán {'  '}
-            <TextFnx>15 phút</TextFnx>
+            <TextFnx>{get(advertisment,"lockedInSecond")/60} phút</TextFnx>
           </TextFnx>
         </Layout>
         <Layout
           style={{
             paddingTop: 15,
+            paddingBottom: 30,
           }}
           type="column">
           <TextFnx space={10}>Điều khoản</TextFnx>

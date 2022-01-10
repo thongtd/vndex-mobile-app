@@ -42,7 +42,7 @@ export const ItemCoin = ({
                     </View>
                 </View>
                 <View style={stylest.itemRight}>
-                    {logged?<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={get(item,"available")} />:<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={"--"} />}
+                    {logged?<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={formatCurrency(get(item,"available"),get(item,"symbol"),currencyList)} />:<TextFnx style={[stylest.spacingCenter,{fontWeight:"normal"}]} color={colors.text} value={"--"} />}
                     {/* {logged?<TextSeparators suffix="VND" color={colors.subText} value={get(item,"lastestPrice")?formatCurrencyFnx((get(item,"available")+get(item,"pending"))*get(item,"lastestPrice"),0):0} />:<TextFnx color={colors.subText} value="--" />} */}
                 </View>
             </View>

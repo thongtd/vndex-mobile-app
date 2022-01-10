@@ -16,6 +16,7 @@ import { useActionsMarket } from '../../redux/modules/market';
 import { GET_ASSET_SUMARY, GET_WITHDRAW_COIN_LOG, GET_WITHDRAW_FIAT_LOG, GET_DEPOSIT_COIN_LOG, GET_DEPOSIT_FIAT_LOG, GET_DEPOSIT_BANK_ACCOUNT, GET_COIN_BY_TYPE } from '../../redux/modules/wallet/actions';
 import { GET_SWAP_ORDERS_BOOK } from '../../redux/modules/market/actions';
 import Logo from "assets/svg/Logo.svg";
+import { useActionsP2p } from '../../redux';
 const SplashScreen = ({
     componentId
 }) => {
@@ -32,7 +33,13 @@ const SplashScreen = ({
     useActionsMarket().handleGetConfigSwap();
     useActionsMarket().handleGetCryptoWallet(UserId);
     useActionsMarket().handleGetFiatWallet(UserId);
-    
+    // useActionsP2p().handleGetAdvertisments({
+    //     pageIndex: 1,
+    //     pageSize: 15,
+    //     side:"B",
+       
+    // });
+    useActionsP2p().handleGetTradingMarket();
     // dispatcher(createAction(GET_SWAP_ORDERS_BOOK,{
     //     UserId,
     //     pageIndex:1,
@@ -43,6 +50,7 @@ const SplashScreen = ({
     //     status:""
     // }))
     dispatcher(createAction(LANGUAGES, lang));
+    
     // if (isArray(marketWatch) && size(marketWatch) > 0 && size(UserId) > 0) {
     //     dispatcher(createAction(GET_ASSET_SUMARY, {
     //         UserId,

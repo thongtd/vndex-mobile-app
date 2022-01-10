@@ -3,19 +3,26 @@ const env = "dev"
 // const MARKET_WATCH_URL = 'http://54.169.27.91:6873/';
 
 
-const MARKET_WATCH_URL = env === "dev" ? 'http://54.169.221.223:6870/' : 'https://market-watch.financex.io/';
+const MARKET_WATCH_URL = env === "dev" ?  'http://54.169.221.223:6870/': 'http://54.169.221.223:8870/';
 
 export const MARKET_API = {
     GET_MARKET_WATCH: `${MARKET_WATCH_URL}api/v1/market-watch/get-market-watch`, //GET
     ORDER_BOOK: `${MARKET_WATCH_URL}api/v1/market-watch/get-top-price-by-pair`, //GET
     GET_TRADE_HISTORIES: `${MARKET_WATCH_URL}api/v1/market-watch/get-market-trade-histories`, //GET
+   
 }
 
 //Exchange
-const EXCHANGE_URL = env === "dev" ? 'http://54.169.221.223:6870/' : 'https://api.financex.io/';
+const EXCHANGE_URL = env === "dev" ? 'http://54.169.221.223:6870/' : 'http://54.169.221.223:8870/';
 // const EXCHANGE_URL = 'http://dev-api.financex.io/';
+export const P2P_API = {
+    advertisments: `${EXCHANGE_URL}api/v1/p2p-order/advertisments`,
+    GET_TRADING_MARKETS: `${EXCHANGE_URL}api/v1/trade/get-trading-markets`,
+    GET_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/advertisment`//orderId,
+}
 export const EXCHANGE_API = {
     CHECK_API: `${EXCHANGE_URL}api/health-check`,
+    
     //API for user
     GET_COUNTRIES: `${EXCHANGE_URL}api/v1/package/get-countries`, //POST
     CUSTOMER_REGISTER: `${EXCHANGE_URL}api/v1/user/register`, //POST: email, password, fromReferralId, countryCode, callbackUrl, ipAddress, city, userLocationRaw

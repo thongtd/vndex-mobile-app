@@ -34,6 +34,7 @@ export default {
   icCopy: <Copy />,
   icFilter: <Filter />,
   icMomo: require('assets/icons/momo.png'),
+  icBank: require('assets/icons/ic_bank.png'),
   avatar: require('assets/images/avatar.png'),
   bgLogin: require('assets/images/bg_login.jpeg'),
   bgSignup: require('assets/images/bg_signup.jpeg'),

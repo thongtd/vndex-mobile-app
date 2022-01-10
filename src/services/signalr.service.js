@@ -17,9 +17,9 @@ const SignalRService = ({
     const userInfo = useSelector(state => state.authentication.userInfo);
     const marketWatch = useSelector(state => state.market.marketWatch)
     useEffect(() => {
-        setInterval(()=>{
-            restartSocket(get(userInfo, "id") || "")
-        },60000)
+        // setInterval(()=>{
+        //     restartSocket(get(userInfo, "id") || "")
+        // },60000)
         restartSocket(get(userInfo, "id") || "")
     }, [userInfo]);
     const restartSocket = (userId) => {
@@ -157,7 +157,7 @@ const SignalRService = ({
             connected = false;
             if (!isClose) {
                 isClose = true;
-                reconnect();;
+                // reconnect();;
             }
         })
     }
