@@ -156,6 +156,9 @@ export const IdNavigation = {
   PressIn: {
     historyTransaction: 'Id.PressIn.historyTransaction',
     filterTransaction: 'Id.PressIn.filterTransaction',
+    filterCommand: 'Id.PressIn.filterCommand',
+    filterMyAdvertisement: 'Id.PressIn.filterMyAdvertisement',
+    warningAddNewAds: 'Id.PressIn.warningAddNewAds',
     notification: 'Id.PressIn.notification',
     menuLeft: 'Id.PressIn.menuLeft',
     profile: 'Id.PressIn.profile',

@@ -111,6 +111,8 @@ import {
   STO_SCREEN,
   TOTAL_COMMISSION_SCREEN,
   UPDATE_ACCOUNT_SCREEN,
+  ADS_ADD_NEW_SCREEN,
+  ADS_MY_ADVERTISENMENT_SCREEN,
 } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
@@ -135,6 +137,9 @@ import Step2BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step2BuySell
 import Step3BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step3BuySellScreen';
 import Step4BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step4BuySellScreen';
 import Step5BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step5BuySellScreen';
+import MyAdvertisenmentScreen from '../screens/Advertisement/MyAdvertisenment/MyAdvertisenmentScreen';
+import AddNewAdvertisementScreen from '../screens/Advertisement/AddNewAdvertisement/AddNewAdvertisementScreen';
+
 const WrapScreen = (ReduxScreen, store) => props =>
   (
     <Provider store={store}>
@@ -417,10 +422,21 @@ export const registerScreens = store => {
     () => Step4BuySellScreen,
   );
   Navigation.registerComponent(
+    ADS_ADD_NEW_SCREEN,
+    () => withNavigationProvider(WrapScreen(AddNewAdvertisementScreen, store)),
+    () => AddNewAdvertisementScreen,
+  );
+  Navigation.registerComponent(
+    ADS_MY_ADVERTISENMENT_SCREEN,
+    () => withNavigationProvider(WrapScreen(MyAdvertisenmentScreen, store)),
+    () => MyAdvertisenmentScreen,
+  );
+  Navigation.registerComponent(
     STEP_5_BUY_SELL_SCREEN,
     () => withNavigationProvider(WrapScreen(Step5BuySellScreen, store)),
     () => Step5BuySellScreen,
   );
+
   //modal screen
   Navigation.registerComponent(
     ALERT_NOTICE_PASSWORD,

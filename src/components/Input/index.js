@@ -20,6 +20,7 @@ import {thousandsSeparators, subString, size} from '../../configs/utils';
 import {isFunction, isNull} from 'lodash';
 import {TextInputMask} from 'react-native-masked-text';
 import Button from '../Button/Button';
+import Layout from '../Layout/Layout';
 
 const Input = ({
   placeholder = '',
@@ -38,6 +39,7 @@ const Input = ({
   maxLength = null,
   style = stylest.inputCore,
   styleView = stylest.inputView,
+  styleBorder,
   styleButtonMax = stylest.btnMax,
   colorTextMax,
   widthMax,
@@ -51,8 +53,11 @@ const Input = ({
   onBtnRight,
   iconComponentLeft,
   titleBtnRight,
+  isInputTop,
+  isInputTopUnit,
   bgBtnRight,
   titleRight,
+  restInput,
   ...rest
 }) => {
   const [valueInput, setValue] = useState(value);
@@ -110,7 +115,7 @@ const Input = ({
       {rest.isLabel && <TextFnx style={stylest.label} value={label} />}
       <View
         style={[
-          rest.isCircle ? stylest.inputCircle : styleView,
+          rest.isCircle ? stylest.inputCircle : [styleView, styleBorder],
           {marginVertical: spaceVertical},
         ]}>
         {rest.isIconLeft && (
@@ -123,19 +128,44 @@ const Input = ({
             size={13}
           />
         )}
-        <TextInput
-          defaultValue={defaultValue}
-          editable={editable}
-          maxLength={rest.isResend ? 6 : maxLength}
-          keyboardType={rest.isResend ? 'number-pad' : keyboardType}
-          secureTextEntry={isSecurity}
-          onChangeText={handleChange}
-          value={hasValue ? value : valueInput}
-          style={[{color: colors.text}, style]}
-          placeholderTextColor={colors.description}
-          placeholder={placeholder}
-          onSubmitEditing={onSubmitEditing}
-        />
+
+        {(isInputTop && (
+          <View style={{flex: 1, marginRight: 20}}>
+            {isInputTop}
+    
+            <Layout isCenter style={{justifyContent:'flex-start'}}>
+              <TextInput
+                defaultValue={defaultValue}
+                editable={editable}
+                maxLength={rest.isResend ? 6 : maxLength}
+                keyboardType={rest.isResend ? 'number-pad' : keyboardType}
+                secureTextEntry={isSecurity}
+                onChangeText={handleChange}
+                value={hasValue ? value : valueInput}
+                style={[{color: colors.text}, style]}
+                placeholderTextColor={colors.description}
+                placeholder={placeholder}
+                onSubmitEditing={onSubmitEditing}
+                {...restInput}
+              />
+              {isInputTopUnit}
+            </Layout>
+          </View>
+        )) || (
+          <TextInput
+            defaultValue={defaultValue}
+            editable={editable}
+            maxLength={rest.isResend ? 6 : maxLength}
+            keyboardType={rest.isResend ? 'number-pad' : keyboardType}
+            secureTextEntry={isSecurity}
+            onChangeText={handleChange}
+            value={hasValue ? value : valueInput}
+            style={[{color: colors.text}, style]}
+            placeholderTextColor={colors.description}
+            placeholder={placeholder}
+            onSubmitEditing={onSubmitEditing}
+          />
+        )}
 
         {rest.isPaste && (
           <ButtonWithTitle
@@ -145,7 +175,11 @@ const Input = ({
             color={colors.iconButton}
           />
         )}
-        {titleRight && <TextFnx color={colors.app.textContentLevel3} spaceRight={spacingApp}>{titleRight}</TextFnx>}
+        {titleRight && (
+          <TextFnx color={colors.app.textContentLevel3} spaceRight={spacingApp}>
+            {titleRight}
+          </TextFnx>
+        )}
         {titleBtnRight && (
           <TouchableOpacity
             onPress={onBtnRight}

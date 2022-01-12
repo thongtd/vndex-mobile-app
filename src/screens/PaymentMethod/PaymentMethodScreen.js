@@ -1,7 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useRef} from 'react';
 import Container from '../../components/Container';
-import Input from '../../components/Input';
 import Button from '../../components/Button/Button';
 import Layout from '../../components/Layout/Layout';
 import TextFnx from '../../components/Text/TextFnx';
