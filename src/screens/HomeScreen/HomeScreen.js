@@ -24,7 +24,13 @@ import {
 import {useSelector} from 'react-redux';
 import Container from '../../components/Container';
 import {Navigation} from 'react-native-navigation';
-import {fontSize, IdNavigation} from '../../configs/constant';
+import {
+  BUY,
+  constant,
+  fontSize,
+  IdNavigation,
+  SELL,
+} from '../../configs/constant';
 import Banner from './components/Banner';
 import colors from '../../configs/styles/colors';
 import Layout from '../../components/Layout/Layout';
@@ -34,16 +40,35 @@ import ButtonIcon from '../../components/Button/ButtonIcon';
 import icons from '../../configs/icons';
 import Icon from '../../components/Icon';
 import {useRef} from 'react';
-import {get} from 'lodash';
+import {get, size} from 'lodash';
 import {Dimensions, StatusBar} from 'react-native';
-
 const screenHeight = Dimensions.get('screen').height;
 const windowHeight = Dimensions.get('window').height;
 const navbarHeight = screenHeight - windowHeight + StatusBar.currentHeight;
-import {listenerEventEmitter, removeEventEmitter} from '../../configs/utils';
+import {
+  formatCurrency,
+  listenerEventEmitter,
+  removeEventEmitter,
+} from '../../configs/utils';
+import {useActionsP2p} from '../../redux';
+import { useDispatch } from 'react-redux';
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
-  const [ActiveSymbol, setActiveSymbol] = useState('AIFT');
+  const dispatch = useDispatch();
+  const [ActiveSymbol, setActiveSymbol] = useState('');
+  const [ActiveType, setActiveType] = useState('B');
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (size(get(tradingMarket, 'assets')) > 0) {
+      setActiveSymbol(get(tradingMarket, 'assets')[0]);
+      
+    }
+
+    return () => {};
+  }, [tradingMarket]);
+  const tradingMarket = useSelector(state => state.p2p.tradingMarket);
+  const advertisments = useSelector(state => state.p2p.advertisments);
+  console.log(advertisments, 'advertisments');
   useEffect(() => {
     const listenerEmit = listenerEventEmitter('pushMyads', () => {
       pushSingleScreenApp(componentId, ADS_MY_ADVERTISENMENT_SCREEN, null, {
@@ -57,7 +82,6 @@ const HomeScreen = ({componentId}) => {
         },
       });
     });
-
     const navigationButtonEventListener =
       Navigation.events().registerNavigationButtonPressedListener(
         ({buttonId}) => {
@@ -77,17 +101,6 @@ const HomeScreen = ({componentId}) => {
             } else {
               pushSingleScreenApp(componentId, LOGIN_SCREEN);
             }
-
-            // pushSingleScreenApp(componentId, TRANSACTION_HISTORY, null, {
-            //   topBar: {
-            //     rightButtons: [
-            //       {
-            //         id: IdNavigation.PressIn.filterTransaction,
-            //         icon: require('assets/icons/Filter.png'),
-            //       },
-            //     ],
-            //   },
-            // });
           }
         },
       );
@@ -96,27 +109,33 @@ const HomeScreen = ({componentId}) => {
       listenerEmit.remove();
     };
   }, []);
+  
+ useEffect(() => {
+   let evDone = listenerEventEmitter('doneApi',()=>{
+    setIsLoading(false);
+   });
+   if(ActiveSymbol){
+    useActionsP2p(dispatch).handleGetAdvertisments({
+      pageIndex: 1,
+      pageSize: 15,
+      side: ActiveType== BUY?SELL:BUY,
+      coinSymbol: ActiveSymbol ,
+    });
+    setIsLoading(true);
+   }
+   
+ 
+   return () => {
+    evDone.remove();
+   }
+ }, [dispatch,ActiveType,ActiveSymbol])
   const logged = useSelector(state => state.authentication.logged);
+  const currencyList = useSelector(state => state.market.currencyList);
   return (
-    <Container isScroll componentId={componentId} isTopBar isFooter title="P2P">
+    <Container
+    isLoadding={isLoading}
+    isScroll componentId={componentId} isTopBar isFooter title="P2P">
       <Banner />
-      {/* {logged ? (
-          <Button
-            onSubmit={() => {
-              pushSingleHiddenTopBarApp(componentId, SETTING_SCREEN);
-            }}
-            isSubmit
-            textSubmit={'Thông tin tài khoản'}
-          />
-        ) : (
-          <Button
-            onSubmit={() => {
-              pushSingleScreenApp(componentId, LOGIN_SCREEN);
-            }}
-            isSubmit
-            textSubmit={'Login'}
-          />
-        )} */}
       <View
         style={{
           flexDirection: 'row',
@@ -131,29 +150,33 @@ const HomeScreen = ({componentId}) => {
           }}>
           <Button
             isNormal
+            onPress={() => setActiveType(BUY)}
             width={75}
             title={'Mua'}
             height={40}
-            colorTitle={colors.app.buy}
-            bgButtonColor={colors.app.bgBuy}
+            colorTitle={ActiveType == BUY ? colors.app.buy : colors.text}
+            bgButtonColor={
+              ActiveType == BUY ? colors.app.bgBuy : colors.app.backgroundLevel1
+            }
           />
           <Button
-            spaceHorizontal={10}
+            onPress={() => setActiveType(SELL)}
             isNormal
-            spaceHorizontal={20}
+            width={75}
             title={'Bán'}
             height={40}
-            colorTitle={colors.app.sell}
-            bgButtonColor={colors.app.bgSell}
+            colorTitle={ActiveType == SELL ? colors.app.sell : colors.text}
+            bgButtonColor={
+              ActiveType == SELL
+                ? colors.app.bgSell
+                : colors.app.backgroundLevel1
+            }
           />
         </View>
 
         <Button
           isPlaceholder={false}
-          // spaceVertical={10}
           spaceHorizontal={20}
-          // width={100}
-          // onInput={handleSelectSex}
           height={40}
           isInput
           iconRight="caret-down"
@@ -169,16 +192,18 @@ const HomeScreen = ({componentId}) => {
             borderBottomWidth: 1,
           }}
           horizontal
-          data={['AIFT', 'DIC', 'USDT', 'LTA']}
+          data={get(tradingMarket, 'assets') || []}
           renderItem={({item}) => (
             <TouchableOpacity
+              onPress={() => setActiveSymbol(item)}
               style={[
                 {
                   paddingHorizontal: 20,
                   paddingVertical: 10,
                 },
                 ActiveSymbol == item && {
-                  borderBottomColor: colors.app.buy,
+                  borderBottomColor:
+                    ActiveType == BUY ? colors.app.buy : colors.app.sell,
                   borderBottomWidth: 2,
                 },
               ]}>
@@ -187,7 +212,9 @@ const HomeScreen = ({componentId}) => {
                 size={fontSize.f16}
                 color={
                   ActiveSymbol == item
-                    ? colors.app.buy
+                    ? ActiveType == BUY
+                      ? colors.app.buy
+                      : colors.app.sell
                     : colors.app.textContentLevel3
                 }>
                 {item}
@@ -197,8 +224,9 @@ const HomeScreen = ({componentId}) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-      {[{}, {}, {}, {}, {}, {}, {}, {}, {}].map((item, index) => (
+      {(advertisments || []).map((item, index) => (
         <View
+          key={`data-${index}`}
           style={{
             paddingVertical: 20,
             borderBottomWidth: 1,
@@ -207,12 +235,15 @@ const HomeScreen = ({componentId}) => {
           <Layout isSpaceBetween>
             <Layout>
               <TextFnx weight="400" size={fontSize.f16} spaceRight={10}>
-                lutuananh94
+                {`${get(item, 'traderInfo.emailAddress')}`}
               </TextFnx>
-              <Icon iconComponent={icons.icTick} />
+              {get(item, 'requiredKyc') && (
+                <Icon iconComponent={icons.icTick} />
+              )}
             </Layout>
             <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-              2125 lệnh | 99.07% hoàn tất
+              {get(item, 'traderInfo.totalCompleteOrder')} lệnh |{' '}
+              {get(item, 'traderInfo.completePercent')}% hoàn tất
             </TextFnx>
           </Layout>
           <Layout isSpaceBetween isLineCenter>
@@ -220,13 +251,22 @@ const HomeScreen = ({componentId}) => {
               <TextFnx color={colors.app.textDisabled} size={fontSize.f12}>
                 Giá
               </TextFnx>
-              <TextFnx weight="500" color={colors.app.buy} size={fontSize.f20}>
-                53,083.14{' '}
+              <TextFnx
+                weight="500"
+                color={
+                  get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
+                }
+                size={fontSize.f20}>
+                {formatCurrency(
+                  get(item, 'price'),
+                  get(item, 'paymentUnit'),
+                  currencyList,
+                )}{' '}
                 <TextFnx
                   color={colors.app.textContentLevel3}
                   weight="400"
                   size={fontSize.f14}>
-                  VND
+                  {get(item, 'paymentUnit')}
                 </TextFnx>
               </TextFnx>
             </View>
@@ -236,12 +276,24 @@ const HomeScreen = ({componentId}) => {
                 isNormal
                 // width={175}
                 onPress={() =>
-                  pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN)
+                  pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN,{
+                    item
+                  })
                 }
-                title={'Mua USDT'}
+                title={
+                  get(item, 'side') == SELL
+                    ? `Mua ${get(item, 'symbol')}`
+                    : `Bán ${get(item, 'symbol')}`
+                }
                 height={40}
-                colorTitle={colors.app.buy}
-                bgButtonColor={colors.app.bgBuy}
+                colorTitle={
+                  get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
+                }
+                bgButtonColor={
+                  get(item, 'side') == SELL
+                    ? colors.app.bgBuy
+                    : colors.app.bgSell
+                }
               />
             </View>
           </Layout>
@@ -266,25 +318,47 @@ const HomeScreen = ({componentId}) => {
                 flex: 1,
               }}>
               <TextFnx space={3} size={fontSize.f12}>
-                89.23 AIFT
+                {formatCurrency(
+                  get(item, 'quantity'),
+                  get(item, 'symbol'),
+                  currencyList,
+                )}{' '}
+                {get(item, 'symbol')}
               </TextFnx>
               <Layout isSpaceBetween>
                 <TextFnx space={3} size={fontSize.f12}>
-                  50,000,000 - 1,000,000,000 VND
+                  {formatCurrency(
+                    get(item, 'minOrderAmount'),
+                    get(item, 'paymentUnit'),
+                    currencyList,
+                  )}{' '}
+                  -{' '}
+                  {formatCurrency(
+                    get(item, 'maxOrderAmount'),
+                    get(item, 'paymentUnit'),
+                    currencyList,
+                  )}{' '}
+                  {get(item, 'paymentUnit')}
                 </TextFnx>
+
                 <Layout>
-                  <Image
-                    source={icons.icMomo}
-                    style={{
-                      marginLeft: 5,
-                    }}
-                  />
-                  <Image
-                    source={icons.icMomo}
-                    style={{
-                      marginLeft: 5,
-                    }}
-                  />
+                  {(get(item, 'paymentMethods') || []).map((it, ind) => {
+                    if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
+                      return (<Image
+                        source={icons.icMomo}
+                        style={{
+                          marginLeft: 5,
+                        }}
+                      />);
+                    } else if(get(it, 'code') == constant.CODE_PAYMENT_METHOD.BANK_TRANSFER) {
+                      return (<Image
+                        source={icons.icBank}
+                        style={{
+                          marginLeft: 5,
+                        }}
+                      />);
+                    }
+                  })}
                 </Layout>
               </Layout>
             </View>

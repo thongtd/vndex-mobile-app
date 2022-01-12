@@ -23,7 +23,7 @@ import Image from '../../components/Image/Image';
 import TextFnx from '../../components/Text/TextFnx';
 import React from 'react';
 import colors from '../styles/colors';
-
+var qs = require('qs');
 export const fullWidth = ReactNative.Dimensions.get('window').width;
 export const fullHeight = ReactNative.Dimensions.get('window').height;
 export const checkFullHeight = hasNotch
@@ -34,6 +34,15 @@ export const checkFullHeight = hasNotch
 export const isArray = arr => {
   return _.isArray(arr);
 };
+export function removeEmptyUrl(url) {
+
+  let data = qs.parse(url);
+  
+  let removeted = Object.fromEntries(Object.entries(data).filter(([_, v]) => (v != "undefined" && v != "" && v != "null")));
+  
+  
+  return qs.stringify(removeted);
+}
 var screenCurrent = '';
 export const isSameScreen = screen => {
   if (screen != screenCurrent) {
@@ -41,6 +50,21 @@ export const isSameScreen = screen => {
     return false;
   } else {
     return true;
+  }
+};
+export const getItemWallet = (arr,symbol) => {
+  let data;
+  if(size(arr) > 0){
+    arr.map((item,index)=>{
+      if(get(item,"symbol") == symbol){
+        data = item;
+      }
+    })
+    
+    return data;
+    
+  }else{
+    return {}
   }
 };
 export const resetScreenGlobal = () => {
@@ -186,7 +210,7 @@ export const formatTrunc = (cuList, n, symbol, isCut) => {
       }
     }
     n0 = formatCurrencyFnx(n1.str2Number(), 0) + (f > 0 ? '.' + n2 : '') + n3;
-    // symbol === "BCH" && console.log(f,symbol,n0,pos,n1,n2,n0,"f,symbol,n0,pos,n1,n2,n0")
+    // symbol === "BCH" && 
     return n0;
   } else {
     return formatCurrencyFnx(n, 0);

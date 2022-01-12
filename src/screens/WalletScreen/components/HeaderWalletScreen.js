@@ -13,6 +13,7 @@ import {
   formatCurrencyFnx,
   formatCurrency,
   convertToUSD,
+  thousandsSeparators,
 } from '../../../configs/utils';
 import TextFnx from '../../../components/Text/TextFnx';
 import Button from '../../../components/Button/Button';
@@ -80,7 +81,7 @@ const HeaderWalletScreen = ({componentId}) => {
           Số dư token
         </TextFnx>
         <TextFnx weight='700' spaceTop={8} color={colors.text} size={30}>
-          {TotalValue}
+          {`${thousandsSeparators(TotalValue)}`}
         </TextFnx>
       </View>
     </TopBarWallet>

@@ -4,6 +4,10 @@ export const constant = {
     ADD_MOMO: 'ADD_MOMO',
     ADD_VIETTEL_PAY: 'ADD_VIETTEL_PAY',
   },
+  CODE_PAYMENT_METHOD: {
+    MOMO: 'MOMO',
+    BANK_TRANSFER:"BANK_TRANSFER"
+  },
   TYPE_ICON: {
     FontAwesome: 'FontAwesome',
     AntDesign: 'AntDesign',
