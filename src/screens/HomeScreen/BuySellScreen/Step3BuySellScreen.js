@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -27,7 +27,18 @@ import {
 import ButtonIcon from '../../../components/Button/ButtonIcon';
 import Copy from 'assets/svg/ic_copy.svg';
 import BottomSheet from '../../../components/ActionSheet/ActionSheet';
-const Step3BuySellScreen = ({componentId}) => {
+import {useDispatch} from 'react-redux';
+import {useActionsP2p} from '../../../redux';
+import {get} from '../../../configs/utils';
+
+const Step3BuySellScreen = ({componentId, offerOrderId}) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
+    return () => {};
+  }, [dispatch]);
+
   const actionSheetRef = useRef(null);
   return (
     <Container
@@ -163,7 +174,7 @@ const Step3BuySellScreen = ({componentId}) => {
             </View>
           </Layout>
         </Layout>
-       
+
         <Layout spaceBottom={10} type="column">
           <TextFnx space={10} color={colors.app.yellowHightlight}>
             Lưu ý
@@ -190,7 +201,9 @@ const Step3BuySellScreen = ({componentId}) => {
           spaceVertical={20}
           isSubmit
           isClose
-          onSubmit={() => pushSingleScreenApp(componentId,STEP_4_BUY_SELL_SCREEN)}
+          onSubmit={() =>
+            pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN)
+          }
           colorTitle={colors.text}
           weightTitle={'700'}
           textClose={'Huỷ lệnh'}
@@ -199,8 +212,6 @@ const Step3BuySellScreen = ({componentId}) => {
           //   te={'MUA USDT'}
         />
       </View>
-
-     
     </Container>
   );
 };

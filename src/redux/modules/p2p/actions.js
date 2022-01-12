@@ -13,6 +13,9 @@ export const ADD_PAYMENT_METHOD = `${CONTEXT}/ADD_PAYMENT_METHOD`;
 export const ADD_PAYMENT_METHOD_SUCCESS = `${CONTEXT}/ADD_PAYMENT_METHOD_SUCCESS`;
 export const REMOVE_PAYMENT_METHOD = `${CONTEXT}/REMOVE_PAYMENT_METHOD`;
 export const REMOVE_PAYMENT_METHOD_SUCCESS = `${CONTEXT}/REMOVE_PAYMENT_METHOD_SUCCESS`;
+export const GET_OFFER_ORDER = `${CONTEXT}/GET_OFFER_ORDER`;
+export const GET_OFFER_ORDER_SUCCESS = `${CONTEXT}/GET_OFFER_ORDER_SUCCESS`;
+export const CREATE_OFFER_ADVERTISMENT = `${CONTEXT}/CREATE_OFFER_ADVERTISMENT`;
 
 
 export const GET_ADVERTISMENTS_SUCCESS = `${CONTEXT}/GET_ADVERTISMENTS_SUCCESS`;
@@ -29,6 +32,8 @@ export function useActionsP2p(dispatch) {
     handleAddPaymentMethod: (data) => dispatch(createAction(ADD_PAYMENT_METHOD,data)),
     handleRemovePaymentMethod: (data) => dispatch(createAction(REMOVE_PAYMENT_METHOD,data)),
     handleGetAdvertisment: (orderId) => dispatch(createAction(GET_ADVERTISMENT,orderId)),
+    handleGetOfferOrder: (orderId) => dispatch(createAction(GET_OFFER_ORDER,orderId)),
+    handleCreateOfferOrder: (data) => dispatch(createAction(CREATE_OFFER_ADVERTISMENT,data)),
   };
 }
 export const actionsReducerP2p = {
@@ -38,4 +43,5 @@ export const actionsReducerP2p = {
   getAdvertismentSuccess: data => createAction(GET_ADVERTISMENT_SUCCESS, data),
   getPaymentMethodByAccSuccess: data => createAction(GET_PAYMENT_METHOD_BY_ACC_SUCCESS, data),
   getExchangePaymentMethodSuccess: data => createAction(GET_EXCHANGE_PAYMENT_METHOD_SUCCESS, data),
+  getOfferOrderSuccess: data => createAction(GET_OFFER_ORDER_SUCCESS, data),
 };
