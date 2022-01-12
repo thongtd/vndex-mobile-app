@@ -176,10 +176,8 @@ const stylest = StyleSheet.create({
   },
   blockLogoWallet: {
     alignItems: 'center',
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    paddingTop: '65%',
+justifyContent:'center',
+flex:1
   },
 });
 export default SplashScreen;
