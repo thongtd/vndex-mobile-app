@@ -11,9 +11,17 @@ import {
   GET_EXCHANGE_PAYMENT_METHOD,
   ADD_PAYMENT_METHOD,
   REMOVE_PAYMENT_METHOD,
+  GET_OFFER_ORDER,
+  CREATE_OFFER_ADVERTISMENT,
+  GET_OFFER_ORDER_SUCCESS,
 } from './actions';
 
-import {createAction, emitEventEmitter, get} from '../../../configs/utils';
+import {
+  createAction,
+  emitEventEmitter,
+  get,
+  toast,
+} from '../../../configs/utils';
 import {P2pService} from '../../../services/p2p.service';
 import {size} from 'lodash';
 
@@ -142,15 +150,13 @@ export function* watchGetPaymentMethod() {
 }
 export function* asyncAddPaymentMethod({payload}) {
   try {
-    const res = yield call(P2pService.addPaymentMethod,payload);
+    const res = yield call(P2pService.addPaymentMethod, payload);
     emitEventEmitter('doneApi', true);
-    console.log('easyncGetPaymentMethod: ', res);
     if (get(res, 'success')) {
       yield put(createAction(GET_PAYMENT_METHOD_BY_ACC));
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    console.log('easyncGetPaymentMethod: ', e);
   }
 }
 export function* watchAddPaymentMethod() {
@@ -161,7 +167,11 @@ export function* watchAddPaymentMethod() {
 }
 export function* asyncRemovePaymentMethod({payload}) {
   try {
-    const res = yield call(P2pService.removePaymentMethod,get(payload,"data"),get(payload,"accId"));
+    const res = yield call(
+      P2pService.removePaymentMethod,
+      get(payload, 'data'),
+      get(payload, 'accId'),
+    );
     emitEventEmitter('doneApi', true);
     console.log('easyncGetPaymentMethod: ', res);
     if (get(res, 'success')) {
@@ -178,6 +188,46 @@ export function* watchRemovePaymentMethod() {
     yield* asyncRemovePaymentMethod(action);
   }
 }
+export function* asyncGetOfferOrder({payload}) {
+  try {
+    const res = yield call(P2pService.getOfferOrder, payload);
+    emitEventEmitter('doneApi', true);
+
+    if (get(res, 'success')) {
+      yield put(
+        actionsReducerP2p.getOfferOrderSuccess(get(res, 'data')),
+      );
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetOfferOrder() {
+  while (true) {
+    const action = yield take(GET_OFFER_ORDER);
+    yield* asyncGetOfferOrder(action);
+  }
+}
+export function* asyncCreateOfferOrder({payload}) {
+  try {
+    const res = yield call(P2pService.createOfferOrderAdvertisment, payload);
+    emitEventEmitter('doneApi', true);
+    if (get(res, 'success') && get(res, 'data.status')) {
+      // yield put(createAction(GET));
+      emitEventEmitter('pushOfferOrder', get(res, 'data.offerOrderId'));
+    } else {
+      toast(get(res, 'message'));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchCreateOfferOrder() {
+  while (true) {
+    const action = yield take(CREATE_OFFER_ADVERTISMENT);
+    yield* asyncCreateOfferOrder(action);
+  }
+}
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
   yield all([fork(watchGetTrading)]);
@@ -186,4 +236,6 @@ export default function* () {
   yield all([fork(watchGetExchangePaymentMethod)]);
   yield all([fork(watchAddPaymentMethod)]);
   yield all([fork(watchRemovePaymentMethod)]);
+  yield all([fork(watchGetOfferOrder)]);
+  yield all([fork(watchCreateOfferOrder)]);
 }

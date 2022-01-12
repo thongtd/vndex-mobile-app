@@ -37,6 +37,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
   const dispatch = useDispatch();
   useEffect(() => {
     useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'orderId'));
+    
     return () => {};
   }, [dispatch, item]);
   useEffect(() => {

@@ -264,10 +264,15 @@ const HomeScreen = ({componentId}) => {
                 spaceHorizontal={20}
                 isNormal
                 // width={175}
-                onPress={() =>
+                onPress={() =>{
+                  if(!logged){
+                    return pushSingleScreenApp(componentId,LOGIN_SCREEN);  
+                  }
                   pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN,{
                     item
                   })
+                }
+         
                 }
                 title={
                   get(item, 'side') == SELL
