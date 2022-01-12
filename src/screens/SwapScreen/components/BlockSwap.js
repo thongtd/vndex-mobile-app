@@ -44,7 +44,11 @@ const BlockSwap = ({
         <View style={[stylest.blockLeft, styleBlockLeft]}>
           <TouchablePreview onPress={onSelect}>
             <Layout style={stylest.layoutBtnLeft}>
-              <Image style={stylest.icLeft} source={{uri: icon}} />
+              {(icon && (
+                <Image style={stylest.icLeft} source={{uri: icon}} />
+              )) ||
+                null}
+
               <TextFnx isDart weight="bold" value={textIcon} />
               <Icon
                 name="caret-down"
