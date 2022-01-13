@@ -47,13 +47,13 @@ const SplashScreen = ({componentId}) => {
   const [UserId, setUserId] = useState('');
   const dispatcher = useDispatch();
 
-  useActionsAuthen().handleGetCountries();
+  // useActionsAuthen().handleGetCountries();
   useActionsMarket().handleGetMarketWatch();
   useActionsMarket().handleGetCurrencyList();
   useActionsMarket().handleGetConversion();
-  useActionsMarket().handleGetConfigSwap();
+  // useActionsMarket().handleGetConfigSwap();
   useActionsMarket().handleGetCryptoWallet(UserId);
-  useActionsMarket().handleGetFiatWallet(UserId);
+  // useActionsMarket().handleGetFiatWallet(UserId);
   // useActionsP2p().handleGetAdvertisments({
   //     pageIndex: 1,
   //     pageSize: 15,

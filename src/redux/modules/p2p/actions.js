@@ -17,6 +17,8 @@ export const GET_OFFER_ORDER = `${CONTEXT}/GET_OFFER_ORDER`;
 export const GET_OFFER_ORDER_SUCCESS = `${CONTEXT}/GET_OFFER_ORDER_SUCCESS`;
 export const CONFIRM_PAYMENT_ADVERTISMENT = `${CONTEXT}/CONFIRM_PAYMENT_ADVERTISMENT`;
 export const CONFIRM_PAYMENT_ADVERTISMENT_SUCCESS = `${CONTEXT}/CONFIRM_PAYMENT_ADVERTISMENT_SUCCESS`;
+export const UNLOCK_OFFER_ADVERTISMENT = `${CONTEXT}/UNLOCK_OFFER_ADVERTISMENT`;
+export const UNLOCK_OFFER_ADVERTISMENT_SUCCESS = `${CONTEXT}/UNLOCK_OFFER_ADVERTISMENT_SUCCESS`;
 
 export const CREATE_OFFER_ADVERTISMENT = `${CONTEXT}/CREATE_OFFER_ADVERTISMENT`;
 
@@ -38,6 +40,7 @@ export function useActionsP2p(dispatch) {
     handleGetOfferOrder: (orderId) => dispatch(createAction(GET_OFFER_ORDER,orderId)),
     handleCreateOfferOrder: (data) => dispatch(createAction(CREATE_OFFER_ADVERTISMENT,data)),
     handleConfirmPaymentAdvertisment: (data) => dispatch(createAction(CONFIRM_PAYMENT_ADVERTISMENT,data)),
+    handleUnlockOfferAdvertisment: (data) => dispatch(createAction(UNLOCK_OFFER_ADVERTISMENT,data)),
   };
 }
 export const actionsReducerP2p = {
@@ -48,4 +51,5 @@ export const actionsReducerP2p = {
   getPaymentMethodByAccSuccess: data => createAction(GET_PAYMENT_METHOD_BY_ACC_SUCCESS, data),
   getExchangePaymentMethodSuccess: data => createAction(GET_EXCHANGE_PAYMENT_METHOD_SUCCESS, data),
   getOfferOrderSuccess: data => createAction(GET_OFFER_ORDER_SUCCESS, data),
+  unlockOfferAdvertismentSuccess: data => createAction(UNLOCK_OFFER_ADVERTISMENT_SUCCESS, data),
 };

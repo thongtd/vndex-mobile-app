@@ -57,7 +57,11 @@ const Button = ({
   marginVertical,
   marginLeft,
   marginRight,
+  disabledClose,
+  disabledSubmit,
   weightTitle,
+  bgButtonColorSubmit,
+  bgButtonColorClose,
   ...rest
 }) => (
   <View
@@ -104,12 +108,13 @@ const Button = ({
           <ButtonSubmitClose
             weightTitle={weightTitle}
             title={textSubmit}
+            disabled={disabledSubmit}
             // iconLeft={iconLeftSubmit}
             iconLeftSvg={iconLeftSubmit}
             isSubmit
             isButtonCircle={isButtonCircle}
             onPress={onSubmit}
-            bgButtonColor={bgButtonColor}
+            bgButtonColor={bgButtonColorSubmit}
             style={style}
             colorTitle={colorTitleSubmit}
             {...rest}
@@ -118,8 +123,9 @@ const Button = ({
         {isSubmit && isClose && <View style={{flex: 0.05}} />}
         {isClose && (
           <ButtonSubmitClose
-            bgButtonColor={bgButtonColor}
+            bgButtonColor={bgButtonColorClose}
             title={textClose}
+            disabled={disabledClose}
             isClose
             weightTitle={weightTitle}
             isButtonCircle={isButtonCircle}

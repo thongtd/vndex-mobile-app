@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState,useMemo} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -10,7 +10,13 @@ import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
 import Layout from '../../../components/Layout/Layout';
 import TextFnx from '../../../components/Text/TextFnx';
-import {BUY, constant, fontSize, SELL, spacingApp} from '../../../configs/constant';
+import {
+  BUY,
+  constant,
+  fontSize,
+  SELL,
+  spacingApp,
+} from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
 import TimelineBuySell from './TimelineBuySell';
@@ -20,6 +26,7 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
 import {
   pushSingleScreenApp,
+  STEP_2FA_BUY_SELL_SCREEN,
   STEP_2_BUY_SELL_SCREEN,
   STEP_3_BUY_SELL_SCREEN,
   STEP_5_BUY_SELL_SCREEN,
@@ -27,17 +34,73 @@ import {
 import ButtonIcon from '../../../components/Button/ButtonIcon';
 import Copy from 'assets/svg/ic_copy.svg';
 import BottomSheet from '../../../components/ActionSheet/ActionSheet';
-import { useDispatch, useSelector } from 'react-redux';
-import { get } from 'lodash';
-import { formatCurrency, to_UTCDate } from '../../../configs/utils';
+import {useDispatch, useSelector} from 'react-redux';
+import {get} from 'lodash';
+import {formatCurrency, to_UTCDate} from '../../../configs/utils';
+import {useActionsP2p} from '../../../redux';
 
-const Step4BuySellScreen = ({componentId,item,paymentMethodData}) => {
+const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const actionSheetRef = useRef(null);
   const dispatch = useDispatch();
   const advertisment = useSelector(state => state.p2p.advertisment);
   const currencyList = useSelector(state => state.market.currencyList);
   const offerOrder = useSelector(state => state.p2p.offerOrder);
+  const offerOrderId = useSelector(state => state.p2p.offerOrderId);
+
+  const [offerOrderIdState, setOfferOrderIdState] = useState(offerOrderIdState);
+  const [offerOrderState, setOfferOrderState] = useState(offerOrder);
+  const [disabledSubmit, setDisabledSubmit] = useState(false);
+  // const offerMemo = useMemo(() => offerOrder, [offerOrder]);
+  useEffect(() => {
+    var intervalID = setInterval(() => {
+      useActionsP2p(dispatch).handleGetOfferOrder(
+        offerOrderIdState,
+      );
+    }, 20000);
+   
+    return () => {
+      clearInterval(intervalID); 
+    }
+  }, [offerOrderIdState,offerOrderState]);
+  useEffect(() => {
   
+    setOfferOrderIdState(offerOrderId);
+    setOfferOrderState(offerOrder);
+    return () => {};
+  }, [offerOrderId,offerOrder]);
+  useEffect(() => {
+      useActionsP2p(dispatch).handleGetOfferOrder(
+        offerOrderIdState,
+    );
+    return () => {
+      
+    }
+  }, [offerOrderIdState])
+  useEffect(() => {
+    if (
+      get(offerOrderState, 'offerSide') === BUY &&
+      get(offerOrderState, 'isUnLockConfirm')
+    ) {
+       pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
+    } else if (
+      get(offerOrderState, 'offerSide') === SELL &&
+      get(offerOrderState, 'isPaymentConfirm')
+    ) {
+      setDisabledSubmit(false);
+    } else if (
+      get(offerOrderState, 'offerSide') === SELL &&
+      !get(offerOrderState, 'isPaymentConfirm')
+    ) {
+      setDisabledSubmit(true);
+    }else if (
+      get(offerOrderState, 'isPaymentCancel')
+    ) {
+       pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
+    }
+    return () => {
+      
+    }
+  }, [offerOrderState])
   return (
     <Container
       space={15}
@@ -63,7 +126,7 @@ const Step4BuySellScreen = ({componentId,item,paymentMethodData}) => {
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
           step={2}
-          side={get(item, 'side')}
+          side={get(offerOrder, 'offerSide')}
           title={'Chuyển tiền và Xác nhận chuyển tiền'}
         />
       </Layout>
@@ -77,8 +140,12 @@ const Step4BuySellScreen = ({componentId,item,paymentMethodData}) => {
         }}>
         <TextFnx
           weight="700"
-          color={get(item, 'side') == SELL ? colors.app.buy : colors.app.sell}>
-          {`${get(item, 'side') == SELL ? 'Mua' : 'Bán'} ${get(
+          color={
+            get(offerOrder, 'offerSide') == BUY
+              ? colors.app.buy
+              : colors.app.sell
+          }>
+          {`${get(offerOrder, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
             item,
             'symbol',
           )}`}
@@ -96,7 +163,9 @@ const Step4BuySellScreen = ({componentId,item,paymentMethodData}) => {
             size={16}
             weight="700"
             color={
-              get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
+              get(offerOrder, 'offerSide') == BUY
+                ? colors.app.buy
+                : colors.app.sell
             }>
             {`${formatCurrency(
               get(offerOrder, 'price'),
@@ -167,7 +236,9 @@ const Step4BuySellScreen = ({componentId,item,paymentMethodData}) => {
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
-          <TextFnx color={colors.app.textContentLevel3}>Phương thức thanh toán</TextFnx>
+          <TextFnx color={colors.app.textContentLevel3}>
+            Phương thức thanh toán
+          </TextFnx>
           {get(paymentMethodData, 'code') ==
           constant.CODE_PAYMENT_METHOD.MOMO ? (
             <Layout isLineCenter>
@@ -221,11 +292,14 @@ const Step4BuySellScreen = ({componentId,item,paymentMethodData}) => {
             </Layout>
           )}
         </Layout>
-        <Layout style={{
-            backgroundColor:colors.app.lineSetting,
-            borderRadius:10,
-            paddingLeft:16
-        }} isSpaceBetween spaceTop={10}>
+        <Layout
+          style={{
+            backgroundColor: colors.app.lineSetting,
+            borderRadius: 10,
+            paddingLeft: 16,
+          }}
+          isSpaceBetween
+          spaceTop={10}>
           <Layout>
             <View
               style={{
@@ -244,7 +318,7 @@ const Step4BuySellScreen = ({componentId,item,paymentMethodData}) => {
                 Người bán
               </TextFnx>
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
-                {get(advertisment,"traderInfo.emailAddress")}
+                {get(advertisment, 'traderInfo.emailAddress')}
               </TextFnx>
             </Layout>
           </Layout>
@@ -255,7 +329,8 @@ const Step4BuySellScreen = ({componentId,item,paymentMethodData}) => {
             Lưu ý
           </TextFnx>
           <TextFnx color={colors.app.textContentLevel3}>
-          Sau khi người bán xác nhận đã nhận được khoản thanh toán, hệ thống sẽ tự động chuyển tài sản vào ví của bạn.
+            Sau khi người bán xác nhận đã nhận được khoản thanh toán, hệ thống
+            sẽ tự động chuyển tài sản vào ví của bạn.
           </TextFnx>
         </Layout>
         <Layout
@@ -274,19 +349,45 @@ const Step4BuySellScreen = ({componentId,item,paymentMethodData}) => {
         <Button
           spaceVertical={20}
           isSubmit
+          bgButtonColorSubmit={
+            disabledSubmit ? '#715611' : colors.app.yellowHightlight
+          }
+          bgButtonColorClose={disabledSubmit ? '#2C2B28' : colors.btnClose}
+          disabledClose={disabledSubmit}
+          disabledSubmit={disabledSubmit}
           isClose
           onSubmit={() => {
-              pushSingleScreenApp(componentId,STEP_5_BUY_SELL_SCREEN)
+            if(get(offerOrder, 'offerSide') === SELL){
+              pushSingleScreenApp(componentId, STEP_2FA_BUY_SELL_SCREEN);
+            }
           }}
           colorTitle={colors.text}
           weightTitle={'700'}
-          textClose={'Huỷ lệnh'}
-          textSubmit={'Khiếu nại'}
-          colorTitleClose={colors.app.sell}
+          onClose={()=>{
+            if(get(offerOrder, 'offerSide') === BUY){
+              useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
+                offerOrderId: offerOrderId,
+                isHasPayment: false,
+                pofPayment: "",
+                pofPaymentComment: "",
+                cancellationReason: ""
+              });
+            }
+          }}
+          textClose={
+            get(offerOrder, 'offerSide') === BUY ? 'Huỷ lệnh' : 'Khiếu nại'
+          }
+          textSubmit={
+            get(offerOrder, 'offerSide') === BUY
+              ? 'Khiếu nại'
+              : 'Xác nhận mở khóa'
+          }
+          colorTitleClose={
+            disabledSubmit ? colors.description : colors.textBtnClose
+          }
           //   te={'MUA USDT'}
         />
       </View>
-
     </Container>
   );
 };

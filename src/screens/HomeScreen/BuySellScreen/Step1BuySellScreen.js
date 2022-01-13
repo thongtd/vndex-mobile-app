@@ -65,7 +65,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
       )}`}>
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
-          side={get(item, 'side')}
+          side={get(item, 'side') == SELL ?BUY:SELL}
           step={0}
           title={`Tạo lệnh ${get(item, 'side') == SELL ? 'mua' : 'bán'} ${get(
             item,

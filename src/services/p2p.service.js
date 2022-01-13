@@ -67,4 +67,9 @@ export const P2pService = {
     let response = await httpService.post(url,data);
     return response.data;
   },
+  unlockOfferAdvertisment:async (data,offerOrderId) => {
+    let url = `${P2P_API.UNLOCK_OFFER_ADVERTISMENT}${offerOrderId}`;
+    let response = await httpService.post(url,data);
+    return response.data;
+  },
 };

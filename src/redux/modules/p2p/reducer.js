@@ -9,7 +9,8 @@ export const DEFAULT = {
   advertisment:{},
   paymentMethods:[],
   exchangePaymentMethod:[],
-  offerOrder:{}
+  offerOrder:{},
+  offerOrderId:""
 };
 
 export default p2p = (state = DEFAULT, action = {}) => {
@@ -25,6 +26,11 @@ export default p2p = (state = DEFAULT, action = {}) => {
         ...state,
         offerOrder: payload,
       };
+      case 'GET_OFFER_ORDER_ID_SUCCESS':
+      return {
+        ...state,
+        offerOrderId: payload,
+      };
       case GET_ADVERTISMENT_SUCCESS:
       return {
         ...state,
@@ -33,7 +39,7 @@ export default p2p = (state = DEFAULT, action = {}) => {
       case GET_TRADING_SUCCESS:
       return {
         ...state,
-        tradingMarket: payload,
+        tradingMarket: {...payload},
       };
       case GET_EXCHANGE_PAYMENT_METHOD_SUCCESS:
       return {

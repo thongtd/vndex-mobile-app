@@ -11,7 +11,7 @@ import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
 import Layout from '../../../components/Layout/Layout';
 import TextFnx from '../../../components/Text/TextFnx';
-import {constant, fontSize, SELL, spacingApp} from '../../../configs/constant';
+import {constant, fontSize, SELL,BUY, spacingApp} from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
 import TimelineBuySell from './TimelineBuySell';
@@ -23,6 +23,7 @@ import {
   pushSingleScreenApp,
   STEP_2_BUY_SELL_SCREEN,
   STEP_3_BUY_SELL_SCREEN,
+  STEP_4_BUY_SELL_SCREEN,
 } from '../../../navigation';
 import ButtonIcon from '../../../components/Button/ButtonIcon';
 import Copy from 'assets/svg/ic_copy.svg';
@@ -45,14 +46,22 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
   const advertisment = useSelector(state => state.p2p.advertisment);
   const currencyList = useSelector(state => state.market.currencyList);
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
-  const offerOrder = useSelector(state => state.p2p.offerOrder);
+
   useEffect(() => {
     const ev = listenerEventEmitter('pushOfferOrder',(data)=>{
-      pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN,{
-        paymentMethodData:get(data,"paymentMethodData"),
-        offerOrder:get(data,"offerOrder"),
-        item
-      });
+      if(get(data,"offerOrder.offerSide") === BUY){
+        pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN,{
+          paymentMethodData:get(data,"paymentMethodData"),
+          offerOrder:get(data,"offerOrder"),
+          item
+        });
+      }else{
+        pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN,{
+          paymentMethodData:get(data,"paymentMethodData"),
+          item
+        });
+      }
+      
     })
     
     return () => {
@@ -84,7 +93,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
           step={1}
-          side={get(item, 'side')}
+          side={get(item, 'side') == SELL ?BUY:SELL}
           title={'Chuyển tiền và Xác nhận chuyển tiền'}
         />
       </Layout>
@@ -302,11 +311,9 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
         <Button
           spaceVertical={20}
           isSubmit
-          isClose
           onSubmit={() => actionSheetRef?.current?.show()}
           colorTitle={colors.text}
           weightTitle={'700'}
-          textClose={'Huỷ lệnh'}
           colorTitleClose={colors.app.sell}
           //   te={'MUA USDT'}
         />

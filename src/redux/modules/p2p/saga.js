@@ -1,6 +1,14 @@
 // @flow
 
-import {take, put, call, fork, all, takeEvery} from 'redux-saga/effects';
+import {
+  take,
+  put,
+  call,
+  fork,
+  all,
+  takeEvery,
+  select,
+} from 'redux-saga/effects';
 import {
   GET_COUNTRIES,
   actionsReducerP2p,
@@ -15,6 +23,7 @@ import {
   CREATE_OFFER_ADVERTISMENT,
   GET_OFFER_ORDER_SUCCESS,
   CONFIRM_PAYMENT_ADVERTISMENT,
+  UNLOCK_OFFER_ADVERTISMENT,
 } from './actions';
 
 import {
@@ -47,7 +56,6 @@ export function* asyncGetAdvertisments({payload}) {
     yield put(actionsReducerP2p.getAdvertismentsSuccess(get(res, 'source')));
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    
   }
 }
 export function* watchGetAdvertisments() {
@@ -59,7 +67,7 @@ export function* watchGetAdvertisments() {
 export function* asyncGetTrading({payload}) {
   try {
     const res = yield call(P2pService.getTradingMarket);
-    
+
     let symbolArr = [];
 
     let currencyArr = [];
@@ -85,9 +93,7 @@ export function* asyncGetTrading({payload}) {
     };
 
     yield put(actionsReducerP2p.getTradingSuccess(resData));
-  } catch (e) {
-    
-  }
+  } catch (e) {}
 }
 export function* watchGetTrading() {
   while (true) {
@@ -102,7 +108,6 @@ export function* asyncGetAdvertisment({payload}) {
     yield put(actionsReducerP2p.getAdvertismentSuccess(res));
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    
   }
 }
 export function* watchGetAdvertisment() {
@@ -119,7 +124,6 @@ export function* asyncGetExchangePaymentMethod({payload}) {
     yield put(actionsReducerP2p.getExchangePaymentMethodSuccess(res));
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    
   }
 }
 export function* watchGetExchangePaymentMethod() {
@@ -132,7 +136,7 @@ export function* asyncGetPaymentMethod({payload}) {
   try {
     const res = yield call(P2pService.getPaymentMethodByAcc);
     emitEventEmitter('doneApi', true);
-    
+
     if (get(res, 'success')) {
       yield put(
         actionsReducerP2p.getPaymentMethodByAccSuccess(get(res, 'data')),
@@ -140,7 +144,6 @@ export function* asyncGetPaymentMethod({payload}) {
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    
   }
 }
 export function* watchGetPaymentMethod() {
@@ -174,13 +177,12 @@ export function* asyncRemovePaymentMethod({payload}) {
       get(payload, 'accId'),
     );
     emitEventEmitter('doneApi', true);
-    
+
     if (get(res, 'success')) {
       yield put(createAction(GET_PAYMENT_METHOD_BY_ACC));
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    
   }
 }
 export function* watchRemovePaymentMethod() {
@@ -191,15 +193,17 @@ export function* watchRemovePaymentMethod() {
 }
 export function* asyncGetOfferOrder({payload}) {
   try {
+    const offerOrderData = yield select(state => state.p2p.offerOrder);
     const res = yield call(P2pService.getOfferOrder, payload);
+    console.log('res: ', res);
     emitEventEmitter('doneApi', true);
 
     if (get(res, 'success')) {
-      yield put(
-        actionsReducerP2p.getOfferOrderSuccess(get(res, 'data')),
-      );
+        yield put(actionsReducerP2p.getOfferOrderSuccess(get(res, 'data')));
+      
     }
   } catch (e) {
+    console.log(e,"errkaka");
     emitEventEmitter('doneApi', true);
   }
 }
@@ -211,13 +215,22 @@ export function* watchGetOfferOrder() {
 }
 export function* asyncCreateOfferOrder({payload}) {
   try {
-    const res = yield call(P2pService.createOfferOrderAdvertisment, get(payload,"data"));
+    const res = yield call(
+      P2pService.createOfferOrderAdvertisment,
+      get(payload, 'data'),
+    );
     emitEventEmitter('doneApi', true);
     if (get(res, 'success') && get(res, 'data.status')) {
-      // yield put(createAction(GET));
+      yield put(
+        createAction(
+          'GET_OFFER_ORDER_ID_SUCCESS',
+          get(res, 'data.offerOrderId'),
+        ),
+      );
+      yield put(createAction(GET_OFFER_ORDER, get(res, 'data.offerOrderId')));
       emitEventEmitter('pushOfferOrder', {
-        paymentMethodData:get(payload,"paymentMethodData"),
-        offerOrder:get(res, 'data')
+        paymentMethodData: get(payload, 'paymentMethodData'),
+        offerOrder: get(res, 'data'),
       });
     } else {
       toast(get(res, 'message'));
@@ -239,7 +252,8 @@ export function* asyncConfirmPaymentAdvertisment({payload}) {
     emitEventEmitter('doneApi', true);
     if (get(res, 'success') && get(res, 'data.status')) {
       // yield put(createAction(GET));
-      emitEventEmitter('pushStep', true);
+      emitEventEmitter('pushStep', payload);
+      yield put(createAction(GET_OFFER_ORDER, get(res, 'data.offerOrderId')));
     } else {
       toast(get(res, 'message'));
     }
@@ -253,6 +267,30 @@ export function* watchConfirmPaymentAdvertisment() {
     yield* asyncConfirmPaymentAdvertisment(action);
   }
 }
+export function* asyncUnlockOfferAdvertisment({payload}) {
+  try {
+    const res = yield call(
+      P2pService.unlockOfferAdvertisment,
+      get(payload, 'data'),
+      get(payload, 'offerOrderId'),
+    );
+    emitEventEmitter('doneApi', true);
+    if (get(res, 'success') && get(res, 'data.status')) {
+      yield put(createAction(GET_OFFER_ORDER, get(res, 'data.offerOrderId')));
+      emitEventEmitter('successUnlock', true);
+    } else {
+      toast(get(res, 'message'));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchUnlockOfferAdvertisment() {
+  while (true) {
+    const action = yield take(UNLOCK_OFFER_ADVERTISMENT);
+    yield* asyncUnlockOfferAdvertisment(action);
+  }
+}
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
   yield all([fork(watchGetTrading)]);
@@ -263,5 +301,6 @@ export default function* () {
   yield all([fork(watchRemovePaymentMethod)]);
   yield all([fork(watchGetOfferOrder)]);
   yield all([fork(watchCreateOfferOrder)]);
+  yield all([fork(watchUnlockOfferAdvertisment)]);
   yield all([fork(watchConfirmPaymentAdvertisment)]);
 }

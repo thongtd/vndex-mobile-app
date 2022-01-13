@@ -56,7 +56,7 @@ import { useDispatch } from 'react-redux';
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
   const dispatch = useDispatch();
-  const [ActiveSymbol, setActiveSymbol] = useState('');
+  const [ActiveSymbol, setActiveSymbol] = useState('AIFT');
   const [ActiveType, setActiveType] = useState('B');
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -69,8 +69,10 @@ const HomeScreen = ({componentId}) => {
   }, [tradingMarket]);
   const tradingMarket = useSelector(state => state.p2p.tradingMarket);
   const advertisments = useSelector(state => state.p2p.advertisments);
-  console.log(advertisments, 'advertisments');
+  
   useEffect(() => {
+    
+   
     const listenerEmit = listenerEventEmitter('pushMyads', () => {
       pushSingleScreenApp(componentId, ADS_MY_ADVERTISENMENT_SCREEN, null, {
         topBar: {
@@ -112,6 +114,7 @@ const HomeScreen = ({componentId}) => {
   }, []);
   
  useEffect(() => {
+  useActionsP2p(dispatch).handleGetTradingMarket();
    let evDone = listenerEventEmitter('doneApi',()=>{
     setIsLoading(false);
    });

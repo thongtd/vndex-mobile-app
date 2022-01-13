@@ -10,7 +10,13 @@ import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
 import Layout from '../../../components/Layout/Layout';
 import TextFnx from '../../../components/Text/TextFnx';
-import {constant, fontSize, SELL, spacingApp} from '../../../configs/constant';
+import {
+  constant,
+  fontSize,
+  SELL,
+  spacingApp,
+  BUY,
+} from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
 import TimelineBuySell from './TimelineBuySell';
@@ -30,32 +36,51 @@ import Copy from 'assets/svg/ic_copy.svg';
 import BottomSheet from '../../../components/ActionSheet/ActionSheet';
 import {useDispatch} from 'react-redux';
 import {useActionsP2p} from '../../../redux';
-import {formatCurrency, get, listenerEventEmitter} from '../../../configs/utils';
+import {
+  formatCurrency,
+  get,
+  listenerEventEmitter,
+} from '../../../configs/utils';
 import {isEmpty} from 'lodash';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
-const Step3BuySellScreen = ({item,componentId, offerOrder, paymentMethodData}) => {
+const Step3BuySellScreen = ({
+  item,
+  componentId,
+  offerOrder,
+  paymentMethodData,
+}) => {
   const dispatch = useDispatch();
   const offerOrderGlobal = useSelector(state => state.p2p.offerOrder);
+  const offerOrderId = useSelector(state => state.p2p.offerOrderId);
   useEffect(() => {
-    const ev = listenerEventEmitter('pushStep',()=>{
-      pushSingleScreenApp(componentId,STEP_4_BUY_SELL_SCREEN,{
-        paymentMethodData,
-        item
-      })
-    });
     useActionsP2p(dispatch).handleGetOfferOrder(
       get(offerOrder, 'offerOrderId'),
     );
-    return () => {
-      ev.remove();
-
-    };
+    return () => {};
   }, [dispatch]);
+  useEffect(() => {
+    const ev = listenerEventEmitter('pushStep', dataConfirm => {
+      console.log(dataConfirm,"data confirm")
+      if (get(dataConfirm, 'isHasPayment') === false) {
+        pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
+      } else if (
+        get(dataConfirm, 'isHasPayment') &&
+        get(offerOrderGlobal, 'offerSide') == BUY
+      ) {
+        
+        pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, {
+          paymentMethodData,
+          item,
+        });
+      }
+    });
+    return () => ev.remove();
+  }, []);
   const currencyList = useSelector(state => state.market.currencyList);
   const actionSheetRef = useRef(null);
   const advertisment = useSelector(state => state.p2p.advertisment);
-  
+
   return (
     <Container
       space={15}
@@ -80,7 +105,7 @@ const Step3BuySellScreen = ({item,componentId, offerOrder, paymentMethodData}) =
       </Layout>
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
-        side={get(item, 'side')}
+          side={get(offerOrderGlobal, 'offerSide')}
           step={1}
           title={'Chuyển tiền và Xác nhận chuyển tiền'}
         />
@@ -93,10 +118,14 @@ const Step3BuySellScreen = ({item,componentId, offerOrder, paymentMethodData}) =
           borderTopRightRadius: 10,
           paddingHorizontal: spacingApp,
         }}>
-          <TextFnx
+        <TextFnx
           weight="700"
-          color={get(item, 'side') == SELL ? colors.app.buy : colors.app.sell}>
-          {`${get(item, 'side') == SELL ? 'Mua' : 'Bán'} ${get(
+          color={
+            get(offerOrderGlobal, 'offerSide') == BUY
+              ? colors.app.buy
+              : colors.app.sell
+          }>
+          {`${get(offerOrderGlobal, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
             item,
             'symbol',
           )}`}
@@ -110,13 +139,22 @@ const Step3BuySellScreen = ({item,componentId, offerOrder, paymentMethodData}) =
             borderColor: colors.app.lineSetting,
           }}>
           <TextFnx color={colors.app.textContentLevel3}>Số tiền</TextFnx>
-          <TextFnx size={16} weight="700" color={ get(item, 'side') == SELL ? colors.app.buy : colors.app.sell}>
+          <TextFnx
+            size={16}
+            weight="700"
+            color={
+              get(offerOrderGlobal, 'offerSide') == BUY
+                ? colors.app.buy
+                : colors.app.sell
+            }>
             {`${formatCurrency(
               get(offerOrderGlobal, 'price'),
               get(advertisment, 'paymentUnit'),
               currencyList,
             )} `}
-            <TextFnx color={colors.app.textContentLevel3}>{get(advertisment, 'paymentUnit')}</TextFnx>
+            <TextFnx color={colors.app.textContentLevel3}>
+              {get(advertisment, 'paymentUnit')}
+            </TextFnx>
           </TextFnx>
         </Layout>
         {!isEmpty(get(paymentMethodData, 'backAccountNo')) && (
@@ -291,20 +329,30 @@ const Step3BuySellScreen = ({item,componentId, offerOrder, paymentMethodData}) =
           spaceVertical={20}
           isSubmit
           isClose
-          onSubmit={() =>{
-            useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
-              offerOrderId: get(offerOrder, 'offerOrderId'),
-              isHasPayment: true,
-              pofPayment: "",
-              pofPaymentComment: "",
-              cancellationReason: ""
-            });
-          }
+          onSubmit={
+            () => {
+              useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
+                  offerOrderId: offerOrderId,
+                  isHasPayment: true,
+                  pofPayment: '',
+                  pofPaymentComment: '',
+                  cancellationReason: '',
+                });
+            }
             // pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN)
           }
           colorTitle={colors.text}
           weightTitle={'700'}
           textClose={'Huỷ lệnh'}
+          onClose={() => {
+            useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
+              offerOrderId: offerOrderId,
+              isHasPayment: false,
+              pofPayment: '',
+              pofPaymentComment: '',
+              cancellationReason: '',
+            });
+          }}
           textSubmit={'Xác nhận đã chuyển tiền'}
           colorTitleClose={colors.app.sell}
           //   te={'MUA USDT'}
