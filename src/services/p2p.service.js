@@ -62,4 +62,9 @@ export const P2pService = {
     let response = await httpService.post(url,data);
     return response.data;
   },
+  confirmPaymentAdvertisment:async (data) => {
+    let url = `${P2P_API.CONFIRM_PAYMENT_ADVERTISMENT}`;
+    let response = await httpService.post(url,data);
+    return response.data;
+  },
 };

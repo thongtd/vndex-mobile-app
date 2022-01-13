@@ -45,10 +45,13 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
   const advertisment = useSelector(state => state.p2p.advertisment);
   const currencyList = useSelector(state => state.market.currencyList);
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
+  const offerOrder = useSelector(state => state.p2p.offerOrder);
   useEffect(() => {
-    const ev = listenerEventEmitter('pushOfferOrder',(offerOrderId)=>{
+    const ev = listenerEventEmitter('pushOfferOrder',(data)=>{
       pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN,{
-        offerOrderId
+        paymentMethodData:get(data,"paymentMethodData"),
+        offerOrder:get(data,"offerOrder"),
+        item
       });
     })
     
@@ -212,7 +215,9 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
                 {get(advertisment, 'traderInfo.emailAddress')}
               </TextFnx>
-              <Layout
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
                 style={{
                   paddingTop: 5,
                 }}>
@@ -254,6 +259,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
                       paddingHorizontal: 5,
                       paddingVertical: 2,
                       borderRadius: 5,
+                      marginRight: 10,
                     }}>
                     <Image
                       source={icons.icBank}
@@ -267,7 +273,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
                   </View>);
                   }
                 })}
-              </Layout>
+              </ScrollView>
             </Layout>
           </Layout>
           <ButtonIcon name="eye" color={colors.app.yellowHightlight} />
@@ -331,10 +337,13 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
                   onPress={() => {
                     actionSheetRef.current?.hide();
                     useActionsP2p(dispatch).handleCreateOfferOrder({
-                      orderId: get(advertisment,"orderId"),
-                      orderQtty:get(data, 'quantity'),
-                      orderPrice: get(data, 'price'),
-                      p2PAccountPaymentMethodId: get(item,"id")
+                      data:{
+                        orderId: get(advertisment,"orderId"),
+                        orderQtty:get(data, 'quantity'),
+                        orderPrice: get(data, 'price'),
+                        p2PAccountPaymentMethodId: get(item,"id")
+                      },
+                      paymentMethodData:item
                     })
                     
                   }}>

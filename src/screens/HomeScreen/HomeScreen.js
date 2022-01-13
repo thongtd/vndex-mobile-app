@@ -15,6 +15,7 @@ import {
   LOGIN_SCREEN,
   SETTING_SCREEN,
   STEP_1_BUY_SELL_SCREEN,
+  STEP_4_BUY_SELL_SCREEN,
 } from '../../navigation';
 import {
   pushSingleHiddenTopBarApp,
