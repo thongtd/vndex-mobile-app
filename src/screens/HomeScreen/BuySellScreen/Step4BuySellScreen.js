@@ -10,7 +10,7 @@ import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
 import Layout from '../../../components/Layout/Layout';
 import TextFnx from '../../../components/Text/TextFnx';
-import {fontSize, spacingApp} from '../../../configs/constant';
+import {BUY, constant, fontSize, SELL, spacingApp} from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
 import TimelineBuySell from './TimelineBuySell';
@@ -27,8 +27,17 @@ import {
 import ButtonIcon from '../../../components/Button/ButtonIcon';
 import Copy from 'assets/svg/ic_copy.svg';
 import BottomSheet from '../../../components/ActionSheet/ActionSheet';
-const Step4BuySellScreen = ({componentId}) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { get } from 'lodash';
+import { formatCurrency, to_UTCDate } from '../../../configs/utils';
+
+const Step4BuySellScreen = ({componentId,item,paymentMethodData}) => {
   const actionSheetRef = useRef(null);
+  const dispatch = useDispatch();
+  const advertisment = useSelector(state => state.p2p.advertisment);
+  const currencyList = useSelector(state => state.market.currencyList);
+  const offerOrder = useSelector(state => state.p2p.offerOrder);
+  
   return (
     <Container
       space={15}
@@ -54,6 +63,7 @@ const Step4BuySellScreen = ({componentId}) => {
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
           step={2}
+          side={get(item, 'side')}
           title={'Chuyển tiền và Xác nhận chuyển tiền'}
         />
       </Layout>
@@ -65,8 +75,13 @@ const Step4BuySellScreen = ({componentId}) => {
           borderTopRightRadius: 10,
           paddingHorizontal: spacingApp,
         }}>
-        <TextFnx weight="700" color={colors.app.buy}>
-          Mua USDT
+        <TextFnx
+          weight="700"
+          color={get(item, 'side') == SELL ? colors.app.buy : colors.app.sell}>
+          {`${get(item, 'side') == SELL ? 'Mua' : 'Bán'} ${get(
+            item,
+            'symbol',
+          )}`}
         </TextFnx>
         <Layout
           isLineCenter
@@ -77,66 +92,134 @@ const Step4BuySellScreen = ({componentId}) => {
             borderColor: colors.app.lineSetting,
           }}>
           <TextFnx color={colors.app.textContentLevel3}>Số tiền</TextFnx>
-          <TextFnx size={16} weight="700" color={colors.app.buy}>
-            150.000.000{' '}
-            <TextFnx color={colors.app.textContentLevel3}>VND</TextFnx>
+          <TextFnx
+            size={16}
+            weight="700"
+            color={
+              get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
+            }>
+            {`${formatCurrency(
+              get(offerOrder, 'price'),
+              get(advertisment, 'paymentUnit'),
+              currencyList,
+            )} `}
+            <TextFnx color={colors.app.textContentLevel3}>
+              {get(advertisment, 'paymentUnit')}
+            </TextFnx>
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Giá</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>24.525 VND</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
+            get(advertisment, 'price'),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>5,000 AIF</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
+            get(offerOrder, 'quantity'),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'symbol')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>1.120000 AIF</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
+            get(offerOrder, 'price') * get(advertisment, 'fee'),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>1.120000 AIF</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>
+            0 {get(advertisment, 'paymentUnit')}
+          </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
-          <TextFnx color={colors.app.textContentLevel2}>1234567890</TextFnx>
-          <ButtonIcon 
-          style={{
-              height:25,
-              width:30
-          }}
-          iconComponent={<Copy height={20} width={20} />}
-          />
+            <TextFnx color={colors.app.textContentLevel2}>
+              {get(advertisment, 'orderNumber')}
+            </TextFnx>
+            <ButtonIcon
+              onPress={() => {
+                Clipboard.setString(get(advertisment, 'orderNumber'));
+                toast('COPY_TO_CLIPBOARD'.t());
+              }}
+              style={{
+                height: 25,
+                width: 30,
+              }}
+              iconComponent={<Copy height={20} width={20} />}
+            />
           </Layout>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>16-11-2021 11:20:35</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>
+            {to_UTCDate(
+              get(advertisment, 'createdDate'),
+              'DD-MM-YYYY hh:mm:ss',
+            )}
+          </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phương thức thanh toán</TextFnx>
-          <View
-              style={{
-                flexDirection: 'row',
-                backgroundColor: '#3B2B2B',
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingHorizontal: 5,
-                paddingVertical: 2,
-                borderRadius: 5,
-              }}>
-              <Image
-                source={icons.icMomo}
+          {get(paymentMethodData, 'code') ==
+          constant.CODE_PAYMENT_METHOD.MOMO ? (
+            <Layout isLineCenter>
+              <View
                 style={{
-                  marginLeft: 5,
-                  width: 10,
-                  height: 10,
-                }}
-              />
-              <TextFnx spaceLeft={5}>Momo</TextFnx>
-            </View>
+                  flexDirection: 'row',
+                  backgroundColor: '#3B2B2B',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
+                  paddingVertical: 2,
+                  borderRadius: 5,
+                }}>
+                <Image
+                  source={icons.icMomo}
+                  style={{
+                    marginLeft: 5,
+                    width: 10,
+                    height: 10,
+                  }}
+                />
+                <TextFnx spaceLeft={5}>
+                  {get(paymentMethodData, 'name')}
+                </TextFnx>
+              </View>
+            </Layout>
+          ) : (
+            <Layout isLineCenter>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: '#3B2B2B',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
+                  paddingVertical: 2,
+                  borderRadius: 5,
+                }}>
+                <Image
+                  source={icons.icBank}
+                  style={{
+                    marginLeft: 5,
+                    width: 10,
+                    height: 10,
+                  }}
+                />
+                <TextFnx spaceLeft={5}>
+                  {get(paymentMethodData, 'name')}
+                </TextFnx>
+              </View>
+            </Layout>
+          )}
         </Layout>
         <Layout style={{
             backgroundColor:colors.app.lineSetting,
@@ -161,7 +244,7 @@ const Step4BuySellScreen = ({componentId}) => {
                 Người bán
               </TextFnx>
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
-                kkk
+                {get(advertisment,"traderInfo.emailAddress")}
               </TextFnx>
             </Layout>
           </Layout>
@@ -198,7 +281,7 @@ const Step4BuySellScreen = ({componentId}) => {
           colorTitle={colors.text}
           weightTitle={'700'}
           textClose={'Huỷ lệnh'}
-          textSubmit={'Xác nhận đã chuyển tiền'}
+          textSubmit={'Khiếu nại'}
           colorTitleClose={colors.app.sell}
           //   te={'MUA USDT'}
         />
