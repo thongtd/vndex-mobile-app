@@ -164,7 +164,7 @@ const Step1AddNewAds = ({bntClose, submitNextStep}) => {
           <TextFnx color={colors.description}>Giá của bạn</TextFnx>
           <TextFnx color={colors.greyLight}>22,940 VND</TextFnx>
         </Layout>
-        <Layout isSpaceBetween isLineCenter spaceTop={10}>
+        <Layout isSpaceBetween isLineCenter spaceTop={10} spaceBottom={30}>
           <TextFnx color={colors.description}>Giá lệnh thấp nhất</TextFnx>
           <TextFnx color={colors.greyLight}>22.800 VND</TextFnx>
         </Layout>

@@ -11,11 +11,12 @@ import {
   GET_EXCHANGE_PAYMENT_METHOD,
   ADD_PAYMENT_METHOD,
   REMOVE_PAYMENT_METHOD,
+  GET_MY_ADVERTISMENTS,
 } from './actions';
 
 import {createAction, emitEventEmitter, get} from '../../../configs/utils';
 import {P2pService} from '../../../services/p2p.service';
-import {size} from 'lodash';
+import {isArray, size} from 'lodash';
 
 export function* asyncGetAdvertisments({payload}) {
   try {
@@ -38,7 +39,6 @@ export function* asyncGetAdvertisments({payload}) {
     yield put(actionsReducerP2p.getAdvertismentsSuccess(get(res, 'source')));
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    console.log('e: ', e);
   }
 }
 export function* watchGetAdvertisments() {
@@ -50,7 +50,7 @@ export function* watchGetAdvertisments() {
 export function* asyncGetTrading({payload}) {
   try {
     const res = yield call(P2pService.getTradingMarket);
-    console.log('res: ', res);
+
     let symbolArr = [];
 
     let currencyArr = [];
@@ -76,9 +76,7 @@ export function* asyncGetTrading({payload}) {
     };
 
     yield put(actionsReducerP2p.getTradingSuccess(resData));
-  } catch (e) {
-    console.log('e: ', e);
-  }
+  } catch (e) {}
 }
 export function* watchGetTrading() {
   while (true) {
@@ -93,9 +91,9 @@ export function* asyncGetAdvertisment({payload}) {
     yield put(actionsReducerP2p.getAdvertismentSuccess(res));
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    console.log('e: ', e);
   }
 }
+
 export function* watchGetAdvertisment() {
   while (true) {
     const action = yield take(GET_ADVERTISMENT);
@@ -110,7 +108,6 @@ export function* asyncGetExchangePaymentMethod({payload}) {
     yield put(actionsReducerP2p.getExchangePaymentMethodSuccess(res));
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    console.log('e: ', e);
   }
 }
 export function* watchGetExchangePaymentMethod() {
@@ -123,7 +120,7 @@ export function* asyncGetPaymentMethod({payload}) {
   try {
     const res = yield call(P2pService.getPaymentMethodByAcc);
     emitEventEmitter('doneApi', true);
-    console.log('easyncGetPaymentMethod: ', res);
+
     if (get(res, 'success')) {
       yield put(
         actionsReducerP2p.getPaymentMethodByAccSuccess(get(res, 'data')),
@@ -131,7 +128,6 @@ export function* asyncGetPaymentMethod({payload}) {
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    console.log('easyncGetPaymentMethod: ', e);
   }
 }
 export function* watchGetPaymentMethod() {
@@ -142,15 +138,14 @@ export function* watchGetPaymentMethod() {
 }
 export function* asyncAddPaymentMethod({payload}) {
   try {
-    const res = yield call(P2pService.addPaymentMethod,payload);
+    const res = yield call(P2pService.addPaymentMethod, payload);
     emitEventEmitter('doneApi', true);
-    console.log('easyncGetPaymentMethod: ', res);
+
     if (get(res, 'success')) {
       yield put(createAction(GET_PAYMENT_METHOD_BY_ACC));
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    console.log('easyncGetPaymentMethod: ', e);
   }
 }
 export function* watchAddPaymentMethod() {
@@ -161,21 +156,82 @@ export function* watchAddPaymentMethod() {
 }
 export function* asyncRemovePaymentMethod({payload}) {
   try {
-    const res = yield call(P2pService.removePaymentMethod,get(payload,"data"),get(payload,"accId"));
+    const res = yield call(
+      P2pService.removePaymentMethod,
+      get(payload, 'data'),
+      get(payload, 'accId'),
+    );
     emitEventEmitter('doneApi', true);
-    console.log('easyncGetPaymentMethod: ', res);
+
     if (get(res, 'success')) {
       yield put(createAction(GET_PAYMENT_METHOD_BY_ACC));
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);
-    console.log('easyncGetPaymentMethod: ', e);
   }
 }
 export function* watchRemovePaymentMethod() {
   while (true) {
     const action = yield take(REMOVE_PAYMENT_METHOD);
     yield* asyncRemovePaymentMethod(action);
+  }
+}
+export function* asyncGetMyAdvertisment({payload}) {
+  try {
+    const res = yield call(P2pService.getMyAdvertisments, {
+      pageIndex: get(payload, 'pageIndex') || 1,
+      pageSize: get(payload, 'pageSize') || 15,
+      side: get(payload, 'side') || '',
+      coinSymbol: get(payload, 'coinSymbol') || '',
+      paymentUnit: get(payload, 'paymentUnit') || '',
+      priceType: get(payload, 'priceType') || '',
+      orderAmount: get(payload, 'orderAmount') || '',
+      exPaymentMethodIds: get(payload, 'exPaymentMethodIds') || '',
+      requiredKyc: get(payload, 'requiredKyc') || '',
+      requiredAgeInday: get(payload, 'requiredAgeInday') || '',
+      createdFrom: get(payload, 'createdFrom') || '',
+      createdTo: get(payload, 'createdTo') || '',
+      status: get(payload, 'status') || '',
+    });
+    if (res?.status == 200) {
+      if (isArray(get(res.data, 'source'))) {
+        res.data.source = res.data.source.map(item => {
+          const isBankMomo = (get(item, 'paymentMethods') || []).find(
+            i => i.code == 'MOMO',
+          )
+            ? true
+            : false;
+          const isBanking = (get(item, 'paymentMethods') || []).find(
+            i => i.code == 'BANK_TRANSFER',
+          )
+            ? true
+            : false;
+          return {
+            ...item,
+            isBankMomo,
+            isBanking,
+          };
+        });
+        yield put(
+          actionsReducerP2p.getMyAdvertismentsSuccess({
+            ...get(res, 'data'),
+            pageIndex: get(payload, 'pageIndex') || 1,
+          }),
+        );
+      }
+      emitEventEmitter('doneApi', true);
+    } else {
+      emitEventEmitter('doneApi', false);
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', false);
+  }
+}
+
+export function* watchGetMyAdvertisment() {
+  while (true) {
+    const action = yield take(GET_MY_ADVERTISMENTS);
+    yield* asyncGetMyAdvertisment(action);
   }
 }
 export default function* () {
@@ -186,4 +242,5 @@ export default function* () {
   yield all([fork(watchGetExchangePaymentMethod)]);
   yield all([fork(watchAddPaymentMethod)]);
   yield all([fork(watchRemovePaymentMethod)]);
+  yield all([fork(watchGetMyAdvertisment)]);
 }

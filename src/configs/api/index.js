@@ -23,6 +23,7 @@ export const P2P_API = {
     GET_EXCHANGE_PAYMENT_METHOD: `${EXCHANGE_URL}api/v1/payment-methods/exchange-payment-methods`,
     ADD_PAYMENT_METHOD: `${EXCHANGE_URL}api/v1/payment-methods/add-payment-methods`,
     REMOVE_PAYMENT_METHOD: `${EXCHANGE_URL}api/v1/payment-methods/remove-payment-methods/`,//accountId
+    GET_MY_ADVERTISEMENT: `${EXCHANGE_URL}api/v1/p2p-order/my-advertisments`
 }
 export const EXCHANGE_API = {
     CHECK_API: `${EXCHANGE_URL}api/health-check`,

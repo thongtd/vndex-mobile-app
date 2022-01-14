@@ -8,6 +8,7 @@ export const httpService = {
         try {
             let publicIp = await publicIP();
             let token = await storageService.getItem('auth_token');
+            console.log('token: ', token);
             let headers = new Headers({
                 'Authorization': 'Bearer ' + token.authToken,
                 'Content-Type': 'application/json;charset=UTF-8',

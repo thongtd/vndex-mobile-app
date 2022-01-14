@@ -13,6 +13,7 @@ const BoxCommand = ({
   isSell,
   price,
   unit,
+  icon,
   nameCoin,
   contentCenter,
   contentBottom,
@@ -48,14 +49,17 @@ const BoxCommand = ({
 
         <Layout isSpaceBetween isLineCenter spaceBottom={10}>
           <Layout isLineCenter>
-            <Image
-              source={require('assets/icons/ic_usdt.png')}
-              style={{
-                width: 20,
-                height: 20,
-              }}
-            />
-            <TextFnx color={colors.subText} spaceLeft={10}>
+            {(icon && (
+              <Image
+                source={require('assets/icons/ic_usdt.png')}
+                style={{
+                  width: 20,
+                  height: 20,
+                }}
+              />
+            )) ||
+              null}
+            <TextFnx color={colors.subText} spaceLeft={(icon && 10) || 0}>
               {nameCoin || ''}
             </TextFnx>
           </Layout>

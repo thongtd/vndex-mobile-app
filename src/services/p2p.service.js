@@ -42,15 +42,24 @@ export const P2pService = {
     let response = await httpService.get_without_token(url);
     return response;
   },
-  addPaymentMethod: async (data) => {
+  addPaymentMethod: async data => {
     let url = `${P2P_API.ADD_PAYMENT_METHOD}`;
-    let response = await httpService.post(url,data);
+    let response = await httpService.post(url, data);
     return response.data;
   },
-  removePaymentMethod: async (data,accId) => {
+  removePaymentMethod: async (data, accId) => {
     let url = `${P2P_API.REMOVE_PAYMENT_METHOD}${accId}`;
-    let response = await httpService.post(url,data);
+    let response = await httpService.post(url, data);
     return response.data;
   },
-  
+  getMyAdvertisments: async data => {
+    let dataRemoved = removeEmptyUrl(
+      `side=${data.side}&coinSymbol=${data.coinSymbol}&paymentUnit=${data.paymentUnit}&priceType=${data.priceType}&orderAmount=${data.orderAmount}&exPaymentMethodIds=${data.exPaymentMethodIds}&requiredKyc=${data.requiredKyc}&requiredAgeInday=${data.requiredAgeInday}&createdFrom=${data.createdFrom}&createdTo=${data.createdTo}&status=${data.status}&pageIndex=${data.pageIndex}&pageSize=${data.pageSize}`,
+    );
+    let urlGetAdvertisments = `${P2P_API.GET_MY_ADVERTISEMENT}?${dataRemoved}`;
+
+    let response = await httpService.get(urlGetAdvertisments);
+
+    return response;
+  },
 };
