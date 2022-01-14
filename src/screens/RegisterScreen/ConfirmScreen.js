@@ -29,7 +29,7 @@ import {
 import {fontSize, IdNavigation} from '../../configs/constant';
 import {authService} from '../../services/authentication.service';
 import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
-import {pop, pushSingleHiddenTopBarApp} from '../../navigation/Navigation';
+import {pop, pushSingleHiddenTopBarApp, showModal} from '../../navigation/Navigation';
 import Layout from '../../components/Layout/Layout';
 import { size } from 'lodash';
 
@@ -41,7 +41,8 @@ const ConfirmScreen = ({countryCode = 'VN', componentId}) => {
   const [disabled, setDisabled] = useState(false);
   const [email, setEmail] = useState('');
   const handleButtonRight = () => {
-    Navigation.showModal(hiddenModal(ALERT_NOTICE_PASSWORD));
+    showModal(ALERT_NOTICE_PASSWORD);
+    // Navigation.showModal(hiddenModal(ALERT_NOTICE_PASSWORD));
   };
   const handleChangeEmail = text => {
     setEmail(text);

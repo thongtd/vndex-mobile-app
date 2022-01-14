@@ -48,6 +48,7 @@ import {
   dismissAllModal,
   pop,
   pushSingleHiddenTopBarApp,
+  showModal,
 } from '../../navigation/Navigation';
 import Button from '../../components/Button/Button';
 // import ButtonSubmitClose from 'components/Button/ButtonSubmitClose';
@@ -275,8 +276,8 @@ const SettingScreen = ({componentId}) => {
       },
       keywords: ['name'],
     };
-
-    Navigation.showModal(hiddenModal(PICKER_SEARCH, propsData, false));
+    showModal(PICKER_SEARCH, propsData, false);
+    // Navigation.showModal(hiddenModal(PICKER_SEARCH, propsData, false));
   };
   const handleActiveCurrency = currency => {
     dismissAllModal();

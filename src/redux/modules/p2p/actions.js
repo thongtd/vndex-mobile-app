@@ -20,6 +20,8 @@ export const CONFIRM_PAYMENT_ADVERTISMENT = `${CONTEXT}/CONFIRM_PAYMENT_ADVERTIS
 export const CONFIRM_PAYMENT_ADVERTISMENT_SUCCESS = `${CONTEXT}/CONFIRM_PAYMENT_ADVERTISMENT_SUCCESS`;
 export const UNLOCK_OFFER_ADVERTISMENT = `${CONTEXT}/UNLOCK_OFFER_ADVERTISMENT`;
 export const UNLOCK_OFFER_ADVERTISMENT_SUCCESS = `${CONTEXT}/UNLOCK_OFFER_ADVERTISMENT_SUCCESS`;
+export const GET_MARKET_INFO = `${CONTEXT}/GET_MARKET_INFO`;
+export const GET_MARKET_INFO_SUCCESS = `${CONTEXT}/GET_MARKET_INFO_SUCCESS`;
 
 export const CREATE_OFFER_ADVERTISMENT = `${CONTEXT}/CREATE_OFFER_ADVERTISMENT`;
 
@@ -37,6 +39,7 @@ export function useActionsP2p(dispatch) {
     handleGetMyAdvertisments: data =>
       dispatch(createAction(GET_MY_ADVERTISMENTS, data)),
     handleGetTradingMarket: () => dispatch(createAction(GET_TRADING)),
+    handleGetMarketInfo: (data) => dispatch(createAction(GET_MARKET_INFO,data)),
     handleGetPaymentMethodByAcc: () => dispatch(createAction(GET_PAYMENT_METHOD_BY_ACC)),
     handleGetExchangePaymentMethod: () => dispatch(createAction(GET_EXCHANGE_PAYMENT_METHOD)),
     handleAddPaymentMethod: (data) => dispatch(createAction(ADD_PAYMENT_METHOD,data)),
@@ -49,6 +52,7 @@ export function useActionsP2p(dispatch) {
   };
 }
 export const actionsReducerP2p = {
+  getMarketInfoSuccess: (data) => createAction(GET_MARKET_INFO_SUCCESS,data),
   getAdvertismentsSuccess: advertisment =>
     createAction(GET_ADVERTISMENTS_SUCCESS, advertisment),
   getMyAdvertismentsSuccess: advertisment =>

@@ -58,6 +58,7 @@ const Input = ({
   bgBtnRight,
   titleRight,
   restInput,
+  prefix,
   ...rest
 }) => {
   const [valueInput, setValue] = useState(value);
@@ -130,7 +131,7 @@ const Input = ({
         )}
 
         {(isInputTop && (
-          <View style={{flex: 1, marginRight: 20, height:48}}>
+          <View style={{flex: 1, marginRight: 20}}>
              <TextFnx
               color={colors.description}
               size={12}
@@ -150,7 +151,7 @@ const Input = ({
                 secureTextEntry={isSecurity}
                 onChangeText={handleChange}
                 value={hasValue ? value : valueInput}
-                style={[{color: colors.text,height:40}, style]}
+                style={[{color: colors.text, height:40}, style]}
                 placeholderTextColor={colors.description}
                 placeholder={placeholder}
                 onSubmitEditing={onSubmitEditing}
@@ -174,7 +175,13 @@ const Input = ({
             onSubmitEditing={onSubmitEditing}
           />
         )}
-
+        {prefix && (<View style={{
+          position:"absolute",
+          right:8,
+          top:'35%'
+        }}>
+          <TextFnx color={colors.app.textDisabled}>{prefix}</TextFnx>
+        </View>)}
         {rest.isPaste && (
           <ButtonWithTitle
             onPress={handlePaste}

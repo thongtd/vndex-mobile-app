@@ -25,6 +25,7 @@ import {
   GET_OFFER_ORDER_SUCCESS,
   CONFIRM_PAYMENT_ADVERTISMENT,
   UNLOCK_OFFER_ADVERTISMENT,
+  GET_MARKET_INFO,
 } from './actions';
 
 import {
@@ -35,6 +36,7 @@ import {
 } from '../../../configs/utils';
 import {P2pService} from '../../../services/p2p.service';
 import {isArray, size} from 'lodash';
+import { useActionsP2p } from '.';
 
 export function* asyncGetAdvertisments({payload}) {
   try {
@@ -352,6 +354,28 @@ export function* watchUnlockOfferAdvertisment() {
     yield* asyncUnlockOfferAdvertisment(action);
   }
 }
+export function* asyncGetMarketInfo({payload}) {
+  try {
+    const res = yield call(
+      
+      P2pService.getMarketInfo,payload
+    );
+    emitEventEmitter('doneApi', true);
+    console.log('res: ', res);
+    if(isArray(res) && size(res) > 0){
+      yield put(actionsReducerP2p.getMarketInfoSuccess(res[0]));
+    }
+    
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetMarketInfo() {
+  while (true) {
+    const action = yield take(GET_MARKET_INFO);
+    yield* asyncGetMarketInfo(action);
+  }
+}
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
   yield all([fork(watchGetTrading)]);
@@ -365,4 +389,5 @@ export default function* () {
   yield all([fork(watchCreateOfferOrder)]);
   yield all([fork(watchUnlockOfferAdvertisment)]);
   yield all([fork(watchConfirmPaymentAdvertisment)]);
+  yield all([fork(watchGetMarketInfo)]);
 }

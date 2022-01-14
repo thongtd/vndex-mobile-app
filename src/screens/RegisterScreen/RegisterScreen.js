@@ -15,7 +15,7 @@ import { constant, IdNavigation } from '../../configs/constant';
 import { authService } from '../../services/authentication.service';
 import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
 import ButtonBack from '../../components/Button/ButtonBack';
-import { dismissAllModal } from '../../navigation/Navigation';
+import { dismissAllModal, showModal } from '../../navigation/Navigation';
 const RegisterScreen = ({
     componentId
 }) => {
@@ -44,7 +44,8 @@ const RegisterScreen = ({
             },
             keywords: ["name"]
         }
-        Navigation.showModal(hiddenModal(PICKER_SEARCH, propsData, false));
+        showModal(PICKER_SEARCH, propsData, false);
+        // Navigation.showModal(hiddenModal(PICKER_SEARCH, propsData, false));
     }
     const handleChangeEmail = (text) => {
         setEmail(text);

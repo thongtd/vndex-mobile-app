@@ -82,4 +82,15 @@ export const P2pService = {
     let response = await httpService.post(url,data);
     return response.data;
   },
+  getMarketInfo:async (data) => {
+    let dataRemoved = removeEmptyUrl(
+      `symbol=${data.symbol}&paymentUnit=${data.paymentUnit}`,
+    );
+    let url = `${P2P_API.GET_MARKET_INFO}?${dataRemoved}`;
+    let response = await httpService.get_without_token(url);
+    console.log('response: ', response);
+    return response;
+  },
+  
+  
 };

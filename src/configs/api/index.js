@@ -27,7 +27,8 @@ export const P2P_API = {
     CREATE_OFFER_ADVERTISMENT:`${EXCHANGE_URL}api/v1/p2p-order/create-offer-advertisment`,//accountId
     GET_OFFER_ORDER:`${EXCHANGE_URL}api/v1/p2p-order/offer-order/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
     CONFIRM_PAYMENT_ADVERTISMENT:`${EXCHANGE_URL}api/v1/p2p-order/confirm-payment-advertisment`,
-    UNLOCK_OFFER_ADVERTISMENT:`${EXCHANGE_URL}api/v1/p2p-order/unlock-offer-advertisment/`//3fa85f64-5717-4562-b3fc-2c963f66afa6
+    UNLOCK_OFFER_ADVERTISMENT:`${EXCHANGE_URL}api/v1/p2p-order/unlock-offer-advertisment/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
+    GET_MARKET_INFO:`${EXCHANGE_URL}api/v1/p2p-order/market-info`
 }
 export const EXCHANGE_API = {
     CHECK_API: `${EXCHANGE_URL}api/health-check`,

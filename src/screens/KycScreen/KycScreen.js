@@ -6,7 +6,7 @@ import Container from '../../components/Container';
 import Input from '../../components/Input';
 import ItemList from '../../components/Item/ItemList';
 import {constant, fontSize, spacingApp} from '../../configs/constant';
-import {dismissAllModal} from '../../navigation/Navigation';
+import {dismissAllModal, showModal} from '../../navigation/Navigation';
 import {isEmpty} from "lodash";
 import {
   PICKER_SEARCH,
@@ -115,7 +115,8 @@ const KycScreen = ({componentId}) => {
       },
       keywords: ['name'],
     };
-    Navigation.showModal(hiddenModal(PICKER_SEARCH, propsData, false));
+    showModal(PICKER_SEARCH, propsData, false);
+    // Navigation.showModal(hiddenModal(PICKER_SEARCH, propsData, false));
   };
   // console.log(date,"date");
   return (

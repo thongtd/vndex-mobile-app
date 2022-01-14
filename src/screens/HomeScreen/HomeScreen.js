@@ -53,7 +53,7 @@ import {
   resetScreenGlobal,
 } from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
@@ -64,17 +64,13 @@ const HomeScreen = ({componentId}) => {
   useEffect(() => {
     if (size(get(tradingMarket, 'assets')) > 0) {
       setActiveSymbol(get(tradingMarket, 'assets')[0]);
-      
     }
-
     return () => {};
   }, [tradingMarket]);
   const tradingMarket = useSelector(state => state.p2p.tradingMarket);
   const advertisments = useSelector(state => state.p2p.advertisments);
-  
+
   useEffect(() => {
-    
-   
     const listenerEmit = listenerEventEmitter('pushMyads', () => {
       pushSingleScreenApp(componentId, ADS_MY_ADVERTISENMENT_SCREEN, null, {
         topBar: {
@@ -87,11 +83,11 @@ const HomeScreen = ({componentId}) => {
         },
       });
     });
-    const screenPoppedListener = Navigation.events().registerScreenPoppedListener(({ componentId }) => {
-      
-      resetScreenGlobal();
-    });
-    
+    const screenPoppedListener =
+      Navigation.events().registerScreenPoppedListener(({componentId}) => {
+        resetScreenGlobal();
+      });
+
     const navigationButtonEventListener =
       Navigation.events().registerNavigationButtonPressedListener(
         ({buttonId}) => {
@@ -120,33 +116,36 @@ const HomeScreen = ({componentId}) => {
       screenPoppedListener.remove();
     };
   }, []);
-  
- useEffect(() => {
-  useActionsP2p(dispatch).handleGetTradingMarket();
-   let evDone = listenerEventEmitter('doneApi',()=>{
-    setIsLoading(false);
-   });
-   if(ActiveSymbol){
-    useActionsP2p(dispatch).handleGetAdvertisments({
-      pageIndex: 1,
-      pageSize: 15,
-      side: ActiveType== BUY?SELL:BUY,
-      coinSymbol: ActiveSymbol ,
+
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetTradingMarket();
+    let evDone = listenerEventEmitter('doneApi', () => {
+      setIsLoading(false);
     });
-    setIsLoading(true);
-   }
-   
- 
-   return () => {
-    evDone.remove();
-   }
- }, [dispatch,ActiveType,ActiveSymbol])
+    if (ActiveSymbol) {
+      useActionsP2p(dispatch).handleGetAdvertisments({
+        pageIndex: 1,
+        pageSize: 15,
+        side: ActiveType == BUY ? SELL : BUY,
+        coinSymbol: ActiveSymbol,
+      });
+      setIsLoading(true);
+    }
+
+    return () => {
+      evDone.remove();
+    };
+  }, [dispatch, ActiveType, ActiveSymbol]);
   const logged = useSelector(state => state.authentication.logged);
   const currencyList = useSelector(state => state.market.currencyList);
   return (
     <Container
-    isLoadding={isLoading}
-    isScroll componentId={componentId} isTopBar isFooter title="P2P">
+      isLoadding={isLoading}
+      isScroll
+      componentId={componentId}
+      isTopBar
+      isFooter
+      title="P2P">
       <Banner />
       <View
         style={{
@@ -197,7 +196,7 @@ const HomeScreen = ({componentId}) => {
         />
         <ButtonIcon iconComponent={icons.icFilter} />
       </View>
-      
+
       <View>
         <FlatList
           style={{
@@ -288,16 +287,14 @@ const HomeScreen = ({componentId}) => {
                 spaceHorizontal={20}
                 isNormal
                 // width={175}
-                onPress={() =>{
-                  if(!logged){
-                    return pushSingleScreenApp(componentId,LOGIN_SCREEN);  
+                onPress={() => {
+                  if (!logged) {
+                    return pushSingleScreenApp(componentId, LOGIN_SCREEN);
                   }
-                  pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN,{
-                    item
-                  })
-                }
-         
-                }
+                  pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN, {
+                    item,
+                  });
+                }}
                 title={
                   get(item, 'side') == SELL
                     ? `Mua ${get(item, 'symbol')}`
@@ -362,19 +359,26 @@ const HomeScreen = ({componentId}) => {
                 <Layout>
                   {(get(item, 'paymentMethods') || []).map((it, ind) => {
                     if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
-                      return (<Image
-                        source={icons.icMomo}
-                        style={{
-                          marginLeft: 5,
-                        }}
-                      />);
-                    } else if(get(it, 'code') == constant.CODE_PAYMENT_METHOD.BANK_TRANSFER) {
-                      return (<Image
-                        source={icons.icBank}
-                        style={{
-                          marginLeft: 5,
-                        }}
-                      />);
+                      return (
+                        <Image
+                          source={icons.icMomo}
+                          style={{
+                            marginLeft: 5,
+                          }}
+                        />
+                      );
+                    } else if (
+                      get(it, 'code') ==
+                      constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
+                    ) {
+                      return (
+                        <Image
+                          source={icons.icBank}
+                          style={{
+                            marginLeft: 5,
+                          }}
+                        />
+                      );
                     }
                   })}
                 </Layout>

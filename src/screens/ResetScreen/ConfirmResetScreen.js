@@ -14,6 +14,7 @@ import { ALERT_NOTICE_PASSWORD, ALERT_ACCOUNT_ACTIVE, LOGIN_SCREEN, pushSingleHi
 import { hiddenModal, get, toast, _validateAuth, size } from '../../configs/utils';
 import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
 import { authService } from '../../services/authentication.service';
+import { showModal } from '../../navigation/Navigation';
 
 const ConfirmResetScreen = ({
     email,
@@ -26,7 +27,8 @@ const ConfirmResetScreen = ({
     const [disabled, setDisabled] = useState(false)
 
     const handleButtonRight = () => {
-        Navigation.showModal(hiddenModal(ALERT_NOTICE_PASSWORD));
+        showModal(ALERT_NOTICE_PASSWORD);
+        // Navigation.showModal(hiddenModal(ALERT_NOTICE_PASSWORD));
     }
     const handleConfirm = async () => {
         let data = { email, otpCode: otp, sessionId, newPassword: password };

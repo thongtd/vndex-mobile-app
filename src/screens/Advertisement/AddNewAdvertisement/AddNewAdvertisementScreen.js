@@ -45,10 +45,10 @@ const AddNewAdvertisementScreen = ({componentId}) => {
   );
 
   const submitNextStep = () => {
-    if (step == 2)
-      return alert(
-        'CALL API Đăng Quảng Cáo Đi Chứ Ngồi Đấy Mà Nghịch!!',
-      );
+    // if (step == 2)
+      // return alert(
+      //   'CALL API Đăng Quảng Cáo Đi Chứ Ngồi Đấy Mà Nghịch!!',
+      // );
     SetStep(step + 1);
   };
   return (

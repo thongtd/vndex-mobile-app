@@ -25,7 +25,7 @@ import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
 import {authService} from '../../services/authentication.service';
 import ButtonBack from '../../components/Button/ButtonBack';
 import ButtonWithTitle from '../../components/Button/ButtonWithTitle';
-import {pushSingleHiddenTopBarApp} from '../../navigation/Navigation';
+import {pushSingleHiddenTopBarApp, showModal} from '../../navigation/Navigation';
 
 const ResetScreen = ({componentId}) => {
   const [email, setEmail] = useState('');
@@ -49,7 +49,8 @@ const ResetScreen = ({componentId}) => {
             email,
           });
         } else if (get(res, 'code') === 1) {
-          Navigation.showModal(hiddenModal(ALERT_ACCOUNT_ACTIVE));
+          showModal(ALERT_ACCOUNT_ACTIVE);
+          // Navigation.showModal(hiddenModal(ALERT_ACCOUNT_ACTIVE));
         } else {
           toast(get(res, 'message').t());
         }

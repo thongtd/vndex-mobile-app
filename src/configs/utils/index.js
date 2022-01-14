@@ -23,6 +23,7 @@ import Image from '../../components/Image/Image';
 import TextFnx from '../../components/Text/TextFnx';
 import React from 'react';
 import colors from '../styles/colors';
+import { showModal } from '../../navigation/Navigation';
 var qs = require('qs');
 export const fullWidth = ReactNative.Dimensions.get('window').width;
 export const fullHeight = ReactNative.Dimensions.get('window').height;
@@ -415,7 +416,8 @@ export const _validateAuth = (
     toast('Please enter RePassword'.t());
     return false;
   } else if (!passRegex.test(password)) {
-    Navigation.showModal(hiddenModal(ALERT_NOTICE_PASSWORD));
+    showModal(ALERT_NOTICE_PASSWORD);
+    // Navigation.showModal(hiddenModal(ALERT_NOTICE_PASSWORD));
     return false;
   } else if (password !== rePassword) {
     toast('PASSWORD_NOT_MATCH'.t());
