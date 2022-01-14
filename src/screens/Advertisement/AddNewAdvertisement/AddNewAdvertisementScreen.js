@@ -17,24 +17,25 @@ const AddNewAdvertisementScreen = ({componentId}) => {
     'Đặt Tổng số lượng & Phương thức thanh toán',
   ];
   const [step, SetStep] = useState(0);
-
-  const renderLayout = () => {
+  const [data, setData] = useState({});
+  const renderLayout = (data) => {
     switch (step) {
       case 0:
-        return (
-          <Step1AddNewAds bntClose={bntClose} submitNextStep={submitNextStep} />
-        );
+        return <Step1AddNewAds bntClose={bntClose} submitStep1={submitStep1} />;
       case 1:
         return (
-          <Step2AddNewAds bntClose={bntClose} submitNextStep={submitNextStep} />
+          <Step2AddNewAds data={data} bntClose={bntClose} submitNextStep={submitNextStep} />
         );
       case 2:
         return (
-          <Step3AddNewAds bntClose={bntClose} submitNextStep={submitNextStep} />
+          <Step3AddNewAds data={data} bntClose={bntClose} submitNextStep={submitNextStep} />
         );
     }
   };
-
+  const submitStep1 = item => {
+    setData({...data, ...item});
+    SetStep(1);
+  };
   const bntClose = (
     <Button
       title={'Hủy bỏ'}
@@ -46,9 +47,9 @@ const AddNewAdvertisementScreen = ({componentId}) => {
 
   const submitNextStep = () => {
     // if (step == 2)
-      // return alert(
-      //   'CALL API Đăng Quảng Cáo Đi Chứ Ngồi Đấy Mà Nghịch!!',
-      // );
+    // return alert(
+    //   'CALL API Đăng Quảng Cáo Đi Chứ Ngồi Đấy Mà Nghịch!!',
+    // );
     SetStep(step + 1);
   };
   return (
@@ -61,7 +62,7 @@ const AddNewAdvertisementScreen = ({componentId}) => {
       <Layout spaceHorizontal={spacingApp}>
         <ProgressSteps step={step} title={title[step]} />
       </Layout>
-      {renderLayout()}
+      {renderLayout(data)}
     </Container>
   );
 };

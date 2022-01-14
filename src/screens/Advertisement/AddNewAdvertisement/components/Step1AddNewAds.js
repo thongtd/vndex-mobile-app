@@ -20,7 +20,7 @@ const Menu = [
   {name: 'Mua', id: 1, type:BUY},
   {name: 'Bán', id: 2, type:SELL},
 ];
-const Step1AddNewAds = ({bntClose, submitNextStep}) => {
+const Step1AddNewAds = ({bntClose, submitStep1=()=>{}}) => {
   const [activeType, SetActiveType] = useState(BUY);
   const [checked, setChecked] = useState('first');
   const marketInfo = useSelector(state => state.p2p.marketInfo);
@@ -80,7 +80,12 @@ const Step1AddNewAds = ({bntClose, submitNextStep}) => {
     dismissAllModal();
   }
   const onSubmitNextStep = () => {
-    submitNextStep();
+    submitStep1({
+      price,
+      percentPrice,
+      symbol:ActiveAsset,
+      paymentUnit: ActiveFiat
+    });
   };
   const renderMenu = (
     <Layout

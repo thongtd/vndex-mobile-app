@@ -1,3 +1,4 @@
+import {get} from 'lodash';
 import React, {useState} from 'react';
 import {
   StyleSheet,
@@ -6,21 +7,72 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 import Button from '../../../../components/Button/Button';
 import ButtonIcon from '../../../../components/Button/ButtonIcon';
 import Image from '../../../../components/Image/Image';
 import Input from '../../../../components/Input';
+import ItemList from '../../../../components/Item/ItemList';
 import Layout from '../../../../components/Layout/Layout';
 import TextFnx from '../../../../components/Text/TextFnx';
 import {spacingApp} from '../../../../configs/constant';
 import icons from '../../../../configs/icons';
 import colors from '../../../../configs/styles/colors';
-
-const Step2AddNewAds = ({submitNextStep, bntClose}) => {
+import {
+  formatCurrency,
+  formatNumberOnChange,
+  set,
+} from '../../../../configs/utils';
+import {PICKER_SEARCH} from '../../../../navigation';
+import {dismissAllModal, showModal} from '../../../../navigation/Navigation';
+const timeToLive = [
+  {
+    second: 600,
+    name: '10 phút',
+  },
+  {
+    second: 900,
+    name: '15 phút',
+  },
+  {
+    second: 1200,
+    name: '20 phút',
+  },
+];
+const Step2AddNewAds = ({submitNextStep, bntClose, data}) => {
   const [value, setValue] = useState(1000);
 
+  const marketInfo = useSelector(state => state.p2p.marketInfo);
+  const [minOrder, setMinOrder] = useState('');
+  const [maxOrder, setMaxOrder] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [activeTimeToLive, setActiveTimeToLive] = useState({
+    second: 900,
+    name: '15 phút',
+  });
+  const currencyList = useSelector(state => state.market.currencyList);
   const onSubmitNextStep = () => {
     submitNextStep();
+  };
+  const onGetTimer = () => {
+    let propsData = {
+      data: timeToLive,
+      renderItem: ({item, key}) => {
+        return (
+          <ItemList
+            onPress={() => handleActive(item)}
+            value={item.second}
+            checked={item.second === activeTimeToLive.second}
+          />
+        );
+      },
+      keywords: ['name'],
+    };
+    showModal(PICKER_SEARCH, propsData, false);
+  };
+  const handleActive = item => {
+    setActiveTimeToLive(item);
+    dismissAllModal();
   };
   return (
     <View style={styles.conatainer}>
@@ -28,20 +80,23 @@ const Step2AddNewAds = ({submitNextStep, bntClose}) => {
         <Input
           spaceVertical={8}
           titleBtnRight="Tất cả"
-          onChangeText={txt => setValue(txt)}
-          value={value}
+          onChangeText={txt =>
+            setQuantity(
+              formatNumberOnChange(currencyList, txt, get(data, 'symbol')),
+            )
+          }
+          value={quantity}
+          hasValue
           onBtnRight={() => alert('ok')}
           placeholder="1000"
           styleBorder={{height: 'auto'}}
           style={{fontSize: 16, color: colors.text}}
           isInputTopUnit={
             <TextFnx color={colors.description} style={{marginRight: 20}}>
-              AIFT
+              {get(data, 'symbol')}
             </TextFnx>
           }
-          isInputTop={
-            "Tổng số tiền giao dịch"
-          }
+          isInputTop={'Tổng số tiền giao dịch'}
         />
         <Layout space={5} isSpaceBetween>
           <TextFnx color={colors.app.textDisabled} size={12}>
@@ -58,11 +113,28 @@ const Step2AddNewAds = ({submitNextStep, bntClose}) => {
         <Input
           spaceVertical={8}
           styleBorder={{height: 'auto'}}
+          hasValue
+          value={minOrder}
+          onChangeText={txt =>
+            setMinOrder(
+              formatNumberOnChange(currencyList, txt, get(data, 'paymentUnit')),
+            )
+          }
           //   onBtnRight={() => alert('ok')}
-          placeholder="20,000,000 VND ~ 50,000,000"
+          placeholder={`${formatCurrency(
+            get(marketInfo, 'minOrderAmount'),
+            get(data, 'paymentUnit'),
+            currencyList,
+          )} ~ ${formatCurrency(
+            get(marketInfo, 'maxOrderAmount'),
+            get(data, 'paymentUnit'),
+            currencyList,
+          )}`}
           style={{fontSize: 16, color: colors.text}}
           isInputTopUnit={
-            <TextFnx style={{fontSize: 16, color: colors.text}}>VND</TextFnx>
+            <TextFnx style={{fontSize: 16, color: colors.description}}>
+              {get(data, 'paymentUnit')}
+            </TextFnx>
           }
           isInputTop={
             <TextFnx
@@ -76,12 +148,29 @@ const Step2AddNewAds = ({submitNextStep, bntClose}) => {
         />
         <Input
           spaceVertical={8}
+          value={maxOrder}
+          onChangeText={txt =>
+            setMaxOrder(
+              formatNumberOnChange(currencyList, txt, get(data, 'paymentUnit')),
+            )
+          }
           styleBorder={{height: 'auto'}}
           //   onBtnRight={() => alert('ok')}
-          placeholder="20,000,000 VND ~ 50,000,000"
+          hasValue
+          placeholder={`${formatCurrency(
+            get(marketInfo, 'minOrderAmount'),
+            get(data, 'paymentUnit'),
+            currencyList,
+          )} ~ ${formatCurrency(
+            get(marketInfo, 'maxOrderAmount'),
+            get(data, 'paymentUnit'),
+            currencyList,
+          )}`}
           style={{fontSize: 16, color: colors.text}}
           isInputTopUnit={
-            <TextFnx style={{fontSize: 16, color: colors.text}}>VND</TextFnx>
+            <TextFnx style={{fontSize: 16, color: colors.description}}>
+              {get(data, 'paymentUnit')}
+            </TextFnx>
           }
           isInputTop={
             <TextFnx
@@ -97,7 +186,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose}) => {
 
       <Layout isSpaceBetween isLineCenter spaceTop={10}>
         <TextFnx color={colors.description}>Phí</TextFnx>
-        <TextFnx color={colors.greyLight}>0.03 USDT </TextFnx>
+        <TextFnx color={colors.greyLight}>0 {get(data, 'paymentUnit')}</TextFnx>
       </Layout>
       <Layout
         isSpaceBetween
@@ -108,7 +197,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose}) => {
           borderColor: colors.app.lineSetting,
         }}>
         <TextFnx color={colors.description}>Thuế</TextFnx>
-        <TextFnx color={colors.greyLight}>0.01 USDT</TextFnx>
+        <TextFnx color={colors.greyLight}>0 {get(data, 'paymentUnit')}</TextFnx>
       </Layout>
 
       <Layout isSpaceBetween isLineCenter spaceTop={10}>
@@ -183,12 +272,12 @@ const Step2AddNewAds = ({submitNextStep, bntClose}) => {
 
       <Layout type="column" style={{width: '100%'}} spaceBottom={20}>
         <Button
-          placeholder={'15 phút'}
+          placeholder={activeTimeToLive.name}
           isPlaceholder={false}
           spaceVertical={20}
           isInputSize={16}
           height={'auto'}
-          // onInput={() => setOpen(true)}
+          onInput={onGetTimer}
           isInput
           iconRight="caret-down"
           isInputLable={
