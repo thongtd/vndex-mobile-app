@@ -53,9 +53,13 @@ const Step3BuySellScreen = ({
   const dispatch = useDispatch();
   const offerOrderGlobal = useSelector(state => state.p2p.offerOrder);
   const offerOrderId = useSelector(state => state.p2p.offerOrderId);
+  
   useEffect(() => {
     useActionsP2p(dispatch).handleGetOfferOrder(
       get(offerOrder, 'offerOrderId'),
+    );
+    useActionsP2p(dispatch).handleGetAdvertisment(
+      get(offerOrder, 'p2PTradingOrderId'),
     );
     return () => {};
   }, [dispatch]);
@@ -150,7 +154,7 @@ const Step3BuySellScreen = ({
               : colors.app.sell
           }>
           {`${get(offerOrderGlobal, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
-            item,
+            advertisment,
             'symbol',
           )}`}
         </TextFnx>

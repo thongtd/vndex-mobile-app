@@ -50,6 +50,7 @@ import {
   formatCurrency,
   listenerEventEmitter,
   removeEventEmitter,
+  resetScreenGlobal,
 } from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
 import { useDispatch } from 'react-redux';
@@ -86,6 +87,11 @@ const HomeScreen = ({componentId}) => {
         },
       });
     });
+    const screenPoppedListener = Navigation.events().registerScreenPoppedListener(({ componentId }) => {
+      
+      resetScreenGlobal();
+    });
+    
     const navigationButtonEventListener =
       Navigation.events().registerNavigationButtonPressedListener(
         ({buttonId}) => {
@@ -111,6 +117,7 @@ const HomeScreen = ({componentId}) => {
     return () => {
       navigationButtonEventListener.remove();
       listenerEmit.remove();
+      screenPoppedListener.remove();
     };
   }, []);
   

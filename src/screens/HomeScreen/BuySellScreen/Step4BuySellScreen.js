@@ -46,7 +46,12 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const currencyList = useSelector(state => state.market.currencyList);
   const offerOrder = useSelector(state => state.p2p.offerOrder);
   const offerOrderId = useSelector(state => state.p2p.offerOrderId);
-
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetAdvertisment(
+      get(offerOrder, 'p2PTradingOrderId'),
+    );
+    return () => {};
+  }, [dispatch]);
   const [offerOrderIdState, setOfferOrderIdState] = useState(offerOrderIdState);
   const [offerOrderState, setOfferOrderState] = useState(offerOrder);
   const [disabledSubmit, setDisabledSubmit] = useState(false);
@@ -77,25 +82,40 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     }
   }, [offerOrderIdState])
   useEffect(() => {
+    
     if (
       get(offerOrderState, 'offerSide') === BUY &&
       get(offerOrderState, 'isUnLockConfirm')
     ) {
        pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
-    } else if (
+    } 
+    if (
       get(offerOrderState, 'offerSide') === SELL &&
       get(offerOrderState, 'isPaymentConfirm')
     ) {
       setDisabledSubmit(false);
-    } else if (
+    } 
+    if (
       get(offerOrderState, 'offerSide') === SELL &&
       !get(offerOrderState, 'isPaymentConfirm')
     ) {
       setDisabledSubmit(true);
-    }else if (
+    }
+    if (
       get(offerOrderState, 'isPaymentCancel')
     ) {
        pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
+    }
+    if(get(offerOrderState,"timeToLiveInSecond") ==0){
+      
+        useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
+          offerOrderId: offerOrderId,
+          isHasPayment: false,
+          pofPayment: "",
+          pofPaymentComment: "",
+          cancellationReason: ""
+        });
+      
     }
     return () => {
       
@@ -169,7 +189,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
               : colors.app.sell
           }>
           {`${get(offerOrder, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
-            item,
+            advertisment,
             'symbol',
           )}`}
         </TextFnx>
