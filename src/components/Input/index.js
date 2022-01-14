@@ -130,10 +130,18 @@ const Input = ({
         )}
 
         {(isInputTop && (
-          <View style={{flex: 1, marginRight: 20}}>
-            {isInputTop}
+          <View style={{flex: 1, marginRight: 20, height:48}}>
+             <TextFnx
+              color={colors.description}
+              size={12}
+              spaceTop={5}
+              style={{marginBottom: -8}}
+              
+              >
+              {isInputTop}
+            </TextFnx>
     
-            <Layout isCenter style={{justifyContent:'flex-start'}}>
+            <Layout isCenter style={{justifyContent:'flex-start',}}>
               <TextInput
                 defaultValue={defaultValue}
                 editable={editable}
@@ -142,7 +150,7 @@ const Input = ({
                 secureTextEntry={isSecurity}
                 onChangeText={handleChange}
                 value={hasValue ? value : valueInput}
-                style={[{color: colors.text}, style]}
+                style={[{color: colors.text,height:40}, style]}
                 placeholderTextColor={colors.description}
                 placeholder={placeholder}
                 onSubmitEditing={onSubmitEditing}

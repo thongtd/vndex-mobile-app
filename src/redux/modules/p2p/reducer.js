@@ -5,9 +5,10 @@ import { get, set } from '../../../configs/utils';
 import i18n from "react-native-i18n"
 export const DEFAULT = {
   advertisments: [],
-  myAdvertisments: {},
+  myAdvertisments: [],
   tradingMarket:{},
-  advertisment:{},
+  advertisment:{
+  },
   paymentMethods:[],
   exchangePaymentMethod:[],
   offerOrder:{},
@@ -23,19 +24,15 @@ export default p2p = (state = DEFAULT, action = {}) => {
         advertisments: payload,
       };
     case GET_MY_ADVERTISMENT_SUCCESS:
-      if (get(payload, 'pageIndex') == 1) state.myAdvertisments.source = [];
+      if (get(payload, 'pageIndex') == 1) state.myAdvertisments = [];
 
-      const myAdvertisments = {
-        source: [
-          ...(state.myAdvertisments.source || []),
-          ...get(payload, 'source'),
-        ],
-        pages: get(payload, 'pages') || 0,
-        totalRecords: get(payload, 'totalRecords') || 0,
-      };
+      const myAdvertisments = [
+        ...(state.myAdvertisments || []),
+        ...get(payload, 'source'),
+      ];
       return {
         ...state,
-        myAdvertisments: {...myAdvertisments},
+        myAdvertisments: myAdvertisments,
       };
       case GET_OFFER_ORDER_SUCCESS:
       return {

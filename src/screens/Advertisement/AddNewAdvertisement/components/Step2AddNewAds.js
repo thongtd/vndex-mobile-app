@@ -40,13 +40,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose}) => {
             </TextFnx>
           }
           isInputTop={
-            <TextFnx
-              color={colors.description}
-              size={12}
-              spaceTop={10}
-              style={{marginBottom: -10}}>
-              Tổng số tiền giao dịch
-            </TextFnx>
+            "Tổng số tiền giao dịch"
           }
         />
         <Layout space={5} isSpaceBetween>
