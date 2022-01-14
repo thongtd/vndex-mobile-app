@@ -43,7 +43,7 @@ import {
 } from '../../../configs/utils';
 import {isEmpty} from 'lodash';
 import {useSelector} from 'react-redux';
-
+import CountDown from 'react-native-countdown-component';
 const Step3BuySellScreen = ({
   item,
   componentId,
@@ -101,7 +101,31 @@ const Step3BuySellScreen = ({
         <TextFnx spaceHorizontal={10} size={fontSize.f12}>
           Thời gian còn lại
         </TextFnx>
-        <TextFnx color={colors.app.yellowHightlight}>14:31</TextFnx>
+        <CountDown
+        until={get(offerOrderGlobal,"timeToLiveInSecond")}
+        size={14}
+        timeLabels={
+          {m: '', s: ''}
+        }
+        style={{
+          flexDirection:"row"
+        }}
+        onFinish={() => {
+          useActionsP2p(dispatch).handleGetOfferOrder(
+            offerOrderId
+          );
+        }}
+        digitStyle={{height:15,width:20}}
+        digitTxtStyle={{color: colors.app.yellowHightlight,fontWeight:'400'}}
+        timeToShow={['M', 'S']}
+        showSeparator
+        separatorStyle={{
+          color:colors.app.yellowHightlight,
+          
+          
+        }}
+      />
+        {/* <TextFnx color={colors.app.yellowHightlight}>14:31</TextFnx> */}
       </Layout>
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell

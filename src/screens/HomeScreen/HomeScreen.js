@@ -53,6 +53,7 @@ import {
 } from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
 import { useDispatch } from 'react-redux';
+
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
   const dispatch = useDispatch();
@@ -189,6 +190,7 @@ const HomeScreen = ({componentId}) => {
         />
         <ButtonIcon iconComponent={icons.icFilter} />
       </View>
+      
       <View>
         <FlatList
           style={{
