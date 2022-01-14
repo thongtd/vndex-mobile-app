@@ -76,8 +76,8 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         scrollEnabled
         ListEmptyComponent={<Empty />}
         data={
-          (isArray(myAdvertisments) &&
-            myAdvertisments) ||
+          (isArray(get(myAdvertisments, 'source')) &&
+            get(myAdvertisments, 'source')) ||
           []
         }
         stopRightSwipe={-100}
