@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import StepIndicator from 'react-native-step-indicator';
 import Icon from '../../../components/Icon';
 import TextFnx from '../../../components/Text/TextFnx'
-import { BUY, fontSize, spacingApp } from '../../../configs/constant'
+import {SELL, BUY, fontSize, spacingApp } from '../../../configs/constant'
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors'
 
@@ -24,7 +24,7 @@ const TimelineBuySell = ({
           weight="bold"
           spaceBottom={20}
           spaceLeft={spacingApp}
-          color={side == BUY?colors.app.sell: colors.app.buy}>
+          color={side == SELL?colors.app.sell: colors.app.buy}>
           {title}
         </TextFnx>
      
@@ -34,13 +34,13 @@ const TimelineBuySell = ({
         renderStepIndicator={(parms)=>{
             // console.log(parms,"paaa")
             if(get(parms,"stepStatus") == 'finished'){
-                return (<Icon name='check' color={side == BUY?colors.app.sell: colors.app.buy} />)
+                return (<Icon name='check' color={side == SELL?colors.app.sell: colors.app.buy} />)
             }else{
                 return (<TextFnx>{get(parms,"position")+1}</TextFnx>)
             }
             
         }}
-      customStyles={formatStyle(side == BUY?true:false)}
+      customStyles={formatStyle(side == SELL?true:false)}
       currentPosition={step}
       stepCount={4}
     />

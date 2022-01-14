@@ -193,7 +193,8 @@ const WalletScreen = ({componentId}) => {
         textSubmit={'WITHDRAW'.t()}
         textClose={'DEPOSIT'.t()}
         colorTitleClose={colors.black}
-        bgButtonColor={colors.app.yellowHightlight}
+        bgButtonColorSubmit={colors.app.yellowHightlight}
+        bgButtonColorClose={colors.app.yellowHightlight}
         iconLeftSubmit={<WithdrawSvg />}
         iconLeftClose={<DepsitSvg />}
       />

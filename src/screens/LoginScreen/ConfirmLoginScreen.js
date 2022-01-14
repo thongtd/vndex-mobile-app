@@ -104,14 +104,8 @@ const ConfirmLoginScreen = ({
     title={"security verification".t()}
     >
 <View style={stylest.title}>
-        {/* <TextFnx size={25} color={colors.tabbarActive} weight={"bold"} value={"LOGIN".t()} /> */}
       </View>
       <Input
-        
-        // isLabel
-        // label={twoFactorType === constant.TWO_FACTOR_TYPE.EMAIL_2FA?"Verify by email".t():"Verify by gg".t()}
-        // isIconLeft
-        // nameIconLeft={"key"}
         onSubmitEditing={handleLogin}
         handleResend={handleResend}
         value={otp}
@@ -120,7 +114,6 @@ const ConfirmLoginScreen = ({
         spaceVertical={10}
         isResend={twoFactorType === constant.TWO_FACTOR_TYPE.EMAIL_2FA}
         placeholder={"2FA_CODE".t()} 
-        // isCircle 
         />
         {twoFactorType === constant.TWO_FACTOR_TYPE.EMAIL_2FA?(<TextFnx space={10} color={colors.description}>{"Enter the 6 numbers sent to the email".t()} {email}</TextFnx>):(<TextFnx>{"Enter 6 numbers google authenticator from".t()} {email}</TextFnx>)}
       <Button
@@ -130,16 +123,6 @@ const ConfirmLoginScreen = ({
         isSubmit
         isButtonCircle={false}
         />
-
-      {/* <View style={stylest.textRegister}>
-        <TextFnx space={10} value={`${"NOT_REGISTERED_YET".t()} `} />
-        <ButtonWithTitle space={10} onPress={() => pushSingleScreenApp(componentId, REGISTER_SCREEN)} color={colors.highlight} title={"REGISTER".t()} />
-      </View> */}
-      {/* <ButtonWithTitle onPress={() => pop(componentId)} style={[stylest.textRegister, { alignItems: 'center', }]}>
-        <Icon name="arrow-left" color={colors.background} />
-        <TextFnx value={` ${"BACK".t()}`} />
-      </ButtonWithTitle>
-      <ButtonFooterAuth /> */}
     </Container>
   );
 }

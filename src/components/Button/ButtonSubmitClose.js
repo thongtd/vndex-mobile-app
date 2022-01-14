@@ -15,16 +15,18 @@ const ButtonSubmitClose = ({
     isClose,
     isButtonCircle,
     title=isSubmit?"SUBMIT".t():"CLOSE".t(),
-    bgButtonColor=isSubmit?colors.app.yellowHightlight:colors.btnClose,
+    bgButtonColor=isSubmit?colors.app.yellowHightlight:colors.app.textDisabled,
     colorTitle,
     width,
     height=48,
     spaceHorizontal,
     weightTitle="500",
+    disabled,
     ...rest
 }) => (
     <View style={[stylest.flex,{paddingVertical:8, width:width}]}>
         <TouchableOpacity
+            disabled={disabled}
             onPress={onPress}
             {...rest}
         >

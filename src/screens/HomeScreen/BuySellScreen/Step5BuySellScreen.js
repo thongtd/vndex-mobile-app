@@ -1,17 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import { Rating } from 'react-native-ratings';
+import {Rating} from 'react-native-ratings';
+import {useDispatch, useSelector} from 'react-redux';
 import Button from '../../../components/Button/Button';
 import Container from '../../../components/Container';
 import Image from '../../../components/Image/Image';
 import Layout from '../../../components/Layout/Layout';
 import TextFnx from '../../../components/Text/TextFnx';
-import {fontSize, spacingApp} from '../../../configs/constant';
+import {BUY, fontSize, SELL, spacingApp} from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
+import {formatCurrency, get} from '../../../configs/utils';
+import {pushTabBasedApp} from '../../../navigation';
+import {useActionsP2p} from '../../../redux';
 import TimelineBuySell from './TimelineBuySell';
 
 const Step5BuySellScreen = ({componentId}) => {
+  const advertisment = useSelector(state => state.p2p.advertisment);
+  const offerOrder = useSelector(state => state.p2p.offerOrder);
+  const currencyList = useSelector(state => state.market.currencyList);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetAdvertisment(
+      get(offerOrder, 'p2PTradingOrderId'),
+    );
+    return () => {};
+  }, [dispatch]);
   return (
     <Container
       isTopBar
@@ -20,42 +34,75 @@ const Step5BuySellScreen = ({componentId}) => {
       spaceHorizontal={0}
       isScroll
       space={15}>
-     <Layout isCenter type='column'>
-     <Layout type="column" spaceHorizontal={spacingApp}>
-        <TimelineBuySell
-          step={3}
-          title={'Chuyển tiền và Xác nhận chuyển tiền'}
+         <Layout type="column" spaceHorizontal={spacingApp}>
+          <TimelineBuySell
+            side={get(offerOrder, 'isPaymentCancel')?SELL:BUY}
+            step={3}
+            title={'Hoàn thành'}
+          />
+        </Layout>
+      <Layout isCenter type="column">
+       
+        <Image
+          source={
+            get(offerOrder, 'isPaymentCancel')
+              ? icons.imgCancel
+              : icons.imgChecked
+          }
         />
-      </Layout>
-      <Image 
-      source={icons.imgChecked}
-      />
-      <TextFnx space={20} size={30} color={colors.app.buy} >
-      50,000 AIF
-      </TextFnx>
-      <TextFnx spaceBottom={30} color={colors.app.textContentLevel2} >
-      Đã được nạp vào ví của bạn
-      </TextFnx>
-      <View style={{
-          height:100
-      }}>
-      <Button 
-      width={200}
-      isNormal
-      title={"Kiểm tra ví"}
-      />
-      </View>
-      <TextFnx spaceBottom={20} color={colors.app.textContentLevel2} >
-      Trải nghiệm giao dịch của bạn như thế nào?
-      </TextFnx>
-      <Rating
+        <TextFnx space={20} size={30} color={get(offerOrder, 'isPaymentCancel')?colors.app.sell:colors.app.buy}>
+          {get(offerOrder, 'isPaymentCancel')
+            ? 'Đã huỷ lệnh'
+            : `${
+                get(offerOrder, 'offerSide') == BUY
+                  ? formatCurrency(
+                      get(advertisment, 'quantity'),
+                      get(advertisment, 'symbol'),
+                      currencyList,
+                    )
+                  : formatCurrency(
+                      get(advertisment, 'price'),
+                      get(advertisment, 'paymentUnit'),
+                      currencyList,
+                    )
+              } ${
+                get(offerOrder, 'offerSide') == BUY
+                  ? get(advertisment, 'symbol')
+                  : get(advertisment, 'paymentUnit')
+              }`}
+        </TextFnx>
+        {!get(offerOrder, 'isPaymentCancel') && (
+          <TextFnx spaceBottom={30} color={colors.app.textContentLevel2}>
+            {get(offerOrder, 'offerSide') == BUY ? 'Mua' : 'Bán'} thành công
+          </TextFnx>
+        )}
+        <View
+          style={{
+            height: 100,
+          }}>
+          <Button
+            onPress={() => pushTabBasedApp(4)}
+            width={200}
+            isNormal
+            title={'Kiểm tra ví'}
+          />
+        </View>
+        {!get(offerOrder, 'isPaymentCancel') && (
+          <>
+            <TextFnx spaceBottom={20} color={colors.app.textContentLevel2}>
+              Trải nghiệm giao dịch của bạn như thế nào?
+            </TextFnx>
+            <Rating
               ratingCount={5}
               startingValue={5}
               tintColor={colors.app.backgroundLevel1}
               showRating
               style={{paddingVertical: 2}}
             />
-     </Layout>
+            <Button isTitle title={'Để lại bình luận'} />
+          </>
+        )}
+      </Layout>
     </Container>
   );
 };

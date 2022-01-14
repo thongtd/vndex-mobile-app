@@ -62,4 +62,24 @@ export const P2pService = {
 
     return response;
   },
+  getOfferOrder: async (offerOrderId) => {
+    let url = `${P2P_API.GET_OFFER_ORDER}${offerOrderId}`;
+    let response = await httpService.get(url);
+    return response.data;
+  },
+  createOfferOrderAdvertisment:async (data) => {
+    let url = `${P2P_API.CREATE_OFFER_ADVERTISMENT}`;
+    let response = await httpService.post(url,data);
+    return response.data;
+  },
+  confirmPaymentAdvertisment:async (data) => {
+    let url = `${P2P_API.CONFIRM_PAYMENT_ADVERTISMENT}`;
+    let response = await httpService.post(url,data);
+    return response.data;
+  },
+  unlockOfferAdvertisment:async (data,offerOrderId) => {
+    let url = `${P2P_API.UNLOCK_OFFER_ADVERTISMENT}${offerOrderId}`;
+    let response = await httpService.post(url,data);
+    return response.data;
+  },
 };

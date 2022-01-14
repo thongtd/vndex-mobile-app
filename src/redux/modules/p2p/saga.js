@@ -1,6 +1,14 @@
 // @flow
 
-import {take, put, call, fork, all, takeEvery} from 'redux-saga/effects';
+import {
+  take,
+  put,
+  call,
+  fork,
+  all,
+  takeEvery,
+  select,
+} from 'redux-saga/effects';
 import {
   GET_COUNTRIES,
   actionsReducerP2p,
@@ -12,9 +20,19 @@ import {
   ADD_PAYMENT_METHOD,
   REMOVE_PAYMENT_METHOD,
   GET_MY_ADVERTISMENTS,
+  GET_OFFER_ORDER,
+  CREATE_OFFER_ADVERTISMENT,
+  GET_OFFER_ORDER_SUCCESS,
+  CONFIRM_PAYMENT_ADVERTISMENT,
+  UNLOCK_OFFER_ADVERTISMENT,
 } from './actions';
 
-import {createAction, emitEventEmitter, get} from '../../../configs/utils';
+import {
+  createAction,
+  emitEventEmitter,
+  get,
+  toast,
+} from '../../../configs/utils';
 import {P2pService} from '../../../services/p2p.service';
 import {isArray, size} from 'lodash';
 
@@ -234,6 +252,106 @@ export function* watchGetMyAdvertisment() {
     yield* asyncGetMyAdvertisment(action);
   }
 }
+export function* asyncGetOfferOrder({payload}) {
+  try {
+    const offerOrderData = yield select(state => state.p2p.offerOrder);
+    const res = yield call(P2pService.getOfferOrder, payload);
+    console.log('res: ', res);
+    emitEventEmitter('doneApi', true);
+
+    if (get(res, 'success')) {
+        yield put(actionsReducerP2p.getOfferOrderSuccess(get(res, 'data')));
+      
+    }
+  } catch (e) {
+    console.log(e,"errkaka");
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetOfferOrder() {
+  while (true) {
+    const action = yield take(GET_OFFER_ORDER);
+    yield* asyncGetOfferOrder(action);
+  }
+}
+export function* asyncCreateOfferOrder({payload}) {
+  try {
+    const res = yield call(
+      P2pService.createOfferOrderAdvertisment,
+      get(payload, 'data'),
+    );
+    emitEventEmitter('doneApi', true);
+    if (get(res, 'success') && get(res, 'data.status')) {
+      yield put(
+        createAction(
+          'GET_OFFER_ORDER_ID_SUCCESS',
+          get(res, 'data.offerOrderId'),
+        ),
+      );
+      yield put(createAction(GET_OFFER_ORDER, get(res, 'data.offerOrderId')));
+      emitEventEmitter('pushOfferOrder', {
+        paymentMethodData: get(payload, 'paymentMethodData'),
+        offerOrder: get(res, 'data'),
+      });
+    } else {
+      toast(get(res, 'message'));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchCreateOfferOrder() {
+  while (true) {
+    const action = yield take(CREATE_OFFER_ADVERTISMENT);
+    yield* asyncCreateOfferOrder(action);
+  }
+}
+export function* asyncConfirmPaymentAdvertisment({payload}) {
+  try {
+    const res = yield call(P2pService.confirmPaymentAdvertisment, payload);
+    console.log('reskaka: ', res);
+    emitEventEmitter('doneApi', true);
+    if (get(res, 'success') && get(res, 'data.status')) {
+      // yield put(createAction(GET));
+      emitEventEmitter('pushStep', payload);
+      yield put(createAction(GET_OFFER_ORDER, get(res, 'data.offerOrderId')));
+    } else {
+      toast(get(res, 'message'));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchConfirmPaymentAdvertisment() {
+  while (true) {
+    const action = yield take(CONFIRM_PAYMENT_ADVERTISMENT);
+    yield* asyncConfirmPaymentAdvertisment(action);
+  }
+}
+export function* asyncUnlockOfferAdvertisment({payload}) {
+  try {
+    const res = yield call(
+      P2pService.unlockOfferAdvertisment,
+      get(payload, 'data'),
+      get(payload, 'offerOrderId'),
+    );
+    emitEventEmitter('doneApi', true);
+    if (get(res, 'success') && get(res, 'data.status')) {
+      yield put(createAction(GET_OFFER_ORDER, get(res, 'data.offerOrderId')));
+      emitEventEmitter('successUnlock', true);
+    } else {
+      toast(get(res, 'message'));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchUnlockOfferAdvertisment() {
+  while (true) {
+    const action = yield take(UNLOCK_OFFER_ADVERTISMENT);
+    yield* asyncUnlockOfferAdvertisment(action);
+  }
+}
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
   yield all([fork(watchGetTrading)]);
@@ -243,4 +361,8 @@ export default function* () {
   yield all([fork(watchAddPaymentMethod)]);
   yield all([fork(watchRemovePaymentMethod)]);
   yield all([fork(watchGetMyAdvertisment)]);
+  yield all([fork(watchGetOfferOrder)]);
+  yield all([fork(watchCreateOfferOrder)]);
+  yield all([fork(watchUnlockOfferAdvertisment)]);
+  yield all([fork(watchConfirmPaymentAdvertisment)]);
 }

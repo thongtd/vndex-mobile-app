@@ -15,6 +15,7 @@ import {
   LOGIN_SCREEN,
   SETTING_SCREEN,
   STEP_1_BUY_SELL_SCREEN,
+  STEP_4_BUY_SELL_SCREEN,
 } from '../../navigation';
 import {
   pushSingleHiddenTopBarApp,
@@ -49,13 +50,15 @@ import {
   formatCurrency,
   listenerEventEmitter,
   removeEventEmitter,
+  resetScreenGlobal,
 } from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
 import { useDispatch } from 'react-redux';
+
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
   const dispatch = useDispatch();
-  const [ActiveSymbol, setActiveSymbol] = useState('');
+  const [ActiveSymbol, setActiveSymbol] = useState('AIFT');
   const [ActiveType, setActiveType] = useState('B');
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -68,8 +71,10 @@ const HomeScreen = ({componentId}) => {
   }, [tradingMarket]);
   const tradingMarket = useSelector(state => state.p2p.tradingMarket);
   const advertisments = useSelector(state => state.p2p.advertisments);
-  console.log(advertisments, 'advertisments');
+  
   useEffect(() => {
+    
+   
     const listenerEmit = listenerEventEmitter('pushMyads', () => {
       pushSingleScreenApp(componentId, ADS_MY_ADVERTISENMENT_SCREEN, null, {
         topBar: {
@@ -82,6 +87,11 @@ const HomeScreen = ({componentId}) => {
         },
       });
     });
+    const screenPoppedListener = Navigation.events().registerScreenPoppedListener(({ componentId }) => {
+      
+      resetScreenGlobal();
+    });
+    
     const navigationButtonEventListener =
       Navigation.events().registerNavigationButtonPressedListener(
         ({buttonId}) => {
@@ -107,10 +117,12 @@ const HomeScreen = ({componentId}) => {
     return () => {
       navigationButtonEventListener.remove();
       listenerEmit.remove();
+      screenPoppedListener.remove();
     };
   }, []);
   
  useEffect(() => {
+  useActionsP2p(dispatch).handleGetTradingMarket();
    let evDone = listenerEventEmitter('doneApi',()=>{
     setIsLoading(false);
    });
@@ -185,6 +197,7 @@ const HomeScreen = ({componentId}) => {
         />
         <ButtonIcon iconComponent={icons.icFilter} />
       </View>
+      
       <View>
         <FlatList
           style={{
@@ -275,10 +288,15 @@ const HomeScreen = ({componentId}) => {
                 spaceHorizontal={20}
                 isNormal
                 // width={175}
-                onPress={() =>
+                onPress={() =>{
+                  if(!logged){
+                    return pushSingleScreenApp(componentId,LOGIN_SCREEN);  
+                  }
                   pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN,{
                     item
                   })
+                }
+         
                 }
                 title={
                   get(item, 'side') == SELL

@@ -113,6 +113,7 @@ import {
   UPDATE_ACCOUNT_SCREEN,
   ADS_ADD_NEW_SCREEN,
   ADS_MY_ADVERTISENMENT_SCREEN,
+  STEP_2FA_BUY_SELL_SCREEN,
 } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
@@ -139,6 +140,7 @@ import Step4BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step4BuySell
 import Step5BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step5BuySellScreen';
 import MyAdvertisenmentScreen from '../screens/Advertisement/MyAdvertisenment/MyAdvertisenmentScreen';
 import AddNewAdvertisementScreen from '../screens/Advertisement/AddNewAdvertisement/AddNewAdvertisementScreen';
+import Step2FA from '../screens/HomeScreen/BuySellScreen/Step2FA';
 
 const WrapScreen = (ReduxScreen, store) => props =>
   (
@@ -435,6 +437,11 @@ export const registerScreens = store => {
     STEP_5_BUY_SELL_SCREEN,
     () => withNavigationProvider(WrapScreen(Step5BuySellScreen, store)),
     () => Step5BuySellScreen,
+  );
+  Navigation.registerComponent(
+    STEP_2FA_BUY_SELL_SCREEN,
+    () => withNavigationProvider(WrapScreen(Step2FA, store)),
+    () => Step2FA,
   );
 
   //modal screen

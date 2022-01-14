@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
 import Layout from '../../../components/Layout/Layout';
@@ -37,6 +37,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
   const dispatch = useDispatch();
   useEffect(() => {
     useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'orderId'));
+    
     return () => {};
   }, [dispatch, item]);
   useEffect(() => {
@@ -64,7 +65,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
       )}`}>
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
-          side={get(item, 'side')}
+          side={get(item, 'side') == SELL ?BUY:SELL}
           step={0}
           title={`Tạo lệnh ${get(item, 'side') == SELL ? 'mua' : 'bán'} ${get(
             item,
@@ -174,7 +175,10 @@ const Step1BuySellScreen = ({componentId, item}) => {
             </TextFnx>
           </View>
         </Layout>
-        <Layout
+        
+        <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
           style={{
             marginTop: 7,
           }}>
@@ -202,7 +206,8 @@ const Step1BuySellScreen = ({componentId, item}) => {
                 <TextFnx spaceLeft={5}>Momo</TextFnx>
               </View>);
             } else if(get(it, 'code') == constant.CODE_PAYMENT_METHOD.BANK_TRANSFER){
-              <View
+              return (
+                <View
                 style={{
                   flexDirection: 'row',
                   backgroundColor: '#3B2B2B',
@@ -211,6 +216,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
                   paddingHorizontal: 5,
                   paddingVertical: 2,
                   borderRadius: 5,
+                  marginRight: 10,
                 }}>
                 <Image
                   source={icons.icBank}
@@ -221,10 +227,11 @@ const Step1BuySellScreen = ({componentId, item}) => {
                   }}
                 />
                 <TextFnx>Chuyển khoản</TextFnx>
-              </View>;
+              </View>
+              );
             }
           })}
-        </Layout>
+        </ScrollView>
       </Layout>
       <View
         style={{

@@ -1,22 +1,17 @@
 // @flow
 
-import {
-  GET_ADVERTISMENTS_SUCCESS,
-  GET_ADVERTISMENT_SUCCESS,
-  GET_EXCHANGE_PAYMENT_METHOD_SUCCESS,
-  GET_PAYMENT_METHOD_BY_ACC_SUCCESS,
-  GET_TRADING_SUCCESS,
-  GET_MY_ADVERTISMENT_SUCCESS,
-} from './actions';
-import {get, set} from '../../../configs/utils';
-import i18n from 'react-native-i18n';
+import {GET_MY_ADVERTISMENT_SUCCESS, GET_ADVERTISMENTS_SUCCESS, GET_ADVERTISMENT_SUCCESS, GET_EXCHANGE_PAYMENT_METHOD_SUCCESS, GET_OFFER_ORDER_SUCCESS, GET_PAYMENT_METHOD_BY_ACC_SUCCESS, GET_TRADING_SUCCESS } from './actions';
+import { get, set } from '../../../configs/utils';
+import i18n from "react-native-i18n"
 export const DEFAULT = {
   advertisments: [],
   myAdvertisments: {},
-  tradingMarket: {},
-  advertisment: {},
-  paymentMethods: [],
-  exchangePaymentMethod: [],
+  tradingMarket:{},
+  advertisment:{},
+  paymentMethods:[],
+  exchangePaymentMethod:[],
+  offerOrder:{},
+  offerOrderId:""
 };
 
 export default p2p = (state = DEFAULT, action = {}) => {
@@ -42,7 +37,17 @@ export default p2p = (state = DEFAULT, action = {}) => {
         ...state,
         myAdvertisments: {...myAdvertisments},
       };
-    case GET_ADVERTISMENT_SUCCESS:
+      case GET_OFFER_ORDER_SUCCESS:
+      return {
+        ...state,
+        offerOrder: payload,
+      };
+      case 'GET_OFFER_ORDER_ID_SUCCESS':
+      return {
+        ...state,
+        offerOrderId: payload,
+      };
+      case GET_ADVERTISMENT_SUCCESS:
       return {
         ...state,
         advertisment: payload,
@@ -50,7 +55,7 @@ export default p2p = (state = DEFAULT, action = {}) => {
     case GET_TRADING_SUCCESS:
       return {
         ...state,
-        tradingMarket: payload,
+        tradingMarket: {...payload},
       };
     case GET_EXCHANGE_PAYMENT_METHOD_SUCCESS:
       return {

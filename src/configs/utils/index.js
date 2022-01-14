@@ -5,7 +5,7 @@ import ReactNative, {
   BackHandler,
 } from 'react-native';
 import {_t} from '../../i18n/i18n';
-import _ from 'lodash';
+import _, { isNumber } from 'lodash';
 import Toast from 'react-native-simple-toast';
 import {Navigation} from 'react-native-navigation';
 import {ALERT_NOTICE_PASSWORD} from '../../navigation';
@@ -266,7 +266,7 @@ export const getDecimal = (symbol, currencyList) => {
 function truncate(num, places) {
   let strNumber = num && num.toString();
   let positionDot = strNumber && strNumber.indexOf('.');
-  if (positionDot !== -1) {
+  if (positionDot !== -1 && isNumber(num)) {
     let numSecond =
       strNumber && strNumber.substring(positionDot + 1, size(strNumber));
     if (size(numSecond) < places) {
@@ -276,9 +276,10 @@ function truncate(num, places) {
       return Math.trunc(num * Math.pow(10, places)) / Math.pow(10, places);
     }
   }
-  if (num !== undefined && num !== null) {
+  if (num !== undefined && num !== null && isNumber(num)) {
     return num.toFixed(places);
   }
+  return 0;
 }
 
 export function convertToCurr(symbol, currencyConversion, totalAmount, curr) {
@@ -301,7 +302,7 @@ export function convertToCurr(symbol, currencyConversion, totalAmount, curr) {
 
 export const formatCurrency = (price, code, currencyList) => {
   let decimal = getDecimal(code, currencyList) || 0;
-  return thousandsSeparators(truncate(price, decimal));
+  return thousandsSeparators(truncate(isNumber(price)?price:0, decimal));
 };
 export function thousandsSeparators(x) {
   let strNumber = x.toString();
