@@ -33,15 +33,17 @@ const MyAdvertisenmentScreen = ({componentId}) => {
       setCallIndexFail(isDone ? 0 : callIndexFail + 1);
       setIsLoading(false);
     });
-    getMyAdvertisments();
+    getMyAdvertisments(pageIndex);
     return () => {
       evDone.remove();
     };
   }, [pageIndex]);
-  const getMyAdvertisments = () => {
+  const getMyAdvertisments = (pageIndex) => {
+    console.log('pageIndex: ', pageIndex);
+
     useActionsP2p(dispatch).handleGetMyAdvertisments({
       pageIndex: pageIndex,
-      pageSize: 15,
+      pageSize: 2,
       side: '',
       coinSymbol: ActiveSymbol,
     });
