@@ -5,7 +5,7 @@ import { get, set } from '../../../configs/utils';
 import i18n from "react-native-i18n"
 export const DEFAULT = {
   advertisments: [],
-  myAdvertisments: [],
+  myAdvertisments: {},
   tradingMarket:{},
   advertisment:{
   },
@@ -30,15 +30,26 @@ export default p2p = (state = DEFAULT, action = {}) => {
         marketInfo: payload,
       };
     case GET_MY_ADVERTISMENT_SUCCESS:
-      if (get(payload, 'pageIndex') == 1) state.myAdvertisments = [];
+      // if (get(payload, 'pageIndex') == 1) {
+      //   return {
+      //     ...state,
+      //     myAdvertisments: {
+      //       ...state.myAdvertisments.source = []
+      //     },
+      //   };
+      // };
 
-      const myAdvertisments = [
-        ...(state.myAdvertisments || []),
-        ...get(payload, 'source'),
-      ];
+      // const myAdvertisments = [
+      //   ...(state.myAdvertisments.source || []),
+      //   ...payload,
+      // ];
       return {
         ...state,
-        myAdvertisments: myAdvertisments,
+        myAdvertisments: {
+          ...state.myAdvertisments,
+          ...payload,
+          source:[...state.myAdvertisments.source,...payload.source]
+        },
       };
       case GET_OFFER_ORDER_SUCCESS:
       return {

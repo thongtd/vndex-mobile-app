@@ -40,6 +40,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
     
     return () => {};
   }, [dispatch, item]);
+
   useEffect(() => {
     var intervalId;
     if (isTimer && timer) {

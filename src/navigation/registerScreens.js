@@ -114,6 +114,8 @@ import {
   ADS_ADD_NEW_SCREEN,
   ADS_MY_ADVERTISENMENT_SCREEN,
   STEP_2FA_BUY_SELL_SCREEN,
+  STEP_2FA_ADS_ADD_SCREEN,
+  STEP_ADS_ADD_SUCCESS,
 } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
@@ -141,6 +143,8 @@ import Step5BuySellScreen from '../screens/HomeScreen/BuySellScreen/Step5BuySell
 import MyAdvertisenmentScreen from '../screens/Advertisement/MyAdvertisenment/MyAdvertisenmentScreen';
 import AddNewAdvertisementScreen from '../screens/Advertisement/AddNewAdvertisement/AddNewAdvertisementScreen';
 import Step2FA from '../screens/HomeScreen/BuySellScreen/Step2FA';
+import Step2FaAdsAdd from '../screens/Advertisement/AddNewAdvertisement/components/Step2FaAdsAdd';
+import StepSuccess from '../screens/Advertisement/AddNewAdvertisement/components/StepSuccess';
 
 const WrapScreen = (ReduxScreen, store) => props =>
   (
@@ -154,6 +158,11 @@ export const registerScreens = store => {
     DAPP_SCREEN,
     () => withNavigationProvider(WrapScreen(DappScreen, store)),
     () => DappScreen,
+  );
+  Navigation.registerComponent(
+    STEP_ADS_ADD_SUCCESS,
+    () => withNavigationProvider(WrapScreen(StepSuccess, store)),
+    () => StepSuccess,
   );
   Navigation.registerComponent(
     SWAP_SCREEN,
@@ -235,6 +244,11 @@ export const registerScreens = store => {
     STEP3KYC_SCREEN,
     () => withNavigationProvider(WrapScreen(Step3Kyc, store)),
     () => Step3Kyc,
+  );
+  Navigation.registerComponent(
+    STEP_2FA_ADS_ADD_SCREEN,
+    () => withNavigationProvider(WrapScreen(Step2FaAdsAdd, store)),
+    () => Step2FaAdsAdd,
   );
 
   Navigation.registerComponent(

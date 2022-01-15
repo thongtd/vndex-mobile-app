@@ -8,85 +8,29 @@ import {BUY, fontSize, SELL, spacingApp} from '../../../../configs/constant';
 import colors from '../../../../configs/styles/colors';
 import {RadioButton} from 'react-native-paper';
 import ButtonIcon from '../../../../components/Button/ButtonIcon';
-import { formatCurrency, get, getPropsData } from '../../../../configs/utils';
+import {formatCurrency, get, getPropsData} from '../../../../configs/utils';
 import ItemList from '../../../../components/Item/ItemList';
-import { useDispatch, useSelector } from 'react-redux';
-import { PICKER_SEARCH } from '../../../../navigation';
-import { dismissAllModal, showModal } from '../../../../navigation/Navigation';
-import { useActionsP2p } from '../../../../redux';
-import { isEmpty, isNumber } from 'lodash';
+import {useDispatch, useSelector} from 'react-redux';
+import {PICKER_SEARCH} from '../../../../navigation';
+import {dismissAllModal, showModal} from '../../../../navigation/Navigation';
+import {useActionsP2p} from '../../../../redux';
+import {isEmpty, isNumber} from 'lodash';
 
 const Menu = [
-  {name: 'Mua', id: 1, type:BUY},
-  {name: 'Bán', id: 2, type:SELL},
+  {name: 'Mua', id: 1, type: BUY},
+  {name: 'Bán', id: 2, type: SELL},
 ];
-const Step1AddNewAds = ({bntClose, submitStep1=()=>{}}) => {
-  const [activeType, SetActiveType] = useState(BUY);
-  const [checked, setChecked] = useState('first');
+const Step1AddNewAds = ({bntClose, onSubmitNextStep, dataState, ...rest}) => {
+  // const [get(dataState,"activeType"), SetActiveType] = useState(BUY);
+  // const [checked, setChecked] = useState('first');
   const marketInfo = useSelector(state => state.p2p.marketInfo);
-  const [price, setPrice] = useState(formatCurrency(get(marketInfo,"lastestPrice"),get(marketInfo,"paymentUnit"),currencyList));
+  // const [get(dataState,'price'), setPrice] = useState(formatCurrency(get(marketInfo,"lastestPrice"),get(marketInfo,"paymentUnit"),currencyList));
   const tradingMarket = useSelector(state => state.p2p.tradingMarket);
   const currencyList = useSelector(state => state.market.currencyList);
-  const [ActiveAsset, setActiveAsset] = useState(get(tradingMarket,"assets[0]"));
-  const [ActiveFiat, setActiveFiat] = useState(get(tradingMarket,"paymentUnit[0]"));
-  const [percentPrice, setPercentPrice] = useState(100);
-  
-  const dispatch = useDispatch();
-  useEffect(() => {
-    useActionsP2p(dispatch).handleGetMarketInfo({
-      symbol:ActiveAsset,
-      paymentUnit:ActiveFiat
-    })
-    return () => {
-      
-    }
-  }, [dispatch,ActiveAsset,ActiveFiat])
-  const onGetAsset = () => {
-    let propsData = {
-      data:get(tradingMarket,"assets"),
-      renderItem: ({item, key}) => {
-        return (
-          <ItemList
-            onPress={() => handleActiveAsset(item)}
-            value={item}
-            checked={item === ActiveAsset}
-          />
-        );
-      },
-    };
-    showModal(PICKER_SEARCH, propsData, false);
-  };
-  const handleActiveAsset = (item)=>{
-    setActiveAsset(item);
-    dismissAllModal();
-  }
-  const onGetFiat = () => {
-    let propsData = {
-      data:get(tradingMarket,"paymentUnit"),
-      renderItem: ({item, key}) => {
-        return (
-          <ItemList
-            onPress={() => handleActiveFiat(item)}
-            value={item}
-            checked={item === ActiveFiat}
-          />
-        );
-      },
-    };
-    showModal(PICKER_SEARCH, propsData, false);
-  };
-  const handleActiveFiat = (item)=>{
-    setActiveFiat(item);
-    dismissAllModal();
-  }
-  const onSubmitNextStep = () => {
-    submitStep1({
-      price,
-      percentPrice,
-      symbol:ActiveAsset,
-      paymentUnit: ActiveFiat
-    });
-  };
+  // const [get(dataState,"ActiveAsset"), setActiveAsset] = useState(get(tradingMarket,"assets[0]"));
+  // const [get(dataState,"ActiveFiat"), setActiveFiat] = useState(get(tradingMarket,"paymentUnit[0]"));
+  // const [get(dataState,"percentPrice"), setPercentPrice] = useState(100);
+
   const renderMenu = (
     <Layout
       isSpaceBetween
@@ -94,22 +38,27 @@ const Step1AddNewAds = ({bntClose, submitStep1=()=>{}}) => {
       style={[styles.borderBottom, {paddingHorizontal: spacingApp}]}>
       {Menu.map((__i, ind) => (
         <TouchableOpacity
-          onPress={() => SetActiveType(__i?.type || 1)}
+          onPress={()=>rest.onSelectType(__i)}
           key={String(`key-menu-${ind}`)}
           style={[
             styles.bntBuySell,
-            activeType == __i?.type && styles.active,
+            get(dataState, 'activeType') == __i?.type && styles.active,
             {
               borderBottomColor:
-                (activeType == BUY && colors.buy) || colors.app.sell,
+                (get(dataState, 'activeType') == BUY && colors.buy) ||
+                colors.app.sell,
             },
           ]}>
           <TextFnx
             weight="bold"
             size={fontSize.f16}
             color={
-              (__i?.type == BUY && activeType == BUY && colors.buy) ||
-              (__i?.type == SELL && activeType == SELL && colors.app.sell) ||
+              (__i?.type == BUY &&
+                get(dataState, 'activeType') == BUY &&
+                colors.buy) ||
+              (__i?.type == SELL &&
+                get(dataState, 'activeType') == SELL &&
+                colors.app.sell) ||
               colors.description
             }>
             {__i.name}
@@ -123,10 +72,10 @@ const Step1AddNewAds = ({bntClose, submitStep1=()=>{}}) => {
       {renderMenu}
       <View style={[styles.conatainer, styles.space]}>
         <Button
-          placeholder={ActiveAsset}
+          placeholder={get(dataState,"ActiveAsset")}
           isPlaceholder={false}
           spaceVertical={10}
-          onInput={onGetAsset}
+          onInput={rest.onGetAsset}
           isInput
           iconRight="caret-down"
           isInputLable={
@@ -137,10 +86,10 @@ const Step1AddNewAds = ({bntClose, submitStep1=()=>{}}) => {
         />
         <Button
           // placeholder={'Tất cả'}
-          placeholder={ActiveFiat}
+          placeholder={get(dataState,"ActiveFiat")}
           isPlaceholder={false}
           spaceVertical={10}
-          onInput={onGetFiat}
+          onInput={rest.onGetFiat}
           isInput
           iconRight="caret-down"
           isInputLable={
@@ -157,51 +106,49 @@ const Step1AddNewAds = ({bntClose, submitStep1=()=>{}}) => {
           <Layout isSpaceBetween isLineCenter>
             <ButtonIcon
               title={'Cố định'}
-              onPress={() => {
-                // setPrice(formatCurrency(get(marketInfo,"lastestPrice"),get(marketInfo,"paymentUnit"),currencyList));
-                // setPercentPrice(100);
-                setPrice(formatCurrency(parseFloat(get(marketInfo,"lastestPrice") * parseFloat(percentPrice).toFixed(2)/100),get(marketInfo,"paymentUnit"),currencyList));
-                // setPercentPrice(parseFloat(price.str2Number()/get(marketInfo,"lastestPrice") * 100).toFixed(2));
-                setChecked('first')}}
+              onPress={rest.onFixed}
               style={styles.bntRaio}
               styleText={{
                 color:
-                  checked === 'first' ? colors.iconButton : colors.description,
+                  get(dataState, 'checked') === 'FIXED_PRICE'
+                    ? colors.iconButton
+                    : colors.description,
               }}
               iconComponent={
                 <RadioButton
-                  value="first"
+                  value="FIXED_PRICE"
                   color={colors.iconButton}
                   uncheckedColor={colors.description}
-                  status={checked === 'first' ? 'checked' : 'unchecked'}
-                  onPress={() => setChecked('first')}
+                  status={
+                    get(dataState, 'checked') === 'FIXED_PRICE'
+                      ? 'checked'
+                      : 'unchecked'
+                  }
+                  onPress={rest.onFixed}
                 />
               }
             />
             <ButtonIcon
               title={'Thả nổi'}
-              onPress={() => {
-                setChecked('second');
-                // setPrice(formatCurrency(parseFloat(get(marketInfo,"lastestPrice") * parseFloat(percentPrice).toFixed(2)/100),get(marketInfo,"paymentUnit"),currencyList));
-                setPercentPrice(parseFloat(price.str2Number()/get(marketInfo,"lastestPrice") * 100).toFixed(2));
-                // setPrice(formatCurrency(get(marketInfo,"lastestPrice"),get(marketInfo,"paymentUnit"),currencyList));
-                // setPercentPrice(100);
-              }}
+              onPress={rest.onFloat}
               style={styles.bntRaio}
               styleText={{
                 color:
-                  checked === 'second' ? colors.iconButton : colors.description,
+                  get(dataState, 'checked') === 'FLOAT_PRICE'
+                    ? colors.iconButton
+                    : colors.description,
               }}
               iconComponent={
                 <RadioButton
-                  value="second"
+                  value="FLOAT_PRICE"
                   color={colors.iconButton}
                   uncheckedColor={colors.description}
-                  status={checked === 'second' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setChecked('second')
-                    
-                  }}
+                  status={
+                    get(dataState, 'checked') === 'FLOAT_PRICE'
+                      ? 'checked'
+                      : 'unchecked'
+                  }
+                  onPress={rest.onFloat}
                 />
               }
             />
@@ -213,15 +160,7 @@ const Step1AddNewAds = ({bntClose, submitStep1=()=>{}}) => {
           </TextFnx>
           <Layout isSpaceBetween isLineCenter style={{width: '100%'}}>
             <ButtonIcon
-              onPress={() => {
-                if(checked == 'first'){
-                  setPrice(formatCurrency(price.str2Number()-1000,get(marketInfo,"paymentUnit"),currencyList));
-                  setPercentPrice(parseFloat(price.str2Number()-1000/get(marketInfo,"lastestPrice") * 100).toFixed(2));
-                }else{
-                  setPercentPrice(!isEmpty(percentPrice) && isNumber(parseFloat(percentPrice))?(parseFloat(percentPrice) - 0.01).toFixed(2):0);
-                  setPrice(formatCurrency(parseFloat(get(marketInfo,"lastestPrice") * (parseFloat(percentPrice)-0.01).toFixed(2)/100),get(marketInfo,"paymentUnit"),currencyList));
-                }
-              }}
+              onPress={rest.onIncreamentPrice}
               style={[styles.bntRaio, styles.borderBntLeft]}
               name="minus"
               styleBlockIcon={{alignItems: 'center'}}
@@ -229,36 +168,24 @@ const Step1AddNewAds = ({bntClose, submitStep1=()=>{}}) => {
               color={colors.iconButton}
             />
             <Input
-              value={`${checked === 'first'?price:`${percentPrice}`}`}
+              value={`${
+                get(dataState, 'checked') === 'FIXED_PRICE'
+                  ? get(dataState,'price')
+                  : `${get(dataState,"percentPrice")}`
+              }`}
               hasValue
               // keyboardType='numeric'
               styleView={{flex: 1}}
-              onChangeText={value => {
-                if(checked == 'first'){
-                  setPrice(formatCurrency(value.str2Number(),get(marketInfo,"paymentUnit"),currencyList))
-                  setPercentPrice(parseFloat(value.str2Number()/get(marketInfo,"lastestPrice") * 100).toFixed(2));
-                }else{
-                  setPercentPrice(isNumber(parseFloat(value))?parseFloat(value).toFixed(2):value);
-                  setPrice(formatCurrency(parseFloat(get(marketInfo,"lastestPrice") * parseFloat(value)/100),get(marketInfo,"paymentUnit"),currencyList));
-                }
-              }}
+              onChangeText={value => rest.onChangePrice(value)}
               style={{
                 textAlign: 'center',
                 backgroundColor: colors.background,
                 height: 56,
               }}
-              prefix={checked === 'second' ?"%":null}
+              prefix={get(dataState, 'checked') === 'FLOAT_PRICE' ? '%' : null}
             />
             <ButtonIcon
-              onPress={() => {
-                if(checked == 'first'){
-                  setPrice(formatCurrency(price.str2Number() + 1000,get(marketInfo,"paymentUnit"),currencyList));
-                  setPercentPrice(parseFloat(price.str2Number()+1000/get(marketInfo,"lastestPrice") * 100).toFixed(2));
-                }else{
-                  setPercentPrice(!isEmpty(percentPrice) && isNumber(parseFloat(percentPrice))?(parseFloat(percentPrice) + 0.01).toFixed(2):0);
-                  setPrice(formatCurrency(parseFloat(get(marketInfo,"lastestPrice") * (parseFloat(percentPrice)+0.01).toFixed(2)/100),get(marketInfo,"paymentUnit"),currencyList));
-                }
-                }}
+              onPress={rest.decrementPrice}
               style={[styles.bntRaio, styles.borderBntRight]}
               styleBlockIcon={{alignItems: 'center'}}
               name="plus"
@@ -270,11 +197,31 @@ const Step1AddNewAds = ({bntClose, submitStep1=()=>{}}) => {
 
         <Layout isSpaceBetween isLineCenter spaceTop={10}>
           <TextFnx color={colors.description}>Giá của bạn</TextFnx>
-          <TextFnx color={colors.greyLight}>{formatCurrency(price.str2Number(),get(marketInfo,"paymentUnit"),currencyList)} {get(marketInfo,"paymentUnit")}</TextFnx>
+          <TextFnx color={colors.greyLight}>
+            {formatCurrency(
+              get(dataState,'price').str2Number(),
+              get(marketInfo, 'paymentUnit'),
+              currencyList,
+            )}{' '}
+            {get(marketInfo, 'paymentUnit')}
+          </TextFnx>
         </Layout>
         <Layout isSpaceBetween isLineCenter spaceTop={10} spaceBottom={30}>
           <TextFnx color={colors.description}>Giá lệnh thấp nhất</TextFnx>
-          <TextFnx color={colors.greyLight}>{activeType == BUY?formatCurrency(get(marketInfo,"bestestBuyOpenPrice"),get(marketInfo,"paymentUnit"),currencyList):formatCurrency(get(marketInfo,"bestestSellOpenPrice"),get(marketInfo,"paymentUnit"),currencyList)} {get(marketInfo,"paymentUnit")}</TextFnx>
+          <TextFnx color={colors.greyLight}>
+            {get(dataState, 'activeType') == BUY
+              ? formatCurrency(
+                  get(marketInfo, 'bestestBuyOpenPrice'),
+                  get(marketInfo, 'paymentUnit'),
+                  currencyList,
+                )
+              : formatCurrency(
+                  get(marketInfo, 'bestestSellOpenPrice'),
+                  get(marketInfo, 'paymentUnit'),
+                  currencyList,
+                )}{' '}
+            {get(marketInfo, 'paymentUnit')}
+          </TextFnx>
         </Layout>
 
         <Button title={'Tiếp theo'} isNormal onPress={onSubmitNextStep} />
@@ -285,10 +232,10 @@ const Step1AddNewAds = ({bntClose, submitStep1=()=>{}}) => {
 };
 
 export default Step1AddNewAds;
-const formatPercent = (value)=>{
-  if(!isEmpty(value)) return `${value}%`
-  return `${0}%`
-}
+const formatPercent = value => {
+  if (!isEmpty(value)) return `${value}%`;
+  return `${0}%`;
+};
 const styles = StyleSheet.create({
   conatainer: {
     backgroundColor: colors.app.backgroundLevel2,

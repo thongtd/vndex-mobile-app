@@ -74,7 +74,9 @@ const Step2FA = ({componentId}) => {
     //   isLoadding={disabled}
       componentId={componentId}
       isTopBar={true}
-      title={'security verification'.t()}>
+      title={'security verification'.t()}
+      
+      >
       <Layout type="column" spaceHorizontal={spacingApp}>
           <TimelineBuySell side={get(offerOrder, 'offerSide')} step={2} title={'security verification'.t()} />
         </Layout>

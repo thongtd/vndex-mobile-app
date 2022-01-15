@@ -26,6 +26,9 @@ import {
   CONFIRM_PAYMENT_ADVERTISMENT,
   UNLOCK_OFFER_ADVERTISMENT,
   GET_MARKET_INFO,
+  CREATE_ADVERTISMENT,
+  UPDATE_ADVERTISMENT,
+  REMOVE_ADVERTISMENT,
 } from './actions';
 
 import {
@@ -36,7 +39,7 @@ import {
 } from '../../../configs/utils';
 import {P2pService} from '../../../services/p2p.service';
 import {isArray, size} from 'lodash';
-import { useActionsP2p } from '.';
+import {useActionsP2p} from '.';
 
 export function* asyncGetAdvertisments({payload}) {
   try {
@@ -262,11 +265,10 @@ export function* asyncGetOfferOrder({payload}) {
     emitEventEmitter('doneApi', true);
 
     if (get(res, 'success')) {
-        yield put(actionsReducerP2p.getOfferOrderSuccess(get(res, 'data')));
-      
+      yield put(actionsReducerP2p.getOfferOrderSuccess(get(res, 'data')));
     }
   } catch (e) {
-    console.log(e,"errkaka");
+    console.log(e, 'errkaka');
     emitEventEmitter('doneApi', true);
   }
 }
@@ -356,16 +358,12 @@ export function* watchUnlockOfferAdvertisment() {
 }
 export function* asyncGetMarketInfo({payload}) {
   try {
-    const res = yield call(
-      
-      P2pService.getMarketInfo,payload
-    );
+    const res = yield call(P2pService.getMarketInfo, payload);
     emitEventEmitter('doneApi', true);
     console.log('res: ', res);
-    if(isArray(res) && size(res) > 0){
+    if (isArray(res) && size(res) > 0) {
       yield put(actionsReducerP2p.getMarketInfoSuccess(res[0]));
     }
-    
   } catch (e) {
     emitEventEmitter('doneApi', true);
   }
@@ -374,6 +372,76 @@ export function* watchGetMarketInfo() {
   while (true) {
     const action = yield take(GET_MARKET_INFO);
     yield* asyncGetMarketInfo(action);
+  }
+}
+
+export function* asyncCreateAdvertisment({payload}) {
+  try {
+    const res = yield call(P2pService.createAdvertisment, payload);
+    emitEventEmitter('doneApi', true);
+
+    if (get(res, 'success') && get(res, 'data.status')) {
+      toast(get(res, 'message'));
+      emitEventEmitter('successCreateAds', true);
+      yield put(createAction(GET_MY_ADVERTISMENTS));
+    } else {
+      toast(get(res, 'message'));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchCreateAdvertisment() {
+  while (true) {
+    const action = yield take(CREATE_ADVERTISMENT);
+    yield* asyncCreateAdvertisment(action);
+  }
+}
+export function* asyncUpdateAdvertisment({payload}) {
+  try {
+    const res = yield call(
+      P2pService.updateAdvertisment,
+      get(payload, 'data'),
+      get(payload, 'tradingOrderId'),
+    );
+    emitEventEmitter('doneApi', true);
+    if (get(res, 'success') && get(res, 'status')) {
+      toast(get(res, 'message'));
+      yield put(createAction(GET_MY_ADVERTISMENTS));
+    } else {
+      toast(get(res, 'message'));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchUpdateAdvertisment() {
+  while (true) {
+    const action = yield take(UPDATE_ADVERTISMENT);
+    yield* asyncUpdateAdvertisment(action);
+  }
+}
+export function* asyncDeleteAdvertisment({payload}) {
+  try {
+    const res = yield call(
+      P2pService.removeAdvertisment,
+      get(payload, 'tradingOrderId')
+    );
+    emitEventEmitter('doneApi', true);
+    if (get(res, 'success') && get(res, 'status')) {
+      toast(get(res, 'message'));
+      yield put(createAction(GET_MY_ADVERTISMENTS));
+    } else {
+      toast(get(res, 'message'));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchDeleteAdvertisment() {
+  while (true) {
+    const action = yield take(REMOVE_ADVERTISMENT);
+    yield* asyncDeleteAdvertisment(action);
   }
 }
 export default function* () {
@@ -390,4 +458,7 @@ export default function* () {
   yield all([fork(watchUnlockOfferAdvertisment)]);
   yield all([fork(watchConfirmPaymentAdvertisment)]);
   yield all([fork(watchGetMarketInfo)]);
+  yield all([fork(watchCreateAdvertisment)]);
+  yield all([fork(watchUpdateAdvertisment)]);
+  yield all([fork(watchDeleteAdvertisment)]);
 }

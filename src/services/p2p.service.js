@@ -62,27 +62,43 @@ export const P2pService = {
 
     return response;
   },
-  getOfferOrder: async (offerOrderId) => {
+  getOfferOrder: async offerOrderId => {
     let url = `${P2P_API.GET_OFFER_ORDER}${offerOrderId}`;
     let response = await httpService.get(url);
     return response.data;
   },
-  createOfferOrderAdvertisment:async (data) => {
+  createOfferOrderAdvertisment: async data => {
     let url = `${P2P_API.CREATE_OFFER_ADVERTISMENT}`;
-    let response = await httpService.post(url,data);
+    let response = await httpService.post(url, data);
     return response.data;
   },
-  confirmPaymentAdvertisment:async (data) => {
+  confirmPaymentAdvertisment: async data => {
     let url = `${P2P_API.CONFIRM_PAYMENT_ADVERTISMENT}`;
-    let response = await httpService.post(url,data);
+    let response = await httpService.post(url, data);
     return response.data;
   },
-  unlockOfferAdvertisment:async (data,offerOrderId) => {
+  unlockOfferAdvertisment: async (data, offerOrderId) => {
     let url = `${P2P_API.UNLOCK_OFFER_ADVERTISMENT}${offerOrderId}`;
-    let response = await httpService.post(url,data);
+    let response = await httpService.post(url, data);
     return response.data;
   },
-  getMarketInfo:async (data) => {
+  createAdvertisment: async data => {
+    let url = `${P2P_API.CREATE_ADVERTISMENT}`;
+    let response = await httpService.post(url, data);
+    console.log('response: ', response);
+    return response.data;
+  },
+  updateAdvertisment: async (data, tradingOrderId) => {
+    let url = `${P2P_API.UPDATE_ADVERTISMENT}${tradingOrderId}`;
+    let response = await httpService.post(url, data);
+    return response.data;
+  },
+  removeAdvertisment: async traddingOrderId => {
+    let url = `${P2P_API.REMOVE_ADVERTISMENT}${traddingOrderId}`;
+    let response = await httpService.get(url);
+    return response.data;
+  },
+  getMarketInfo: async data => {
     let dataRemoved = removeEmptyUrl(
       `symbol=${data.symbol}&paymentUnit=${data.paymentUnit}`,
     );
@@ -91,6 +107,4 @@ export const P2pService = {
     console.log('response: ', response);
     return response;
   },
-  
-  
 };

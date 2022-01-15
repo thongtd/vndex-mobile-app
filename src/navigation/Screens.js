@@ -63,6 +63,8 @@ export const ADS_ADD_NEW_SCREEN = 'vndex.title.AddNewAdvertisementScreen';
 export const ADS_MY_ADVERTISENMENT_SCREEN = 'vndex.title.AdvertisenmentScreen';
 export const STEP_5_BUY_SELL_SCREEN = 'vndex.title.Step5BuySellScreen';
 export const STEP_2FA_BUY_SELL_SCREEN = 'vndex.title.STEP_2FA_BUY_SELL_SCREEN';
+export const STEP_2FA_ADS_ADD_SCREEN = 'vndex.title.STEP_2FA_ADS_ADD_SCREEN';
+export const STEP_ADS_ADD_SUCCESS = 'vndex.title.STEP_ADS_ADD_SUCCESS';
 
 // register ModalMy
 export const ALERT_NOTICE_PASSWORD = 'modal.AlertNoticePassword';

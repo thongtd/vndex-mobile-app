@@ -18,12 +18,9 @@ import {RadioButton} from 'react-native-paper';
 import icons from '../../../../configs/icons';
 import Image from '../../../../components/Image/Image';
 import CheckBox from 'react-native-check-box';
+import { get } from '../../../../configs/utils';
 
-const Step1AddNewAds = ({submitNextStep, bntClose}) => {
-  const [checked, setChecked] = useState('first');
-  const [isSelectedKYC, setSelectionKYC] = useState(true);
-  const [isSelectedRegister, setSelectedRegister] = useState(true);
-  const [isSelectedAIFT, setSelectedAIFT] = useState(true);
+const Step3AddNewAds = ({submitNextStep, bntClose, dataState,...rest}) => {
 
   const onSubmitNextStep = () => {
     submitNextStep();
@@ -45,6 +42,9 @@ const Step1AddNewAds = ({submitNextStep, bntClose}) => {
           styleBorder={{height: 'auto'}}
           placeholder="Điều khoản sẽ được hiển thị cho đối tác"
           style={styles.textArea}
+          hasValue
+          value={get(dataState,"comment")}
+          onChangeText={(text)=>rest.onCommentChange(text)}
           restInput={{
             numberOfLines: 10,
             multiline: true,
@@ -64,6 +64,9 @@ const Step1AddNewAds = ({submitNextStep, bntClose}) => {
           styleBorder={{height: 'auto'}}
           placeholder="Tin nhắn trả lời tự động sẽ được gửi đến đối tác khi họ đặt lệnh"
           style={styles.textArea}
+          hasValue
+          value={get(dataState,"autoReplyMessage")}
+          onChangeText={(text)=>rest.onAutoRepChange(text)}
           restInput={{
             numberOfLines: 10,
             multiline: true,
@@ -95,8 +98,8 @@ const Step1AddNewAds = ({submitNextStep, bntClose}) => {
         </TextFnx>
 
         <CheckBox
-          isChecked={isSelectedKYC}
-          onClick={() => setSelectionKYC(!isSelectedKYC)}
+          isChecked={get(dataState,"isSelectedKYC")}
+          onClick={rest.onCheckKyc}
           style={styles.checkbox}
           // rightTextView={'Momo'}
           checkedCheckBoxColor={colors.iconButton}
@@ -110,8 +113,8 @@ const Step1AddNewAds = ({submitNextStep, bntClose}) => {
           }
         />
         <CheckBox
-          isChecked={isSelectedRegister}
-          onClick={() => setSelectedRegister(!isSelectedRegister)}
+          isChecked={get(dataState,"isSelectedRegister")}
+          onClick={rest.onCheckReg}
           style={styles.checkbox}
           // rightTextView={'Momo'}
           checkedCheckBoxColor={colors.iconButton}
@@ -132,7 +135,7 @@ const Step1AddNewAds = ({submitNextStep, bntClose}) => {
             </View>
           }
         />
-        <CheckBox
+        {/* <CheckBox
           isChecked={isSelectedAIFT}
           onClick={() => setSelectedAIFT(!isSelectedAIFT)}
           style={styles.checkbox}
@@ -154,7 +157,7 @@ const Step1AddNewAds = ({submitNextStep, bntClose}) => {
               </Layout>
             </View>
           }
-        />
+        /> */}
       </Layout>
 
       <Layout type="column" style={{width: '100%'}} spaceBottom={20}>
@@ -163,36 +166,36 @@ const Step1AddNewAds = ({submitNextStep, bntClose}) => {
         </TextFnx>
         <ButtonIcon
           title={'Online, đăng ngay'}
-          onPress={() => setChecked('first')}
+          onPress={()=>rest.onCheckStatus('first')}
           style={styles.bntRaio}
           styleText={{
-            color: checked === 'first' ? colors.iconButton : colors.description,
+            color: get(dataState,"checkedStatus")=== 'first' ? colors.iconButton : colors.description,
           }}
           iconComponent={
             <RadioButton
               value="first"
               color={colors.iconButton}
               uncheckedColor={colors.description}
-              status={checked === 'first' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('first')}
+              status={get(dataState,"checkedStatus")=== 'first' ? 'checked' : 'unchecked'}
+              onPress={()=>rest.onCheckStatus('first')}
             />
           }
         />
         <ButtonIcon
           title={'Offline, thực hiện sau'}
-          onPress={() => setChecked('second')}
+          onPress={()=>rest.onCheckStatus('second')}
           style={styles.bntRaio}
           styleText={{
             color:
-              checked === 'second' ? colors.iconButton : colors.description,
+              get(dataState,"checkedStatus")=== 'second' ? colors.iconButton : colors.description,
           }}
           iconComponent={
             <RadioButton
               value="second"
               color={colors.iconButton}
               uncheckedColor={colors.description}
-              status={checked === 'second' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('second')}
+              status={get(dataState,"checkedStatus")=== 'second' ? 'checked' : 'unchecked'}
+              onPress={()=>rest.onCheckStatus('second')}
             />
           }
         />
@@ -203,7 +206,7 @@ const Step1AddNewAds = ({submitNextStep, bntClose}) => {
   );
 };
 
-export default Step1AddNewAds;
+export default Step3AddNewAds;
 
 const styles = StyleSheet.create({
   bntRaio: {

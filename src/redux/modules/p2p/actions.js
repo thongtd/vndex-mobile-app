@@ -22,6 +22,14 @@ export const UNLOCK_OFFER_ADVERTISMENT = `${CONTEXT}/UNLOCK_OFFER_ADVERTISMENT`;
 export const UNLOCK_OFFER_ADVERTISMENT_SUCCESS = `${CONTEXT}/UNLOCK_OFFER_ADVERTISMENT_SUCCESS`;
 export const GET_MARKET_INFO = `${CONTEXT}/GET_MARKET_INFO`;
 export const GET_MARKET_INFO_SUCCESS = `${CONTEXT}/GET_MARKET_INFO_SUCCESS`;
+export const CREATE_ADVERTISMENT = `${CONTEXT}/CREATE_ADVERTISMENT`;
+export const CREATE_ADVERTISMENT_SUCCESS = `${CONTEXT}/CREATE_ADVERTISMENT_SUCCESS`;
+
+export const UPDATE_ADVERTISMENT = `${CONTEXT}/UPDATE_ADVERTISMENT`;
+export const UPDATE_ADVERTISMENT_SUCCESS = `${CONTEXT}/UPDATE_ADVERTISMENT_SUCCESS`;
+export const REMOVE_ADVERTISMENT = `${CONTEXT}/REMOVE_ADVERTISMENT`;
+export const REMOVE_ADVERTISMENT_SUCCESS = `${CONTEXT}/REMOVE_ADVERTISMENT_SUCCESS`;
+
 
 export const CREATE_OFFER_ADVERTISMENT = `${CONTEXT}/CREATE_OFFER_ADVERTISMENT`;
 
@@ -49,6 +57,9 @@ export function useActionsP2p(dispatch) {
     handleCreateOfferOrder: (data) => dispatch(createAction(CREATE_OFFER_ADVERTISMENT,data)),
     handleConfirmPaymentAdvertisment: (data) => dispatch(createAction(CONFIRM_PAYMENT_ADVERTISMENT,data)),
     handleUnlockOfferAdvertisment: (data) => dispatch(createAction(UNLOCK_OFFER_ADVERTISMENT,data)),
+    handleCreateAdvertisment: (data) => dispatch(createAction(CREATE_ADVERTISMENT,data)),
+    handleUpdateAdvertisment: (data) => dispatch(createAction(UPDATE_ADVERTISMENT,data)),
+    handleRemoveAdvertisment: (data) => dispatch(createAction(REMOVE_ADVERTISMENT,data)),
   };
 }
 export const actionsReducerP2p = {

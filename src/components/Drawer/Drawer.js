@@ -56,7 +56,7 @@ const Drawer = ({componentId}) => {
                 },
               },
             });
-          }, 1000);
+          }, 500);
           emitEventEmitter('pushMyads', true);
         }}
       />
@@ -71,6 +71,18 @@ const Drawer = ({componentId}) => {
       <Button
         marginTop={40}
         isNormal
+      onPress={()=>{
+        setTimeout(() => {
+          Navigation.mergeOptions(componentId, {
+            sideMenu: {
+              left: {
+                visible: false,
+              },
+            },
+          });
+        }, 500);
+        emitEventEmitter('pushNewAds', true);
+      }}
         title={'Đăng quảng cáo'}
         iconLeftSubmit={icons.IcMarkettingTrans}
       />

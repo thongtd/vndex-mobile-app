@@ -10,6 +10,7 @@ import {
 import {LayoutSplashScreen} from '../../components';
 import Button from '../../components/Button/Button';
 import {
+  ADS_ADD_NEW_SCREEN,
   ADS_HISTORY_EXCHANGE_SCREEN,
   ADS_MY_ADVERTISENMENT_SCREEN,
   LOGIN_SCREEN,
@@ -83,6 +84,18 @@ const HomeScreen = ({componentId}) => {
         },
       });
     });
+    const listenerPushNewAds = listenerEventEmitter('pushNewAds', () => {
+      pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.warningAddNewAds,
+              icon: require('assets/icons/ic_warning.png'),
+            },
+          ],
+        },
+      });
+    });
     const screenPoppedListener =
       Navigation.events().registerScreenPoppedListener(({componentId}) => {
         resetScreenGlobal();
@@ -114,6 +127,7 @@ const HomeScreen = ({componentId}) => {
       navigationButtonEventListener.remove();
       listenerEmit.remove();
       screenPoppedListener.remove();
+      listenerPushNewAds.remove();
     };
   }, []);
 
