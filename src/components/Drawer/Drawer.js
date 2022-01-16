@@ -17,8 +17,6 @@ import ButtonIcon from '../Button/ButtonIcon';
 import Container from '../Container';
 import ItemSetting from '../Item/ItemSetting';
 const Drawer = ({componentId}) => {
-  
-
   const handleClose = () => {
     Navigation.mergeOptions(componentId, {
       sideMenu: {

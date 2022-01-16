@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Clipboard,
 } from 'react-native';
 import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
@@ -40,6 +41,7 @@ import {
   formatCurrency,
   get,
   listenerEventEmitter,
+  toast,
 } from '../../../configs/utils';
 import {ceil, isEmpty, isNumber} from 'lodash';
 import {useSelector} from 'react-redux';
@@ -55,6 +57,24 @@ const Step3BuySellScreen = ({
   const offerOrderId = useSelector(state => state.p2p.offerOrderId);
   const advertisment = useSelector(state => state.p2p.advertisment);
   const [isLoading, setIsLoading] = useState(false);
+  const UserInfo = useSelector(state => state.authentication.userInfo);
+  const [offerOrderState, setOfferOrderState] = useState(offerOrder || {});
+  useEffect(() => {
+    if (
+      get(UserInfo, 'id') ===
+      get(offerOrderGlobal, 'ownerIdentityUser.identityUserId')
+    ) {
+      setOfferOrderState({
+        ...offerOrderGlobal,
+        offerSide: get(offerOrderGlobal, 'offerSide') === BUY ? SELL : BUY,
+      });
+    } else {
+      setOfferOrderState({
+        ...offerOrderGlobal,
+      });
+    }
+    return () => {};
+  }, [offerOrderGlobal, UserInfo]);
   useEffect(() => {
     useActionsP2p(dispatch).handleGetOfferOrder(
       get(offerOrder, 'offerOrderId'),
@@ -63,10 +83,11 @@ const Step3BuySellScreen = ({
       get(offerOrder, 'p2PTradingOrderId'),
     );
     return () => {};
-  }, [dispatch]);
+  }, []);
   useEffect(() => {
     const ev = listenerEventEmitter('pushStep', dataConfirm => {
-      console.log(dataConfirm,offerOrderGlobal, 'data confirm');
+      console.log(dataConfirm, offerOrderState, 'data confirm');
+      // alert(JSON.stringify(item));
       setIsLoading(false);
       if (get(dataConfirm, 'isHasPayment') === false) {
         pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
@@ -82,10 +103,14 @@ const Step3BuySellScreen = ({
     });
     return () => ev.remove();
   }, []);
-  
+
+  const hanldeCopy = url => {
+    Clipboard.setString(url);
+    toast('COPY_TO_CLIPBOARD'.t());
+  };
   const currencyList = useSelector(state => state.market.currencyList);
   const actionSheetRef = useRef(null);
-  
+
   console.log('advertisment: ', advertisment);
 
   return (
@@ -110,7 +135,11 @@ const Step3BuySellScreen = ({
           Thời gian còn lại
         </TextFnx>
         <CountDown
-          until={isNumber(get(offerOrderGlobal, 'timeToLiveInSecond'))?parseInt(get(offerOrderGlobal, 'timeToLiveInSecond')):0}
+          until={
+            isNumber(get(offerOrderState, 'timeToLiveInSecond'))
+              ? parseInt(get(offerOrderState, 'timeToLiveInSecond'))
+              : 0
+          }
           size={14}
           timeLabels={{m: '', s: ''}}
           style={{
@@ -134,7 +163,7 @@ const Step3BuySellScreen = ({
       </Layout>
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
-          side={get(offerOrderGlobal, 'offerSide')}
+          side={get(offerOrderState, 'offerSide')}
           step={1}
           title={'Chuyển tiền và Xác nhận chuyển tiền'}
         />
@@ -150,11 +179,11 @@ const Step3BuySellScreen = ({
         <TextFnx
           weight="700"
           color={
-            get(offerOrderGlobal, 'offerSide') == BUY
+            get(offerOrderState, 'offerSide') == BUY
               ? colors.app.buy
               : colors.app.sell
           }>
-          {`${get(offerOrderGlobal, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${
+          {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${
             get(advertisment, 'symbol') || ''
           }`}
         </TextFnx>
@@ -171,12 +200,12 @@ const Step3BuySellScreen = ({
             size={16}
             weight="700"
             color={
-              get(offerOrderGlobal, 'offerSide') == BUY
+              get(offerOrderState, 'offerSide') == BUY
                 ? colors.app.buy
                 : colors.app.sell
             }>
             {`${formatCurrency(
-              get(offerOrderGlobal, 'price'),
+              get(offerOrderState, 'price'),
               get(advertisment, 'paymentUnit'),
               currencyList,
             )} `}
@@ -185,90 +214,99 @@ const Step3BuySellScreen = ({
             </TextFnx>
           </TextFnx>
         </Layout>
-        {!isEmpty(get(paymentMethodData, 'backAccountNo')) && (
+        {!isEmpty(get(offerOrderState, 'backAccountNo')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>Số tài khoản</TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(paymentMethodData, 'backAccountNo')}
+                {get(offerOrderState, 'backAccountNo')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
+                onPress={() =>
+                  hanldeCopy(get(offerOrderState, 'bankAccountNo'))
+                }
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
           </Layout>
         )}
-        {!isEmpty(get(paymentMethodData, 'bankName')) && (
+        {!isEmpty(get(offerOrderState, 'bankName')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>
               Tên ngân hàng
             </TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(paymentMethodData, 'bankName')}
+                {get(offerOrderState, 'bankName')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
+                onPress={() => hanldeCopy(get(offerOrderState, 'bankName'))}
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
           </Layout>
         )}
-        {!isEmpty(get(paymentMethodData, 'bankBranchName')) && (
+        {!isEmpty(get(offerOrderState, 'bankBranchName')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>Chi nhánh</TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(paymentMethodData, 'bankBranchName')}
+                {get(offerOrderState, 'bankBranchName')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
+                onPress={() =>
+                  hanldeCopy(get(offerOrderState, 'bankBranchName'))
+                }
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
           </Layout>
         )}
-        {!isEmpty(get(paymentMethodData, 'fullName')) && (
+        {!isEmpty(get(offerOrderState, 'fullName')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>Tên</TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(paymentMethodData, 'fullName')}
+                {get(offerOrderState, 'fullName')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
+                onPress={() => hanldeCopy(get(offerOrderState, 'fullName'))}
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
           </Layout>
         )}
-        {!isEmpty(get(paymentMethodData, 'phoneNumber')) && (
+        {!isEmpty(get(offerOrderState, 'phoneNumber')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>
               Số điện thoại
             </TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(paymentMethodData, 'phoneNumber')}
+                {get(offerOrderState, 'phoneNumber')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
+                onPress={() => hanldeCopy(get(offerOrderState, 'phoneNumber'))}
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
@@ -278,7 +316,7 @@ const Step3BuySellScreen = ({
           <TextFnx color={colors.app.textContentLevel3}>
             Phương thức thanh toán
           </TextFnx>
-          {get(paymentMethodData, 'code') ==
+          {get(offerOrderState, 'exPaymentMethodCode') ==
           constant.CODE_PAYMENT_METHOD.MOMO ? (
             <Layout isLineCenter>
               <View
@@ -299,9 +337,7 @@ const Step3BuySellScreen = ({
                     height: 10,
                   }}
                 />
-                <TextFnx spaceLeft={5}>
-                  {get(paymentMethodData, 'name')}
-                </TextFnx>
+                <TextFnx spaceLeft={5}>Momo</TextFnx>
               </View>
             </Layout>
           ) : (
@@ -324,9 +360,7 @@ const Step3BuySellScreen = ({
                     height: 10,
                   }}
                 />
-                <TextFnx spaceLeft={5}>
-                  {get(paymentMethodData, 'name')}
-                </TextFnx>
+                <TextFnx spaceLeft={5}>Chuyển khoản</TextFnx>
               </View>
             </Layout>
           )}

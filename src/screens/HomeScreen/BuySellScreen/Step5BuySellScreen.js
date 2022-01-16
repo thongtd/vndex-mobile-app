@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Rating} from 'react-native-ratings';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,9 +16,12 @@ import {useActionsP2p} from '../../../redux';
 import TimelineBuySell from './TimelineBuySell';
 
 const Step5BuySellScreen = ({componentId}) => {
+  
   const advertisment = useSelector(state => state.p2p.advertisment);
   const offerOrder = useSelector(state => state.p2p.offerOrder);
   const currencyList = useSelector(state => state.market.currencyList);
+  const [offerOrderState, setOfferOrderState] = useState(offerOrder || {});
+  const UserInfo = useSelector(state => state.authentication.userInfo);
   const dispatch = useDispatch();
   useEffect(() => {
     useActionsP2p(dispatch).handleGetAdvertisment(
@@ -26,6 +29,23 @@ const Step5BuySellScreen = ({componentId}) => {
     );
     return () => {};
   }, [dispatch]);
+  useEffect(() => {
+    // alert("kkk")
+    if (
+      get(UserInfo, 'id') ===
+      get(offerOrder, 'ownerIdentityUser.identityUserId')
+    ) {
+      setOfferOrderState({
+        ...offerOrder,
+        offerSide: get(offerOrder, 'offerSide') === BUY ? SELL : BUY,
+      });
+    } else {
+      setOfferOrderState({
+        ...offerOrder,
+      });
+    }
+    return () => {};
+  }, [offerOrder, UserInfo]);
   return (
     <Container
       isTopBar
@@ -36,7 +56,7 @@ const Step5BuySellScreen = ({componentId}) => {
       space={15}>
          <Layout type="column" spaceHorizontal={spacingApp}>
           <TimelineBuySell
-            side={get(offerOrder, 'isPaymentCancel')?SELL:BUY}
+            side={get(offerOrderState, 'isPaymentCancel')?SELL:BUY}
             step={3}
             title={'Hoàn thành'}
           />
@@ -45,35 +65,35 @@ const Step5BuySellScreen = ({componentId}) => {
        
         <Image
           source={
-            get(offerOrder, 'isPaymentCancel')
+            get(offerOrderState, 'isPaymentCancel')
               ? icons.imgCancel
               : icons.imgChecked
           }
         />
-        <TextFnx space={20} size={30} color={get(offerOrder, 'isPaymentCancel')?colors.app.sell:colors.app.buy}>
-          {get(offerOrder, 'isPaymentCancel')
+        <TextFnx space={20} size={30} color={get(offerOrderState, 'isPaymentCancel')?colors.app.sell:colors.app.buy}>
+          {get(offerOrderState, 'isPaymentCancel')
             ? 'Đã huỷ lệnh'
             : `${
-                get(offerOrder, 'offerSide') == BUY
+                get(offerOrderState, 'offerSide') == BUY
                   ? formatCurrency(
-                      get(offerOrder, 'quantity'),
+                      get(offerOrderState, 'quantity'),
                       get(advertisment, 'symbol'),
                       currencyList,
                     )
                   : formatCurrency(
-                      get(offerOrder, 'price'),
+                      get(offerOrderState, 'price'),
                       get(advertisment, 'paymentUnit'),
                       currencyList,
                     )
               } ${
-                get(offerOrder, 'offerSide') == BUY
+                get(offerOrderState, 'offerSide') == BUY
                   ? get(advertisment, 'symbol')
                   : get(advertisment, 'paymentUnit')
               }`}
         </TextFnx>
-        {!get(offerOrder, 'isPaymentCancel') && (
+        {!get(offerOrderState, 'isPaymentCancel') && (
           <TextFnx spaceBottom={30} color={colors.app.textContentLevel2}>
-            {get(offerOrder, 'offerSide') == BUY ? 'Mua' : 'Bán'} thành công
+            {get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} thành công
           </TextFnx>
         )}
         <View
@@ -87,7 +107,7 @@ const Step5BuySellScreen = ({componentId}) => {
             title={'Kiểm tra ví'}
           />
         </View>
-        {!get(offerOrder, 'isPaymentCancel') && (
+        {!get(offerOrderState, 'isPaymentCancel') && (
           <>
             <TextFnx spaceBottom={20} color={colors.app.textContentLevel2}>
               Trải nghiệm giao dịch của bạn như thế nào?
