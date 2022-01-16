@@ -1,4 +1,4 @@
-import {get, isArray} from 'lodash';
+import {get, isArray, uniq, uniqBy} from 'lodash';
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, Switch, ActivityIndicator, View} from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
@@ -8,10 +8,14 @@ import Image from '../../../components/Image/Image';
 import Empty from '../../../components/Item/Empty';
 import Layout from '../../../components/Layout/Layout';
 import TextFnx from '../../../components/Text/TextFnx';
-import {IdNavigation} from '../../../configs/constant';
+import {constant, IdNavigation} from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
-import {formatCurrency, listenerEventEmitter} from '../../../configs/utils';
+import {
+  formatCurrency,
+  listenerEventEmitter,
+  size,
+} from '../../../configs/utils';
 import {ADS_ADD_NEW_SCREEN, pushSingleScreenApp} from '../../../navigation';
 import {useActionsP2p} from '../../../redux';
 import BoxCommand from '../../CommandScreen/components/BoxCommand';
@@ -20,7 +24,7 @@ import ButtonAddNew from './ButtonAddNew';
 const MyAdvertisenmentScreen = ({componentId}) => {
   const dispatch = useDispatch();
   const [isEnabled, setIsEnabled] = useState(true);
-  const [callIndexFail, setCallIndexFail] = useState(0);
+  // const [callIndexFail, setCallIndexFail] = useState(0);
   const [pageIndex, setPageIndex] = useState(1);
   const [ActiveType, setActiveType] = useState('');
   const [ActiveSymbol, setActiveSymbol] = useState('');
@@ -30,7 +34,6 @@ const MyAdvertisenmentScreen = ({componentId}) => {
 
   useEffect(() => {
     const evDone = listenerEventEmitter('doneApi', isDone => {
-      setCallIndexFail(isDone ? 0 : callIndexFail + 1);
       setIsLoading(false);
     });
     getMyAdvertisments(pageIndex);
@@ -38,12 +41,12 @@ const MyAdvertisenmentScreen = ({componentId}) => {
       evDone.remove();
     };
   }, [pageIndex]);
-  const getMyAdvertisments = (pageIndex) => {
+  const getMyAdvertisments = pageIndex => {
     console.log('pageIndex: ', pageIndex);
 
     useActionsP2p(dispatch).handleGetMyAdvertisments({
       pageIndex: pageIndex,
-      pageSize: 2,
+      pageSize: 15,
       side: '',
       coinSymbol: ActiveSymbol,
     });
@@ -91,7 +94,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         onEndReachedThreshold={0.4}
         onEndReached={() => {
           if (pageIndex >= get(myAdvertisments, 'pages')) return;
-          setPageIndex(pageIndex - callIndexFail + 1);
+          setPageIndex(pageIndex + 1);
         }}
         ListFooterComponent={
           (isLoading && <ActivityIndicator style={{color: colors.text}} />) ||
@@ -146,27 +149,29 @@ const MyAdvertisenmentScreen = ({componentId}) => {
               contentBottom={
                 <Layout isSpaceBetween isLineCenter>
                   <Layout isLineCenter>
-                    {(item?.isBanking && (
-                      <Image
-                        source={icons.icBankPng}
-                        style={{
-                          width: 18,
-                          height: 18,
-                          marginRight: 5,
-                        }}
-                      />
-                    )) ||
-                      null}
-                    {(item?.isBankMomo && (
-                      <Image
-                        source={icons.icMomo}
-                        style={{
-                          width: 18,
-                          height: 18,
-                        }}
-                      />
-                    )) ||
-                      null}
+                    {get(item, 'paymentMethods') &&
+                      size(get(item, 'paymentMethods')) > 0 &&
+                      uniqBy(get(item, 'paymentMethods'), 'code').map((__it,index)=>{
+                        return (
+                          <Image
+                            source={
+                              get(__it, 'code') ===
+                              constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
+                                ? icons.icBankPng
+                                : icons.icMomo
+                            }
+                            style={{
+                              width: 18,
+                              height: 18,
+                              marginRight: 5,
+                            }}
+                          />
+                        )
+                      })
+                      
+                      
+                      }
+                    
                   </Layout>
 
                   <Layout isLineCenter>

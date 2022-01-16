@@ -218,23 +218,23 @@ export function* asyncGetMyAdvertisment({payload}) {
     });
     if (res?.status == 200) {
       if (isArray(get(res.data, 'source'))) {
-        res.data.source = res.data.source.map(item => {
-          const isBankMomo = (get(item, 'paymentMethods') || []).find(
-            i => i.code == 'MOMO',
-          )
-            ? true
-            : false;
-          const isBanking = (get(item, 'paymentMethods') || []).find(
-            i => i.code == 'BANK_TRANSFER',
-          )
-            ? true
-            : false;
-          return {
-            ...item,
-            isBankMomo,
-            isBanking,
-          };
-        });
+        // res.data.source = res.data.source.map(item => {
+        //   const isBankMomo = (get(item, 'paymentMethods') || []).find(
+        //     i => i.code == 'MOMO',
+        //   )
+        //     ? true
+        //     : false;
+        //   const isBanking = (get(item, 'paymentMethods') || []).find(
+        //     i => i.code == 'BANK_TRANSFER',
+        //   )
+        //     ? true
+        //     : false;
+        //   return {
+        //     ...item,
+        //     isBankMomo,
+        //     isBanking,
+        //   };
+        // });
         yield put(
           actionsReducerP2p.getMyAdvertismentsSuccess({
             ...get(res, 'data'),
@@ -252,10 +252,7 @@ export function* asyncGetMyAdvertisment({payload}) {
 }
 
 export function* watchGetMyAdvertisment() {
-  while (true) {
-    const action = yield take(GET_MY_ADVERTISMENTS);
-    yield* asyncGetMyAdvertisment(action);
-  }
+  yield takeEvery(GET_MY_ADVERTISMENTS,asyncGetMyAdvertisment);
 }
 export function* asyncGetOfferOrder({payload}) {
   try {
