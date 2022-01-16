@@ -33,7 +33,7 @@ const BoxCommand = ({
             </TextFnx>
             {(dateTime && (
               <TextFnx color={colors.app.textDisabled} size={12} spaceLeft={10}>
-                2021-11-07 09:25:49
+                {dateTime}
               </TextFnx>
             )) ||
               null}

@@ -11,7 +11,13 @@ import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
 import Layout from '../../../components/Layout/Layout';
 import TextFnx from '../../../components/Text/TextFnx';
-import {constant, fontSize, SELL,BUY, spacingApp} from '../../../configs/constant';
+import {
+  constant,
+  fontSize,
+  SELL,
+  BUY,
+  spacingApp,
+} from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
 import TimelineBuySell from './TimelineBuySell';
@@ -37,9 +43,9 @@ import {
   toast,
   to_UTCDate,
 } from '../../../configs/utils';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {isEmpty} from 'lodash';
-import { useActionsP2p } from '../../../redux';
+import {useActionsP2p} from '../../../redux';
 const Step2BuySellScreen = ({componentId, item, data}) => {
   const actionSheetRef = useRef(null);
   const dispatch = useDispatch();
@@ -48,26 +54,25 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
 
   useEffect(() => {
-    const ev = listenerEventEmitter('pushOfferOrder',(data)=>{
-      if(get(data,"offerOrder.offerSide") === BUY){
-        pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN,{
-          paymentMethodData:get(data,"paymentMethodData"),
-          offerOrder:get(data,"offerOrder"),
-          item
+    const ev = listenerEventEmitter('pushOfferOrder', data => {
+      if (get(data, 'offerOrder.offerSide') === BUY) {
+        pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN, {
+          paymentMethodData: get(data, 'paymentMethodData'),
+          offerOrder: get(data, 'offerOrder'),
+          item,
         });
-      }else{
-        pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN,{
-          paymentMethodData:get(data,"paymentMethodData"),
-          item
+      } else {
+        pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, {
+          paymentMethodData: get(data, 'paymentMethodData'),
+          item,
         });
       }
-      
-    })
-    
+    });
+
     return () => {
       ev.remove();
-    }
-  }, [componentId])
+    };
+  }, [componentId]);
   return (
     <Container
       space={15}
@@ -93,7 +98,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
           step={1}
-          side={get(item, 'side') == SELL ?BUY:SELL}
+          side={get(item, 'side') == SELL ? BUY : SELL}
           title={'Chuyển tiền và Xác nhận chuyển tiền'}
         />
       </Layout>
@@ -219,7 +224,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
             </View>
             <Layout type="column">
               <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-                Người bán
+                Người {get(advertisment, 'side') == SELL?"bán":"mua" }
               </TextFnx>
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
                 {get(advertisment, 'traderInfo.emailAddress')}
@@ -259,27 +264,29 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
                     get(it, 'code') ==
                     constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
                   ) {
-                   return ( <View
-                    style={{
-                      flexDirection: 'row',
-                      backgroundColor: '#3B2B2B',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      paddingHorizontal: 5,
-                      paddingVertical: 2,
-                      borderRadius: 5,
-                      marginRight: 10,
-                    }}>
-                    <Image
-                      source={icons.icBank}
-                      style={{
-                        marginLeft: 5,
-                        width: 10,
-                        height: 10,
-                      }}
-                    />
-                    <TextFnx>Chuyển khoản</TextFnx>
-                  </View>);
+                    return (
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          backgroundColor: '#3B2B2B',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          paddingHorizontal: 5,
+                          paddingVertical: 2,
+                          borderRadius: 5,
+                          marginRight: 10,
+                        }}>
+                        <Image
+                          source={icons.icBank}
+                          style={{
+                            marginLeft: 5,
+                            width: 10,
+                            height: 10,
+                          }}
+                        />
+                        <TextFnx>Chuyển khoản</TextFnx>
+                      </View>
+                    );
                   }
                 })}
               </ScrollView>
@@ -287,14 +294,17 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
           </Layout>
           <ButtonIcon name="eye" color={colors.app.yellowHightlight} />
         </Layout>
-        <Layout space={5} spaceTop={20} isLineCenter>
+       {get(advertisment, 'side') == SELL && (
+         <>
+         <Layout space={5} spaceTop={20} isLineCenter>
           <Icon iconComponent={icons.IcChecked} />
           <TextFnx> VNDEX đã khóa token của người bán</TextFnx>
         </Layout>
         <Layout space={5} isLineCenter>
           <Icon iconComponent={icons.IcChecked} />
           <TextFnx> VNDEX hỗ trợ 24/7</TextFnx>
-        </Layout>
+        </Layout></>
+       )} 
         <Layout
           style={{
             paddingTop: 15,
@@ -335,24 +345,27 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
           onMomentumScrollEnd={() =>
             actionSheetRef.current?.handleChildScrollEnd()
           }>
-          {get(advertisment,"paymentMethods") &&
-            size(get(advertisment,"paymentMethods")) > 0 &&
-            get(advertisment,"paymentMethods").map((item, index) => {
+          {get(advertisment, 'paymentMethods') &&
+            size(get(advertisment, 'paymentMethods')) > 0 &&
+            (get(advertisment, 'side') == SELL
+              ? get(advertisment, 'paymentMethods')
+              : paymentMethods
+            ).map((item, index) => {
               return (
                 <TouchableOpacity
                   key={`ite-${index}`}
                   onPress={() => {
                     actionSheetRef.current?.hide();
+                    useActionsP2p(dispatch).handleResetOffer();
                     useActionsP2p(dispatch).handleCreateOfferOrder({
-                      data:{
-                        orderId: get(advertisment,"orderId"),
-                        orderQtty:get(data, 'quantity'),
+                      data: {
+                        orderId: get(advertisment, 'orderId'),
+                        orderQtty: get(data, 'quantity'),
                         orderPrice: get(data, 'price'),
-                        p2PAccountPaymentMethodId: get(item,"id")
+                        p2PAccountPaymentMethodId: get(item, 'id'),
                       },
-                      paymentMethodData:item
-                    })
-                    
+                      paymentMethodData: item,
+                    });
                   }}>
                   <Layout
                     style={{

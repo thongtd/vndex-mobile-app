@@ -9,6 +9,7 @@ import {
   GET_PAYMENT_METHOD_BY_ACC_SUCCESS,
   GET_TRADING_SUCCESS,
   GET_MARKET_INFO_SUCCESS,
+  GET_HISTORY_ORDER_SUCCESS,
 } from './actions';
 import {get, set} from '../../../configs/utils';
 import i18n from 'react-native-i18n';
@@ -24,6 +25,9 @@ export const DEFAULT = {
   offerOrder: {},
   offerOrderId: '',
   marketInfo: {},
+  historyOrders:{
+    source:[]
+  }
 };
 
 export default p2p = (state = DEFAULT, action = {}) => {
@@ -41,16 +45,28 @@ export default p2p = (state = DEFAULT, action = {}) => {
       };
     case GET_MY_ADVERTISMENT_SUCCESS:
       if (get(payload, 'pageIndex') == 1) {
-        state.myAdvertisments.source = [];
+        set(state,"myAdvertisments.source",[]);
       }
       return {
         ...state,
         myAdvertisments: {
           ...state.myAdvertisments,
           ...payload,
-          source: [...state.myAdvertisments.source, ...get(payload, 'source')],
+          source: [...get(state.myAdvertisments,"source"), ...get(payload, 'source')],
         },
       };
+      case GET_HISTORY_ORDER_SUCCESS:
+        if (get(payload, 'pageIndex') == 1) {
+          set(state,"historyOrders.source",[]);
+        }
+        return {
+          ...state,
+          historyOrders: {
+            ...state.historyOrders,
+            ...payload,
+            source: [...get(state.historyOrders,"source"), ...get(payload, 'source')],
+          },
+        };
     case GET_OFFER_ORDER_SUCCESS:
       return {
         ...state,

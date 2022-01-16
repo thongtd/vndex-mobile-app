@@ -104,7 +104,14 @@ export const P2pService = {
     );
     let url = `${P2P_API.GET_MARKET_INFO}?${dataRemoved}`;
     let response = await httpService.get_without_token(url);
-    console.log('response: ', response);
     return response;
+  },
+  getHistoryOrder: async data => {
+    let dataRemoved = removeEmptyUrl(
+      `side=${data.side}&paymentUnit=${data.paymentUnit}&priceType=${data.priceType}&isPaymentConfirm=${data.isPaymentConfirm}&isPaymentCancel=${data.isPaymentCancel}&fromDate=${data.fromDate}&toDate=${data.toDate}&pageIndex=${data.pageIndex}&pageSize=${data.pageSize}`,
+    );
+    let url = `${P2P_API.GET_HISTORY_ORDER}?${dataRemoved}`;
+    let response = await httpService.get(url);
+    return response.data;
   },
 };

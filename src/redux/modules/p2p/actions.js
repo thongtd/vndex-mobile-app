@@ -22,6 +22,8 @@ export const UNLOCK_OFFER_ADVERTISMENT = `${CONTEXT}/UNLOCK_OFFER_ADVERTISMENT`;
 export const UNLOCK_OFFER_ADVERTISMENT_SUCCESS = `${CONTEXT}/UNLOCK_OFFER_ADVERTISMENT_SUCCESS`;
 export const GET_MARKET_INFO = `${CONTEXT}/GET_MARKET_INFO`;
 export const GET_MARKET_INFO_SUCCESS = `${CONTEXT}/GET_MARKET_INFO_SUCCESS`;
+export const GET_HISTORY_ORDER = `${CONTEXT}/GET_HISTORY_ORDER`;
+export const GET_HISTORY_ORDER_SUCCESS = `${CONTEXT}/GET_HISTORY_ORDER_SUCCESS`;
 export const CREATE_ADVERTISMENT = `${CONTEXT}/CREATE_ADVERTISMENT`;
 export const CREATE_ADVERTISMENT_SUCCESS = `${CONTEXT}/CREATE_ADVERTISMENT_SUCCESS`;
 
@@ -44,6 +46,8 @@ export function useActionsP2p(dispatch) {
   return {
     handleGetAdvertisments: data =>
       dispatch(createAction(GET_ADVERTISMENTS, data)),
+      handleGetHistoryOrder: data =>
+      dispatch(createAction(GET_HISTORY_ORDER, data)),
     handleGetMyAdvertisments: data =>
       dispatch(createAction(GET_MY_ADVERTISMENTS, data)),
     handleGetTradingMarket: () => dispatch(createAction(GET_TRADING)),
@@ -56,6 +60,7 @@ export function useActionsP2p(dispatch) {
     handleGetOfferOrder: (orderId) => dispatch(createAction(GET_OFFER_ORDER,orderId)),
     handleCreateOfferOrder: (data) => dispatch(createAction(CREATE_OFFER_ADVERTISMENT,data)),
     handleConfirmPaymentAdvertisment: (data) => dispatch(createAction(CONFIRM_PAYMENT_ADVERTISMENT,data)),
+    handleResetOffer:()=>dispatch(createAction(GET_OFFER_ORDER_SUCCESS,{})),
     handleUnlockOfferAdvertisment: (data) => dispatch(createAction(UNLOCK_OFFER_ADVERTISMENT,data)),
     handleCreateAdvertisment: (data) => dispatch(createAction(CREATE_ADVERTISMENT,data)),
     handleUpdateAdvertisment: (data) => dispatch(createAction(UPDATE_ADVERTISMENT,data)),
@@ -73,5 +78,6 @@ export const actionsReducerP2p = {
   getPaymentMethodByAccSuccess: data => createAction(GET_PAYMENT_METHOD_BY_ACC_SUCCESS, data),
   getExchangePaymentMethodSuccess: data => createAction(GET_EXCHANGE_PAYMENT_METHOD_SUCCESS, data),
   getOfferOrderSuccess: data => createAction(GET_OFFER_ORDER_SUCCESS, data),
+  getHistoryOrderSuccess: data => createAction(GET_HISTORY_ORDER_SUCCESS, data),
   unlockOfferAdvertismentSuccess: data => createAction(UNLOCK_OFFER_ADVERTISMENT_SUCCESS, data),
 };

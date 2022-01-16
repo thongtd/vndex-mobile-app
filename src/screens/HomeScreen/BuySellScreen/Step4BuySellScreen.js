@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState,useMemo} from 'react';
+import React, {useEffect, useRef, useState, useMemo} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -35,7 +35,7 @@ import ButtonIcon from '../../../components/Button/ButtonIcon';
 import Copy from 'assets/svg/ic_copy.svg';
 import BottomSheet from '../../../components/ActionSheet/ActionSheet';
 import {useDispatch, useSelector} from 'react-redux';
-import {get} from 'lodash';
+import {ceil, get, isNumber} from 'lodash';
 import {formatCurrency, to_UTCDate} from '../../../configs/utils';
 import {useActionsP2p} from '../../../redux';
 import CountDown from 'react-native-countdown-component';
@@ -50,77 +50,58 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     useActionsP2p(dispatch).handleGetAdvertisment(
       get(offerOrder, 'p2PTradingOrderId'),
     );
+    useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
     return () => {};
-  }, [dispatch]);
-  const [offerOrderIdState, setOfferOrderIdState] = useState(offerOrderIdState);
-  const [offerOrderState, setOfferOrderState] = useState(offerOrder);
+  }, [dispatch,offerOrder]);
+  // useEffect(() => {
+  //   useActionsP2p(dispatch).handleGetAdvertisment(
+  //     get(offerOrder, 'p2PTradingOrderId'),
+  //   );
+  //   useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
+  //   return () => {};
+  // }, []);
   const [disabledSubmit, setDisabledSubmit] = useState(false);
-  // const offerMemo = useMemo(() => offerOrder, [offerOrder]);
+
   useEffect(() => {
-    var intervalID = setInterval(() => {
-      useActionsP2p(dispatch).handleGetOfferOrder(
-        offerOrderIdState,
-      );
-    }, 20000);
-   
-    return () => {
-      clearInterval(intervalID); 
-    }
-  }, [offerOrderIdState,offerOrderState]);
-  useEffect(() => {
-  
-    setOfferOrderIdState(offerOrderId);
-    setOfferOrderState(offerOrder);
-    return () => {};
-  }, [offerOrderId,offerOrder]);
-  useEffect(() => {
-      useActionsP2p(dispatch).handleGetOfferOrder(
-        offerOrderIdState,
+    var intervalID = setInterval(
+      (offerData, offerOrderIdData) => {
+        useActionsP2p(dispatch).handleGetAdvertisment(
+          get(offerData, 'p2PTradingOrderId'),
+        );
+        useActionsP2p(dispatch).handleGetOfferOrder(offerOrderIdData);
+        // console.log(alert(JSON.stringify(offerOrder)));
+        if (
+          get(offerData, 'offerSide') === BUY &&
+          get(offerData, 'isUnLockConfirm')
+        ) {
+          pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
+        }
+        if (
+          get(offerData, 'offerSide') === SELL &&
+          get(offerData, 'isPaymentConfirm')
+        ) {
+          setDisabledSubmit(false);
+        }
+        if (
+          get(offerData, 'offerSide') === SELL &&
+          !get(offerData, 'isPaymentConfirm')
+        ) {
+          setDisabledSubmit(true);
+        }
+        if (get(offerData, 'isPaymentCancel')) {
+          pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
+        }
+      },
+      10000,
+      offerOrder,
+      offerOrderId,
     );
+
     return () => {
-      
-    }
-  }, [offerOrderIdState])
-  useEffect(() => {
-    
-    if (
-      get(offerOrderState, 'offerSide') === BUY &&
-      get(offerOrderState, 'isUnLockConfirm')
-    ) {
-       pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
-    } 
-    if (
-      get(offerOrderState, 'offerSide') === SELL &&
-      get(offerOrderState, 'isPaymentConfirm')
-    ) {
-      setDisabledSubmit(false);
-    } 
-    if (
-      get(offerOrderState, 'offerSide') === SELL &&
-      !get(offerOrderState, 'isPaymentConfirm')
-    ) {
-      setDisabledSubmit(true);
-    }
-    if (
-      get(offerOrderState, 'isPaymentCancel')
-    ) {
-       pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
-    }
-    if(get(offerOrderState,"timeToLiveInSecond") ==0){
-      
-        useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
-          offerOrderId: offerOrderId,
-          isHasPayment: false,
-          pofPayment: "",
-          pofPaymentComment: "",
-          cancellationReason: ""
-        });
-      
-    }
-    return () => {
-      
-    }
-  }, [offerOrderState])
+      clearInterval(intervalID);
+    };
+  }, [offerOrder, offerOrderId]);
+
   return (
     <Container
       space={15}
@@ -142,29 +123,30 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           Thời gian còn lại
         </TextFnx>
         <CountDown
-        until={get(offerOrder,"timeToLiveInSecond")}
-        size={14}
-        timeLabels={
-          {m: '', s: ''}
-        }
-        style={{
-          flexDirection:"row"
-        }}
-        onFinish={() => {
-          useActionsP2p(dispatch).handleGetOfferOrder(
-            offerOrderId
-          );
-        }}
-        digitStyle={{height:15,width:20}}
-        digitTxtStyle={{color: colors.app.yellowHightlight,fontWeight:'400'}}
-        timeToShow={['M', 'S']}
-        showSeparator
-        separatorStyle={{
-          color:colors.app.yellowHightlight,
-          
-          
-        }}
-      />
+          until={
+            isNumber(get(offerOrder, 'timeToLiveInSecond'))
+              ? parseInt(get(offerOrder, 'timeToLiveInSecond'))
+              : 0
+          }
+          size={14}
+          timeLabels={{m: '', s: ''}}
+          style={{
+            flexDirection: 'row',
+          }}
+          onFinish={() => {
+            useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
+          }}
+          digitStyle={{height: 15, width: 20}}
+          digitTxtStyle={{
+            color: colors.app.yellowHightlight,
+            fontWeight: '400',
+          }}
+          timeToShow={['M', 'S']}
+          showSeparator
+          separatorStyle={{
+            color: colors.app.yellowHightlight,
+          }}
+        />
       </Layout>
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
@@ -400,20 +382,20 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           disabledSubmit={disabledSubmit}
           isClose
           onSubmit={() => {
-            if(get(offerOrder, 'offerSide') === SELL){
+            if (get(offerOrder, 'offerSide') === SELL) {
               pushSingleScreenApp(componentId, STEP_2FA_BUY_SELL_SCREEN);
             }
           }}
           colorTitle={colors.text}
           weightTitle={'700'}
-          onClose={()=>{
-            if(get(offerOrder, 'offerSide') === BUY){
+          onClose={() => {
+            if (get(offerOrder, 'offerSide') === BUY) {
               useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
                 offerOrderId: offerOrderId,
                 isHasPayment: false,
-                pofPayment: "",
-                pofPaymentComment: "",
-                cancellationReason: ""
+                pofPayment: '',
+                pofPaymentComment: '',
+                cancellationReason: '',
               });
             }
           }}

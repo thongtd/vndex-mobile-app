@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -41,7 +41,7 @@ import {
   get,
   listenerEventEmitter,
 } from '../../../configs/utils';
-import {isEmpty} from 'lodash';
+import {ceil, isEmpty, isNumber} from 'lodash';
 import {useSelector} from 'react-redux';
 import CountDown from 'react-native-countdown-component';
 const Step3BuySellScreen = ({
@@ -53,7 +53,8 @@ const Step3BuySellScreen = ({
   const dispatch = useDispatch();
   const offerOrderGlobal = useSelector(state => state.p2p.offerOrder);
   const offerOrderId = useSelector(state => state.p2p.offerOrderId);
-  
+  const advertisment = useSelector(state => state.p2p.advertisment);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     useActionsP2p(dispatch).handleGetOfferOrder(
       get(offerOrder, 'offerOrderId'),
@@ -65,14 +66,14 @@ const Step3BuySellScreen = ({
   }, [dispatch]);
   useEffect(() => {
     const ev = listenerEventEmitter('pushStep', dataConfirm => {
-      console.log(dataConfirm,"data confirm")
+      console.log(dataConfirm,offerOrderGlobal, 'data confirm');
+      setIsLoading(false);
       if (get(dataConfirm, 'isHasPayment') === false) {
         pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
       } else if (
         get(dataConfirm, 'isHasPayment') &&
-        get(offerOrderGlobal, 'offerSide') == BUY
+        get(item, 'side') == SELL
       ) {
-        
         pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, {
           paymentMethodData,
           item,
@@ -81,9 +82,11 @@ const Step3BuySellScreen = ({
     });
     return () => ev.remove();
   }, []);
+  
   const currencyList = useSelector(state => state.market.currencyList);
   const actionSheetRef = useRef(null);
-  const advertisment = useSelector(state => state.p2p.advertisment);
+  
+  console.log('advertisment: ', advertisment);
 
   return (
     <Container
@@ -91,6 +94,7 @@ const Step3BuySellScreen = ({
       spaceHorizontal={0}
       isTopBar
       isScroll
+      isLoadding={isLoading}
       componentId={componentId}
       title="Xác nhận thanh toán">
       <Layout
@@ -106,29 +110,26 @@ const Step3BuySellScreen = ({
           Thời gian còn lại
         </TextFnx>
         <CountDown
-        until={get(offerOrderGlobal,"timeToLiveInSecond")}
-        size={14}
-        timeLabels={
-          {m: '', s: ''}
-        }
-        style={{
-          flexDirection:"row"
-        }}
-        onFinish={() => {
-          useActionsP2p(dispatch).handleGetOfferOrder(
-            offerOrderId
-          );
-        }}
-        digitStyle={{height:15,width:20}}
-        digitTxtStyle={{color: colors.app.yellowHightlight,fontWeight:'400'}}
-        timeToShow={['M', 'S']}
-        showSeparator
-        separatorStyle={{
-          color:colors.app.yellowHightlight,
-          
-          
-        }}
-      />
+          until={isNumber(get(offerOrderGlobal, 'timeToLiveInSecond'))?parseInt(get(offerOrderGlobal, 'timeToLiveInSecond')):0}
+          size={14}
+          timeLabels={{m: '', s: ''}}
+          style={{
+            flexDirection: 'row',
+          }}
+          // onFinish={() => {
+          //   // useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
+          // }}
+          digitStyle={{height: 15, width: 20}}
+          digitTxtStyle={{
+            color: colors.app.yellowHightlight,
+            fontWeight: '400',
+          }}
+          timeToShow={['M', 'S']}
+          showSeparator
+          separatorStyle={{
+            color: colors.app.yellowHightlight,
+          }}
+        />
         {/* <TextFnx color={colors.app.yellowHightlight}>14:31</TextFnx> */}
       </Layout>
       <Layout type="column" spaceHorizontal={spacingApp}>
@@ -153,10 +154,9 @@ const Step3BuySellScreen = ({
               ? colors.app.buy
               : colors.app.sell
           }>
-          {`${get(offerOrderGlobal, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
-            advertisment,
-            'symbol',
-          )}`}
+          {`${get(offerOrderGlobal, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${
+            get(advertisment, 'symbol') || ''
+          }`}
         </TextFnx>
         <Layout
           isLineCenter
@@ -359,13 +359,14 @@ const Step3BuySellScreen = ({
           isClose
           onSubmit={
             () => {
+              setIsLoading(true);
               useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
-                  offerOrderId: offerOrderId,
-                  isHasPayment: true,
-                  pofPayment: '',
-                  pofPaymentComment: '',
-                  cancellationReason: '',
-                });
+                offerOrderId: offerOrderId,
+                isHasPayment: true,
+                pofPayment: '',
+                pofPaymentComment: '',
+                cancellationReason: '',
+              });
             }
             // pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN)
           }
@@ -373,6 +374,7 @@ const Step3BuySellScreen = ({
           weightTitle={'700'}
           textClose={'Huỷ lệnh'}
           onClose={() => {
+            setIsLoading(true);
             useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
               offerOrderId: offerOrderId,
               isHasPayment: false,

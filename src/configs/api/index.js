@@ -32,6 +32,7 @@ export const P2P_API = {
     CREATE_ADVERTISMENT:`${EXCHANGE_URL}api/v1/p2p-order/create-advertisment`,
     UPDATE_ADVERTISMENT:`${EXCHANGE_URL}api/v1/p2p-order/update-advertisment/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
     REMOVE_ADVERTISMENT:`${EXCHANGE_URL}api/v1/p2p-order/delete-advertisment/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
+    GET_HISTORY_ORDER:`${EXCHANGE_URL}api/v1/p2p-order/get-history-orders`
 }
 export const EXCHANGE_API = {
     CHECK_API: `${EXCHANGE_URL}api/health-check`,

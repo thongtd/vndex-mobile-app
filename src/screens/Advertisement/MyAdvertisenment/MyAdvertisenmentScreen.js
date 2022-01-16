@@ -100,8 +100,8 @@ const MyAdvertisenmentScreen = ({componentId}) => {
           (isLoading && <ActivityIndicator style={{color: colors.text}} />) ||
           null
         }
-        renderItem={({item}) => (
-          <View style={{paddingHorizontal: 20}}>
+        renderItem={({item,index}) => (
+          <View key={`item-${index}`} style={{paddingHorizontal: 20}}>
             <BoxCommand
               onSeeDetailCommand={onSeeDetailCommand}
               type={get(item, 'side') == 'B' ? 'Mua' : 'Bán'}

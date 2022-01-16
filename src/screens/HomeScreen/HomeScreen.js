@@ -42,7 +42,7 @@ import ButtonIcon from '../../components/Button/ButtonIcon';
 import icons from '../../configs/icons';
 import Icon from '../../components/Icon';
 import {useRef} from 'react';
-import {get, size} from 'lodash';
+import {get, size, uniqBy} from 'lodash';
 import {Dimensions, StatusBar} from 'react-native';
 const screenHeight = Dimensions.get('screen').height;
 const windowHeight = Dimensions.get('window').height;
@@ -371,7 +371,7 @@ const HomeScreen = ({componentId}) => {
                 </TextFnx>
 
                 <Layout>
-                  {(get(item, 'paymentMethods') || []).map((it, ind) => {
+                  {(uniqBy(get(item, 'paymentMethods'),"code") || []).map((it, ind) => {
                     if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
                       return (
                         <Image

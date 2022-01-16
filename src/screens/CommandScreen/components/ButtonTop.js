@@ -1,21 +1,22 @@
 import React, {memo} from 'react';
 import Button from '../../../components/Button/Button';
 import Layout from '../../../components/Layout/Layout';
+import { BUY, SELL } from '../../../configs/constant';
 import colors from '../../../configs/styles/colors';
 import BlockSwap from '../../SwapScreen/components/BlockSwap';
 
 const arrMenu = [
   {
     name: 'Tất cả',
-    id: 1,
+    id: '',
   },
   {
     name: 'Mua',
-    id: 2,
+    id: BUY,
   },
   {
     name: 'Bán',
-    id: 3,
+    id: SELL,
   },
 ];
 const ButtonTop = ({onSelect, onChangeActive, activeMenu}) => {

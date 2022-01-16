@@ -29,6 +29,7 @@ import {
   CREATE_ADVERTISMENT,
   UPDATE_ADVERTISMENT,
   REMOVE_ADVERTISMENT,
+  GET_HISTORY_ORDER,
 } from './actions';
 
 import {
@@ -38,7 +39,7 @@ import {
   toast,
 } from '../../../configs/utils';
 import {P2pService} from '../../../services/p2p.service';
-import {isArray, size} from 'lodash';
+import {ceil, isArray, size} from 'lodash';
 import {useActionsP2p} from '.';
 
 export function* asyncGetAdvertisments({payload}) {
@@ -218,27 +219,13 @@ export function* asyncGetMyAdvertisment({payload}) {
     });
     if (res?.status == 200) {
       if (isArray(get(res.data, 'source'))) {
-        // res.data.source = res.data.source.map(item => {
-        //   const isBankMomo = (get(item, 'paymentMethods') || []).find(
-        //     i => i.code == 'MOMO',
-        //   )
-        //     ? true
-        //     : false;
-        //   const isBanking = (get(item, 'paymentMethods') || []).find(
-        //     i => i.code == 'BANK_TRANSFER',
-        //   )
-        //     ? true
-        //     : false;
-        //   return {
-        //     ...item,
-        //     isBankMomo,
-        //     isBanking,
-        //   };
-        // });
         yield put(
           actionsReducerP2p.getMyAdvertismentsSuccess({
             ...get(res, 'data'),
             pageIndex: get(payload, 'pageIndex') || 1,
+            pages: ceil(
+              get(res, 'data.totalRecords') / get(payload, 'pageSize'),
+            ),
           }),
         );
       }
@@ -252,7 +239,7 @@ export function* asyncGetMyAdvertisment({payload}) {
 }
 
 export function* watchGetMyAdvertisment() {
-  yield takeEvery(GET_MY_ADVERTISMENTS,asyncGetMyAdvertisment);
+  yield takeEvery(GET_MY_ADVERTISMENTS, asyncGetMyAdvertisment);
 }
 export function* asyncGetOfferOrder({payload}) {
   try {
@@ -262,7 +249,13 @@ export function* asyncGetOfferOrder({payload}) {
     emitEventEmitter('doneApi', true);
 
     if (get(res, 'success')) {
+      yield put(
+        createAction('GET_OFFER_ORDER_ID_SUCCESS', get(res, 'data.id')),
+      );
       yield put(actionsReducerP2p.getOfferOrderSuccess(get(res, 'data')));
+      // yield put(
+      //   createAction(GET_ADVERTISMENT, get(res, 'data.p2PTradingOrderId')),
+      // );
     }
   } catch (e) {
     console.log(e, 'errkaka');
@@ -281,6 +274,7 @@ export function* asyncCreateOfferOrder({payload}) {
       P2pService.createOfferOrderAdvertisment,
       get(payload, 'data'),
     );
+    console.log('resk: ', res);
     emitEventEmitter('doneApi', true);
     if (get(res, 'success') && get(res, 'data.status')) {
       yield put(
@@ -289,6 +283,11 @@ export function* asyncCreateOfferOrder({payload}) {
           get(res, 'data.offerOrderId'),
         ),
       );
+
+      emitEventEmitter('pushOfferOrder', {
+        paymentMethodData: get(payload, 'paymentMethodData'),
+        offerOrder: get(res, 'data'),
+      });
       yield put(createAction(GET_OFFER_ORDER, get(res, 'data.offerOrderId')));
       emitEventEmitter('pushOfferOrder', {
         paymentMethodData: get(payload, 'paymentMethodData'),
@@ -371,7 +370,28 @@ export function* watchGetMarketInfo() {
     yield* asyncGetMarketInfo(action);
   }
 }
+export function* asyncGetHistoryOrder({payload}) {
+  try {
+    const res = yield call(P2pService.getHistoryOrder, payload);
+    console.log('History: ', res);
+    emitEventEmitter('doneApi', true);
 
+    if (isArray(get(res, 'source'))) {
+      yield put(
+        actionsReducerP2p.getHistoryOrderSuccess({
+          ...res,
+          pageIndex: get(payload, 'pageIndex') || 1,
+          pages: ceil(get(res, 'totalRecords') / get(payload, 'pageSize')),
+        }),
+      );
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetHistoryOrder() {
+  yield takeEvery(GET_HISTORY_ORDER, asyncGetHistoryOrder);
+}
 export function* asyncCreateAdvertisment({payload}) {
   try {
     const res = yield call(P2pService.createAdvertisment, payload);
@@ -422,7 +442,7 @@ export function* asyncDeleteAdvertisment({payload}) {
   try {
     const res = yield call(
       P2pService.removeAdvertisment,
-      get(payload, 'tradingOrderId')
+      get(payload, 'tradingOrderId'),
     );
     emitEventEmitter('doneApi', true);
     if (get(res, 'success') && get(res, 'status')) {
@@ -455,6 +475,7 @@ export default function* () {
   yield all([fork(watchUnlockOfferAdvertisment)]);
   yield all([fork(watchConfirmPaymentAdvertisment)]);
   yield all([fork(watchGetMarketInfo)]);
+  yield all([fork(watchGetHistoryOrder)]);
   yield all([fork(watchCreateAdvertisment)]);
   yield all([fork(watchUpdateAdvertisment)]);
   yield all([fork(watchDeleteAdvertisment)]);

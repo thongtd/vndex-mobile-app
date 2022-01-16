@@ -56,12 +56,12 @@ const Step5BuySellScreen = ({componentId}) => {
             : `${
                 get(offerOrder, 'offerSide') == BUY
                   ? formatCurrency(
-                      get(advertisment, 'quantity'),
+                      get(offerOrder, 'quantity'),
                       get(advertisment, 'symbol'),
                       currencyList,
                     )
                   : formatCurrency(
-                      get(advertisment, 'price'),
+                      get(offerOrder, 'price'),
                       get(advertisment, 'paymentUnit'),
                       currencyList,
                     )
