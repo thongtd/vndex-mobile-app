@@ -69,7 +69,6 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           get(offerData, 'p2PTradingOrderId'),
         );
         useActionsP2p(dispatch).handleGetOfferOrder(offerOrderIdData);
-        // console.log(alert(JSON.stringify(offerOrder)));
         if (
           get(offerData, 'offerSide') === BUY &&
           get(offerData, 'isUnLockConfirm')

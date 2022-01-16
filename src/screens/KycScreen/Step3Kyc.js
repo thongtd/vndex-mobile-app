@@ -42,10 +42,13 @@ export default function Step3Kyc({
   postalCode,
   sex,
   identityUserId,
+  phoneNumber,
+  address,
 }) {
   const [assetSelfieSide, setAssetSelfieSide] = useState('');
 
   const userKyc = useSelector(state => state.authentication.userKyc);
+  const userInfo = useSelector(state => state.authentication.userInfo);
   const handleSubmit = selfieSide => {
     if (isEmpty(selfieSide) && isEmpty(get(userKyc, 'selfie'))) {
       toast('PLEASE_SELECT_SELFIE_IMAGE'.t());
@@ -66,6 +69,8 @@ export default function Step3Kyc({
         frontIdentityCardFileName,
         backIdentityCardBytes,
         backIdentityCardFileName,
+        phoneNumber,
+        address,
       };
 
       authService.updateUserInfo(data).then(res => {
@@ -125,19 +130,26 @@ export default function Step3Kyc({
           paddingTop: 20,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          paddingBottom:200
+          paddingBottom: 200,
         }}>
         <TouchableOpacity
           onPress={handleSelfieSide}
           style={[stylest.box, {marginTop: 15}]}>
           <View style={stylest.centerFlex}>
-            {get(assetSelfieSide, 'uri') || get(userKyc, 'selfie') ? (
+            {get(assetSelfieSide, 'uri') ? (
               <FastImage
                 style={{width: 200, height: 200}}
                 source={{
-                  uri: get(userKyc, 'selfie')
-                    ? get(userKyc, 'selfie')
-                    : get(assetSelfieSide, 'uri'),
+                  uri: get(assetSelfieSide, 'uri'),
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            ) : get(userKyc, 'selfie') ? (
+              <FastImage
+                style={{width: 200, height: 200}}
+                source={{
+                  uri: get(userKyc, 'selfie'),
                   priority: FastImage.priority.high,
                 }}
                 resizeMode={FastImage.resizeMode.contain}
@@ -153,49 +165,17 @@ export default function Step3Kyc({
         <TextFnx space={10} size={fontSize.f12} color={colors.description}>
           {'RuleUploadImage'.t()}
         </TextFnx>
-        {/* <View>
-        <Mtcmt1 />
-        <View style={stylest.cmt}>
-          <Checked />
-          <TextFnx color={colors.description}>{'Valid'.t()}</TextFnx>
-        </View>
-      </View> */}
-        {/* <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
-        <View>
-          <Mtcmt2 />
-          <View style={stylest.cmt}>
-            <Close />
-            <TextFnx color={colors.description}>{'Not blurred'.t()}</TextFnx>
-          </View>
-        </View>
-        <View>
-          <Mtcmt3 />
-          <View style={stylest.cmt}>
-            <Close />
-            <TextFnx color={colors.description}>{'No match'.t()}</TextFnx>
-          </View>
-        </View>
-        <View>
-          <Mtcmt4 />
-          <View style={stylest.cmt}>
-            <Close />
-            <TextFnx color={colors.description}>{'Not cut'.t()}</TextFnx>
-          </View>
-        </View>
-      </View> */}
-        <Button
-          textClose={'Come back'.t()}
-          onSubmit={() => handleSubmit(assetSelfieSide)}
-          isButtonCircle={false}
-          isSubmit
-          isClose
-          spaceVertical={30}
-          onClose={() => pop(componentId)}
-        />
+        {!get(userInfo, 'customerMetaData.isKycUpdated') && (
+          <Button
+            textClose={'Come back'.t()}
+            onSubmit={() => handleSubmit(assetSelfieSide)}
+            isButtonCircle={false}
+            isSubmit
+            isClose
+            spaceVertical={30}
+            onClose={() => pop(componentId)}
+          />
+        )}
       </View>
     </Container>
   );

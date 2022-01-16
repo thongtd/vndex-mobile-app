@@ -7,7 +7,7 @@ import Input from '../../components/Input';
 import ItemList from '../../components/Item/ItemList';
 import {constant, fontSize, spacingApp} from '../../configs/constant';
 import {dismissAllModal, showModal} from '../../navigation/Navigation';
-import {isEmpty} from "lodash";
+import {isEmpty} from 'lodash';
 import {
   PICKER_SEARCH,
   pushSingleScreenApp,
@@ -25,9 +25,9 @@ import {Navigation} from 'react-native-navigation';
 import DatePicker from 'react-native-date-picker';
 import {authService} from '../../services/authentication.service';
 import moment from 'moment';
-import { useActionsAuthen } from '../../redux/modules/authentication';
+import {useActionsAuthen} from '../../redux/modules/authentication';
 import colors from '../../configs/styles/colors';
-import StepIndicator from "react-native-step-indicator";
+import StepIndicator from 'react-native-step-indicator';
 import Layout from '../../components/Layout/Layout';
 import TextFnx from '../../components/Text/TextFnx';
 const KycScreen = ({componentId}) => {
@@ -43,20 +43,34 @@ const KycScreen = ({componentId}) => {
   //   name: 'Viet Nam',
   // });
   const [open, setOpen] = useState(false);
-  const [birthDate, setBirthDate] = useState(new Date(get(userKyc,"birthDate")));
+  const [birthDate, setBirthDate] = useState(
+    new Date(get(userKyc, 'birthDate')),
+  );
   // const [birthDate, setBirthDate] = useState("");
-  const [firstName, setFirstName] = useState(get(userKyc,"firstName") || "");
-  const [lastName, setLastName] = useState(get(userKyc,"lastName") || "");
-  const [city, setCity] = useState(get(userKyc,"city") || "");
-  const [postalCode, setPostalCode] = useState(get(userKyc,"postalCode") || "");
-  const [identityCard, setIdentityCard] = useState(get(userKyc,"identityCard") || "");
-  const [sex, setSex] = useState(get(userKyc,"sex")== 1?{
-    name: 'Male'.t(),
-    value: '1',
-  }:{
-    name: 'Female'.t(),
-    value: '0',
-  } );
+  const [firstName, setFirstName] = useState(get(userKyc, 'firstName') || '');
+  const [lastName, setLastName] = useState(get(userKyc, 'lastName') || '');
+  const [city, setCity] = useState(get(userKyc, 'city') || '');
+  const [postalCode, setPostalCode] = useState(
+    get(userKyc, 'postalCode') || '',
+  );
+  const [identityCard, setIdentityCard] = useState(
+    get(userKyc, 'identityCard') || '',
+  );
+  const [address, setAddress] = useState(get(userKyc, 'address') || '');
+  const [phoneNumber, setPhoneNumber] = useState(
+    get(userKyc, 'phoneNumber') || '',
+  );
+  const [sex, setSex] = useState(
+    get(userKyc, 'sex') == 1
+      ? {
+          name: 'Male'.t(),
+          value: '1',
+        }
+      : {
+          name: 'Female'.t(),
+          value: '0',
+        },
+  );
   // const handleActiveDistrict = districtActived => {
   //   setDistrict(districtActived);
   //   dismissAllModal();
@@ -81,26 +95,31 @@ const KycScreen = ({componentId}) => {
     setSex(sex);
     dismissAllModal();
   };
-  const handleNext = (data) => {
-    console.log(get(data,"sex"),"bir");
-    if(isEmpty(get(data,"lastName"))){
-      return toast("Please enter".t().replace("{0}",'LastName'.t()));
-    }else if(isEmpty(get(data,"firstName"))){
-      return toast("Please enter".t().replace("{0}",'FirstName'.t()));
-    }else if(isEmpty(get(data,"birthDate"))){
-      return toast("Please enter".t().replace("{0}",'Date of birth'.t()));
-    }else if(isEmpty(get(data,"identityCard"))){
-      return toast("Please enter".t().replace("{0}",'Citizen identification number'.t()));
-    }else if(isEmpty(get(data,"postalCode"))){
-      return toast("Please enter".t().replace("{0}",'Area code'.t()));
-    }else if(isEmpty(get(data,"city"))){
-      return toast("Please enter".t().replace("{0}",'City'.t()));
-    }else{
-      return pushSingleScreenApp(componentId, STEP2KYC_SCREEN, {...data})
+  const handleNext = data => {
+    console.log(get(data, 'sex'), 'bir');
+    if (isEmpty(get(data, 'lastName'))) {
+      return toast('Please enter'.t().replace('{0}', 'LastName'.t()));
+    } else if (isEmpty(get(data, 'firstName'))) {
+      return toast('Please enter'.t().replace('{0}', 'FirstName'.t()));
+    } else if (isEmpty(get(data, 'birthDate'))) {
+      return toast('Please enter'.t().replace('{0}', 'Date of birth'.t()));
+    } else if (isEmpty(get(data, 'identityCard'))) {
+      return toast(
+        'Please enter'.t().replace('{0}', 'Citizen identification number'.t()),
+      );
+    } else if (isEmpty(get(data, 'postalCode'))) {
+      return toast('Please enter'.t().replace('{0}', 'Area code'.t()));
+    } else if (isEmpty(get(data, 'city'))) {
+      return toast('Please enter'.t().replace('{0}', 'City'.t()));
+    }else if (isEmpty(get(data, 'phoneNumber'))) {
+      return toast('Please enter'.t().replace('{0}', 'PHONE_NUMBER'.t()));
+    }else if (isEmpty(get(data, 'address'))) {
+      return toast('Please enter'.t().replace('{0}', 'Address'.t()));
+    } else {
+      return pushSingleScreenApp(componentId, STEP2KYC_SCREEN, {...data});
     }
-    
   };
-  
+
   const handleSelectSex = () => {
     let propsData = {
       data: Sexes,
@@ -126,120 +145,138 @@ const KycScreen = ({componentId}) => {
       componentId={componentId}
       hasBack
       space={20}
-      spaceHorizontal={0}
-      >
-        <View style={{
-          marginBottom:20
-        }} >
-          <TextFnx size={fontSize.f16} weight='bold' spaceBottom={20} spaceLeft={spacingApp} color={colors.app.yellowHightlight}>
+      spaceHorizontal={0}>
+      <View
+        style={{
+          marginBottom: 20,
+        }}>
+        <TextFnx
+          size={fontSize.f16}
+          weight="bold"
+          spaceBottom={20}
+          spaceLeft={spacingApp}
+          color={colors.app.yellowHightlight}>
           {'Personal Information'.t()}
-          </TextFnx>
-        <StepIndicator 
-        customStyles={customStyles}
-        currentPosition={0}
-        stepCount={3}
+        </TextFnx>
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={0}
+          stepCount={3}
         />
-        </View>
-        
-      <View  style={{
-        backgroundColor:colors.app.backgroundLevel2,
-        paddingHorizontal:spacingApp,
-        paddingTop:20,
-        borderTopLeftRadius:20,
-        borderTopRightRadius:20
-      }}>
-      <Input
-        spaceVertical={10}
-        value={lastName}
-        onChangeText={text => setLastName(text)}
-        placeholder={'LastName'.t()}
-      />
-      <Input
-        spaceVertical={10}
-        value={firstName}
-        onChangeText={text => setFirstName(text)}
-        placeholder={'FirstName'.t()}
-      />
-      <Button
-        
-        placeholder={'Date of birth'.t()}
-        isPlaceholder={false}
-        spaceVertical={10}
-        onInput={() => setOpen(true)}
-        isInput
-        iconRight="caret-down"
-        // iconLeft="globe-americas"
-        placeholder={moment(birthDate).format('YYYY-MM-DD')}
-      />
-      <Button
-        isPlaceholder={false}
-        spaceVertical={10}
-        onInput={handleSelectSex}
-        isInput
-        iconRight="caret-down"
-        // iconLeft="globe-americas"
-        placeholder={get(sex, 'name')}
-      />
-      <Input
-        spaceVertical={10}
-        value={identityCard}
-        onChangeText={text => setIdentityCard(text)}
-        placeholder={'Citizen identification number'.t()}
-      />
-      <Input
-        spaceVertical={10}
-        value={postalCode}
-        onChangeText={text => setPostalCode(text)}
-        placeholder={'Area code'.t()}
-      />
-      <Input
-        editable={false}
-        spaceVertical={10}
-        placeholder={'Country'.t()}
-        hasValue
-        value="Việt Nam"
-      />
-      <Input
-        spaceVertical={10}
-        placeholder={'City'.t()}
-        value={city}
-        onChangeText={text => setCity(text)}
-      />
+      </View>
 
-      <DatePicker
-        mode="date"
-        modal
-        open={open}
-        date={birthDate}
-        onConfirm={date => {
-          setOpen(false);
-          setBirthDate(date);
-        }}
-        onCancel={() => {
-          setOpen(false);
-        }}
-      />
-      <Button
-        textSubmit={'NEXT'.t()}
-        textClose={'Cancel'.t()}
-        onSubmit={() =>
-          handleNext({
-            birthDate:moment(birthDate).format('YYYY-MM-DD'),
-            city,
-            countryCode:"VN",
-            firstName,
-            lastName,
-            identityCard,
-            postalCode,
-            sex:get(sex, 'value'),
-            identityUserId: get(UserInfo, 'id'),
-          })
-        }
-        isButtonCircle={false}
-        isSubmit
-        isClose
-        spaceVertical={10}
-      />
+      <View
+        style={{
+          backgroundColor: colors.app.backgroundLevel2,
+          paddingHorizontal: spacingApp,
+          paddingTop: 20,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        }}>
+        <Input
+          spaceVertical={10}
+          value={lastName}
+          onChangeText={text => setLastName(text)}
+          placeholder={'LastName'.t()}
+        />
+        <Input
+          spaceVertical={10}
+          value={firstName}
+          onChangeText={text => setFirstName(text)}
+          placeholder={'FirstName'.t()}
+        />
+        <Button
+          placeholder={'Date of birth'.t()}
+          isPlaceholder={false}
+          spaceVertical={10}
+          onInput={() => setOpen(true)}
+          isInput
+          iconRight="caret-down"
+          // iconLeft="globe-americas"
+          placeholder={moment(birthDate).format('YYYY-MM-DD')}
+        />
+        <Button
+          isPlaceholder={false}
+          spaceVertical={10}
+          onInput={handleSelectSex}
+          isInput
+          iconRight="caret-down"
+          // iconLeft="globe-americas"
+          placeholder={get(sex, 'name')}
+        />
+        <Input
+          spaceVertical={10}
+          value={identityCard}
+          onChangeText={text => setIdentityCard(text)}
+          placeholder={'Citizen identification number'.t()}
+        />
+        <Input
+          spaceVertical={10}
+          value={postalCode}
+          onChangeText={text => setPostalCode(text)}
+          placeholder={'Area code'.t()}
+        />
+        <Input
+          editable={false}
+          spaceVertical={10}
+          placeholder={'Country'.t()}
+          hasValue
+          value="Việt Nam"
+        />
+        <Input
+          spaceVertical={10}
+          placeholder={'City'.t()}
+          value={city}
+          onChangeText={text => setCity(text)}
+        />
+        <Input
+          spaceVertical={10}
+          placeholder={'Address'.t()}
+          value={address}
+          onChangeText={text => setAddress(text)}
+        />
+        <Input
+          spaceVertical={10}
+          placeholder={'PHONE_NUMBER'.t()}
+          value={phoneNumber}
+          onChangeText={text => setPhoneNumber(text)}
+        />
+        <DatePicker
+          mode="date"
+          modal
+          open={open}
+          date={birthDate}
+          onConfirm={date => {
+            setOpen(false);
+            setBirthDate(date);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+        <Button
+          textSubmit={'NEXT'.t()}
+          textClose={'Cancel'.t()}
+          onSubmit={() =>
+            handleNext({
+              birthDate: moment(birthDate).format('YYYY-MM-DD'),
+              city,
+              countryCode: 'VN',
+              firstName,
+              lastName,
+              identityCard,
+              postalCode,
+              sex: get(sex, 'value'),
+              identityUserId: get(UserInfo, 'id'),
+              address,
+              phoneNumber
+            })
+          }
+          isButtonCircle={false}
+          isSubmit
+          isClose
+          spaceVertical={10}
+        />
       </View>
     </Container>
   );
@@ -259,7 +296,7 @@ const customStyles = {
   stepIndicatorUnFinishedColor: colors.app.backgroundLevel2,
   stepIndicatorCurrentColor: colors.app.backgroundLevel2,
   stepIndicatorLabelFontSize: 14,
-  stepIndicatorLabelCurrentColor:colors.app.yellowHightlight,
+  stepIndicatorLabelCurrentColor: colors.app.yellowHightlight,
   currentStepIndicatorLabelFontSize: 14,
-}
+};
 export default KycScreen;

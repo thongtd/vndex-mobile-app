@@ -41,6 +41,8 @@ export default function Step2Kyc({
   postalCode,
   sex,
   identityUserId,
+  phoneNumber,
+  address,
 }) {
   const [assetFrontSide, setAssetFrontSide] = useState('');
   const [assetBackSide, setAssetBackSide] = useState('');
@@ -93,6 +95,8 @@ export default function Step2Kyc({
         postalCode,
         sex,
         identityUserId,
+        phoneNumber,
+        address,
       });
     }
   };
@@ -135,13 +139,20 @@ export default function Step2Kyc({
           onPress={handleFrontSide}
           style={[stylest.box, {marginTop: 15}]}>
           <View style={stylest.centerFlex}>
-            {get(assetFrontSide, 'uri') || get(userKyc, 'frontIdentityCard') ? (
+            {get(assetFrontSide, 'uri') ? (
               <FastImage
                 style={{width: 200, height: 200}}
                 source={{
-                  uri: get(userKyc, 'frontIdentityCard')
-                    ? get(userKyc, 'frontIdentityCard')
-                    : get(assetFrontSide, 'uri'),
+                  uri: get(assetFrontSide, 'uri'),
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            ) : get(userKyc, 'frontIdentityCard') ? (
+              <FastImage
+                style={{width: 200, height: 200}}
+                source={{
+                  uri: get(userKyc, 'frontIdentityCard'),
                   priority: FastImage.priority.high,
                 }}
                 resizeMode={FastImage.resizeMode.contain}
@@ -160,13 +171,20 @@ export default function Step2Kyc({
           onPress={handleBackSide}
           style={[stylest.box, {marginTop: 15}]}>
           <View style={stylest.centerFlex}>
-            {get(assetBackSide, 'uri') || get(userKyc, 'backIdentityCard') ? (
+            {get(assetBackSide, 'uri') ? (
               <FastImage
                 style={{width: 200, height: 200}}
                 source={{
-                  uri: get(userKyc, 'backIdentityCard')
-                    ? get(userKyc, 'backIdentityCard')
-                    : get(assetBackSide, 'uri'),
+                  uri: get(assetBackSide, 'uri'),
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            ) : get(userKyc, 'backIdentityCard') ? (
+              <FastImage
+                style={{width: 200, height: 200}}
+                source={{
+                  uri: get(userKyc, 'backIdentityCard'),
                   priority: FastImage.priority.high,
                 }}
                 resizeMode={FastImage.resizeMode.contain}
