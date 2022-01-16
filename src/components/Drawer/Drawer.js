@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import { useSelector } from 'react-redux';
 import icons from '../../configs/icons';
 import colors from '../../configs/styles/colors';
 import {emitEventEmitter} from '../../configs/utils';
@@ -16,6 +17,8 @@ import ButtonIcon from '../Button/ButtonIcon';
 import Container from '../Container';
 import ItemSetting from '../Item/ItemSetting';
 const Drawer = ({componentId}) => {
+  
+
   const handleClose = () => {
     Navigation.mergeOptions(componentId, {
       sideMenu: {
@@ -43,11 +46,6 @@ const Drawer = ({componentId}) => {
         iconLeftSvg={icons.IcMarketting}
         textLeft={'Quảng cáo của tôi'}
         onPress={() => {
-          // pushTabBasedApp()
-          // rr
-          //   pushSingleScreenApp(componentId,LOGIN_SCREEN,{
-          //       test:"ok"
-          //   });
           setTimeout(() => {
             Navigation.mergeOptions(componentId, {
               sideMenu: {

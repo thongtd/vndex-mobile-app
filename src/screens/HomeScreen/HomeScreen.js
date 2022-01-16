@@ -62,6 +62,7 @@ const HomeScreen = ({componentId}) => {
   const [ActiveSymbol, setActiveSymbol] = useState('AIFT');
   const [ActiveType, setActiveType] = useState('B');
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     if (size(get(tradingMarket, 'assets')) > 0) {
       setActiveSymbol(get(tradingMarket, 'assets')[0]);
@@ -73,28 +74,36 @@ const HomeScreen = ({componentId}) => {
 
   useEffect(() => {
     const listenerEmit = listenerEventEmitter('pushMyads', () => {
-      pushSingleScreenApp(componentId, ADS_MY_ADVERTISENMENT_SCREEN, null, {
-        topBar: {
-          rightButtons: [
-            {
-              id: IdNavigation.PressIn.filterMyAdvertisement,
-              icon: require('assets/icons/Filter.png'),
-            },
-          ],
-        },
-      });
+      if (logged) {
+        pushSingleScreenApp(componentId, ADS_MY_ADVERTISENMENT_SCREEN, null, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.filterMyAdvertisement,
+                icon: require('assets/icons/Filter.png'),
+              },
+            ],
+          },
+        });
+      } else {
+        pushSingleScreenApp(componentId, LOGIN_SCREEN);
+      }
     });
     const listenerPushNewAds = listenerEventEmitter('pushNewAds', () => {
-      pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {
-        topBar: {
-          rightButtons: [
-            {
-              id: IdNavigation.PressIn.warningAddNewAds,
-              icon: require('assets/icons/ic_warning.png'),
-            },
-          ],
-        },
-      });
+      if (logged) {
+        pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.warningAddNewAds,
+                icon: require('assets/icons/ic_warning.png'),
+              },
+            ],
+          },
+        });
+      } else {
+        pushSingleScreenApp(componentId, LOGIN_SCREEN);
+      }
     });
     const screenPoppedListener =
       Navigation.events().registerScreenPoppedListener(({componentId}) => {
@@ -371,30 +380,34 @@ const HomeScreen = ({componentId}) => {
                 </TextFnx>
 
                 <Layout>
-                  {(uniqBy(get(item, 'paymentMethods'),"code") || []).map((it, ind) => {
-                    if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
-                      return (
-                        <Image
-                          source={icons.icMomo}
-                          style={{
-                            marginLeft: 5,
-                          }}
-                        />
-                      );
-                    } else if (
-                      get(it, 'code') ==
-                      constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
-                    ) {
-                      return (
-                        <Image
-                          source={icons.icBank}
-                          style={{
-                            marginLeft: 5,
-                          }}
-                        />
-                      );
-                    }
-                  })}
+                  {(uniqBy(get(item, 'paymentMethods'), 'code') || []).map(
+                    (it, ind) => {
+                      if (
+                        get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO
+                      ) {
+                        return (
+                          <Image
+                            source={icons.icMomo}
+                            style={{
+                              marginLeft: 5,
+                            }}
+                          />
+                        );
+                      } else if (
+                        get(it, 'code') ==
+                        constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
+                      ) {
+                        return (
+                          <Image
+                            source={icons.icBank}
+                            style={{
+                              marginLeft: 5,
+                            }}
+                          />
+                        );
+                      }
+                    },
+                  )}
                 </Layout>
               </Layout>
             </View>
