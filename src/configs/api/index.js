@@ -1,4 +1,4 @@
-const env = 'dev';
+const env = 'prod';
 // const MARKET_WATCH_URL = 'http://54.169.27.91:6873/';
 
 const MARKET_WATCH_URL =

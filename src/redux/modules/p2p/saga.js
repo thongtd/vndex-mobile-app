@@ -62,7 +62,7 @@ export function* asyncGetAdvertisments({payload}) {
     });
     emitEventEmitter('doneApi', true);
 
-    if (isArray(get(res, 'source'))) {
+    if (res && isArray(get(res, 'source'))) {
       yield put(
         actionsReducerP2p.getAdvertismentsSuccess({
           ...res,
@@ -70,6 +70,12 @@ export function* asyncGetAdvertisments({payload}) {
           pages: ceil(get(res, 'totalRecords') / get(payload, 'pageSize')),
         }),
       );
+    }else{
+      actionsReducerP2p.getAdvertismentsSuccess({
+        source:[],
+        pageIndex: 1,
+        pages: 0,
+      })
     }
     emitEventEmitter('doneApi', true);
   } catch (e) {

@@ -63,7 +63,7 @@ const ConfirmScreen = ({countryCode = 'VN', componentId}) => {
       fromReferralId: referralId,
       countryCode: countryCode,
       via: 2,
-      CallbackUrl:"http://54.169.221.223:6868/confirm-email"
+      CallbackUrl:"https://uat.vndex.io/confirm-email"
     };
 
     let isValid = _validateAuth(password, rePassword);
