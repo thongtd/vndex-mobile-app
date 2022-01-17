@@ -90,7 +90,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
     });
   };
   const onSeeDetailCommand = () => {
-    alert('Xem chi tiết lệnh');
+    // alert('Xem chi tiết lệnh');
   };
   const onActionClick = item => {
     refAction.current?.hide();
@@ -120,6 +120,11 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         break;
       }
       case 'CLOSE': {
+
+        refAction.current?.hide();
+        const item = refAction.current?.item || {};
+        
+        useActionsP2p(dispatch).handleRemoveAdvertisment(get(item,"orderId"));
         break;
       }
     }

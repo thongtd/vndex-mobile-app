@@ -46,16 +46,41 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const currencyList = useSelector(state => state.market.currencyList);
   const offerOrder = useSelector(state => state.p2p.offerOrder);
   const offerOrderId = useSelector(state => state.p2p.offerOrderId);
+  const [offerOrderState, setOfferOrderState] = useState(offerOrder || {});
+  const UserInfo = useSelector(state => state.authentication.userInfo);
+  useEffect(() => {
+    if (
+      get(UserInfo, 'id') ===
+      get(offerOrder, 'ownerIdentityUser.identityUserId')
+    ) {
+      setOfferOrderState({
+        ...offerOrder,
+        offerSide: get(offerOrder, 'offerSide') === BUY ? SELL : BUY,
+      });
+      if(get(offerOrder, 'offerSide') === BUY &&  !get(offerOrder, 'isPaymentConfirm')){
+        setDisabledSubmit(true);
+      }
+    } else {
+      if( get(offerOrder, 'offerSide') === SELL &&
+      !get(offerOrder, 'isPaymentConfirm')){
+        setDisabledSubmit(true);
+      }
+      setOfferOrderState({
+        ...offerOrder,
+      });
+    }
+    return () => {};
+  }, [offerOrder, UserInfo]);
   useEffect(() => {
     useActionsP2p(dispatch).handleGetAdvertisment(
       get(offerOrder, 'p2PTradingOrderId'),
     );
     useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
     return () => {};
-  }, [dispatch,offerOrder]);
+  }, []);
   // useEffect(() => {
   //   useActionsP2p(dispatch).handleGetAdvertisment(
-  //     get(offerOrder, 'p2PTradingOrderId'),
+  //     get(offerOrderState, 'p2PTradingOrderId'),
   //   );
   //   useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
   //   return () => {};
@@ -65,6 +90,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   useEffect(() => {
     var intervalID = setInterval(
       (offerData, offerOrderIdData) => {
+        // console.log(offerData,"offerData");
         useActionsP2p(dispatch).handleGetAdvertisment(
           get(offerData, 'p2PTradingOrderId'),
         );
@@ -92,14 +118,13 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         }
       },
       10000,
-      offerOrder,
-      offerOrderId,
+      offerOrderState,
+      offerOrderId
     );
-
     return () => {
       clearInterval(intervalID);
     };
-  }, [offerOrder, offerOrderId]);
+  }, [offerOrderState, offerOrderId, offerOrder]);
 
   return (
     <Container
@@ -123,8 +148,8 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         </TextFnx>
         <CountDown
           until={
-            isNumber(get(offerOrder, 'timeToLiveInSecond'))
-              ? parseInt(get(offerOrder, 'timeToLiveInSecond'))
+            isNumber(get(offerOrderState, 'timeToLiveInSecond'))
+              ? parseInt(get(offerOrderState, 'timeToLiveInSecond'))
               : 0
           }
           size={14}
@@ -150,7 +175,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
           step={2}
-          side={get(offerOrder, 'offerSide')}
+          side={get(offerOrderState, 'offerSide')}
           title={'Chuyển tiền và Xác nhận chuyển tiền'}
         />
       </Layout>
@@ -165,11 +190,11 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         <TextFnx
           weight="700"
           color={
-            get(offerOrder, 'offerSide') == BUY
+            get(offerOrderState, 'offerSide') == BUY
               ? colors.app.buy
               : colors.app.sell
           }>
-          {`${get(offerOrder, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
+          {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
             advertisment,
             'symbol',
           )}`}
@@ -187,12 +212,12 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             size={16}
             weight="700"
             color={
-              get(offerOrder, 'offerSide') == BUY
+              get(offerOrderState, 'offerSide') == BUY
                 ? colors.app.buy
                 : colors.app.sell
             }>
             {`${formatCurrency(
-              get(offerOrder, 'price'),
+              get(offerOrderState, 'price'),
               get(advertisment, 'paymentUnit'),
               currencyList,
             )} `}
@@ -212,7 +237,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(offerOrder, 'quantity'),
+            get(offerOrderState, 'quantity'),
             get(advertisment, 'paymentUnit'),
             currencyList,
           )} ${get(advertisment, 'symbol')}`}</TextFnx>
@@ -220,7 +245,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(offerOrder, 'price') * get(advertisment, 'fee'),
+            get(offerOrderState, 'price') * get(advertisment, 'fee'),
             get(advertisment, 'paymentUnit'),
             currencyList,
           )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
@@ -367,7 +392,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           <TextFnx space={10}>Điều khoản</TextFnx>
           <TextFnx color={colors.app.textContentLevel3}>
             Bạn có thể thêm đến 20 phương thức thanh toán. Kích hoạt phương thức
-            thanh toán bạn muốn, và bắt đầu giao dịch ngay trên Binance P2P.
+            thanh toán bạn muốn, và bắt đầu giao dịch ngay trên Vndex P2P.
           </TextFnx>
         </Layout>
         <Button
@@ -381,14 +406,14 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           disabledSubmit={disabledSubmit}
           isClose
           onSubmit={() => {
-            if (get(offerOrder, 'offerSide') === SELL) {
+            if (get(offerOrderState, 'offerSide') === SELL) {
               pushSingleScreenApp(componentId, STEP_2FA_BUY_SELL_SCREEN);
             }
           }}
           colorTitle={colors.text}
           weightTitle={'700'}
           onClose={() => {
-            if (get(offerOrder, 'offerSide') === BUY) {
+            if (get(offerOrderState, 'offerSide') === BUY) {
               useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
                 offerOrderId: offerOrderId,
                 isHasPayment: false,
@@ -399,10 +424,10 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             }
           }}
           textClose={
-            get(offerOrder, 'offerSide') === BUY ? 'Huỷ lệnh' : 'Khiếu nại'
+            get(offerOrderState, 'offerSide') === BUY ? 'Huỷ lệnh' : 'Khiếu nại'
           }
           textSubmit={
-            get(offerOrder, 'offerSide') === BUY
+            get(offerOrderState, 'offerSide') === BUY
               ? 'Khiếu nại'
               : 'Xác nhận mở khóa'
           }

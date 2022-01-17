@@ -65,7 +65,7 @@ export default function Step2FaAdsAdd({componentId, data}) {
             autoReplyMessage: get(data, 'autoReplyMessage'),
             lockedInSecond: get(data, 'activeTimeToLive.second'),
             requiredKyc: get(data, 'isSelectedKYC'),
-            requiredAgeInDay: 10,
+            requiredAgeInDay: get(data,"isSelectedRegister")? 10:0,
             isOpenForTrading:
               get(data, 'checkedStatus') == 'first' ? true : false,
             verifyCode: otp,

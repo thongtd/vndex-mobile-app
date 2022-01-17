@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
 import {TouchablePreview} from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 
 import PropTypes from 'prop-types';
@@ -34,7 +34,10 @@ const ButtonIcon = ({
 }) => (
   <View style={[stylest.icon, style]}>
     {!isHidden && (
-      <TouchableOpacity onPress={onPress} {...rest}>
+      <TouchableOpacity onPress={()=>{
+        Keyboard.dismiss();
+        onPress()
+      }} {...rest}>
         <View
           style={[
             {

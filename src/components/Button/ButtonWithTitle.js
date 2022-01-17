@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Keyboard } from 'react-native';
 import TextWhite from '../Text/TextWhite';
 import { TouchablePreview } from 'react-native-navigation/lib/dist/src/adapters/TouchablePreview';
 
@@ -28,7 +28,10 @@ const ButtonWithTitle = ({
             height:height
         }}>
             <TouchableOpacity
-                onPress={onPress}
+                onPress={()=>{
+                    Keyboard.dismiss();
+                    onPress();
+                }}
             >
                 <View {...rest}
                     style={style}>

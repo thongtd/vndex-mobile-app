@@ -356,7 +356,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
                   key={`ite-${index}`}
                   onPress={() => {
                     actionSheetRef.current?.hide();
-                    useActionsP2p(dispatch).handleResetOffer();
+                    // useActionsP2p(dispatch).handleResetOffer();
                     useActionsP2p(dispatch).handleCreateOfferOrder({
                       data: {
                         orderId: get(advertisment, 'orderId'),

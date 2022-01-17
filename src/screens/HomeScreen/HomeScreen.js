@@ -77,28 +77,36 @@ const HomeScreen = ({componentId}) => {
 
   useEffect(() => {
     const listenerEmit = listenerEventEmitter('pushMyads', () => {
-      pushSingleScreenApp(componentId, ADS_MY_ADVERTISENMENT_SCREEN, null, {
-        topBar: {
-          rightButtons: [
-            {
-              id: IdNavigation.PressIn.filterMyAdvertisement,
-              icon: require('assets/icons/Filter.png'),
-            },
-          ],
-        },
-      });
+      if (logged) {
+        pushSingleScreenApp(componentId, ADS_MY_ADVERTISENMENT_SCREEN, null, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.filterMyAdvertisement,
+                icon: require('assets/icons/Filter.png'),
+              },
+            ],
+          },
+        });
+      } else {
+        pushSingleScreenApp(componentId, LOGIN_SCREEN);
+      }
     });
     const listenerPushNewAds = listenerEventEmitter('pushNewAds', () => {
-      pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {
-        topBar: {
-          rightButtons: [
-            {
-              id: IdNavigation.PressIn.warningAddNewAds,
-              icon: require('assets/icons/ic_warning.png'),
-            },
-          ],
-        },
-      });
+      if (logged) {
+        pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.warningAddNewAds,
+                icon: require('assets/icons/ic_warning.png'),
+              },
+            ],
+          },
+        });
+      } else {
+        pushSingleScreenApp(componentId, LOGIN_SCREEN);
+      }
     });
     const screenPoppedListener =
       Navigation.events().registerScreenPoppedListener(({componentId}) => {
@@ -224,7 +232,7 @@ const HomeScreen = ({componentId}) => {
           />
         </View>
 
-        <Button
+        {/* <Button
           isPlaceholder={false}
           spaceHorizontal={20}
           height={40}
@@ -233,7 +241,7 @@ const HomeScreen = ({componentId}) => {
           iconLeft="globe-americas"
           placeholder={'VND'}
         />
-        <ButtonIcon iconComponent={icons.icFilter} />
+        <ButtonIcon iconComponent={icons.icFilter} /> */}
       </View>
 
       <View>

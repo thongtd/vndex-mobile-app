@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Clipboard,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 import Icon from '../Icon';
 import ButtonWithTitle from '../Button/ButtonWithTitle';
@@ -47,6 +48,7 @@ const Input = ({
   onMax,
   styleBtnRight,
   hasValue,
+  stylePrefix,
   styleRight,
   editable,
   defaultValue,
@@ -132,17 +134,15 @@ const Input = ({
 
         {(isInputTop && (
           <View style={{flex: 1, marginRight: 20}}>
-             <TextFnx
+            <TextFnx
               color={colors.description}
               size={12}
               spaceTop={5}
-              style={{marginBottom: -8}}
-              
-              >
+              style={{marginBottom: -8}}>
               {isInputTop}
             </TextFnx>
-    
-            <Layout isCenter style={{justifyContent:'flex-start',}}>
+
+            <Layout isCenter style={{justifyContent: 'flex-start'}}>
               <TextInput
                 defaultValue={defaultValue}
                 editable={editable}
@@ -151,7 +151,7 @@ const Input = ({
                 secureTextEntry={isSecurity}
                 onChangeText={handleChange}
                 value={hasValue ? value : valueInput}
-                style={[{color: colors.text, height:40,width:"93%"}, style]}
+                style={[{color: colors.text, height: 40, width: '93%'}, style]}
                 placeholderTextColor={colors.description}
                 placeholder={placeholder}
                 onSubmitEditing={onSubmitEditing}
@@ -175,13 +175,19 @@ const Input = ({
             onSubmitEditing={onSubmitEditing}
           />
         )}
-        {prefix && (<View style={{
-          position:"absolute",
-          right:8,
-          top:'35%'
-        }}>
-          <TextFnx color={colors.app.textDisabled}>{prefix}</TextFnx>
-        </View>)}
+        {prefix && (
+          <View
+            style={[
+              {
+                position: 'absolute',
+                right: 8,
+                top: '35%',
+              },
+              stylePrefix,
+            ]}>
+            <TextFnx color={colors.app.textContentLevel3}>{prefix}</TextFnx>
+          </View>
+        )}
         {rest.isPaste && (
           <ButtonWithTitle
             onPress={handlePaste}
@@ -197,7 +203,10 @@ const Input = ({
         )}
         {titleBtnRight && (
           <TouchableOpacity
-            onPress={onBtnRight}
+            onPress={() => {
+              Keyboard.dismiss();
+              onBtnRight();
+            }}
             style={{
               backgroundColor: '#FFEFC5',
               paddingVertical: 5,

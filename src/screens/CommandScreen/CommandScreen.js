@@ -10,11 +10,13 @@ import {
   View,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
+import {LoginScreen} from '..';
 import ButtonIcon from '../../components/Button/ButtonIcon';
 import Container from '../../components/Container';
 import Empty from '../../components/Item/Empty';
 import Layout from '../../components/Layout/Layout';
 import TextFnx from '../../components/Text/TextFnx';
+import {BUY, SELL} from '../../configs/constant';
 import icons from '../../configs/icons';
 import colors from '../../configs/styles/colors';
 import {
@@ -22,17 +24,23 @@ import {
   listenerEventEmitter,
   to_UTCDate,
 } from '../../configs/utils';
-import { pushSingleScreenApp, STEP_3_BUY_SELL_SCREEN, STEP_4_BUY_SELL_SCREEN, STEP_5_BUY_SELL_SCREEN } from '../../navigation';
+import {
+  pushSingleScreenApp,
+  STEP_3_BUY_SELL_SCREEN,
+  STEP_4_BUY_SELL_SCREEN,
+  STEP_5_BUY_SELL_SCREEN,
+} from '../../navigation';
 import {useActionsP2p} from '../../redux';
 import BoxCommand from './components/BoxCommand';
 import ButtonTop from './components/ButtonTop';
 
-const CommandScreen = ({componentId}) => {
+const CommandScreen2 = ({componentId}) => {
   const [activeMenu, setActiveMenu] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
   const currencyList = useSelector(state => state.market.currencyList);
   const historyOrders = useSelector(state => state.p2p.historyOrders);
+  const logged = useSelector(state => state.authentication.logged);
 
   const onChangeActive = (menu = {}) => {
     setActiveMenu(get(menu, 'id'));
@@ -41,36 +49,108 @@ const CommandScreen = ({componentId}) => {
     alert('Lựa chọn đợn vị');
   };
   const dispatch = useDispatch();
-  const onSeeDetailCommand = (item) => {
-    useActionsP2p(dispatch).handleGetOfferOrder(
-      get(item, 'id'),
-    );
+  const UserInfo = useSelector(state => state.authentication.userInfo);
+  const onSeeDetailCommand = item => {
+    // alert(JSON.stringify(UserInfo))
+    useActionsP2p(dispatch).handleGetOfferOrder(get(item, 'id'));
     useActionsP2p(dispatch).handleGetAdvertisment(
       get(item, 'p2PTradingOrder.id'),
     );
-    if(get(item,"isPaymentCancel")){
-      pushSingleScreenApp(componentId,STEP_5_BUY_SELL_SCREEN)
-    }else if(get(item,"isUnLockConfirm")){
-      pushSingleScreenApp(componentId,STEP_5_BUY_SELL_SCREEN)
-    }else if(get(item,"isPaymentConfirm")){
-      pushSingleScreenApp(componentId,STEP_4_BUY_SELL_SCREEN);
-    }else {
-      pushSingleScreenApp(componentId,STEP_4_BUY_SELL_SCREEN);
+    // if(get(UserInfo, 'id') ===
+    // get(item, 'p2PTradingOrder.accId')){
+    //   alert("ok");
+    // }
+    if (get(item, 'isPaymentCancel')) {
+      pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
+    } else if (get(item, 'isUnLockConfirm')) {
+      pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
+    } else if (
+      get(item, 'isPaymentConfirm') &&
+      get(item, 'timeToLiveInSecond') > 0 &&
+      !get(item, 'isUnLockConfirm') &&
+      get(item, 'offerSide') == SELL &&
+      get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
+    ) {
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
+    } else if (
+      !get(item, 'isPaymentConfirm') &&
+      get(item, 'timeToLiveInSecond') > 0 &&
+      !get(item, 'isUnLockConfirm') &&
+      get(item, 'offerSide') == SELL &&
+      get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
+    ) {
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
+    }else if (
+      !get(item, 'isPaymentConfirm') &&
+      get(item, 'timeToLiveInSecond') > 0 &&
+      !get(item, 'isUnLockConfirm') &&
+      get(item, 'offerSide') == BUY &&
+      get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
+    ){
+      pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN,{
+        item:{...item,side:get(item,"offerSide")== BUY?SELL:BUY},
+        offerOrder:{...item,offerOrderId:get(item,"id"),p2PTradingOrderId:get(item, 'p2PTradingOrder.id')}
+      });
+    }else if (
+      get(item, 'isPaymentConfirm') &&
+      get(item, 'timeToLiveInSecond') > 0 &&
+      !get(item, 'isUnLockConfirm') &&
+      get(item, 'offerSide') == BUY &&
+      get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
+    ){
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
+    }else if (
+      !get(item, 'isPaymentConfirm') &&
+      get(item, 'timeToLiveInSecond') > 0 &&
+      !get(item, 'isUnLockConfirm') &&
+      get(item, 'offerSide') == SELL
+    ){
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
+    }else if (
+      !get(item, 'isPaymentConfirm') &&
+      get(item, 'timeToLiveInSecond') > 0 &&
+      !get(item, 'isUnLockConfirm') &&
+      get(item, 'offerSide') == SELL 
+    ) {
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
+    }else if (
+      !get(item, 'isPaymentConfirm') &&
+      get(item, 'timeToLiveInSecond') > 0 &&
+      !get(item, 'isUnLockConfirm') &&
+      get(item, 'offerSide') == BUY 
+    ){
+      pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN,{
+        item:{...item,side:get(item,"offerSide")== BUY?SELL:BUY},
+        offerOrder:{...item,offerOrderId:get(item,"id"),p2PTradingOrderId:get(item, 'p2PTradingOrder.id')}
+      });
+    }else if (
+      get(item, 'isPaymentConfirm') &&
+      get(item, 'timeToLiveInSecond') > 0 &&
+      !get(item, 'isUnLockConfirm') &&
+      get(item, 'offerSide') == BUY 
+    ){
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
+    }else{
+      pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
     }
-    
+    // else if(!get(item, 'isUnLockConfirm') && !get(item, 'isPaymentConfirm') && !get(item, 'isPaymentCancel') && get(item, 'timeToLiveInSecond') >= 0){
+    //   pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN);
+    // }else{
+    //   pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
+    // }
   };
-  
+
   useEffect(() => {
     const evDone = listenerEventEmitter('doneApi', isDone => {
       setIsLoading(false);
     });
-    getHistoryOrder(pageIndex,{
-      side:activeMenu
+    getHistoryOrder(pageIndex, {
+      side: activeMenu,
     });
     return () => {
       evDone.remove();
     };
-  }, [pageIndex,activeMenu]);
+  }, [pageIndex, activeMenu]);
   useEffect(() => {
     if (pageIndex > 1) {
       setPageIndex(1);
@@ -81,12 +161,14 @@ const CommandScreen = ({componentId}) => {
     useActionsP2p(dispatch).handleGetHistoryOrder({
       pageIndex: pageIndex,
       pageSize: 15,
-      side: get(data,"side")
+      side: get(data, 'side'),
     });
     setIsLoading(true);
   };
-  const onRefresh = () => {
-    setPageIndex(1);
+  const onRefresh = activeMenu => {
+    getHistoryOrder(1, {
+      side: activeMenu,
+    });
   };
   return (
     <Container componentId={componentId} title="Lịch sử giao dịch">
@@ -98,7 +180,10 @@ const CommandScreen = ({componentId}) => {
       <FlatList
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => onRefresh(activeMenu)}
+          />
         }
         ListEmptyComponent={<Empty />}
         data={get(historyOrders, 'source')}
@@ -116,7 +201,7 @@ const CommandScreen = ({componentId}) => {
         renderItem={({item, index}) => (
           <BoxCommand
             key={`item-${index}`}
-            onSeeDetailCommand={()=>onSeeDetailCommand(item)}
+            onSeeDetailCommand={() => onSeeDetailCommand(item)}
             type={get(item, 'offerSide') == 'B' ? 'MUA' : 'BÁN'}
             isSell={get(item, 'offerSide') !== 'B'}
             price={formatCurrency(
@@ -163,7 +248,7 @@ const CommandScreen = ({componentId}) => {
                 <ButtonIcon
                   onPress={() => {}}
                   iconComponent={icons.IcChat}
-                  title={get(item,"p2PTradingOrder.identityUser.userName")}
+                  title={get(item, 'p2PTradingOrder.identityUser.userName')}
                   style={{
                     width: 'auto',
                     backgroundColor: colors.background,
@@ -186,91 +271,54 @@ const CommandScreen = ({componentId}) => {
           />
         )}
       />
-
-      {/* <BoxCommand
-        onSeeDetailCommand={onSeeDetailCommand}
-        isSell
-        type="MUA"
-        price="53,083.14"
-        nameCoin="AIF"
-        unit="VND"
-        dateTime="2021-11-07 09:25:49"
-        contentCenter={
-          <>
-            <Layout isSpaceBetween isLineCenter spaceBottom={10}>
-              <TextFnx color={colors.btnClose} size={12}>
-                Giá
-              </TextFnx>
-              <TextFnx color={colors.greyLight} size={12}>
-                23.152 VND
-              </TextFnx>
-            </Layout>
-            <Layout isSpaceBetween isLineCenter spaceBottom={10}>
-              <TextFnx color={colors.btnClose} size={12}>
-                Số lượng
-              </TextFnx>
-              <TextFnx color={colors.greyLight} size={12}>
-                89.25 AIFT
-              </TextFnx>
-            </Layout>
-          </>
-        }
-        contentBottom={
-          <Layout isSpaceBetween isLineCenter>
-            <ButtonIcon
-              onPress={() => {}}
-              iconComponent={icons.IcChat}
-              title={'Seller001'}
-              style={{
-                width: 'auto',
-                backgroundColor: colors.background,
-                height: 'auto',
-                borderRadius: 5,
-              }}
-              spaceLeft={5}
-            />
-            <TextFnx
-              color={colors.green}
-              style={{
-                backgroundColor: colors.app.bgBuy,
-                borderRadius: 5,
-              }}
-              spaceHorizontal={12}>
-              Hoàn thành
-            </TextFnx>
-          </Layout>
-        }
-      /> */}
     </Container>
   );
 };
-const mapStatus = ({ isPaymentCancel, isPaymentConfirm, isUnLockConfirm }) => {
-  if (isPaymentCancel) {
-      return {
-        color:colors.app.sell,
-        bg:colors.app.bgSell,
-        label:"Đã huỷ"
-      };
+const CommandScreen = ({componentId}) => {
+  const logged = useSelector(state => state.authentication.logged);
+  if (logged) {
+    return <CommandScreen2 componentId={componentId} />;
+  }
+  return <LoginScreen componentId={componentId} />;
+};
+const mapStatus = ({
+  isPaymentCancel,
+  isPaymentConfirm,
+  isUnLockConfirm,
+  timeToLiveInSecond,
+}) => {
+  if (isPaymentCancel || (!isPaymentConfirm && !isPaymentCancel && !isUnLockConfirm && timeToLiveInSecond == 0)) {
+    return {
+      color: colors.app.sell,
+      bg: colors.app.bgSell,
+      label: 'Đã huỷ',
+    };
   } else if (isUnLockConfirm) {
     return {
-      color:colors.app.buy,
-      bg:colors.app.bgBuy,
-      label:"Hoàn thành"
+      color: colors.app.buy,
+      bg: colors.app.bgBuy,
+      label: 'Hoàn thành',
     };
-  } else if (isPaymentConfirm && !isPaymentCancel) {
+  } else if (isPaymentConfirm && !isPaymentCancel && !isUnLockConfirm) {
     return {
-      color:colors.app.buy,
-      bg:colors.app.bgBuy,
-      label:"Đã thanh toán"
+      color: colors.app.buy,
+      bg: colors.app.bgBuy,
+      label: 'Đã thanh toán',
     };
-  } else if(!isPaymentConfirm && !isPaymentCancel && !isUnLockConfirm){
+  } else if (isPaymentConfirm && !isPaymentCancel && timeToLiveInSecond == 0) {
     return {
-      color:colors.app.sell,
-      bg:colors.app.bgSell,
-      label:"Chờ thanh toán"
+      color: colors.app.sell,
+      bg: colors.app.bgSell,
+      label: 'Khiếu lại',
+    };
+  } else if (!isPaymentConfirm && !isPaymentCancel && !isUnLockConfirm && timeToLiveInSecond > 0) {
+    return {
+      color: colors.app.sell,
+      bg: colors.app.bgSell,
+      label: 'Chờ thanh toán',
     };
   }
- }
+};
 
 export default CommandScreen;
 
