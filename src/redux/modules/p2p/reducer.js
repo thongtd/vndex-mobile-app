@@ -10,11 +10,12 @@ import {
   GET_TRADING_SUCCESS,
   GET_MARKET_INFO_SUCCESS,
   GET_HISTORY_ORDER_SUCCESS,
+  GET_DETIAL_ADVERTISMENT_SUCCESS,
 } from './actions';
 import {get, set} from '../../../configs/utils';
 import i18n from 'react-native-i18n';
 export const DEFAULT = {
-  advertisments: [],
+  advertisments: {},
   myAdvertisments: {
     source: [],
   },
@@ -25,48 +26,70 @@ export const DEFAULT = {
   offerOrder: {},
   offerOrderId: '',
   marketInfo: {},
-  historyOrders:{
-    source:[]
-  }
+  historyOrders: {
+    source: [],
+  },
+  advertismentDetails: {},
 };
 
 export default p2p = (state = DEFAULT, action = {}) => {
   const {type, payload} = action;
   switch (type) {
     case GET_ADVERTISMENTS_SUCCESS:
+      if (get(payload, 'pageIndex') == 1) {
+        set(state, 'advertisments.source', []);
+      }
+
       return {
         ...state,
-        advertisments: payload,
+        advertisments: {
+          ...state.advertisments,
+          ...payload,
+          source: [
+            ...get(state.myAdvertisments, 'source'),
+            ...get(payload, 'source'),
+          ],
+        },
       };
     case GET_MARKET_INFO_SUCCESS:
       return {
         ...state,
-        marketInfo: payload,
+        marketInfo: {
+          ...payload,
+          lastestPrice:
+            get(state.advertismentDetails, 'price') || get(payload, 'lastestPrice'),
+        },
       };
     case GET_MY_ADVERTISMENT_SUCCESS:
       if (get(payload, 'pageIndex') == 1) {
-        set(state,"myAdvertisments.source",[]);
+        set(state, 'myAdvertisments.source', []);
       }
       return {
         ...state,
         myAdvertisments: {
           ...state.myAdvertisments,
           ...payload,
-          source: [...get(state.myAdvertisments,"source"), ...get(payload, 'source')],
+          source: [
+            ...get(state.myAdvertisments, 'source'),
+            ...get(payload, 'source'),
+          ],
         },
       };
-      case GET_HISTORY_ORDER_SUCCESS:
-        if (get(payload, 'pageIndex') == 1) {
-          set(state,"historyOrders.source",[]);
-        }
-        return {
-          ...state,
-          historyOrders: {
-            ...state.historyOrders,
-            ...payload,
-            source: [...get(state.historyOrders,"source"), ...get(payload, 'source')],
-          },
-        };
+    case GET_HISTORY_ORDER_SUCCESS:
+      if (get(payload, 'pageIndex') == 1) {
+        set(state, 'historyOrders.source', []);
+      }
+      return {
+        ...state,
+        historyOrders: {
+          ...state.historyOrders,
+          ...payload,
+          source: [
+            ...get(state.historyOrders, 'source'),
+            ...get(payload, 'source'),
+          ],
+        },
+      };
     case GET_OFFER_ORDER_SUCCESS:
       return {
         ...state,
@@ -96,6 +119,11 @@ export default p2p = (state = DEFAULT, action = {}) => {
       return {
         ...state,
         paymentMethods: payload,
+      };
+    case GET_DETIAL_ADVERTISMENT_SUCCESS:
+      return {
+        ...state,
+        advertismentDetails: {...payload},
       };
     default:
       return state;

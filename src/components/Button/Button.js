@@ -16,6 +16,7 @@ const Button = ({
   isSubmit,
   isClose,
   isInput,
+  styleInputView,
   isInputLable,
   isInputSize,
   isTitle,
@@ -149,6 +150,7 @@ const Button = ({
               marginHorizontal: spaceHorizontal,
               height: height,
             },
+            {...styleInputView},
           ]}>
           {iconLeft && <Icon name={iconLeft} style={[stylest.iconLeft]} />}
           <View style={stylest.inputCore}>

@@ -38,7 +38,7 @@ const Step1AddNewAds = ({bntClose, onSubmitNextStep, dataState, ...rest}) => {
       style={[styles.borderBottom, {paddingHorizontal: spacingApp}]}>
       {Menu.map((__i, ind) => (
         <TouchableOpacity
-          onPress={()=>rest.onSelectType(__i)}
+          onPress={() => rest.onSelectType(__i)}
           key={String(`key-menu-${ind}`)}
           style={[
             styles.bntBuySell,
@@ -72,7 +72,7 @@ const Step1AddNewAds = ({bntClose, onSubmitNextStep, dataState, ...rest}) => {
       {renderMenu}
       <View style={[styles.conatainer, styles.space]}>
         <Button
-          placeholder={get(dataState,"ActiveAsset")}
+          placeholder={get(dataState, 'ActiveAsset')}
           isPlaceholder={false}
           spaceVertical={10}
           onInput={rest.onGetAsset}
@@ -84,9 +84,10 @@ const Step1AddNewAds = ({bntClose, onSubmitNextStep, dataState, ...rest}) => {
             </TextFnx>
           }
         />
+
         <Button
           // placeholder={'Tất cả'}
-          placeholder={get(dataState,"ActiveFiat")}
+          placeholder={get(dataState, 'ActiveFiat')}
           isPlaceholder={false}
           spaceVertical={10}
           onInput={rest.onGetFiat}
@@ -170,8 +171,8 @@ const Step1AddNewAds = ({bntClose, onSubmitNextStep, dataState, ...rest}) => {
             <Input
               value={`${
                 get(dataState, 'checked') === 'FIXED_PRICE'
-                  ? get(dataState,'price')
-                  : `${get(dataState,"percentPrice")}`
+                  ? get(dataState, 'price')
+                  : `${get(dataState, 'percentPrice')}`
               }`}
               hasValue
               // keyboardType='numeric'
@@ -199,7 +200,7 @@ const Step1AddNewAds = ({bntClose, onSubmitNextStep, dataState, ...rest}) => {
           <TextFnx color={colors.description}>Giá của bạn</TextFnx>
           <TextFnx color={colors.greyLight}>
             {formatCurrency(
-              get(dataState,'price').str2Number(),
+              get(dataState, 'price').str2Number(),
               get(marketInfo, 'paymentUnit'),
               currencyList,
             )}{' '}

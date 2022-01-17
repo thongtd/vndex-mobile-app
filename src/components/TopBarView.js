@@ -1,76 +1,81 @@
-import React, { Component } from 'react'
-import { Text, View, Platform, StyleSheet, StatusBar } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
-import TextWhite from './Text/TextWhite'
-import SafeAreaViewFnx from './SafeAreaView'
+import React, {Component} from 'react';
+import {Text, View, Platform, StyleSheet, StatusBar} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import TextWhite from './Text/TextWhite';
+import SafeAreaViewFnx from './SafeAreaView';
 import DeviceInfo from 'react-native-device-info';
-import icons from '../configs/icons'
-import Icon from "react-native-vector-icons/FontAwesome5";
-import ButtonIcon from './Button/ButtonIcon'
+import icons from '../configs/icons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import ButtonIcon from './Button/ButtonIcon';
 import PropTypes from 'prop-types';
-import colors from '../configs/styles/colors'
-import { constant } from '../configs/constant'
-import { pop } from '../navigation/Navigation'
-import TextFnx from './Text/TextFnx'
+import colors from '../configs/styles/colors';
+import {constant} from '../configs/constant';
+import {pop} from '../navigation/Navigation';
+import TextFnx from './Text/TextFnx';
 let hasNotch = DeviceInfo.hasNotch();
 const TopBarView = ({
   isFilter,
-  title = "Title",
+  title = 'Title',
   onClickRight,
   onClickLeft,
-  nameLeft = "arrow-left",
-  nameRight = "arrow-right",
+  nameLeft = 'arrow-left',
+  nameRight = 'arrow-right',
   sizeIconLeft = 15,
   sizeIconRight = 15,
-  colorLeft = "#fff",
-  colorRight ="#fff",
-  textLeft = "",
-  textRight = "",
+  colorLeft = '#fff',
+  colorRight = '#fff',
+  textLeft = '',
+  textRight = '',
   typeRight = constant.TYPE_ICON.FontAwesome,
   typeLeft = constant.TYPE_ICON.FontAwesome,
   children,
   style,
   hasBack,
   componentId,
-  
 }) => {
   return (
     // <LinearGradient
     //   start={{ x: 0.0, y: 0.25 }}
     //   end={{ x: 0.5, y: 1.0 }}
     //   colors={[colors.gradientFrom, colors.gradientTo]} style={[stylest.bgLinear,style]}>
-        <View style={[stylest.bgLinear,style]}>
-      {children || <View style={[stylest.blockTextHeader]}>
-        <ButtonIcon
-        space={10}
-          styleBlockIcon={{ alignItems: 'flex-start' }}
-          name={nameLeft}
-          onPress={hasBack?()=>pop(componentId):onClickLeft}
-          size={sizeIconLeft}
-          color={colorLeft}
-          titleIcon={textLeft}
-          type={typeLeft}
-          isHidden={(onClickLeft || textLeft || nameLeft) ? false : true}
-        />
-        <View style={[stylest.flex1, stylest.viewCenter, { width: "60%" }]}>
-          <TextFnx size={16} weight={"bold"} color={colors.text} value={title} />
+    <View style={[stylest.bgLinear, style]}>
+      {children || (
+        <View style={[stylest.blockTextHeader]}>
+          <ButtonIcon
+            space={10}
+            styleBlockIcon={{alignItems: 'flex-start'}}
+            name={nameLeft}
+            onPress={hasBack ? () => pop(componentId) : onClickLeft}
+            size={sizeIconLeft}
+            color={colorLeft}
+            titleIcon={textLeft}
+            type={typeLeft}
+            isHidden={onClickLeft || textLeft || nameLeft ? false : true}
+          />
+          <View style={[stylest.flex1, stylest.viewCenter, {width: '60%'}]}>
+            <TextFnx
+              size={16}
+              weight={'bold'}
+              color={colors.text}
+              value={title}
+            />
+          </View>
+          <ButtonIcon
+            space={10}
+            styleBlockIcon={{alignItems: 'flex-end'}}
+            name={nameRight}
+            onPress={onClickRight}
+            size={sizeIconRight}
+            color={colorRight}
+            titleIcon={textRight}
+            type={typeRight}
+            isHidden={onClickRight ? false : true}
+          />
         </View>
-        <ButtonIcon
-          space={10}
-          styleBlockIcon={{ alignItems: 'flex-end' }}
-          name={nameRight}
-          onPress={onClickRight}
-          size={sizeIconRight}
-          color={colorRight}
-          titleIcon={textRight}
-          type={typeRight}
-          isHidden={onClickRight ? false : true}
-        />
-      </View>}
-      </View>
+      )}
+    </View>
   );
-
-}
+};
 export default TopBarView;
 TopBarView.propTypes = {
   onClickRight: PropTypes.func,
@@ -96,7 +101,7 @@ TopBarView.propTypes = {
     constant.TYPE_ICON.Entypo,
     constant.TYPE_ICON.EvilIcons,
     constant.TYPE_ICON.Feather,
-    constant.TYPE_ICON.Fontisto
+    constant.TYPE_ICON.Fontisto,
   ]),
   typeLeft: PropTypes.oneOf([
     constant.TYPE_ICON.FontAwesome,
@@ -110,36 +115,35 @@ TopBarView.propTypes = {
     constant.TYPE_ICON.Entypo,
     constant.TYPE_ICON.EvilIcons,
     constant.TYPE_ICON.Feather,
-    constant.TYPE_ICON.Fontisto
+    constant.TYPE_ICON.Fontisto,
   ]),
-
-}
+};
 const stylest = StyleSheet.create({
   bgLinear: {
     height: hasNotch ? 85 : StatusBar.currentHeight > 24 ? 80 : 60,
-    width: "100%",
-    position: "relative",
+    width: '100%',
+    position: 'relative',
     // marginBottom: 15,
-    backgroundColor:colors.navigation
+    backgroundColor: colors.navigation,
   },
   blockTextHeader: {
-    flexDirection: "row",
-    position: "absolute",
+    flexDirection: 'row',
+    position: 'absolute',
     bottom: 0,
     height: 45,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   title: {
-    color: "#fff",
-    fontWeight: "bold",
+    color: '#fff',
+    fontWeight: 'bold',
     fontSize: 16,
   },
   viewCenter: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   flex1: {
-    width: "20%",
-    lineHeight: 45
-  }
-})
+    width: '20%',
+    lineHeight: 45,
+  },
+});

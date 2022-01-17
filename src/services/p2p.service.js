@@ -98,6 +98,11 @@ export const P2pService = {
     let response = await httpService.get(url);
     return response.data;
   },
+  detailItemAdvertisment: async traddingOrderId => {
+    let url = `${P2P_API.DETAIL_ADVERTISMENT}${traddingOrderId}`;
+    let response = await httpService.get(url);
+    return response.data;
+  },
   getMarketInfo: async data => {
     let dataRemoved = removeEmptyUrl(
       `symbol=${data.symbol}&paymentUnit=${data.paymentUnit}`,

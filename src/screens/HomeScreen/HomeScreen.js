@@ -42,7 +42,7 @@ import ButtonIcon from '../../components/Button/ButtonIcon';
 import icons from '../../configs/icons';
 import Icon from '../../components/Icon';
 import {useRef} from 'react';
-import {get, size, uniqBy} from 'lodash';
+import {get, isArray, size, uniqBy} from 'lodash';
 import {Dimensions, StatusBar} from 'react-native';
 const screenHeight = Dimensions.get('screen').height;
 const windowHeight = Dimensions.get('window').height;
@@ -60,8 +60,12 @@ var flagMenu = true;
 const HomeScreen = ({componentId}) => {
   const dispatch = useDispatch();
   const [ActiveSymbol, setActiveSymbol] = useState('AIFT');
+  const [isRefresh, setRefresh] = useState(false);
   const [ActiveType, setActiveType] = useState('B');
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadMore, setLoadMore] = useState(true);
+  const [pageIndex, setPageIndex] = useState(1);
+
   useEffect(() => {
     if (size(get(tradingMarket, 'assets')) > 0) {
       setActiveSymbol(get(tradingMarket, 'assets')[0]);
@@ -137,29 +141,50 @@ const HomeScreen = ({componentId}) => {
       setIsLoading(false);
     });
     if (ActiveSymbol) {
-      useActionsP2p(dispatch).handleGetAdvertisments({
-        pageIndex: 1,
-        pageSize: 15,
-        side: ActiveType == BUY ? SELL : BUY,
-        coinSymbol: ActiveSymbol,
-      });
+      getAdvertisments();
       setIsLoading(true);
     }
 
     return () => {
       evDone.remove();
     };
-  }, [dispatch, ActiveType, ActiveSymbol]);
+  }, [dispatch, ActiveType, ActiveSymbol, isRefresh]);
+
+  const getAdvertisments = () => {
+    useActionsP2p(dispatch).handleGetAdvertisments({
+      pageIndex: pageIndex || 1,
+      pageSize: 15,
+      side: ActiveType == BUY ? SELL : BUY,
+      coinSymbol: ActiveSymbol,
+    });
+  };
   const logged = useSelector(state => state.authentication.logged);
   const currencyList = useSelector(state => state.market.currencyList);
+  const _onScroll = event => {
+    if (isLoadMore || pageIndex >= get(advertisments, 'pages')) {
+      return;
+    }
+    let y = event.nativeEvent.contentOffset.y;
+    let height = event.nativeEvent.layoutMeasurement.height;
+    let contentHeight = event.nativeEvent.contentSize.height;
+    if (y + height >= contentHeight - 20) {
+      setPageIndex(pageIndex + 1);
+      setLoadMore(true);
+    }
+  };
   return (
     <Container
       isLoadding={isLoading}
       isScroll
       componentId={componentId}
       isTopBar
+      onRefresh={() => setRefresh(!isRefresh)}
       isFooter
-      title="P2P">
+      title="P2P"
+      resAwareScrollView={{
+        scrollEventThrottle: 50,
+        onScroll: e => _onScroll(e),
+      }}>
       <Banner />
       <View
         style={{
@@ -250,7 +275,11 @@ const HomeScreen = ({componentId}) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-      {(advertisments || []).map((item, index) => (
+      {(
+        (isArray(get(advertisments, 'source')) &&
+          get(advertisments, 'source')) ||
+        []
+      ).map((item, index) => (
         <View
           key={`data-${index}`}
           style={{
@@ -371,30 +400,34 @@ const HomeScreen = ({componentId}) => {
                 </TextFnx>
 
                 <Layout>
-                  {(uniqBy(get(item, 'paymentMethods'),"code") || []).map((it, ind) => {
-                    if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
-                      return (
-                        <Image
-                          source={icons.icMomo}
-                          style={{
-                            marginLeft: 5,
-                          }}
-                        />
-                      );
-                    } else if (
-                      get(it, 'code') ==
-                      constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
-                    ) {
-                      return (
-                        <Image
-                          source={icons.icBank}
-                          style={{
-                            marginLeft: 5,
-                          }}
-                        />
-                      );
-                    }
-                  })}
+                  {(uniqBy(get(item, 'paymentMethods'), 'code') || []).map(
+                    (it, ind) => {
+                      if (
+                        get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO
+                      ) {
+                        return (
+                          <Image
+                            source={icons.icMomo}
+                            style={{
+                              marginLeft: 5,
+                            }}
+                          />
+                        );
+                      } else if (
+                        get(it, 'code') ==
+                        constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
+                      ) {
+                        return (
+                          <Image
+                            source={icons.icBank}
+                            style={{
+                              marginLeft: 5,
+                            }}
+                          />
+                        );
+                      }
+                    },
+                  )}
                 </Layout>
               </Layout>
             </View>
