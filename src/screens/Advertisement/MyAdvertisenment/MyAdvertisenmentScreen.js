@@ -234,7 +234,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
 
                   <Layout isLineCenter>
                     <TextFnx color={colors.btnClose} size={12} spaceRight={10}>
-                      {get(item, 'status') > 0 ? 'Đag bật' : 'Đang tắt'}
+                      {get(item, 'status') > 0 ? 'Đang bật' : 'Đang tắt'}
                     </TextFnx>
                     <Switch
                       trackColor={{false: '#767577', true: colors.iconButton}}

@@ -53,10 +53,6 @@ export function* asyncCheckLogin({ payload }) {
             twoFactorType:get(res,"data.twoFactorType")
           }
           pushSingleScreenApp(payload.componentId,CONFIRM_LOGIN_SCREEN,twoFa)
-        } else if (get(res, "data.isNotAllowed")) {
-          showModal(ALERT_ACCOUNT_ACTIVE, {
-            email: get(payload, "email")
-          },true);
         } else if (get(res, "data.message")) {
           toast(formatMessageByArray("wrong password {0} {1}".t(), get(res, "data.messageArray")))
         }

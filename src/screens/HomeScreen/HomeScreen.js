@@ -151,7 +151,7 @@ const HomeScreen = ({componentId}) => {
       setIsLoading(false);
     });
     if (ActiveSymbol) {
-      getAdvertisments();
+      getAdvertisments(ActiveType,ActiveSymbol);
       setIsLoading(true);
     }
 
@@ -160,7 +160,7 @@ const HomeScreen = ({componentId}) => {
     };
   }, [dispatch, ActiveType, ActiveSymbol, isRefresh]);
 
-  const getAdvertisments = () => {
+  const getAdvertisments = (ActiveType,ActiveSymbol) => {
     useActionsP2p(dispatch).handleGetAdvertisments({
       pageIndex: pageIndex || 1,
       pageSize: 15,

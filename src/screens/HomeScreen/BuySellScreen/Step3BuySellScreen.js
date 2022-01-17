@@ -371,7 +371,7 @@ const Step3BuySellScreen = ({
           </TextFnx>
           <TextFnx color={colors.app.textContentLevel3}>
             Để giao dịch thành công, vui lòng không đề cập đến bất kỳ thuật ngữ
-            liên quan đến tiền mã hóa nào (BTC, v.v) trong ghi chú thanh toán.
+            liên quan đến chứng khoán nào (BTC, v.v) trong ghi chú thanh toán.
           </TextFnx>
         </Layout>
         <Layout

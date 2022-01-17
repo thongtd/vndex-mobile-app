@@ -48,7 +48,7 @@ const AddNewAdvertisementScreen = ({componentId}) => {
     'Đặt khối lượng & Phương thức thanh toán',
   ];
   // detail item for edit
-  
+
   const advertismentDetails = useSelector(state => state.p2p.advertisment);
   const [step, SetStep] = useState(0);
   const [data, setData] = useState({});
@@ -90,12 +90,10 @@ const AddNewAdvertisementScreen = ({componentId}) => {
     get(tradingMarket, 'paymentUnit[0]'),
   );
   const [percentPrice, setPercentPrice] = useState(100);
-useEffect(() => {
-  useActionsP2p(dispatch).handleGetPaymentMethodByAcc();
-  return () => {
-    
-  }
-}, [dispatch])
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetPaymentMethodByAcc();
+    return () => {};
+  }, [dispatch]);
   useEffect(() => {
     let methodsData = [...paymentMethods];
     if (size(methodsData) > 3) {
@@ -134,7 +132,7 @@ useEffect(() => {
     setActiveTimeToLive(item);
     dismissAllModal();
   };
-  
+
   useEffect(() => {
     useActionsP2p(dispatch).handleGetMarketInfo({
       symbol: ActiveAsset,
@@ -195,14 +193,12 @@ useEffect(() => {
   useEffect(() => {
     if (advertismentDetails?.orderId) {
       const _i = {...advertismentDetails};
-
       SetActiveType((_i?.side == 'B' && BUY) || SELL);
       setActiveAsset(_i?.symbol || get(tradingMarket, 'assets[0]'));
       setActiveFiat(
         get(_i, 'paymentUnit') || get(tradingMarket, 'paymentUnit[0]'),
       );
       setChecked(get(_i, 'priceType') || 'FIXED_PRICE');
-
       //step 2
       setMaxOrder(String(get(_i, 'maxOrderAmount') || ''));
       setMinOrder(String(get(_i, 'minOrderAmount') || ''));
@@ -214,10 +210,7 @@ useEffect(() => {
       });
       //step3
       setComment(String(get(_i, 'note') || ''));
-      // setAutoReplyMessage("");// chuwa cos yeeu cau api boor sung
       setSelectionKYC(get(_i, 'requiredKyc'));
-      // setSelectedRegister(get(_i, 'requiredKyc')); // chuwa cos yeeu cau api boor sung
-      // setCheckedStatus();// chuwa cos yeeu cau api boor sung
     }
   }, [advertismentDetails]);
   const renderLayout = ({
@@ -476,23 +469,42 @@ useEffect(() => {
 
   const submitNextStep = () => {
     if (step == 0) {
-      if(price.str2Number() <= 0 || isEmpty(price)){
-        return toast("Vui lòng nhập giá của bạn phải lớn hơn 0");
-      }else if(price.str2Number() > 0 && (price.str2Number() < (get(marketInfo, 'lastestPrice') * 80)/100 || price.str2Number() > (get(marketInfo, 'lastestPrice') * 200)/100)){
-        return toast("Giá của bạn không được vượt quá giới hạn 80% đến 200%");
+      if (price.str2Number() <= 0 || isEmpty(price)) {
+        return toast('Vui lòng nhập giá của bạn phải lớn hơn 0');
+      } else if (
+        price.str2Number() > 0 &&
+        (price.str2Number() < (get(marketInfo, 'lastestPrice') * 80) / 100 ||
+          price.str2Number() > (get(marketInfo, 'lastestPrice') * 200) / 100)
+      ) {
+        return toast('Giá của bạn không được vượt quá giới hạn 80% đến 200%');
       }
       SetStep(step + 1);
     } else if (step == 1) {
-      if(quantity.str2Number() <= 0 || isEmpty(quantity)){
-        return toast("Vui lòng nhập tổng khối lượng của bạn phải lớn hơn 0");
-      }else if(minOrder.str2Number() <= 0 || isEmpty(minOrder)){
-        return toast("Vui lòng nhập giới hạn lệnh tối thiểu phải lớn hơn 0");
-      }else if(maxOrder.str2Number() <= 0 || isEmpty(maxOrder)){
-        return toast("Vui lòng nhập giới hạn lệnh tối đa phải lớn hơn 0");
-      }else if(minOrder.str2Number() > 0 && minOrder.str2Number() > (get(marketInfo, 'lastestPrice') * quantity.str2Number())){
-        return toast("Giới hạn lệnh tối thiểu không được lớn hơn tổng khối lượng");
-      }else if(maxOrder.str2Number() > 0 && maxOrder.str2Number() <= minOrder.str2Number()){
-        return toast("Giới hạn lệnh tối đa không được nhỏ hơn hoặc bằng giới hạn tối thiểu");
+      if (quantity.str2Number() <= 0 || isEmpty(quantity)) {
+        return toast('Vui lòng nhập tổng khối lượng của bạn phải lớn hơn 0');
+      } else if (minOrder.str2Number() <= 0 || isEmpty(minOrder)) {
+        return toast('Vui lòng nhập giới hạn lệnh tối thiểu phải lớn hơn 0');
+      } else if (maxOrder.str2Number() <= 0 || isEmpty(maxOrder)) {
+        return toast('Vui lòng nhập giới hạn lệnh tối đa phải lớn hơn 0');
+      } else if (
+        minOrder.str2Number() > 0 &&
+        minOrder.str2Number() >
+          get(marketInfo, 'lastestPrice') * quantity.str2Number()
+      ) {
+        return toast(
+          'Giới hạn lệnh tối thiểu không được lớn hơn tổng khối lượng',
+        );
+      } else if (
+        maxOrder.str2Number() > 0 &&
+        maxOrder.str2Number() <= minOrder.str2Number()
+      ) {
+        return toast(
+          'Giới hạn lệnh tối đa không được nhỏ hơn hoặc bằng giới hạn tối thiểu',
+        );
+      }else if(isEmpty(paymentMethodIdData)){
+        return toast(
+          'Vui lòng chọn ít nhất 1 phương thức thanh toán',
+        );
       }
       SetStep(step + 1);
     } else if (step == 2) {

@@ -133,7 +133,7 @@ const AddPaymentMethodScreen = ({type, componentId, typeScreen = '',item}) => {
           <TextFnx
             color={colors.app.textContentLevel3}
             style={{lineHeight: 20}}>
-            Khi bạn bán tiền mã hoá, phương thức thanh toán được thêm sẽ được
+            Khi bạn bán chứng khoán, phương thức thanh toán được thêm sẽ được
             hiển thị cho người mua trong quá trình giao dịch để chấp nhận chuyển
             tiền pháp định, do đó hãy đảm bảo thông tin là chính xác.
           </TextFnx>
