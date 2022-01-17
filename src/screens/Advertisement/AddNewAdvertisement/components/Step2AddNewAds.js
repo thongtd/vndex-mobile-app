@@ -60,6 +60,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
             get(dataState, 'symbol'),
             currencyList,
           ))}
+          keyboardType='decimal-pad'
           placeholder="1000"
           styleBorder={{height: 'auto'}}
           style={{fontSize: 16, color: colors.text}}
@@ -101,6 +102,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
           spaceVertical={8}
           styleBorder={{height: 'auto'}}
           hasValue
+          keyboardType='decimal-pad'
           value={get(dataState, 'minOrder')}
           onChangeText={txt => rest.onMinOrderChange(txt)}
           placeholder={`${formatCurrency(
@@ -130,6 +132,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
         />
         <Input
           spaceVertical={8}
+          keyboardType='decimal-pad'
           value={get(dataState, 'maxOrder')}
           onChangeText={txt => rest.onMaxOrderChange(txt)}
           styleBorder={{height: 'auto'}}

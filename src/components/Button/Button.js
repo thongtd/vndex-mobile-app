@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet, Keyboard} from 'react-native';
 import Icon from '../Icon';
 import colors from '../../configs/styles/colors';
 import TextFnx from '../Text/TextFnx';
@@ -109,7 +109,6 @@ const Button = ({
             weightTitle={weightTitle}
             title={textSubmit}
             disabled={disabledSubmit}
-            // iconLeft={iconLeftSubmit}
             iconLeftSvg={iconLeftSubmit}
             isSubmit
             isButtonCircle={isButtonCircle}
@@ -132,7 +131,6 @@ const Button = ({
             onPress={onClose}
             iconLeftSvg={iconLeftClose}
             colorTitle={colorTitleClose}
-            // iconLeft={iconLeftClose}
             style={style}
             {...rest}
           />
@@ -140,7 +138,12 @@ const Button = ({
       </View>
     )}
     {isInput && (
-      <TouchableOpacity {...rest} onPress={onInput}>
+      <TouchableOpacity
+        {...rest}
+        onPress={() => {
+          Keyboard.dismiss();
+          onInput();
+        }}>
         <View
           style={[
             isInputCircle ? stylest.inputCircle : stylest.inputView,
@@ -183,7 +186,13 @@ const Button = ({
           width: width,
           height: height,
         }}>
-        <TouchableOpacity onPress={onTitle}>
+        <TouchableOpacity
+          onPress={() => {
+            () => {
+              Keyboard.dismiss();
+              onTitle();
+            };
+          }}>
           <View style={style}>
             <TextFnx
               spaceHorizontal={spaceHorizontal}

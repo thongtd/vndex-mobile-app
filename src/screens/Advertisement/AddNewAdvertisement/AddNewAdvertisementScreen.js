@@ -439,8 +439,24 @@ const AddNewAdvertisementScreen = ({componentId}) => {
 
   const submitNextStep = () => {
     if (step == 0) {
+      if(price.str2Number() <= 0 || isEmpty(price)){
+        return toast("Vui lòng nhập giá của bạn phải lớn hơn 0");
+      }else if(price.str2Number() > 0 && (price.str2Number() < (get(marketInfo, 'lastestPrice') * 80)/100 || price.str2Number() > (get(marketInfo, 'lastestPrice') * 200)/100)){
+        return toast("Giá của bạn không được vượt quá giới hạn 80% đến 200%");
+      }
       SetStep(step + 1);
     } else if (step == 1) {
+      if(quantity.str2Number() <= 0 || isEmpty(quantity)){
+        return toast("Vui lòng nhập tổng khối lượng của bạn phải lớn hơn 0");
+      }else if(minOrder.str2Number() <= 0 || isEmpty(minOrder)){
+        return toast("Vui lòng nhập giới hạn lệnh tối thiểu phải lớn hơn 0");
+      }else if(maxOrder.str2Number() <= 0 || isEmpty(maxOrder)){
+        return toast("Vui lòng nhập giới hạn lệnh tối đa phải lớn hơn 0");
+      }else if(minOrder.str2Number() > 0 && minOrder.str2Number() > (get(marketInfo, 'lastestPrice') * quantity.str2Number())){
+        return toast("Giới hạn lệnh tối thiểu không được lớn hơn tổng khối lượng");
+      }else if(maxOrder.str2Number() > 0 && maxOrder.str2Number() <= minOrder.str2Number()){
+        return toast("Giới hạn lệnh tối đa không được nhỏ hơn hoặc bằng giới hạn tối thiểu");
+      }
       SetStep(step + 1);
     } else if (step == 2) {
       pushSingleScreenApp(componentId, STEP_2FA_ADS_ADD_SCREEN, {

@@ -81,7 +81,7 @@ const HeaderWalletScreen = ({componentId}) => {
           Số dư token
         </TextFnx>
         <TextFnx weight='700' spaceTop={8} color={colors.text} size={30}>
-          {`${thousandsSeparators(TotalValue)}`}
+          {logged?`${thousandsSeparators(TotalValue)}`:'0'}
         </TextFnx>
       </View>
     </TopBarWallet>

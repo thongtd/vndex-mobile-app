@@ -130,6 +130,8 @@ const CommandScreen2 = ({componentId}) => {
       get(item, 'offerSide') == BUY 
     ){
       pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
+    }else{
+      pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
     }
     // else if(!get(item, 'isUnLockConfirm') && !get(item, 'isPaymentConfirm') && !get(item, 'isPaymentCancel') && get(item, 'timeToLiveInSecond') >= 0){
     //   pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN);
@@ -285,7 +287,7 @@ const mapStatus = ({
   isUnLockConfirm,
   timeToLiveInSecond,
 }) => {
-  if (isPaymentCancel) {
+  if (isPaymentCancel || (!isPaymentConfirm && !isPaymentCancel && !isUnLockConfirm && timeToLiveInSecond == 0)) {
     return {
       color: colors.app.sell,
       bg: colors.app.bgSell,
@@ -303,13 +305,13 @@ const mapStatus = ({
       bg: colors.app.bgBuy,
       label: 'Đã thanh toán',
     };
-  } else if (isPaymentConfirm && !isPaymentCancel && timeToLiveInSecond <= 0) {
+  } else if (isPaymentConfirm && !isPaymentCancel && timeToLiveInSecond == 0) {
     return {
       color: colors.app.sell,
       bg: colors.app.bgSell,
       label: 'Khiếu lại',
     };
-  } else if (!isPaymentConfirm && !isPaymentCancel && !isUnLockConfirm) {
+  } else if (!isPaymentConfirm && !isPaymentCancel && !isUnLockConfirm && timeToLiveInSecond > 0) {
     return {
       color: colors.app.sell,
       bg: colors.app.bgSell,

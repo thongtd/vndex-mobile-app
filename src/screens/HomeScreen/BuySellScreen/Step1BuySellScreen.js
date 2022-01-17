@@ -21,19 +21,26 @@ import Button from '../../../components/Button/Button';
 import {pushSingleScreenApp, STEP_2_BUY_SELL_SCREEN} from '../../../navigation';
 import {useActionsP2p} from '../../../redux';
 import {useDispatch, useSelector} from 'react-redux';
-import {get} from 'lodash';
-import {formatCurrency, formatNumberOnChange, formatSCurrency, formatTrunc, getItemWallet} from '../../../configs/utils';
+import {get, isEmpty} from 'lodash';
+import {
+  formatCurrency,
+  formatNumberOnChange,
+  formatSCurrency,
+  formatTrunc,
+  getItemWallet,
+  toast,
+} from '../../../configs/utils';
 import BackgroundTimer from 'react-native-background-timer';
 const Step1BuySellScreen = ({componentId, item}) => {
   const advertisment = useSelector(state => state.p2p.advertisment);
   const currencyList = useSelector(state => state.market.currencyList);
   const cryptoWallet = useSelector(state => state.market.cryptoWallet);
-  
+
   const [timer, setTimer] = useState(30);
   const [Pay, setPay] = useState('');
   const [Receive, setReceive] = useState('');
   const [isTimer, setIsTimer] = useState(true);
-  
+
   const dispatch = useDispatch();
   useEffect(() => {
     useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'orderId'));
@@ -67,7 +74,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
       )}`}>
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
-          side={get(item, 'side') == SELL ?BUY:SELL}
+          side={get(item, 'side') == SELL ? BUY : SELL}
           step={0}
           title={`Tạo lệnh ${get(item, 'side') == SELL ? 'mua' : 'bán'} ${get(
             item,
@@ -113,7 +120,12 @@ const Step1BuySellScreen = ({componentId, item}) => {
             borderColor: colors.app.lineSetting,
           }}>
           <Layout isLineCenter>
-            <TextFnx weight="500" color={get(item,"side") == SELL?colors.app.buy:colors.app.sell} size={fontSize.f20}>
+            <TextFnx
+              weight="500"
+              color={
+                get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
+              }
+              size={fontSize.f20}>
               <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
                 Giá{'    '}
               </TextFnx>
@@ -177,59 +189,63 @@ const Step1BuySellScreen = ({componentId, item}) => {
             </TextFnx>
           </View>
         </Layout>
-        
+
         <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
+          horizontal
+          showsHorizontalScrollIndicator={false}
           style={{
             marginTop: 7,
           }}>
           {(get(advertisment, 'paymentMethods') || []).map((it, ind) => {
             if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
-              return (<View
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: '#3B2B2B',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingHorizontal: 5,
-                  paddingVertical: 2,
-                  borderRadius: 5,
-                  marginRight: 10,
-                }}>
-                <Image
-                  source={icons.icMomo}
-                  style={{
-                    marginLeft: 5,
-                    width: 10,
-                    height: 10,
-                  }}
-                />
-                <TextFnx spaceLeft={5}>Momo</TextFnx>
-              </View>);
-            } else if(get(it, 'code') == constant.CODE_PAYMENT_METHOD.BANK_TRANSFER){
               return (
                 <View
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: '#3B2B2B',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingHorizontal: 5,
-                  paddingVertical: 2,
-                  borderRadius: 5,
-                  marginRight: 10,
-                }}>
-                <Image
-                  source={icons.icBank}
                   style={{
-                    marginLeft: 5,
-                    width: 10,
-                    height: 10,
-                  }}
-                />
-                <TextFnx>Chuyển khoản</TextFnx>
-              </View>
+                    flexDirection: 'row',
+                    backgroundColor: '#3B2B2B',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingHorizontal: 5,
+                    paddingVertical: 2,
+                    borderRadius: 5,
+                    marginRight: 10,
+                  }}>
+                  <Image
+                    source={icons.icMomo}
+                    style={{
+                      marginLeft: 5,
+                      width: 10,
+                      height: 10,
+                    }}
+                  />
+                  <TextFnx spaceLeft={5}>Momo</TextFnx>
+                </View>
+              );
+            } else if (
+              get(it, 'code') == constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
+            ) {
+              return (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    backgroundColor: '#3B2B2B',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingHorizontal: 5,
+                    paddingVertical: 2,
+                    borderRadius: 5,
+                    marginRight: 10,
+                  }}>
+                  <Image
+                    source={icons.icBank}
+                    style={{
+                      marginLeft: 5,
+                      width: 10,
+                      height: 10,
+                    }}
+                  />
+                  <TextFnx>Chuyển khoản</TextFnx>
+                </View>
               );
             }
           })}
@@ -266,34 +282,101 @@ const Step1BuySellScreen = ({componentId, item}) => {
         <Input
           spaceVertical={8}
           hasValue
-          onChangeText={(text)=>{
-            setPay(get(item,"side") == SELL? formatCurrency(text.str2Number(),get(advertisment,"paymentUnit"),currencyList):formatNumberOnChange(currencyList,text,get(advertisment,"symbol")))
-            setReceive(get(item,"side") == SELL ? formatCurrency(text.str2Number()/ get(advertisment, 'price'),get(advertisment,"paymentUnit"),currencyList):formatCurrency(text.str2Number() * (get(advertisment, 'price')),get(advertisment,"paymentUnit"),currencyList))
+          keyboardType="decimal-pad"
+          onChangeText={text => {
+            setPay(
+              get(item, 'side') == SELL
+                ? formatCurrency(
+                    text.str2Number(),
+                    get(advertisment, 'paymentUnit'),
+                    currencyList,
+                  )
+                : formatNumberOnChange(
+                    currencyList,
+                    text,
+                    get(advertisment, 'symbol'),
+                  ),
+            );
+            setReceive(
+              get(item, 'side') == SELL
+                ? formatCurrency(
+                    text.str2Number() / get(advertisment, 'price'),
+                    get(advertisment, 'paymentUnit'),
+                    currencyList,
+                  )
+                : formatCurrency(
+                    text.str2Number() * get(advertisment, 'price'),
+                    get(advertisment, 'paymentUnit'),
+                    currencyList,
+                  ),
+            );
+          }}
+          prefix={
+            get(advertisment, 'side') === SELL
+              ? get(advertisment, 'paymentUnit')
+              : get(advertisment, 'symbol')
+          }
+          stylePrefix={{
+            right: 80,
           }}
           value={`${Pay}`}
           titleBtnRight="Tất cả"
           onBtnRight={() => {
-            setPay(get(item,"side") == SELL?formatCurrency(get(advertisment, 'maxOrderAmount'),get(advertisment,"paymentUnit"),currencyList):formatCurrency(get(advertisment, 'quantity'),get(advertisment,"symbol"),currencyList))
-            setReceive(get(item,"side") == SELL?formatCurrency(get(advertisment, 'maxOrderAmount') / (get(advertisment, 'price')),get(advertisment,"symbol"),currencyList):formatCurrency(get(advertisment, 'quantity') * (get(advertisment, 'price')),get(advertisment,"paymentUnit"),currencyList));
+            setPay(
+              get(item, 'side') == SELL
+                ? formatCurrency(
+                    get(advertisment, 'maxOrderAmount'),
+                    get(advertisment, 'paymentUnit'),
+                    currencyList,
+                  )
+                : formatCurrency(
+                    get(advertisment, 'quantity'),
+                    get(advertisment, 'symbol'),
+                    currencyList,
+                  ),
+            );
+            setReceive(
+              get(item, 'side') == SELL
+                ? formatCurrency(
+                    get(advertisment, 'maxOrderAmount') /
+                      get(advertisment, 'price'),
+                    get(advertisment, 'symbol'),
+                    currencyList,
+                  )
+                : formatCurrency(
+                    get(advertisment, 'quantity') * get(advertisment, 'price'),
+                    get(advertisment, 'paymentUnit'),
+                    currencyList,
+                  ),
+            );
+          }}
+          placeholder={
+            get(item, 'side') == SELL
+              ? `${formatCurrency(
+                  get(advertisment, 'minOrderAmount'),
+                  get(advertisment, 'paymentUnit'),
+                  currencyList,
+                )} ${get(advertisment, 'paymentUnit')} ~ ${formatCurrency(
+                  get(advertisment, 'maxOrderAmount'),
+                  get(advertisment, 'paymentUnit'),
+                  currencyList,
+                )} ${get(advertisment, 'paymentUnit')}`
+              : '0'
           }
-            
-          }
-          placeholder={get(item,"side") == SELL?`${formatCurrency(
-            get(advertisment, 'minOrderAmount'),
-            get(advertisment, 'paymentUnit'),
-            currencyList,
-          )} ${get(advertisment, 'paymentUnit')} ~ ${formatCurrency(
-            get(advertisment, 'maxOrderAmount'),
-            get(advertisment, 'paymentUnit'),
-            currencyList,
-          )} ${get(advertisment, 'paymentUnit')}`:"0"}
         />
         <Layout space={5} isSpaceBetween>
           <Layout>
             <TextFnx color={colors.app.textDisabled} size={12}>
               Phí{'  '}{' '}
               <TextFnx size={12} color={colors.app.textContentLevel2}>
-                {formatCurrency(Pay.str2Number()*get(advertisment,"fee"),get(advertisment,"paymentUnit"),currencyList)} {get(item,"side")==BUY? get(advertisment,"symbol"):get(advertisment,"paymentUnit")}
+                {formatCurrency(
+                  Pay.str2Number() * get(advertisment, 'fee'),
+                  get(advertisment, 'paymentUnit'),
+                  currencyList,
+                )}{' '}
+                {get(item, 'side') == BUY
+                  ? get(advertisment, 'symbol')
+                  : get(advertisment, 'paymentUnit')}
               </TextFnx>
             </TextFnx>
           </Layout>
@@ -301,7 +384,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
             <TextFnx color={colors.app.textDisabled} size={12}>
               Thuế{'  '}{' '}
               <TextFnx size={12} color={colors.app.textContentLevel2}>
-                0 {get(advertisment,"symbol")}
+                0 {get(advertisment, 'symbol')}
               </TextFnx>
             </TextFnx>
           </Layout>
@@ -312,38 +395,105 @@ const Step1BuySellScreen = ({componentId, item}) => {
           </TextFnx>
         </Layout>
         <Input
-        editable={false}
-        hasValue
-        value={Receive}
+          editable={false}
+          hasValue
+          value={Receive}
           spaceVertical={8}
-          titleRight={get(item,"side") == SELL?get(advertisment,"symbol"):get(advertisment,"paymentUnit")}
+          titleRight={
+            get(item, 'side') == SELL
+              ? get(advertisment, 'symbol')
+              : get(advertisment, 'paymentUnit')
+          }
           //   onBtnRight={() => alert('ok')}
-          placeholder={get(item,"side") == BUY ? `${formatCurrency(
-            get(advertisment, 'minOrderAmount'),
-            get(advertisment, 'paymentUnit'),
-            currencyList,
-          )} ${get(advertisment, 'paymentUnit')} ~ ${formatCurrency(
-            get(advertisment, 'maxOrderAmount'),
-            get(advertisment, 'paymentUnit'),
-            currencyList,
-          )} ${get(advertisment, 'paymentUnit')}`:"0"}
+          placeholder={
+            get(item, 'side') == BUY
+              ? `${formatCurrency(
+                  get(advertisment, 'minOrderAmount'),
+                  get(advertisment, 'paymentUnit'),
+                  currencyList,
+                )} ${get(advertisment, 'paymentUnit')} ~ ${formatCurrency(
+                  get(advertisment, 'maxOrderAmount'),
+                  get(advertisment, 'paymentUnit'),
+                  currencyList,
+                )} ${get(advertisment, 'paymentUnit')}`
+              : '0'
+          }
         />
 
         <Button
           isNormal
-          onPress={() =>
-            pushSingleScreenApp(componentId, STEP_2_BUY_SELL_SCREEN,{
-              item,
-              data:{
-                price:get(item,"side")===SELL?Pay.str2Number():Receive.str2Number(),
-                quantity:get(item,"side")===SELL?Receive.str2Number():Pay.str2Number()
+          onPress={() => {
+            if (isEmpty(Pay) || Pay.str2Number() == 0) {
+              if (get(advertisment, 'side') === BUY) {
+                return toast(
+                  `Vui lòng nhập số lượng ${get(
+                    advertisment,
+                    'symbol',
+                  )} muốn bán phải lớn hơn 0`,
+                );
+              } else {
+                return toast(
+                  `Vui lòng nhập số tiền ${get(
+                    advertisment,
+                    'paymentUnit',
+                  )} muốn trả phải lớn hơn 0`,
+                );
               }
-            })
+            } else if (isEmpty(Receive) || Receive.str2Number() == 0) {
+              if (get(advertisment, 'side') === SELL) {
+                return toast(
+                  `Số lượng ${get(
+                    advertisment,
+                    'symbol',
+                  )} nhận được lớn hơn 0`,
+                );
+              } else {
+                return toast(
+                  `Số tiền ${get(
+                    advertisment,
+                    'paymentUnit',
+                  )} nhận được phải lớn hơn 0`,
+                );
+              }
+            }else if(Pay.str2Number() > 0 && Pay.str2Number() < get(
+              advertisment,
+              'minOrderAmount',
+            ) || Pay.str2Number() > get(
+              advertisment,
+              'maxOrderAmount',
+            )){
+              return toast(`Giới hạn lệnh từ ${formatCurrency(get(
+                advertisment,
+                'minOrderAmount',
+              ),get(advertisment,"paymentUnit"),currencyList)} đến ${formatCurrency(get(
+                advertisment,
+                'maxOrderAmount',
+              ),get(advertisment,"paymentUnit"),currencyList)} ${get(advertisment,"paymentUnit")}`)
+            }
+            pushSingleScreenApp(componentId, STEP_2_BUY_SELL_SCREEN, {
+              item,
+              data: {
+                price:
+                  get(item, 'side') === SELL
+                    ? Pay.str2Number()
+                    : Receive.str2Number(),
+                quantity:
+                  get(item, 'side') === SELL
+                    ? Receive.str2Number()
+                    : Pay.str2Number(),
+              },
+            });
+          }}
+          bgButtonColor={
+            get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
           }
-          bgButtonColor={get(item,"side") == SELL?colors.app.buy:colors.app.sell}
           colorTitle={colors.text}
           weightTitle={'700'}
-          title={get(item,"side") == SELL?`MUA ${get(advertisment,"symbol")}`:`BÁN ${get(advertisment,"symbol")}`}
+          title={
+            get(item, 'side') == SELL
+              ? `MUA ${get(advertisment, 'symbol')}`
+              : `BÁN ${get(advertisment, 'symbol')}`
+          }
         />
         <Layout
           space={10}
@@ -354,7 +504,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
           isCenter>
           <TextFnx color={colors.app.textDisabled}>
             Giới hạn thời gian thanh toán {'  '}
-            <TextFnx>{get(advertisment,"lockedInSecond")/60} phút</TextFnx>
+            <TextFnx>{get(advertisment, 'lockedInSecond') / 60} phút</TextFnx>
           </TextFnx>
         </Layout>
         <Layout
@@ -366,7 +516,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
           <TextFnx space={10}>Điều khoản</TextFnx>
           <TextFnx color={colors.app.textContentLevel3}>
             Bạn có thể thêm đến 20 phương thức thanh toán. Kích hoạt phương thức
-            thanh toán bạn muốn, và bắt đầu giao dịch ngay trên Binance P2P.
+            thanh toán bạn muốn, và bắt đầu giao dịch ngay trên Vndex P2P.
           </TextFnx>
         </Layout>
       </View>
