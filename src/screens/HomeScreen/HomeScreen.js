@@ -232,7 +232,7 @@ const HomeScreen = ({componentId}) => {
           />
         </View>
 
-        <Button
+        {/* <Button
           isPlaceholder={false}
           spaceHorizontal={20}
           height={40}
@@ -241,7 +241,7 @@ const HomeScreen = ({componentId}) => {
           iconLeft="globe-americas"
           placeholder={'VND'}
         />
-        <ButtonIcon iconComponent={icons.icFilter} />
+        <ButtonIcon iconComponent={icons.icFilter} /> */}
       </View>
 
       <View>

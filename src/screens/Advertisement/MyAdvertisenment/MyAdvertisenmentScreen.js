@@ -120,6 +120,11 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         break;
       }
       case 'CLOSE': {
+
+        refAction.current?.hide();
+        const item = refAction.current?.item || {};
+        
+        useActionsP2p(dispatch).handleRemoveAdvertisment(get(item,"orderId"));
         break;
       }
     }
