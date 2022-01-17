@@ -90,7 +90,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
     });
   };
   const onSeeDetailCommand = () => {
-    alert('Xem chi tiết lệnh');
+    // alert('Xem chi tiết lệnh');
   };
   const onActionClick = item => {
     refAction.current?.hide();
