@@ -55,7 +55,7 @@ const Step3AddNewAds = ({submitNextStep, bntClose, dataState,...rest}) => {
               size={12}
               spaceTop={10}
               style={{marginBottom: -2}}>
-              Nhận xét
+              Lưu ý
             </TextFnx>
           }
         />

@@ -7,7 +7,7 @@ import colors from '../../../configs/styles/colors';
 const ButtonAddNew = ({onPress}) => {
   return (
     <ButtonIcon
-      title="Đăng quảng cáo mới ..."
+      title="Tạo MUA BÁN mới"
       onPress={onPress}
       iconComponent={icons.IcEdit2}
       styleText={styles.text}

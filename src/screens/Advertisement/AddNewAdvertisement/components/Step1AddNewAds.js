@@ -80,7 +80,7 @@ const Step1AddNewAds = ({bntClose, onSubmitNextStep, dataState, ...rest}) => {
           iconRight="caret-down"
           isInputLable={
             <TextFnx color={colors.description} size={12} spaceBottom={1.5}>
-              Tài sản
+              Mã chứng khoán
             </TextFnx>
           }
         />

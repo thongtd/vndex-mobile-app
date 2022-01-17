@@ -79,7 +79,7 @@ const Drawer = ({componentId}) => {
         }, 500);
         emitEventEmitter('pushNewAds', true);
       }}
-        title={'Đăng quảng cáo'}
+        title={'Chào MUA/BÁN'}
         iconLeftSubmit={icons.IcMarkettingTrans}
       />
     </Container>

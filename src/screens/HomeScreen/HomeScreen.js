@@ -52,6 +52,7 @@ import {
   listenerEventEmitter,
   removeEventEmitter,
   resetScreenGlobal,
+  toast,
 } from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
 import {useDispatch} from 'react-redux';
@@ -65,7 +66,7 @@ const HomeScreen = ({componentId}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadMore, setLoadMore] = useState(true);
   const [pageIndex, setPageIndex] = useState(1);
-
+  const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
     if (size(get(tradingMarket, 'assets')) > 0) {
       setActiveSymbol(get(tradingMarket, 'assets')[0]);
@@ -94,6 +95,7 @@ const HomeScreen = ({componentId}) => {
     });
     const listenerPushNewAds = listenerEventEmitter('pushNewAds', () => {
       if (logged) {
+        useActionsP2p(dispatch).handleGetAdvertisment({});
         pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {
           topBar: {
             rightButtons: [
@@ -341,6 +343,9 @@ const HomeScreen = ({componentId}) => {
                 onPress={() => {
                   if (!logged) {
                     return pushSingleScreenApp(componentId, LOGIN_SCREEN);
+                  }
+                  if(get(item,"traderInfo.identityUserId") == get(UserInfo,"id")){
+                    return toast("Không được đặt lệnh bạn đã tạo");
                   }
                   pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN, {
                     item,

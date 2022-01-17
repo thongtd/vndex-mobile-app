@@ -70,7 +70,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
               {get(dataState, 'symbol')}
             </TextFnx>
           }
-          isInputTop={'Tổng số tiền giao dịch'}
+          isInputTop={'Khối lượng'}
         />
         <Layout space={5} isSpaceBetween>
           <TextFnx color={colors.app.textDisabled} size={12}>
@@ -98,7 +98,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
         </Layout>
       </>
       <Layout type="column" spaceTop={10}>
-        <TextFnx color={colors.description}>Giới hạn lệnh</TextFnx>
+        <TextFnx color={colors.description}>Giá trị giao dịch cho phép</TextFnx>
         <Input
           spaceVertical={8}
           styleBorder={{height: 'auto'}}
@@ -127,7 +127,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
               size={12}
               spaceTop={10}
               style={{marginBottom: -10}}>
-              Từ
+              Tối thiểu
             </TextFnx>
           }
         />
@@ -160,7 +160,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
               size={12}
               spaceTop={10}
               style={{marginBottom: -10}}>
-              Đến
+              Tối đa
             </TextFnx>
           }
         />

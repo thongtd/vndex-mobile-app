@@ -60,6 +60,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
       setIsLoading(false);
     });
     getMyAdvertisments(pageIndex);
+    
     return () => {
       evDone.remove();
     };
@@ -77,7 +78,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
   };
 
   const onAddNewAdvertisenment = () => {
-    useActionsP2p(dispatch).handleItemDetailsAdvertisment({});
+    useActionsP2p(dispatch).handleGetAdvertisment({});
     pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {
       topBar: {
         rightButtons: [

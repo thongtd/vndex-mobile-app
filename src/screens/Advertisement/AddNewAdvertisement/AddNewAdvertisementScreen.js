@@ -43,9 +43,9 @@ const timeToLive = [
 ];
 const AddNewAdvertisementScreen = ({componentId}) => {
   const title = [
-    'Đặt loại và giá',
-    'Đặt Tổng số lượng & Phương thức thanh toán',
-    'Đặt Tổng số lượng & Phương thức thanh toán',
+    'Đặt Mã chứng khoán và Giá',
+    'Đặt khối lượng & Phương thức thanh toán',
+    'Đặt khối lượng & Phương thức thanh toán',
   ];
   // detail item for edit
   

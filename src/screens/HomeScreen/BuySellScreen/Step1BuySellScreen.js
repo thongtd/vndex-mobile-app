@@ -503,7 +503,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
           }}
           isCenter>
           <TextFnx color={colors.app.textDisabled}>
-            Giới hạn thời gian thanh toán {'  '}
+          Chọn thời gian thanh toán tối đa {'  '}
             <TextFnx>{get(advertisment, 'lockedInSecond') / 60} phút</TextFnx>
           </TextFnx>
         </Layout>
