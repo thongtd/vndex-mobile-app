@@ -211,6 +211,7 @@ const AddNewAdvertisementScreen = ({componentId}) => {
       //step3
       setComment(String(get(_i, 'note') || ''));
       setSelectionKYC(get(_i, 'requiredKyc'));
+      setCheckedStatus(get(_i,"isOpenForTrading")?'first':'second')
     }
   }, [advertismentDetails]);
   const renderLayout = ({

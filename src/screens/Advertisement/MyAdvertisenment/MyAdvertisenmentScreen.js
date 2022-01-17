@@ -60,7 +60,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
       setIsLoading(false);
     });
     getMyAdvertisments(pageIndex);
-    
+
     return () => {
       evDone.remove();
     };
@@ -110,7 +110,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
           },
         };
 
-        useActionsP2p(dispatch).handleGetAdvertisment(get(item,"orderId"));
+        useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'orderId'));
         pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {...option});
         break;
       }
@@ -121,11 +121,10 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         break;
       }
       case 'CLOSE': {
-
         refAction.current?.hide();
         const item = refAction.current?.item || {};
-        
-        useActionsP2p(dispatch).handleRemoveAdvertisment(get(item,"orderId"));
+
+        useActionsP2p(dispatch).handleRemoveAdvertisment(get(item, 'orderId'));
         break;
       }
     }
@@ -240,35 +239,18 @@ const MyAdvertisenmentScreen = ({componentId}) => {
                       trackColor={{false: '#767577', true: colors.iconButton}}
                       thumbColor={colors.greyLight}
                       ios_backgroundColor="#3e3e3e"
-                      value={get(item, 'status') == 1?true:false}
+                      value={get(item, 'isOpenForTrading')}
                       // value={get(item, 'status') > 0}
                       // readonly
-                      onValueChange={(value) =>{
-                          useActionsP2p(dispatch).handleUpdateAdvertisment(
-                            {
-                              side: get(item, 'side'),
-                              coinSymbol: get(item, 'symbol'),
-                              paymentUnit: get(item, 'paymentUnit'),
-                              price: get(item, 'price'),
-                              quantity: get(item, 'quantity'),
-                              priceType: get(item, 'priceType'),
-                              minOrderAmount: get(item, 'minOrderAmount'),
-                              maxOrderAmount: get(item, 'maxOrderAmount'),
-                              accountPaymentMethodIds: _.map(get(item, 'paymentMethods'),'id'),
-                              comment: "kk",
-                              autoReplyMessage: '',
-                              lockedInSecond: get(item, 'lockedInSecond'),
-                              requiredKyc: get(item, 'requiredKyc'),
-                              requiredAgeInDay: get(item,"requiredAgeInDay"),
-                              isOpenForTrading:
-                                value,
-                              verifyCode: '123456',
-                              userEmail: get(UserInfo, 'email'),
-                              sessionId: "dc8f5f32-aa4b-4723-82c4-6e86b8ee1dcf",
-                              tradingOrderId: get(item, 'orderId')
+                      onValueChange={
+                        value => {
+                          useActionsP2p(dispatch).handleUpdateStatusAdv({
+                            data: {
+                              isOpenForTrading: value,
                             },
-                          )
-                      }
+                            orderId: get(item, 'orderId'),
+                          });
+                        }
                         // setIsEnabled(previousState => !previousState)
                       }
                     />

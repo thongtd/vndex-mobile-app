@@ -33,6 +33,7 @@ export const P2P_API = {
   REMOVE_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/delete-advertisment/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   DETAIL_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/advertisment/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   GET_HISTORY_ORDER: `${EXCHANGE_URL}api/v1/p2p-order/get-history-orders`,
+  UPDATE_STATUS_ADV: `${EXCHANGE_URL}api/v1/p2p-order/update-status-advertisment/`//3fa85f64-5717-4562-b3fc-2c963f66afa6,
 };
 export const EXCHANGE_API = {
   CHECK_API: `${EXCHANGE_URL}api/health-check`,

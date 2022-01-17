@@ -31,6 +31,8 @@ export const UPDATE_ADVERTISMENT = `${CONTEXT}/UPDATE_ADVERTISMENT`;
 export const UPDATE_ADVERTISMENT_SUCCESS = `${CONTEXT}/UPDATE_ADVERTISMENT_SUCCESS`;
 export const REMOVE_ADVERTISMENT = `${CONTEXT}/REMOVE_ADVERTISMENT`;
 export const REMOVE_ADVERTISMENT_SUCCESS = `${CONTEXT}/REMOVE_ADVERTISMENT_SUCCESS`;
+export const UPDATE_STATUS_ADV = `${CONTEXT}/UPDATE_STATUS_ADV`;
+export const UPDATE_STATUS_ADV_SUCCESS = `${CONTEXT}/UPDATE_STATUS_ADV_SUCCESS`;
 
 export const CREATE_OFFER_ADVERTISMENT = `${CONTEXT}/CREATE_OFFER_ADVERTISMENT`;
 export const GET_DETIAL_ADVERTISMENT = `${CONTEXT}/GET_DETIAL_ADVERTISMENT`;
@@ -47,6 +49,8 @@ export function useActionsP2p(dispatch) {
   return {
     handleGetAdvertisments: data =>
       dispatch(createAction(GET_ADVERTISMENTS, data)),
+      handleUpdateStatusAdv: data =>
+      dispatch(createAction(UPDATE_STATUS_ADV, data)),
     handleGetHistoryOrder: data =>
       dispatch(createAction(GET_HISTORY_ORDER, data)),
     handleGetMyAdvertisments: data =>

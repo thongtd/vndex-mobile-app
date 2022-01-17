@@ -119,4 +119,9 @@ export const P2pService = {
     let response = await httpService.get(url);
     return response.data;
   },
+  updateStatusAdv: async (data,orderId) => {
+    let url = `${P2P_API.UPDATE_STATUS_ADV}${orderId}`;
+    let response = await httpService.post(url,data);
+    return response.data;
+  },
 };

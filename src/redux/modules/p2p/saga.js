@@ -31,6 +31,7 @@ import {
   REMOVE_ADVERTISMENT,
   GET_HISTORY_ORDER,
   GET_DETIAL_ADVERTISMENT,
+  UPDATE_STATUS_ADV,
 } from './actions';
 
 import {
@@ -505,6 +506,29 @@ export function* watchDetailsItemAdvertisment() {
     yield* asyncDetailsItemAdvertisment(action);
   }
 }
+export function* asyncUpdateStatusAdv({payload}) {
+  try {
+      const res = yield call(
+        P2pService.updateStatusAdv,
+        get(payload, 'data'),
+        get(payload, 'orderId'),
+      );
+      emitEventEmitter('doneApi', true);
+      if (get(res, 'success')) {
+        yield put(createAction(GET_MY_ADVERTISMENTS));
+      } else {
+        toast(get(res, 'message'));
+      }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchUpdateStatusAdv() {
+  while (true) {
+    const action = yield take(UPDATE_STATUS_ADV);
+    yield* asyncUpdateStatusAdv(action);
+  }
+}
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
   yield all([fork(watchGetTrading)]);
@@ -523,4 +547,5 @@ export default function* () {
   yield all([fork(watchCreateAdvertisment)]);
   yield all([fork(watchUpdateAdvertisment)]);
   yield all([fork(watchDeleteAdvertisment)]);
+  yield all([fork(watchUpdateStatusAdv)]);
 }
