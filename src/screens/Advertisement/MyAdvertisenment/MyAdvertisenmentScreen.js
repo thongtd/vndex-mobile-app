@@ -1,9 +1,13 @@
 import {get, isArray, uniq, uniqBy} from 'lodash';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, Switch, ActivityIndicator, View} from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {useDispatch, useSelector} from 'react-redux';
+import BottomSheet from '../../../components/ActionSheet/ActionSheet';
+import Button from '../../../components/Button/Button';
+import ButtonIcon from '../../../components/Button/ButtonIcon';
 import Container from '../../../components/Container';
+import Icon from '../../../components/Icon';
 import Image from '../../../components/Image/Image';
 import Empty from '../../../components/Item/Empty';
 import Layout from '../../../components/Layout/Layout';
@@ -21,9 +25,28 @@ import {useActionsP2p} from '../../../redux';
 import BoxCommand from '../../CommandScreen/components/BoxCommand';
 import ButtonAddNew from './ButtonAddNew';
 
+const ActionBottom = [
+  {
+    name: 'Chỉnh sửa',
+    type: 'EDIT',
+  },
+  {
+    name: 'Offline',
+    type: 'OFFLINE',
+  },
+  {
+    name: 'Chia sẻ quảng cáo',
+    type: 'SHARE',
+  },
+  {
+    name: 'Đóng quảng cáo',
+    type: 'CLOSE',
+  },
+];
 const MyAdvertisenmentScreen = ({componentId}) => {
   const dispatch = useDispatch();
   const [isEnabled, setIsEnabled] = useState(true);
+  const refAction = useRef(null);
   // const [callIndexFail, setCallIndexFail] = useState(0);
   const [pageIndex, setPageIndex] = useState(1);
   const [ActiveType, setActiveType] = useState('');
@@ -54,6 +77,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
   };
 
   const onAddNewAdvertisenment = () => {
+    useActionsP2p(dispatch).handleItemDetailsAdvertisment({});
     pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {
       topBar: {
         rightButtons: [
@@ -68,7 +92,38 @@ const MyAdvertisenmentScreen = ({componentId}) => {
   const onSeeDetailCommand = () => {
     alert('Xem chi tiết lệnh');
   };
+  const onActionClick = item => {
+    refAction.current?.hide();
 
+    switch (item?.type) {
+      case 'EDIT': {
+        const item = refAction.current?.item || {};
+        const option = {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.warningAddNewAds,
+                icon: require('assets/icons/ic_warning.png'),
+              },
+            ],
+          },
+        };
+
+        useActionsP2p(dispatch).handleItemDetailsAdvertisment({...item});
+        pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {...option});
+        break;
+      }
+      case 'OFFLINE': {
+        break;
+      }
+      case 'SHARE': {
+        break;
+      }
+      case 'CLOSE': {
+        break;
+      }
+    }
+  };
   return (
     <Container
       componentId={componentId}
@@ -87,10 +142,8 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         }
         stopRightSwipe={-100}
         disableRightSwipe
-        // disableLeftSwipe={IsActive === 'C' ? true : false}
         rightOpenValue={-60}
         keyExtractor={(item, index) => String(`key-item-my-ads-${index}`)}
-        // ListFooterComponent={isHistoryTransaction ? renderFooter : null}
         onEndReachedThreshold={0.4}
         onEndReached={() => {
           if (pageIndex >= get(myAdvertisments, 'pages')) return;
@@ -100,7 +153,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
           (isLoading && <ActivityIndicator style={{color: colors.text}} />) ||
           null
         }
-        renderItem={({item,index}) => (
+        renderItem={({item, index}) => (
           <View key={`item-${index}`} style={{paddingHorizontal: 20}}>
             <BoxCommand
               onSeeDetailCommand={onSeeDetailCommand}
@@ -151,27 +204,26 @@ const MyAdvertisenmentScreen = ({componentId}) => {
                   <Layout isLineCenter>
                     {get(item, 'paymentMethods') &&
                       size(get(item, 'paymentMethods')) > 0 &&
-                      uniqBy(get(item, 'paymentMethods'), 'code').map((__it,index)=>{
-                        return (
-                          <Image
-                            source={
-                              get(__it, 'code') ===
-                              constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
-                                ? icons.icBankPng
-                                : icons.icMomo
-                            }
-                            style={{
-                              width: 18,
-                              height: 18,
-                              marginRight: 5,
-                            }}
-                          />
-                        )
-                      })
-                      
-                      
-                      }
-                    
+                      uniqBy(get(item, 'paymentMethods'), 'code').map(
+                        (__it, index) => {
+                          return (
+                            <Image
+                              key={String(`item-key-code-image-${index}___`)}
+                              source={
+                                get(__it, 'code') ===
+                                constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
+                                  ? icons.icBankPng
+                                  : icons.icMomo
+                              }
+                              style={{
+                                width: 18,
+                                height: 18,
+                                marginRight: 5,
+                              }}
+                            />
+                          );
+                        },
+                      )}
                   </Layout>
 
                   <Layout isLineCenter>
@@ -189,6 +241,17 @@ const MyAdvertisenmentScreen = ({componentId}) => {
                       //   setIsEnabled(previousState => !previousState)
                       // }
                     />
+                    <ButtonIcon
+                      style={{width: 'auto'}}
+                      spaceLeft={10}
+                      color={colors.iconButton}
+                      size={14}
+                      name="ellipsis-v"
+                      onPress={() => {
+                        refAction.current.item = {...item};
+                        refAction.current?.setModalVisible();
+                      }}
+                    />
                   </Layout>
                 </Layout>
               }
@@ -196,6 +259,21 @@ const MyAdvertisenmentScreen = ({componentId}) => {
           </View>
         )}
       />
+      <BottomSheet actionRef={refAction} title="Thêm hành động">
+        {ActionBottom.map((item, index) => (
+          <Button
+            key={`dt-${index}`}
+            onInput={() => onActionClick(item)}
+            placeholder={item?.name || ''}
+            styleInputView={{
+              backgroundColor: 'transparent',
+              borderBottomWidth: 1,
+            }}
+            isInput
+          />
+        ))}
+        <View style={{height: 250}} />
+      </BottomSheet>
     </Container>
   );
 };

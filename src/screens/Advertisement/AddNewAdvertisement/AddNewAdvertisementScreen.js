@@ -47,11 +47,17 @@ const AddNewAdvertisementScreen = ({componentId}) => {
     'Đặt Tổng số lượng & Phương thức thanh toán',
     'Đặt Tổng số lượng & Phương thức thanh toán',
   ];
+  // detail item for edit
+  const advertismentDetails = useSelector(
+    state => state.p2p.advertismentDetails,
+  );
+
   const [step, SetStep] = useState(0);
   const [data, setData] = useState({});
   const [activeType, SetActiveType] = useState(BUY);
   const [checked, setChecked] = useState('FIXED_PRICE');
   const marketInfo = useSelector(state => state.p2p.marketInfo);
+  console.log('marketInfoitem: ', marketInfo);
   const [price, setPrice] = useState(
     formatCurrency(
       get(marketInfo, 'lastestPrice'),
@@ -183,6 +189,34 @@ const AddNewAdvertisementScreen = ({componentId}) => {
     dismissAllModal();
   };
 
+  useEffect(() => {
+    if (advertismentDetails?.orderId) {
+      const _i = {...advertismentDetails};
+
+      SetActiveType((_i?.side == 'B' && BUY) || SELL);
+      setActiveAsset(_i?.symbol || get(tradingMarket, 'assets[0]'));
+      setActiveFiat(
+        get(_i, 'paymentUnit') || get(tradingMarket, 'paymentUnit[0]'),
+      );
+      setChecked(get(_i, 'priceType') || 'FIXED_PRICE');
+
+      //step 2
+      setMaxOrder(String(get(_i, 'maxOrderAmount') || ''));
+      setMinOrder(String(get(_i, 'minOrderAmount') || ''));
+      setQuantity(String(get(_i, 'quantity') || ''));
+      setPaymentMethodData(get(_i, 'paymentMethods') || []);
+      setActiveTimeToLive({
+        second: get(_i, 'lockedInSecond') || 900,
+        name: `${(get(_i, 'lockedInSecond') || 900) / 60} phút`,
+      });
+      //step3
+      setComment(String(get(_i, 'note') || ''));
+      // setAutoReplyMessage("");// chuwa cos yeeu cau api boor sung
+      setSelectionKYC(get(_i, 'requiredKyc'));
+      // setSelectedRegister(get(_i, 'requiredKyc')); // chuwa cos yeeu cau api boor sung
+      // setCheckedStatus();// chuwa cos yeeu cau api boor sung
+    }
+  }, [advertismentDetails]);
   const renderLayout = ({
     activeType,
     checked,
@@ -200,7 +234,7 @@ const AddNewAdvertisementScreen = ({componentId}) => {
     isSelectedKYC,
     isSelectedRegister,
     checkedStatus,
-    paymentMethodIdData
+    paymentMethodIdData,
   }) => {
     switch (step) {
       case 0:
@@ -347,7 +381,7 @@ const AddNewAdvertisementScreen = ({componentId}) => {
       case 1:
         return (
           <Step2AddNewAds
-          onBtnAll={(value)=>setQuantity(value)}
+            onBtnAll={value => setQuantity(value)}
             onGetTimer={onGetTimer}
             dataState={{
               paymentUnit: ActiveFiat,
@@ -477,7 +511,9 @@ const AddNewAdvertisementScreen = ({componentId}) => {
           isSelectedKYC,
           isSelectedRegister,
           checkedStatus,
-          paymentMethodIdData
+          isUpdate: get(advertismentDetails, 'orderId') ? true : false,
+          paymentMethodIdData,
+          tradingOrderId: get(advertismentDetails, 'orderId') || null,
         },
       });
     }
@@ -488,7 +524,11 @@ const AddNewAdvertisementScreen = ({componentId}) => {
       componentId={componentId}
       isTopBar
       isScroll
-      title="Đăng quảng cáo mới">
+      title={
+        advertismentDetails?.orderId
+          ? 'Chỉnh sửa quảng cáo'
+          : 'Đăng quảng cáo mới'
+      }>
       <Layout spaceHorizontal={spacingApp}>
         <ProgressSteps step={step} title={title[step]} />
       </Layout>
@@ -509,7 +549,7 @@ const AddNewAdvertisementScreen = ({componentId}) => {
         isSelectedKYC,
         isSelectedRegister,
         checkedStatus,
-        paymentMethodIdData
+        paymentMethodIdData,
       })}
     </Container>
   );

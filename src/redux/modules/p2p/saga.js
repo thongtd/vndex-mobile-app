@@ -30,6 +30,7 @@ import {
   UPDATE_ADVERTISMENT,
   REMOVE_ADVERTISMENT,
   GET_HISTORY_ORDER,
+  GET_DETIAL_ADVERTISMENT,
 } from './actions';
 
 import {
@@ -60,16 +61,23 @@ export function* asyncGetAdvertisments({payload}) {
       status: get(payload, 'status') || '',
     });
     emitEventEmitter('doneApi', true);
-    yield put(actionsReducerP2p.getAdvertismentsSuccess(get(res, 'source')));
+
+    if (isArray(get(res, 'source'))) {
+      yield put(
+        actionsReducerP2p.getAdvertismentsSuccess({
+          ...res,
+          pageIndex: get(payload, 'pageIndex') || 1,
+          pages: ceil(get(res, 'totalRecords') / get(payload, 'pageSize')),
+        }),
+      );
+    }
+    emitEventEmitter('doneApi', true);
   } catch (e) {
     emitEventEmitter('doneApi', true);
   }
 }
 export function* watchGetAdvertisments() {
-  while (true) {
-    const action = yield take(GET_ADVERTISMENTS);
-    yield* asyncGetAdvertisments(action);
-  }
+  yield takeEvery(GET_ADVERTISMENTS, asyncGetAdvertisments);
 }
 export function* asyncGetTrading({payload}) {
   try {
@@ -418,9 +426,10 @@ export function* asyncUpdateAdvertisment({payload}) {
   try {
     const res = yield call(
       P2pService.updateAdvertisment,
-      get(payload, 'data'),
+      payload,
       get(payload, 'tradingOrderId'),
     );
+    console.log('___________res: ', res);
     emitEventEmitter('doneApi', true);
     if (get(res, 'success') && get(res, 'status')) {
       toast(get(res, 'message'));
@@ -459,6 +468,34 @@ export function* watchDeleteAdvertisment() {
   while (true) {
     const action = yield take(REMOVE_ADVERTISMENT);
     yield* asyncDeleteAdvertisment(action);
+  }
+}
+
+export function* asyncDetailsItemAdvertisment(payload) {
+  try {
+    if (get(payload, 'orderId')) {
+      const res = yield call(
+        P2pService.removeAdvertisment,
+        get(payload, 'orderId'),
+      );
+      emitEventEmitter('doneApi', true);
+      if (get(res, 'success') && get(res, 'status')) {
+        toast(get(res, 'message'));
+        yield put(createAction(GET_MY_ADVERTISMENTS));
+      } else {
+        toast(get(res, 'message'));
+      }
+    } else {
+      yield put(actionsReducerP2p.getDetailItemAdvertismentsSuccess({}));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchDetailsItemAdvertisment() {
+  while (true) {
+    const action = yield take(GET_DETIAL_ADVERTISMENT);
+    yield* asyncDetailsItemAdvertisment(action);
   }
 }
 export default function* () {

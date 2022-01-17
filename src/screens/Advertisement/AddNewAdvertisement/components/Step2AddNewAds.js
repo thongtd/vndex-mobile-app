@@ -42,9 +42,10 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
     submitNextStep();
   };
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
-  
+
   return (
     <View style={styles.conatainer}>
+      {console.log('get(dataStateitem, ): ', get(dataState, 'quantity'))}
       <>
         <Input
           spaceVertical={8}
@@ -296,11 +297,9 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
                     if (size(get(dataState, 'paymentMethodData')) >= 3) {
                       toast('Chỉ thêm tối đa 3 phương thức thanh toán');
                     } else {
-                      rest.onSelectPaymentMethod(item,()=>{
+                      rest.onSelectPaymentMethod(item, () => {
                         actionSheetRef.current?.hide();
                       });
-                      
-                        
                     }
                   }}>
                   <Layout

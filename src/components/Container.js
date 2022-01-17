@@ -28,6 +28,7 @@ import Layout from './Layout/Layout';
 const Container = ({
   children,
   ref,
+  resAwareScrollView,
   isFooter,
   isTopBar = true,
   title = '',
@@ -119,7 +120,8 @@ const Container = ({
                   />
                 }
                 keyboardShouldPersistTaps="handled"
-                showsVerticalScrollIndicator={false}>
+                showsVerticalScrollIndicator={false}
+                {...resAwareScrollView}>
                 {children}
 
                 {isFooter && (

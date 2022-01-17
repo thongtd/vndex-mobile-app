@@ -15,7 +15,10 @@ import {
 } from '../../../../configs/utils';
 import {useDispatch, useSelector} from 'react-redux';
 import {constant, spacingApp} from '../../../../configs/constant';
-import {CREATE_ADVERTISMENT} from '../../../../redux/modules/p2p/actions';
+import {
+  CREATE_ADVERTISMENT,
+  UPDATE_ADVERTISMENT,
+} from '../../../../redux/modules/p2p/actions';
 import {
   pushSingleScreenApp,
   STEP_ADS_ADD_SUCCESS,
@@ -46,26 +49,31 @@ export default function Step2FaAdsAdd({componentId, data}) {
       toast('Please enter 2FA code'.t());
     } else {
       dispatcher(
-        createAction(CREATE_ADVERTISMENT, {
-          side: get(data, 'activeType'),
-          coinSymbol: get(data, 'ActiveAsset'),
-          paymentUnit: get(data, 'ActiveFiat'),
-          price: get(data, 'price').str2Number(),
-          quantity: get(data, 'quantity').str2Number(),
-          priceType: get(data, 'checked'),
-          minOrderAmount: get(data, 'minOrder').str2Number(),
-          maxOrderAmount: get(data, 'maxOrder').str2Number(),
-          accountPaymentMethodIds: get(data, 'paymentMethodIdData'),
-          comment: get(data, 'comment'),
-          autoReplyMessage: get(data, 'autoReplyMessage'),
-          lockedInSecond: get(data, 'activeTimeToLive.second'),
-          requiredKyc: get(data, 'isSelectedKYC'),
-          requiredAgeInDay: get(data,"isSelectedRegister")? 10:0,
-          isOpenForTrading: get(data, 'checkedStatus') == 'first'?true:false,
-          verifyCode: otp,
-          userEmail: get(UserInfo, 'email'),
-          sessionId: sessionId || '',
-        }),
+        createAction(
+          get(data, 'isUpdate') ? UPDATE_ADVERTISMENT : CREATE_ADVERTISMENT,
+          {
+            side: get(data, 'activeType'),
+            coinSymbol: get(data, 'ActiveAsset'),
+            paymentUnit: get(data, 'ActiveFiat'),
+            price: get(data, 'price').str2Number(),
+            quantity: get(data, 'quantity').str2Number(),
+            priceType: get(data, 'checked'),
+            minOrderAmount: get(data, 'minOrder').str2Number(),
+            maxOrderAmount: get(data, 'maxOrder').str2Number(),
+            accountPaymentMethodIds: get(data, 'paymentMethodIdData'),
+            comment: get(data, 'comment'),
+            autoReplyMessage: get(data, 'autoReplyMessage'),
+            lockedInSecond: get(data, 'activeTimeToLive.second'),
+            requiredKyc: get(data, 'isSelectedKYC'),
+            requiredAgeInDay: get(data,"isSelectedRegister")? 10:0,
+            isOpenForTrading:
+              get(data, 'checkedStatus') == 'first' ? true : false,
+            verifyCode: otp,
+            userEmail: get(UserInfo, 'email'),
+            sessionId: sessionId || '',
+            tradingOrderId: get(data, 'tradingOrderId')
+          },
+        ),
       );
     }
   };
