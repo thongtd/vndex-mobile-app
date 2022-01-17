@@ -432,6 +432,7 @@ export function* asyncUpdateAdvertisment({payload}) {
     console.log('___________res: ', res);
     emitEventEmitter('doneApi', true);
     if (get(res, 'success') && get(res, 'status')) {
+      emitEventEmitter('successCreateAds', true);
       toast(get(res, 'message'));
       yield put(createAction(GET_MY_ADVERTISMENTS));
     } else {

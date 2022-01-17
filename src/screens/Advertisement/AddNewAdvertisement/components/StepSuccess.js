@@ -21,7 +21,7 @@ export default function StepSuccess({componentId}) {
       <Layout isCenter type="column">
         <Image source={icons.imgChecked} />
         <TextFnx space={20} size={30} color={colors.app.buy}>
-          Đăng thành công
+          Thành công
         </TextFnx>
 
         <TextFnx spaceBottom={30} color={colors.app.textContentLevel2}>

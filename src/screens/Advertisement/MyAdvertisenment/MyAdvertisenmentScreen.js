@@ -1,4 +1,4 @@
-import {get, isArray, uniq, uniqBy} from 'lodash';
+import _, {get, isArray, uniq, uniqBy} from 'lodash';
 import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, Switch, ActivityIndicator, View} from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
@@ -54,7 +54,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
   const [isLoading, setIsLoading] = useState(true);
   const currencyList = useSelector(state => state.market.currencyList);
   const myAdvertisments = useSelector(state => state.p2p.myAdvertisments);
-
+  const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
     const evDone = listenerEventEmitter('doneApi', isDone => {
       setIsLoading(false);
@@ -109,7 +109,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
           },
         };
 
-        useActionsP2p(dispatch).handleItemDetailsAdvertisment({...item});
+        useActionsP2p(dispatch).handleGetAdvertisment(get(item,"orderId"));
         pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {...option});
         break;
       }
@@ -239,12 +239,37 @@ const MyAdvertisenmentScreen = ({componentId}) => {
                       trackColor={{false: '#767577', true: colors.iconButton}}
                       thumbColor={colors.greyLight}
                       ios_backgroundColor="#3e3e3e"
-                      // value={isEnabled}
-                      value={get(item, 'status') > 0}
-                      readonly
-                      // onValueChange={() =>
-                      //   setIsEnabled(previousState => !previousState)
-                      // }
+                      value={get(item, 'status') == 1?true:false}
+                      // value={get(item, 'status') > 0}
+                      // readonly
+                      onValueChange={(value) =>{
+                          useActionsP2p(dispatch).handleUpdateAdvertisment(
+                            {
+                              side: get(item, 'side'),
+                              coinSymbol: get(item, 'symbol'),
+                              paymentUnit: get(item, 'paymentUnit'),
+                              price: get(item, 'price'),
+                              quantity: get(item, 'quantity'),
+                              priceType: get(item, 'priceType'),
+                              minOrderAmount: get(item, 'minOrderAmount'),
+                              maxOrderAmount: get(item, 'maxOrderAmount'),
+                              accountPaymentMethodIds: _.map(get(item, 'paymentMethods'),'id'),
+                              comment: "kk",
+                              autoReplyMessage: '',
+                              lockedInSecond: get(item, 'lockedInSecond'),
+                              requiredKyc: get(item, 'requiredKyc'),
+                              requiredAgeInDay: get(item,"requiredAgeInDay"),
+                              isOpenForTrading:
+                                value,
+                              verifyCode: '123456',
+                              userEmail: get(UserInfo, 'email'),
+                              sessionId: "dc8f5f32-aa4b-4723-82c4-6e86b8ee1dcf",
+                              tradingOrderId: get(item, 'orderId')
+                            },
+                          )
+                      }
+                        // setIsEnabled(previousState => !previousState)
+                      }
                     />
                     <ButtonIcon
                       style={{width: 'auto'}}

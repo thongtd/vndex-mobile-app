@@ -48,10 +48,8 @@ const AddNewAdvertisementScreen = ({componentId}) => {
     'Đặt Tổng số lượng & Phương thức thanh toán',
   ];
   // detail item for edit
-  const advertismentDetails = useSelector(
-    state => state.p2p.advertismentDetails,
-  );
-
+  
+  const advertismentDetails = useSelector(state => state.p2p.advertisment);
   const [step, SetStep] = useState(0);
   const [data, setData] = useState({});
   const [activeType, SetActiveType] = useState(BUY);
@@ -65,7 +63,7 @@ const AddNewAdvertisementScreen = ({componentId}) => {
       currencyList,
     ),
   );
-
+  const dispatch = useDispatch();
   const [minOrder, setMinOrder] = useState('');
   const [maxOrder, setMaxOrder] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -92,7 +90,12 @@ const AddNewAdvertisementScreen = ({componentId}) => {
     get(tradingMarket, 'paymentUnit[0]'),
   );
   const [percentPrice, setPercentPrice] = useState(100);
-
+useEffect(() => {
+  useActionsP2p(dispatch).handleGetPaymentMethodByAcc();
+  return () => {
+    
+  }
+}, [dispatch])
   useEffect(() => {
     let methodsData = [...paymentMethods];
     if (size(methodsData) > 3) {
@@ -131,7 +134,7 @@ const AddNewAdvertisementScreen = ({componentId}) => {
     setActiveTimeToLive(item);
     dismissAllModal();
   };
-  const dispatch = useDispatch();
+  
   useEffect(() => {
     useActionsP2p(dispatch).handleGetMarketInfo({
       symbol: ActiveAsset,
