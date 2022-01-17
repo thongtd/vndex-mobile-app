@@ -46,7 +46,7 @@ export default p2p = (state = DEFAULT, action = {}) => {
           ...state.advertisments,
           ...payload,
           source: [
-            ...get(state.myAdvertisments, 'source'),
+            ...get(state.advertisments, 'source'),
             ...get(payload, 'source'),
           ],
         },

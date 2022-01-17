@@ -41,7 +41,7 @@ const timeToLive = [
     name: '20 phút',
   },
 ];
-const AddNewAdvertisementScreen = ({componentId}) => {
+const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
   const title = [
     'Đặt Mã chứng khoán và Giá',
     'Đặt khối lượng & Phương thức thanh toán',
@@ -191,7 +191,7 @@ const AddNewAdvertisementScreen = ({componentId}) => {
   };
 
   useEffect(() => {
-    if (advertismentDetails?.orderId) {
+    if (isEdit && advertismentDetails?.orderId) {
       const _i = {...advertismentDetails};
       SetActiveType((_i?.side == 'B' && BUY) || SELL);
       setActiveAsset(_i?.symbol || get(tradingMarket, 'assets[0]'));
@@ -541,7 +541,7 @@ const AddNewAdvertisementScreen = ({componentId}) => {
       isTopBar
       isScroll
       title={
-        advertismentDetails?.orderId
+        isEdit
           ? 'Chỉnh sửa quảng cáo'
           : 'Đăng quảng cáo mới'
       }>

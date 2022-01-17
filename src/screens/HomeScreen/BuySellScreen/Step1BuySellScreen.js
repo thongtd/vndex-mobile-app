@@ -455,10 +455,24 @@ const Step1BuySellScreen = ({componentId, item}) => {
                   )} nhận được phải lớn hơn 0`,
                 );
               }
-            }else if(Pay.str2Number() > 0 && Pay.str2Number() < get(
+            }else if( get(advertisment, 'side') === SELL && Pay.str2Number() > 0 && Pay.str2Number() < get(
               advertisment,
               'minOrderAmount',
             ) || Pay.str2Number() > get(
+              advertisment,
+              'maxOrderAmount',
+            )){
+              return toast(`Giới hạn lệnh từ ${formatCurrency(get(
+                advertisment,
+                'minOrderAmount',
+              ),get(advertisment,"paymentUnit"),currencyList)} đến ${formatCurrency(get(
+                advertisment,
+                'maxOrderAmount',
+              ),get(advertisment,"paymentUnit"),currencyList)} ${get(advertisment,"paymentUnit")}`)
+            }else if( get(advertisment, 'side') === BUY && Receive.str2Number() > 0 && Receive.str2Number() < get(
+              advertisment,
+              'minOrderAmount',
+            ) || Receive.str2Number() > get(
               advertisment,
               'maxOrderAmount',
             )){

@@ -112,7 +112,9 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         };
 
         useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'orderId'));
-        pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {...option});
+        pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, {
+          isEdit:true
+        }, {...option});
         break;
       }
       case 'OFFLINE': {
