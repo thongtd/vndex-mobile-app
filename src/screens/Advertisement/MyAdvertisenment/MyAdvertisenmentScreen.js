@@ -45,7 +45,7 @@ const ActionBottom = [
 ];
 const MyAdvertisenmentScreen = ({componentId}) => {
   const dispatch = useDispatch();
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState({});
   const refAction = useRef(null);
   // const [callIndexFail, setCallIndexFail] = useState(0);
   const [pageIndex, setPageIndex] = useState(1);
@@ -58,6 +58,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
   useEffect(() => {
     const evDone = listenerEventEmitter('doneApi', isDone => {
       setIsLoading(false);
+      
     });
     getMyAdvertisments(pageIndex);
 
@@ -67,7 +68,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
   }, [pageIndex]);
   const getMyAdvertisments = pageIndex => {
     console.log('pageIndex: ', pageIndex);
-
+    setIsEnabled({});
     useActionsP2p(dispatch).handleGetMyAdvertisments({
       pageIndex: pageIndex,
       pageSize: 15,
@@ -239,11 +240,11 @@ const MyAdvertisenmentScreen = ({componentId}) => {
                       trackColor={{false: '#767577', true: colors.iconButton}}
                       thumbColor={colors.greyLight}
                       ios_backgroundColor="#3e3e3e"
-                      value={get(item, 'isOpenForTrading')}
+                      value={get(isEnabled,"orderId") === get(item, 'orderId')?get(isEnabled,"isOpenForTrading"):get(item,"isOpenForTrading")}
                       // value={get(item, 'status') > 0}
                       // readonly
                       onValueChange={
-                        value => {
+                        value => {setIsEnabled({...item,isOpenForTrading:value});
                           useActionsP2p(dispatch).handleUpdateStatusAdv({
                             data: {
                               isOpenForTrading: value,
