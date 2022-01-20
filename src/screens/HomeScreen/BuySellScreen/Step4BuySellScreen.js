@@ -117,7 +117,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
         }
       },
-      10000,
+      3000,
       offerOrderState,
       offerOrderId
     );

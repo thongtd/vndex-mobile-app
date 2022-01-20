@@ -395,7 +395,35 @@ const Step1BuySellScreen = ({componentId, item}) => {
           </TextFnx>
         </Layout>
         <Input
-          editable={false}
+          // editable={false}
+          onChangeText={text => {
+            setReceive(
+              get(item, 'side') == BUY
+                ? formatCurrency(
+                    text.str2Number(),
+                    get(advertisment, 'paymentUnit'),
+                    currencyList,
+                  )
+                : formatNumberOnChange(
+                    currencyList,
+                    text,
+                    get(advertisment, 'symbol'),
+                  ),
+            );
+            setPay(
+              get(item, 'side') == BUY
+                ? formatCurrency(
+                    text.str2Number() / get(advertisment, 'price'),
+                    get(advertisment, 'paymentUnit'),
+                    currencyList,
+                  )
+                : formatCurrency(
+                    text.str2Number() * get(advertisment, 'price'),
+                    get(advertisment, 'paymentUnit'),
+                    currencyList,
+                  ),
+            );
+          }}
           hasValue
           value={Receive}
           spaceVertical={8}

@@ -99,22 +99,22 @@ const MyAdvertisenmentScreen = ({componentId}) => {
 
     switch (item?.type) {
       case 'EDIT': {
-        const item = refAction.current?.item || {};
-        const option = {
-          topBar: {
-            rightButtons: [
-              {
-                id: IdNavigation.PressIn.warningAddNewAds,
-                icon: require('assets/icons/ic_warning.png'),
-              },
-            ],
-          },
-        };
+        // const item = refAction.current?.item || {};
+        // const option = {
+        //   topBar: {
+        //     rightButtons: [
+        //       {
+        //         id: IdNavigation.PressIn.warningAddNewAds,
+        //         icon: require('assets/icons/ic_warning.png'),
+        //       },
+        //     ],
+        //   },
+        // };
 
-        useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'orderId'));
-        pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, {
-          isEdit:true
-        }, {...option});
+        // useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'orderId'));
+        // pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, {
+        //   isEdit:true
+        // }, {...option});
         break;
       }
       case 'OFFLINE': {

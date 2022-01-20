@@ -474,10 +474,10 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
         return toast('Vui lòng nhập giá của bạn phải lớn hơn 0');
       } else if (
         price.str2Number() > 0 &&
-        (price.str2Number() < (get(marketInfo, 'lastestPrice') * 80) / 100 ||
-          price.str2Number() > (get(marketInfo, 'lastestPrice') * 200) / 100)
+        (price.str2Number() < (get(marketInfo, 'lastestPrice') * get(marketInfo,"minPrice")) / 100 ||
+          price.str2Number() > (get(marketInfo, 'lastestPrice') * get(marketInfo,"maxPrice")) / 100)
       ) {
-        return toast('Giá của bạn không được vượt quá giới hạn 80% đến 200%');
+        return toast(`Giá của bạn không được vượt quá giới hạn ${get(marketInfo,"minPrice")}% đến ${get(marketInfo,"maxPrice")}%`);
       }
       SetStep(step + 1);
     } else if (step == 1) {

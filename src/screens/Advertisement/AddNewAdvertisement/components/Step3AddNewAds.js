@@ -99,7 +99,7 @@ const Step3AddNewAds = ({submitNextStep, bntClose, dataState,...rest}) => {
 
         <CheckBox
           isChecked={get(dataState,"isSelectedKYC")}
-          onClick={rest.onCheckKyc}
+          onClick={()=>{}}
           style={styles.checkbox}
           // rightTextView={'Momo'}
           checkedCheckBoxColor={colors.iconButton}

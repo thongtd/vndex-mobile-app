@@ -457,10 +457,13 @@ export function* watchUpdateAdvertisment() {
 }
 export function* asyncDeleteAdvertisment({payload}) {
   try {
+    
     const res = yield call(
+      
       P2pService.removeAdvertisment,
-      get(payload, 'tradingOrderId'),
+      payload,
     );
+    
     emitEventEmitter('doneApi', true);
     if (get(res, 'success') && get(res, 'status')) {
       toast(get(res, 'message'));
