@@ -8,9 +8,10 @@
     "ios": "react-native run-ios",
     "start": "react-native start --reset-cache",
     "test": "jest",
-    "build-apk": "cd android && ./gradlew assembleRelease",
+    "apk": "cd android && ./gradlew assembleRelease",
     "lint": "eslint .",
     "pod": "pod install --project-directory=ios",
+    "aab":"cd android && ./gradlew bundleRelease",
     "clean": "watchman watch-del-all && rm -rf node_modules/ && npm cache verify && npm install && npm start -- --reset-cache"
   },
   "dependencies": {
