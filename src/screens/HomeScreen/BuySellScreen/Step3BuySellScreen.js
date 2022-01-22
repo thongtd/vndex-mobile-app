@@ -27,6 +27,7 @@ import Image from '../../../components/Image/Image';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
 import {
+  CHAT_SCREEN,
   pushSingleScreenApp,
   STEP_2_BUY_SELL_SCREEN,
   STEP_3_BUY_SELL_SCREEN,
@@ -47,6 +48,7 @@ import {
 import {ceil, isEmpty, isNumber} from 'lodash';
 import {useSelector} from 'react-redux';
 import CountDown from 'react-native-countdown-component';
+import { Navigation } from 'react-native-navigation';
 const Step3BuySellScreen = ({
   item,
   componentId,
@@ -120,7 +122,17 @@ const Step3BuySellScreen = ({
         });
       }
     });
-    return () => ev.remove();
+    const navigationButtonEventListener =
+    Navigation.events().registerNavigationButtonPressedListener(
+      ({buttonId}) => {
+        if (buttonId == IdNavigation.PressIn.chat) {
+          pushSingleScreenApp(componentId,CHAT_SCREEN,{orderId: get(offerOrder, 'p2PTradingOrderId'),email:get(advertisment,'traderInfo.emailAddress')})
+        }
+      },
+    );
+    return () => {
+      navigationButtonEventListener.remove();
+      ev.remove()};
   }, []);
 
   const hanldeCopy = url => {

@@ -30,7 +30,7 @@ import {
 } from '@aspnet/signalr';
 import {SOCKET_URL} from '../../configs/api';
 
-export default function ChatScreen({componentId, orderId}) {
+export default function ChatScreen({componentId, orderId, email = ''}) {
   const [messages, setMessages] = useState([]);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
   const chatHistory = useSelector(state => state.p2p.chatHistory);
@@ -44,11 +44,10 @@ export default function ChatScreen({componentId, orderId}) {
 
     // })
 
-
     return () => {};
   }, [orderId]);
-useEffect(() => {
-      useActionsP2p(dispatcher).handleGetChatHistory({
+  useEffect(() => {
+    useActionsP2p(dispatcher).handleGetChatHistory({
       orderId: orderId,
       data: {
         skip: skip,
@@ -56,19 +55,16 @@ useEffect(() => {
       },
     });
 
-  return () => {
-    
-  };
-}, [orderId, skip]);
+    return () => {};
+  }, [skip]);
 
   useEffect(() => {
-    
     const hubConnection = new HubConnectionBuilder()
       .configureLogging(LogLevel.None)
       .withUrl(`${SOCKET_URL}${get(UserInfo, 'id')}`)
-      .withHubProtocol( new JsonHubProtocol())
+      .withHubProtocol(new JsonHubProtocol())
       .build();
-      console.log(hubConnection, 'hubConnection');
+    console.log(hubConnection, 'hubConnection');
     hubConnection
       .start()
       .then(res => {
@@ -101,11 +97,13 @@ useEffect(() => {
     } else {
       setMessages([]);
     }
-    return ()=>{
+    return () => {
       setMessages([]);
       hubConnection
-      .stop().then(res =>{}).catch(err => {})
-    }
+        .stop()
+        .then(res => {})
+        .catch(err => {});
+    };
   }, [chatHistory, UserInfo]);
 
   const onSend = useCallback(
@@ -155,9 +153,7 @@ useEffect(() => {
     });
   };
   return (
-    <Container
-      componentId={componentId}
-      title={get(infoChat, 'provideIdentityUser.userName')}>
+    <Container componentId={componentId} title={email}>
       <GiftedChat
         renderLoading={() => <ActivityIndicator />}
         scrollToBottom
@@ -234,8 +230,8 @@ useEffect(() => {
         onSend={messages => onSend(messages)}
         alwaysShowSend
         renderUsernameOnMessage
-        loadEarlier={get(chatHistory,"totalRecords") > skip?true:false}
-        onLoadEarlier={()=>setSkip(skip + 10)}
+        loadEarlier={get(chatHistory, 'totalRecords') > skip ? true : false}
+        onLoadEarlier={() => setSkip(skip + 10)}
         isLoadingEarlier={false}
         renderSend={data => <Send {...data} />}
         onPressActionButton={handleSelfieSide}

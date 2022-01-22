@@ -27,6 +27,7 @@ import Image from '../../../components/Image/Image';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
 import {
+  CHAT_SCREEN,
   pushSingleScreenApp,
   STEP_2_BUY_SELL_SCREEN,
   STEP_3_BUY_SELL_SCREEN,
@@ -47,6 +48,7 @@ import {
 import {useDispatch} from 'react-redux';
 import {isEmpty} from 'lodash';
 import {useActionsP2p} from '../../../redux';
+import { Navigation } from 'react-native-navigation';
 const Step2BuySellScreen = ({componentId, item, data}) => {
   const actionSheetRef = useRef(null);
   const dispatch = useDispatch();
@@ -55,6 +57,14 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
 
   useEffect(() => {
+    const navigationButtonEventListener =
+    Navigation.events().registerNavigationButtonPressedListener(
+      ({buttonId}) => {
+        if (buttonId == IdNavigation.PressIn.chat) {
+          pushSingleScreenApp(componentId,CHAT_SCREEN,{orderId:get(advertisment, 'orderId'), email:get(advertisment,'traderInfo.emailAddress')})
+        }
+      },
+    );
     const ev = listenerEventEmitter('pushOfferOrder', data => {
       if (get(data, 'offerOrder.offerSide') === BUY) {
         pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN, {
@@ -90,6 +100,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
 
     return () => {
       ev.remove();
+      navigationButtonEventListener.remove();
     };
   }, [componentId]);
   return (

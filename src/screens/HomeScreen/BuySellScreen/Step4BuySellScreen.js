@@ -100,16 +100,8 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           get(offerData, 'offerSide') === BUY &&
           get(offerData, 'isUnLockConfirm')
         ) {
-          pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN,null,{
-            topBar: {
-              rightButtons: [
-                {
-                  id: IdNavigation.PressIn.chat,
-                  icon: require('assets/icons/ic_chat.png'),
-                },
-              ],
-            },
-          });
+          pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN,null
+          );
         }
         if (
           get(offerData, 'offerSide') === SELL &&
@@ -124,16 +116,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           setDisabledSubmit(true);
         }
         if (get(offerData, 'isPaymentCancel')) {
-          pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN,null,{
-            topBar: {
-              rightButtons: [
-                {
-                  id: IdNavigation.PressIn.chat,
-                  icon: require('assets/icons/ic_chat.png'),
-                },
-              ],
-            },
-          });
+          pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN,null);
         }
       },
       3000,

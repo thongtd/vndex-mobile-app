@@ -16,7 +16,7 @@ import Container from '../../components/Container';
 import Empty from '../../components/Item/Empty';
 import Layout from '../../components/Layout/Layout';
 import TextFnx from '../../components/Text/TextFnx';
-import {BUY, SELL} from '../../configs/constant';
+import {BUY, IdNavigation, SELL} from '../../configs/constant';
 import icons from '../../configs/icons';
 import colors from '../../configs/styles/colors';
 import {
@@ -72,7 +72,16 @@ const CommandScreen2 = ({componentId}) => {
       get(item, 'offerSide') == SELL &&
       get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
     ) {
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.chat,
+              icon: require('assets/icons/ic_chat.png'),
+            },
+          ],
+        },
+      });
     } else if (
       !get(item, 'isPaymentConfirm') &&
       get(item, 'timeToLiveInSecond') > 0 &&
@@ -80,58 +89,139 @@ const CommandScreen2 = ({componentId}) => {
       get(item, 'offerSide') == SELL &&
       get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
     ) {
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
-    }else if (
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.chat,
+              icon: require('assets/icons/ic_chat.png'),
+            },
+          ],
+        },
+      });
+    } else if (
       !get(item, 'isPaymentConfirm') &&
       get(item, 'timeToLiveInSecond') > 0 &&
       !get(item, 'isUnLockConfirm') &&
       get(item, 'offerSide') == BUY &&
       get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
-    ){
-      pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN,{
-        item:{...item,side:get(item,"offerSide")== BUY?SELL:BUY},
-        offerOrder:{...item,offerOrderId:get(item,"id"),p2PTradingOrderId:get(item, 'p2PTradingOrder.id')}
-      });
-    }else if (
+    ) {
+      pushSingleScreenApp(
+        componentId,
+        STEP_3_BUY_SELL_SCREEN,
+        {
+          item: {...item, side: get(item, 'offerSide') == BUY ? SELL : BUY},
+          offerOrder: {
+            ...item,
+            offerOrderId: get(item, 'id'),
+            p2PTradingOrderId: get(item, 'p2PTradingOrder.id'),
+          },
+        },
+        {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.chat,
+                icon: require('assets/icons/ic_chat.png'),
+              },
+            ],
+          },
+        },
+      );
+    } else if (
       get(item, 'isPaymentConfirm') &&
       get(item, 'timeToLiveInSecond') > 0 &&
       !get(item, 'isUnLockConfirm') &&
       get(item, 'offerSide') == BUY &&
       get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
-    ){
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
-    }else if (
+    ) {
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.chat,
+              icon: require('assets/icons/ic_chat.png'),
+            },
+          ],
+        },
+      });
+    } else if (
       !get(item, 'isPaymentConfirm') &&
       get(item, 'timeToLiveInSecond') > 0 &&
       !get(item, 'isUnLockConfirm') &&
       get(item, 'offerSide') == SELL
-    ){
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
-    }else if (
-      !get(item, 'isPaymentConfirm') &&
-      get(item, 'timeToLiveInSecond') > 0 &&
-      !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == SELL 
     ) {
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
-    }else if (
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.chat,
+              icon: require('assets/icons/ic_chat.png'),
+            },
+          ],
+        },
+      });
+    } else if (
       !get(item, 'isPaymentConfirm') &&
       get(item, 'timeToLiveInSecond') > 0 &&
       !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == BUY 
-    ){
-      pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN,{
-        item:{...item,side:get(item,"offerSide")== BUY?SELL:BUY},
-        offerOrder:{...item,offerOrderId:get(item,"id"),p2PTradingOrderId:get(item, 'p2PTradingOrder.id')}
+      get(item, 'offerSide') == SELL
+    ) {
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.chat,
+              icon: require('assets/icons/ic_chat.png'),
+            },
+          ],
+        },
       });
-    }else if (
+    } else if (
+      !get(item, 'isPaymentConfirm') &&
+      get(item, 'timeToLiveInSecond') > 0 &&
+      !get(item, 'isUnLockConfirm') &&
+      get(item, 'offerSide') == BUY
+    ) {
+      pushSingleScreenApp(
+        componentId,
+        STEP_3_BUY_SELL_SCREEN,
+        {
+          item: {...item, side: get(item, 'offerSide') == BUY ? SELL : BUY},
+          offerOrder: {
+            ...item,
+            offerOrderId: get(item, 'id'),
+            p2PTradingOrderId: get(item, 'p2PTradingOrder.id'),
+          },
+        },
+        {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.chat,
+                icon: require('assets/icons/ic_chat.png'),
+              },
+            ],
+          },
+        },
+      );
+    } else if (
       get(item, 'isPaymentConfirm') &&
       get(item, 'timeToLiveInSecond') > 0 &&
       !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == BUY 
-    ){
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
-    }else{
+      get(item, 'offerSide') == BUY
+    ) {
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.chat,
+              icon: require('assets/icons/ic_chat.png'),
+            },
+          ],
+        },
+      });
+    } else {
       pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
     }
     // else if(!get(item, 'isUnLockConfirm') && !get(item, 'isPaymentConfirm') && !get(item, 'isPaymentCancel') && get(item, 'timeToLiveInSecond') >= 0){
@@ -248,9 +338,10 @@ const CommandScreen2 = ({componentId}) => {
               <Layout isSpaceBetween isLineCenter>
                 <ButtonIcon
                   onPress={() => {
-                    pushSingleScreenApp(componentId,CHAT_SCREEN,{
-                      orderId:get(item, 'id')
-                    })
+                    pushSingleScreenApp(componentId, CHAT_SCREEN, {
+                      orderId: get(item, 'id'),
+                      email:get(item, 'p2PTradingOrder.identityUser.userName')
+                    });
                   }}
                   iconComponent={icons.IcChat}
                   title={get(item, 'p2PTradingOrder.identityUser.userName')}
@@ -292,7 +383,13 @@ const mapStatus = ({
   isUnLockConfirm,
   timeToLiveInSecond,
 }) => {
-  if (isPaymentCancel || (!isPaymentConfirm && !isPaymentCancel && !isUnLockConfirm && timeToLiveInSecond == 0)) {
+  if (
+    isPaymentCancel ||
+    (!isPaymentConfirm &&
+      !isPaymentCancel &&
+      !isUnLockConfirm &&
+      timeToLiveInSecond == 0)
+  ) {
     return {
       color: colors.app.sell,
       bg: colors.app.bgSell,
@@ -316,7 +413,12 @@ const mapStatus = ({
       bg: colors.app.bgSell,
       label: 'Khiếu lại',
     };
-  } else if (!isPaymentConfirm && !isPaymentCancel && !isUnLockConfirm && timeToLiveInSecond > 0) {
+  } else if (
+    !isPaymentConfirm &&
+    !isPaymentCancel &&
+    !isUnLockConfirm &&
+    timeToLiveInSecond > 0
+  ) {
     return {
       color: colors.app.sell,
       bg: colors.app.bgSell,
