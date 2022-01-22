@@ -347,6 +347,9 @@ const HomeScreen = ({componentId}) => {
                   if(get(item,"traderInfo.identityUserId") == get(UserInfo,"id")){
                     return toast("Không được đặt lệnh bạn đã tạo");
                   }
+                  if(!get(UserInfo,"twoFactorEnabled")){
+                    return toast("Vui lòng bật thiết lập 2FA để tạo lệnh");
+                  }
                   pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN, {
                     item,
                   });

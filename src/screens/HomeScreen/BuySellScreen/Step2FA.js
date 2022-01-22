@@ -21,6 +21,7 @@ import {UNLOCK_OFFER_ADVERTISMENT} from '../../../redux/modules/p2p/actions';
 import {pushSingleScreenApp, STEP_5_BUY_SELL_SCREEN} from '../../../navigation';
 import Layout from '../../../components/Layout/Layout';
 import TimelineBuySell from './TimelineBuySell';
+import {P2pService} from '../../../services/p2p.service';
 const Step2FA = ({componentId}) => {
   const [otp, setOtp] = useState('');
   const dispatcher = useDispatch();
@@ -39,7 +40,7 @@ const Step2FA = ({componentId}) => {
       ev.remove();
     };
   }, [componentId]);
-  
+
   const handleSubmit = () => {
     let dataConfirm = {
       verifyCode: otp,
@@ -49,13 +50,22 @@ const Step2FA = ({componentId}) => {
     if (size(otp) === 0) {
       toast('Please enter 2FA code'.t());
     } else {
-      
-      dispatcher(
-        createAction(UNLOCK_OFFER_ADVERTISMENT,{
-            data:dataConfirm,
-            offerOrderId
-        }),
-      );
+      P2pService.verify2Fa(dataConfirm)
+        .then(res => {
+          if (get(res, 'status')) {
+            dispatcher(
+              createAction(UNLOCK_OFFER_ADVERTISMENT, {
+                data: dataConfirm,
+                offerOrderId,
+              }),
+            );
+          } else {
+            toast(get(res, 'message'));
+          }
+        })
+        .catch(err => {
+          toast('Lỗi kết nối');
+        });
     }
   };
   const handleResend = () => {
@@ -65,22 +75,22 @@ const Step2FA = ({componentId}) => {
   };
   useEffect(() => {
     handleResend();
-      return () => {
-          
-      }
-  }, [])
+    return () => {};
+  }, []);
   return (
     <Container
-    //   isLoadding={disabled}
+      //   isLoadding={disabled}
       componentId={componentId}
       isTopBar={true}
-      title={'security verification'.t()}
-      
-      >
+      title={'security verification'.t()}>
       <Layout type="column" spaceHorizontal={spacingApp}>
-          <TimelineBuySell side={get(offerOrder, 'offerSide')} step={2} title={'security verification'.t()} />
-        </Layout>
-        
+        <TimelineBuySell
+          side={get(offerOrder, 'offerSide')}
+          step={2}
+          title={'security verification'.t()}
+        />
+      </Layout>
+
       <Input
         onSubmitEditing={handleSubmit}
         handleResend={handleResend}

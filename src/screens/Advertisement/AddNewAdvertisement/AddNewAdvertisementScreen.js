@@ -81,6 +81,7 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
     second: 900,
     name: '15 phút',
   });
+  const UserInfo = useSelector(state => state.authentication.userInfo);
   const tradingMarket = useSelector(state => state.p2p.tradingMarket);
   const currencyList = useSelector(state => state.market.currencyList);
   const [ActiveAsset, setActiveAsset] = useState(
@@ -470,6 +471,9 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
 
   const submitNextStep = () => {
     if (step == 0) {
+      if(!get(UserInfo,"twoFactorEnabled")){
+        return toast("Vui lòng bật thiết lập 2FA để đăng quảng cáo");
+      }
       if (price.str2Number() <= 0 || isEmpty(price)) {
         return toast('Vui lòng nhập giá của bạn phải lớn hơn 0');
       } else if (

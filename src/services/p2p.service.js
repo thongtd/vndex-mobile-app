@@ -142,4 +142,10 @@ export const P2pService = {
     let response = await httpService.get(url);
     return response.data;
   },
+  verify2Fa:async (data) => {
+    let url = `${P2P_API.VERIFY_2FA}`;
+    let response = await httpService.post(url,data);
+    console.log('response verify 2fa: ', response);
+    return response.data;
+  }
 };

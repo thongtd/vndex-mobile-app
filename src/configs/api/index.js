@@ -15,6 +15,7 @@ const EXCHANGE_URL =
   env === 'dev' ? 'http://54.169.221.223:6870/' : 'http://54.169.221.223:8870/';
 // const EXCHANGE_URL = 'http://dev-api.financex.io/';
 export const P2P_API = {
+  VERIFY_2FA:`${EXCHANGE_URL}api/v1/package/verify-2fa`,
   advertisments: `${EXCHANGE_URL}api/v1/p2p-order/advertisments`,
   GET_TRADING_MARKETS: `${EXCHANGE_URL}api/v1/trade/get-trading-markets`,
   GET_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/advertisment`, //orderId,

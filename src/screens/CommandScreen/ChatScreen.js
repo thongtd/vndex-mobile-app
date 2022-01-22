@@ -2,6 +2,8 @@ import {get, isEmpty} from 'lodash';
 import React, {useState, useCallback, useEffect} from 'react';
 import {
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -153,7 +155,7 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
     });
   };
   return (
-    <Container componentId={componentId} title={email}>
+    <Container componentId={componentId} isFlex title={email}>
       <GiftedChat
         renderLoading={() => <ActivityIndicator />}
         scrollToBottom
@@ -251,6 +253,7 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
         // }}
         infiniteScroll={true}
       />
+      {Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />}
     </Container>
   );
 }

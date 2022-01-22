@@ -23,6 +23,7 @@ import {
   pushSingleScreenApp,
   STEP_ADS_ADD_SUCCESS,
 } from '../../../../navigation';
+import {P2pService} from '../../../../services/p2p.service';
 
 export default function Step2FaAdsAdd({componentId, data}) {
   const [otp, setOtp] = useState('');
@@ -48,33 +49,57 @@ export default function Step2FaAdsAdd({componentId, data}) {
     if (size(otp) === 0) {
       toast('Please enter 2FA code'.t());
     } else {
-      dispatcher(
-        createAction(
-          get(data, 'isUpdate') ? UPDATE_ADVERTISMENT : CREATE_ADVERTISMENT,
-          {
-            side: get(data, 'activeType'),
-            coinSymbol: get(data, 'ActiveAsset'),
-            paymentUnit: get(data, 'ActiveFiat'),
-            price: get(data, 'price').str2Number(),
-            quantity: get(data, 'quantity').str2Number(),
-            priceType: get(data, 'checked'),
-            minOrderAmount: get(data, 'minOrder').str2Number(),
-            maxOrderAmount: get(data, 'maxOrder').str2Number(),
-            accountPaymentMethodIds: get(data, 'paymentMethodIdData'),
-            comment: get(data, 'comment'),
-            autoReplyMessage: get(data, 'autoReplyMessage'),
-            lockedInSecond: get(data, 'activeTimeToLive.second'),
-            requiredKyc: get(data, 'isSelectedKYC'),
-            requiredAgeInDay: get(data,"isSelectedRegister")? 10:0,
-            isOpenForTrading:
-              get(data, 'checkedStatus') == 'first' ? true : false,
-            verifyCode: otp,
-            userEmail: get(UserInfo, 'email'),
-            sessionId: sessionId || '',
-            tradingOrderId: get(data, 'tradingOrderId')
-          },
-        ),
-      );
+      P2pService.verify2Fa({
+          verifyCode: otp,
+          userEmail: get(UserInfo, 'email'),
+          sessionId: sessionId
+        }).then((res)=>{
+          console.log(res,"resss");
+        }).catch(err => console.log(err))
+      // P2pService.verify2Fa({
+      //   verifyCode: otp,
+      //   userEmail: get(UserInfo, 'email'),
+      //   sessionId: sessionId
+      // })
+      //   .then(res => {
+      //     console.log('res: ', res);
+      //     if (get(res, 'status')) {
+      //       dispatcher(
+      //         createAction(
+      //           get(data, 'isUpdate')
+      //             ? UPDATE_ADVERTISMENT
+      //             : CREATE_ADVERTISMENT,
+      //           {
+      //             side: get(data, 'activeType'),
+      //             coinSymbol: get(data, 'ActiveAsset'),
+      //             paymentUnit: get(data, 'ActiveFiat'),
+      //             price: get(data, 'price').str2Number(),
+      //             quantity: get(data, 'quantity').str2Number(),
+      //             priceType: get(data, 'checked'),
+      //             minOrderAmount: get(data, 'minOrder').str2Number(),
+      //             maxOrderAmount: get(data, 'maxOrder').str2Number(),
+      //             accountPaymentMethodIds: get(data, 'paymentMethodIdData'),
+      //             comment: get(data, 'comment'),
+      //             autoReplyMessage: get(data, 'autoReplyMessage'),
+      //             lockedInSecond: get(data, 'activeTimeToLive.second'),
+      //             requiredKyc: get(data, 'isSelectedKYC'),
+      //             requiredAgeInDay: get(data, 'isSelectedRegister') ? 10 : 0,
+      //             isOpenForTrading:
+      //               get(data, 'checkedStatus') == 'first' ? true : false,
+      //             verifyCode: otp,
+      //             userEmail: get(UserInfo, 'email'),
+      //             sessionId: sessionId || '',
+      //             tradingOrderId: get(data, 'tradingOrderId'),
+      //           },
+      //         ),
+      //       );
+      //     } else {
+      //       toast(get(res, 'message'));
+      //     }
+      //   })
+      //   .catch(err => {
+      //     toast('Lỗi kết nối');
+      //   });
     }
   };
   const handleResend = () => {

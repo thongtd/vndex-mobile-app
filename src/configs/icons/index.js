@@ -43,7 +43,7 @@ export default {
   icBankPng: require('assets/icons/ic_banks-png.png'),
   icArrowRight: require('assets/icons/ic_arrow_right.png'),
   icBank: require('assets/icons/ic_bank.png'),
-  avatar: require('assets/images/avatar.png'),
+  avatar: require('assets/images/user-avatar.png'),
   bgLogin: require('assets/images/bg_login.jpeg'),
   bgSignup: require('assets/images/bg_signup.jpeg'),
   bgWallet: require('../../assets/images/bg_wallet.png'),
