@@ -64,7 +64,7 @@ const HomeScreen = ({componentId}) => {
   const [isRefresh, setRefresh] = useState(false);
   const [ActiveType, setActiveType] = useState('B');
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadMore, setLoadMore] = useState(true);
+  const [isLoadMore, setLoadMore] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
   const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
@@ -151,16 +151,27 @@ const HomeScreen = ({componentId}) => {
       setIsLoading(false);
     });
     if (ActiveSymbol) {
-      getAdvertisments(ActiveType,ActiveSymbol);
+      console.log('ActiveSymbol: ', ActiveSymbol);
+      setLoadMore(false);
+      getAdvertisments(ActiveType,ActiveSymbol, pageIndex);
       setIsLoading(true);
+      setPageIndex(1)
     }
 
     return () => {
       evDone.remove();
     };
   }, [dispatch, ActiveType, ActiveSymbol, isRefresh]);
+useEffect(() => {
+  getAdvertisments(ActiveType,ActiveSymbol, pageIndex);
+  setIsLoading(true);
 
-  const getAdvertisments = (ActiveType,ActiveSymbol) => {
+  return () => {
+    
+  };
+}, [pageIndex]);
+
+  const getAdvertisments = (ActiveType,ActiveSymbol, pageIndex) => {
     useActionsP2p(dispatch).handleGetAdvertisments({
       pageIndex: pageIndex || 1,
       pageSize: 15,
@@ -171,13 +182,20 @@ const HomeScreen = ({componentId}) => {
   const logged = useSelector(state => state.authentication.logged);
   const currencyList = useSelector(state => state.market.currencyList);
   const _onScroll = event => {
+    
     if (isLoadMore || pageIndex >= get(advertisments, 'pages')) {
+      // alert("ok");
       return;
     }
     let y = event.nativeEvent.contentOffset.y;
+    console.log('y: ', y);
     let height = event.nativeEvent.layoutMeasurement.height;
+    console.log('height: ', height);
     let contentHeight = event.nativeEvent.contentSize.height;
+    console.log('contentHeight: ', contentHeight);
+    
     if (y + height >= contentHeight - 20) {
+      console.log("ok r")
       setPageIndex(pageIndex + 1);
       setLoadMore(true);
     }

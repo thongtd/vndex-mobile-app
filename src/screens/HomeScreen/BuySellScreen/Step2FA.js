@@ -44,15 +44,16 @@ const Step2FA = ({componentId}) => {
   const handleSubmit = () => {
     let dataConfirm = {
       verifyCode: otp,
-      userEmail: get(UserInfo, 'email'),
+      email: get(UserInfo, 'email'),
       sessionId: sessionId,
+      ipAddress:""
     };
     if (size(otp) === 0) {
       toast('Please enter 2FA code'.t());
     } else {
       P2pService.verify2Fa(dataConfirm)
         .then(res => {
-          if (get(res, 'status')) {
+          if (get(res, 'succeeded')) {
             dispatcher(
               createAction(UNLOCK_OFFER_ADVERTISMENT, {
                 data: dataConfirm,

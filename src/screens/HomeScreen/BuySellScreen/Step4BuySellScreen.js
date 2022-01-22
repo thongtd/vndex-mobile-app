@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { isEmpty} from 'lodash';
 import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
 import Layout from '../../../components/Layout/Layout';
@@ -343,6 +344,104 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             </Layout>
           )}
         </Layout>
+        {!isEmpty(get(offerOrderState, 'backAccountNo')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Số tài khoản</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(offerOrderState, 'backAccountNo')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() =>
+                  hanldeCopy(get(offerOrderState, 'bankAccountNo'))
+                }
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(offerOrderState, 'bankName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>
+              Tên ngân hàng
+            </TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(offerOrderState, 'bankName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(offerOrderState, 'bankName'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(offerOrderState, 'bankBranchName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Chi nhánh</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(offerOrderState, 'bankBranchName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() =>
+                  hanldeCopy(get(offerOrderState, 'bankBranchName'))
+                }
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(offerOrderState, 'fullName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Tên</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(offerOrderState, 'fullName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(offerOrderState, 'fullName'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(offerOrderState, 'phoneNumber')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>
+              Số điện thoại
+            </TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(offerOrderState, 'phoneNumber')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(offerOrderState, 'phoneNumber'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
         <Layout
           style={{
             backgroundColor: colors.app.lineSetting,

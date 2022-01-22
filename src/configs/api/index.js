@@ -1,4 +1,4 @@
-const env = 'prod';
+const env = 'env';
 // const MARKET_WATCH_URL = 'http://54.169.27.91:6873/';
 
 const MARKET_WATCH_URL =
@@ -15,7 +15,7 @@ const EXCHANGE_URL =
   env === 'dev' ? 'http://54.169.221.223:6870/' : 'http://54.169.221.223:8870/';
 // const EXCHANGE_URL = 'http://dev-api.financex.io/';
 export const P2P_API = {
-  VERIFY_2FA:`${EXCHANGE_URL}api/v1/package/verify-2fa`,
+  VERIFY_2FA:`${EXCHANGE_URL}api/v1/user/validate-2fa-code`,
   advertisments: `${EXCHANGE_URL}api/v1/p2p-order/advertisments`,
   GET_TRADING_MARKETS: `${EXCHANGE_URL}api/v1/trade/get-trading-markets`,
   GET_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/advertisment`, //orderId,
@@ -152,7 +152,7 @@ export const XWALLET_API = {
 export const SOCKET_URL =
   env === 'dev'
     ? 'http://54.169.221.223:6870/chat-hub/negotiate?userId='
-    : 'http://54.169.221.223:6870/chat-hub/negotiate?userId='; //uid is user id response when user login
+    : 'http://54.169.221.223:8870/chat-hub/negotiate?userId='; //uid is user id response when user login
 // export const SOCKET_URL = 'http://dev-market-watch.financex.io/signalrHub?uid=' //uid is user id response when user login
 export const SOCKET_EVENT = {
   timeServiceNotifyListener: 'timeServiceNotifyListener',

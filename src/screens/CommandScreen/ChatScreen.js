@@ -24,12 +24,7 @@ import colors from '../../configs/styles/colors';
 import {isArray, size, toast} from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
 import SignalRService from '../../services/signalr.service';
-import {
-  HubConnectionBuilder,
-  JsonHubProtocol,
-  LogLevel,
-  HttpTransportType,
-} from '@aspnet/signalr';
+import {HubConnectionBuilder,LogLevel} from '@aspnet/signalr';
 import {SOCKET_URL} from '../../configs/api';
 
 export default function ChatScreen({componentId, orderId, email = ''}) {
@@ -61,18 +56,26 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
   }, [skip]);
 
   useEffect(() => {
-    const hubConnection = new HubConnectionBuilder()
-      .configureLogging(LogLevel.None)
-      .withUrl(`${SOCKET_URL}${get(UserInfo, 'id')}`)
-      .withHubProtocol(new JsonHubProtocol())
-      .build();
-    console.log(hubConnection, 'hubConnection');
+    let url = `http://54.169.221.223:6870/chat-hub/negotiate?userId=${get(UserInfo, 'id')}`;
+    var hubConnection = new HubConnectionBuilder()
+    .withUrl(url)
+    .configureLogging(LogLevel.None)
+    .build();
+
+    // const hubConnection = new HubConnectionBuilder()
+    //   .configureLogging(LogLevel.None)
+    //   .withUrl(url)
+    //   .withHubProtocol(new JsonHubProtocol())
+    //   .build();
+    console.log(hubConnection,url, 'hubConnection');
+    // hubConnection.on('newMessage', data => {
+    //   console.log(data, 'daaat');
+    // });
     hubConnection
       .start()
       .then(res => {
-        hubConnection.on('newMessage', data => {
-          console.log(data, 'daaat');
-        });
+        console.log('res: ', res);
+       
       })
       .catch(err => console.log('err: ', err));
     hubConnection.onclose(data => {

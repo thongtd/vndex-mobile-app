@@ -44,6 +44,7 @@ import {
   get,
   listenerEventEmitter,
   toast,
+  to_UTCDate,
 } from '../../../configs/utils';
 import {ceil, isEmpty, isNumber} from 'lodash';
 import {useSelector} from 'react-redux';
@@ -78,16 +79,15 @@ const Step3BuySellScreen = ({
     }
     return () => {};
   }, [offerOrderGlobal, UserInfo]);
+
   useEffect(() => {
-    useActionsP2p(dispatch).handleGetOfferOrder(
-      get(offerOrder, 'offerOrderId'),
-    );
     useActionsP2p(dispatch).handleGetAdvertisment(
       get(offerOrder, 'p2PTradingOrderId'),
     );
-    return () => {};
-  }, []);
-  useEffect(() => {
+    useActionsP2p(dispatch).handleGetOfferOrder(
+      get(offerOrder, 'offerOrderId'),
+    );
+ 
     const ev = listenerEventEmitter('pushStep', dataConfirm => {
       console.log(dataConfirm, offerOrderState, 'data confirm');
       // alert(JSON.stringify(item));
@@ -142,7 +142,7 @@ const Step3BuySellScreen = ({
   const currencyList = useSelector(state => state.market.currencyList);
   const actionSheetRef = useRef(null);
 
-  console.log('advertisment: ', advertisment);
+  console.log('item: ', item);
 
   return (
     <Container
@@ -176,9 +176,6 @@ const Step3BuySellScreen = ({
           style={{
             flexDirection: 'row',
           }}
-          // onFinish={() => {
-          //   // useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
-          // }}
           digitStyle={{height: 15, width: 20}}
           digitTxtStyle={{
             color: colors.app.yellowHightlight,
@@ -190,7 +187,6 @@ const Step3BuySellScreen = ({
             color: colors.app.yellowHightlight,
           }}
         />
-        {/* <TextFnx color={colors.app.yellowHightlight}>14:31</TextFnx> */}
       </Layout>
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
@@ -215,7 +211,7 @@ const Step3BuySellScreen = ({
               : colors.app.sell
           }>
           {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${
-            get(advertisment, 'symbol') || ''
+            get(advertisment, 'symbol') || get(item,"symbol")
           }`}
         </TextFnx>
         <Layout
@@ -237,13 +233,116 @@ const Step3BuySellScreen = ({
             }>
             {`${formatCurrency(
               get(offerOrderState, 'price'),
-              get(advertisment, 'paymentUnit'),
+              get(advertisment, 'paymentUnit') || get(item,"paymentUnit"),
               currencyList,
             )} `}
             <TextFnx color={colors.app.textContentLevel3}>
-              {get(advertisment, 'paymentUnit')}
+              {get(advertisment, 'paymentUnit') || get(item,"paymentUnit")}
             </TextFnx>
           </TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
+            get(offerOrderState, 'quantity'),
+            get(advertisment, 'paymentUnit') || get(item,"paymentUnit"),
+            currencyList,
+          )} ${get(advertisment, 'symbol') || get(item,"symbol")}`}</TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
+            get(offerOrderState, 'price') * (get(advertisment, 'fee') || get(item,"fee")),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'paymentUnit') || get(item,"paymentUnit")}`}</TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>
+            0 {get(advertisment, 'paymentUnit') || get(item,"paymentUnit")}
+          </TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
+          <Layout isLineCenter>
+            <TextFnx color={colors.app.textContentLevel2}>
+              {get(advertisment, 'orderNumber')}
+            </TextFnx>
+            <ButtonIcon
+              onPress={() => {
+                Clipboard.setString(get(advertisment, 'orderNumber'));
+                toast('COPY_TO_CLIPBOARD'.t());
+              }}
+              style={{
+                height: 25,
+                width: 30,
+              }}
+              iconComponent={<Copy height={20} width={20} />}
+            />
+          </Layout>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>
+            {to_UTCDate(
+              get(advertisment, 'createdDate'),
+              'DD-MM-YYYY hh:mm:ss',
+            )}
+          </TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>
+            Phương thức thanh toán
+          </TextFnx>
+          {get(offerOrderState, 'exPaymentMethodCode') ==
+          constant.CODE_PAYMENT_METHOD.MOMO ? (
+            <Layout isLineCenter>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: '#3B2B2B',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
+                  paddingVertical: 2,
+                  borderRadius: 5,
+                }}>
+                <Image
+                  source={icons.icMomo}
+                  style={{
+                    marginLeft: 5,
+                    width: 10,
+                    height: 10,
+                  }}
+                />
+                <TextFnx spaceLeft={5}>Momo</TextFnx>
+              </View>
+            </Layout>
+          ) : (
+            <Layout isLineCenter>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: '#3B2B2B',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
+                  paddingVertical: 2,
+                  borderRadius: 5,
+                }}>
+                <Image
+                  source={icons.icBank}
+                  style={{
+                    marginLeft: 5,
+                    width: 10,
+                    height: 10,
+                  }}
+                />
+                <TextFnx spaceLeft={5}>Chuyển khoản</TextFnx>
+              </View>
+            </Layout>
+          )}
         </Layout>
         {!isEmpty(get(offerOrderState, 'backAccountNo')) && (
           <Layout isSpaceBetween space={8}>
@@ -343,59 +442,7 @@ const Step3BuySellScreen = ({
             </Layout>
           </Layout>
         )}
-        <Layout isSpaceBetween space={8}>
-          <TextFnx color={colors.app.textContentLevel3}>
-            Phương thức thanh toán
-          </TextFnx>
-          {get(offerOrderState, 'exPaymentMethodCode') ==
-          constant.CODE_PAYMENT_METHOD.MOMO ? (
-            <Layout isLineCenter>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: '#3B2B2B',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingHorizontal: 5,
-                  paddingVertical: 2,
-                  borderRadius: 5,
-                }}>
-                <Image
-                  source={icons.icMomo}
-                  style={{
-                    marginLeft: 5,
-                    width: 10,
-                    height: 10,
-                  }}
-                />
-                <TextFnx spaceLeft={5}>Momo</TextFnx>
-              </View>
-            </Layout>
-          ) : (
-            <Layout isLineCenter>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: '#3B2B2B',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingHorizontal: 5,
-                  paddingVertical: 2,
-                  borderRadius: 5,
-                }}>
-                <Image
-                  source={icons.icBank}
-                  style={{
-                    marginLeft: 5,
-                    width: 10,
-                    height: 10,
-                  }}
-                />
-                <TextFnx spaceLeft={5}>Chuyển khoản</TextFnx>
-              </View>
-            </Layout>
-          )}
-        </Layout>
+      
         <Layout spaceBottom={10} type="column">
           <TextFnx space={10} color={colors.app.yellowHightlight}>
             Lưu ý
