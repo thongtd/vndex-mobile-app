@@ -124,4 +124,22 @@ export const P2pService = {
     let response = await httpService.post(url,data);
     return response.data;
   },
+  chatHistory: async (data,orderId) => {
+    let dataRemoved = removeEmptyUrl(
+      `skip=${data.skip}&take=${data.take}`,
+    );
+    let url = `${P2P_API.CHAT_HISTORY}${orderId}?${dataRemoved}`;
+    let response = await httpService.get(url);
+    return response.data;
+  },
+  chatSendMessage: async (data,orderId) => {
+    let url = `${P2P_API.CHAT_SEND_MESSAGE}${orderId}`;
+    let response = await httpService.post(url,data);
+    return response.data;
+  },
+  chatInfoP2p: async (orderId) => {
+    let url = `${P2P_API.CHAT_INFO_P2P}${orderId}`;
+    let response = await httpService.get(url);
+    return response.data;
+  },
 };

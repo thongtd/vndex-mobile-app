@@ -34,6 +34,12 @@ export const REMOVE_ADVERTISMENT_SUCCESS = `${CONTEXT}/REMOVE_ADVERTISMENT_SUCCE
 export const UPDATE_STATUS_ADV = `${CONTEXT}/UPDATE_STATUS_ADV`;
 export const UPDATE_STATUS_ADV_SUCCESS = `${CONTEXT}/UPDATE_STATUS_ADV_SUCCESS`;
 
+export const GET_CHAT_HISTORY = `${CONTEXT}/GET_CHAT_HISTORY`;
+export const GET_CHAT_HISTORY_SUCCESS = `${CONTEXT}/GET_CHAT_HISTORY_SUCCESS`;
+export const GET_CHAT_INFO_P2P = `${CONTEXT}/GET_CHAT_INFO_P2P`;
+export const GET_CHAT_INFO_P2P_SUCCESS = `${CONTEXT}/GET_CHAT_INFO_P2P_SUCCESS`;
+export const SEND_CHAT_MESSAGE = `${CONTEXT}/SEND_CHAT_MESSAGE`;
+
 export const CREATE_OFFER_ADVERTISMENT = `${CONTEXT}/CREATE_OFFER_ADVERTISMENT`;
 export const GET_DETIAL_ADVERTISMENT = `${CONTEXT}/GET_DETIAL_ADVERTISMENT`;
 
@@ -49,7 +55,14 @@ export function useActionsP2p(dispatch) {
   return {
     handleGetAdvertisments: data =>
       dispatch(createAction(GET_ADVERTISMENTS, data)),
-      handleUpdateStatusAdv: data =>
+    handleGetChatHistory: data =>
+      dispatch(createAction(GET_CHAT_HISTORY, data)),
+    handleGetChatInfoP2p: data =>
+      dispatch(createAction(GET_CHAT_INFO_P2P, data)),
+    handleSendChatMessage: data =>
+      dispatch(createAction(SEND_CHAT_MESSAGE, data)),
+
+    handleUpdateStatusAdv: data =>
       dispatch(createAction(UPDATE_STATUS_ADV, data)),
     handleGetHistoryOrder: data =>
       dispatch(createAction(GET_HISTORY_ORDER, data)),
@@ -104,4 +117,6 @@ export const actionsReducerP2p = {
   getHistoryOrderSuccess: data => createAction(GET_HISTORY_ORDER_SUCCESS, data),
   unlockOfferAdvertismentSuccess: data =>
     createAction(UNLOCK_OFFER_ADVERTISMENT_SUCCESS, data),
+  getChatHistorySuccess: data => createAction(GET_CHAT_HISTORY_SUCCESS, data),
+  getChatInfoP2pSuccess: data => createAction(GET_CHAT_INFO_P2P_SUCCESS, data),
 };

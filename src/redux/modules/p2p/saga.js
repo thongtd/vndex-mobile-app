@@ -32,6 +32,10 @@ import {
   GET_HISTORY_ORDER,
   GET_DETIAL_ADVERTISMENT,
   UPDATE_STATUS_ADV,
+  GET_CHAT_HISTORY,
+  GET_CHAT_HISTORY_SUCCESS,
+  GET_CHAT_INFO_P2P,
+  SEND_CHAT_MESSAGE,
 } from './actions';
 
 import {
@@ -71,12 +75,12 @@ export function* asyncGetAdvertisments({payload}) {
           pages: ceil(get(res, 'totalRecords') / get(payload, 'pageSize')),
         }),
       );
-    }else{
+    } else {
       actionsReducerP2p.getAdvertismentsSuccess({
-        source:[],
+        source: [],
         pageIndex: 1,
         pages: 0,
-      })
+      });
     }
     emitEventEmitter('doneApi', true);
   } catch (e) {
@@ -457,13 +461,7 @@ export function* watchUpdateAdvertisment() {
 }
 export function* asyncDeleteAdvertisment({payload}) {
   try {
-    
-    const res = yield call(
-      
-      P2pService.removeAdvertisment,
-      payload,
-    );
-    
+    const res = yield call(P2pService.removeAdvertisment, payload);
     emitEventEmitter('doneApi', true);
     if (get(res, 'success') && get(res, 'status')) {
       toast(get(res, 'message'));
@@ -511,17 +509,17 @@ export function* watchDetailsItemAdvertisment() {
 }
 export function* asyncUpdateStatusAdv({payload}) {
   try {
-      const res = yield call(
-        P2pService.updateStatusAdv,
-        get(payload, 'data'),
-        get(payload, 'orderId'),
-      );
-      emitEventEmitter('doneApi', true);
-      if (get(res, 'success')) {
-        yield put(createAction(GET_MY_ADVERTISMENTS));
-      } else {
-        toast(get(res, 'message'));
-      }
+    const res = yield call(
+      P2pService.updateStatusAdv,
+      get(payload, 'data'),
+      get(payload, 'orderId'),
+    );
+    emitEventEmitter('doneApi', true);
+    if (get(res, 'success')) {
+      yield put(createAction(GET_MY_ADVERTISMENTS));
+    } else {
+      toast(get(res, 'message'));
+    }
   } catch (e) {
     emitEventEmitter('doneApi', true);
   }
@@ -531,6 +529,69 @@ export function* watchUpdateStatusAdv() {
     const action = yield take(UPDATE_STATUS_ADV);
     yield* asyncUpdateStatusAdv(action);
   }
+}
+export function* asyncGetChatHistory({payload}) {
+  try {
+    const res = yield call(
+      
+      P2pService.chatHistory,
+      get(payload, 'data'),
+      get(payload, 'orderId'),
+    );
+    console.log('reshi: ',get(payload, 'orderId'), res);
+    emitEventEmitter('doneApi', true);
+    emitEventEmitter('doneChatHistory', true);
+    yield put(
+      actionsReducerP2p.getChatHistorySuccess({
+        ...res,
+        skip: get(payload, 'data.skip'),
+        pages: ceil(get(res, 'totalRecords') / get(payload, 'data.take')),
+      }),
+    );
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetChatHistory() {
+  yield takeEvery(GET_CHAT_HISTORY, asyncGetChatHistory);
+}
+export function* asyncGetChatInfoP2p({payload}) {
+  try {
+    const res = yield call(P2pService.chatInfoP2p, payload);
+    emitEventEmitter('doneApi', true);
+    if (get(res, 'success')) {
+      yield put(actionsReducerP2p.getChatInfoP2pSuccess(get(res, 'data')));
+      yield put(actionsReducerP2p.getChatHistorySuccess({
+        ...get(res,'data.p2PConversationMessagePaging'),
+        skip:0,
+        pages: ceil(get(res, 'data.p2PConversationMessagePaging.totalRecords') / 10),
+      }))
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetChatInfoP2p() {
+  yield takeEvery(GET_CHAT_INFO_P2P, asyncGetChatInfoP2p);
+}
+export function* asyncSendMessage({payload}) {
+  try {
+    const res = yield call(
+      P2pService.chatSendMessage,
+      get(payload, 'formData'),
+      get(payload, 'orderId'),
+    );
+    console.log('res: ', res);
+    emitEventEmitter('doneApi', true);
+    if (!get(res, 'status')) {
+      toast(get(res, 'message'));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchSendMessage() {
+  yield takeEvery(SEND_CHAT_MESSAGE, asyncSendMessage);
 }
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
@@ -551,4 +612,7 @@ export default function* () {
   yield all([fork(watchUpdateAdvertisment)]);
   yield all([fork(watchDeleteAdvertisment)]);
   yield all([fork(watchUpdateStatusAdv)]);
+  yield all([fork(watchGetChatHistory)]);
+  yield all([fork(watchGetChatInfoP2p)]);
+  yield all([fork(watchSendMessage)]);
 }

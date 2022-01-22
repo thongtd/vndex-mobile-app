@@ -17,6 +17,7 @@ import {
   SELL,
   BUY,
   spacingApp,
+  IdNavigation,
 } from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
@@ -60,11 +61,29 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
           paymentMethodData: get(data, 'paymentMethodData'),
           offerOrder: get(data, 'offerOrder'),
           item,
+        },{
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.chat,
+                icon: require('assets/icons/ic_chat.png'),
+              },
+            ],
+          },
         });
       } else {
         pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, {
           paymentMethodData: get(data, 'paymentMethodData'),
           item,
+        },{
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.chat,
+                icon: require('assets/icons/ic_chat.png'),
+              },
+            ],
+          },
         });
       }
     });

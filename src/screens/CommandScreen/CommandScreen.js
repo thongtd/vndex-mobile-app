@@ -25,6 +25,7 @@ import {
   to_UTCDate,
 } from '../../configs/utils';
 import {
+  CHAT_SCREEN,
   pushSingleScreenApp,
   STEP_3_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
@@ -46,7 +47,7 @@ const CommandScreen2 = ({componentId}) => {
     setActiveMenu(get(menu, 'id'));
   };
   const onSelectUnit = () => {
-    alert('Lựa chọn đợn vị');
+    // alert('Lựa chọn đợn vị');
   };
   const dispatch = useDispatch();
   const UserInfo = useSelector(state => state.authentication.userInfo);
@@ -246,7 +247,11 @@ const CommandScreen2 = ({componentId}) => {
             contentBottom={
               <Layout isSpaceBetween isLineCenter>
                 <ButtonIcon
-                  onPress={() => {}}
+                  onPress={() => {
+                    pushSingleScreenApp(componentId,CHAT_SCREEN,{
+                      orderId:get(item, 'id')
+                    })
+                  }}
                   iconComponent={icons.IcChat}
                   title={get(item, 'p2PTradingOrder.identityUser.userName')}
                   style={{

@@ -82,6 +82,7 @@ export function pushTutorialScreen() {
 
       backButton: {
         color: '#8A8779',
+        title:''
       },
       buttonColor: 'white',
     },
@@ -286,12 +287,6 @@ export function pushTabBasedApp(currenIndex = 0) {
               bottomTabs: {currentTabIndex: currenIndex},
             },
           },
-        },
-        right: {
-          component: {
-            id:LOGIN_SCREEN,
-            name:LOGIN_SCREEN
-          }
         }
       }
       

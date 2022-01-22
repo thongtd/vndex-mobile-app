@@ -39,7 +39,7 @@ const ActionBottom = [
     type: 'SHARE',
   },
   {
-    name: 'Đóng quảng cáo',
+    name: 'Huỷ quảng cáo',
     type: 'CLOSE',
   },
 ];

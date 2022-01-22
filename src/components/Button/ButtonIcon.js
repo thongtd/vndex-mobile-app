@@ -10,7 +10,7 @@ import {constant} from '../../configs/constant';
 import Image from '../Image/Image';
 import TextFnx from '../Text/TextFnx';
 const ButtonIcon = ({
-  onPress,
+  onPress=()=>{},
   name = 'arrow-left',
   size = 15,
   color = colors.background,

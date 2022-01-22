@@ -166,6 +166,7 @@ export const IdNavigation = {
     notification: 'Id.PressIn.notification',
     menuLeft: 'Id.PressIn.menuLeft',
     profile: 'Id.PressIn.profile',
+    chat:'Id.PressIn.chat'
   },
 };
 

@@ -33,7 +33,11 @@ export const P2P_API = {
   REMOVE_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/delete-advertisment/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   DETAIL_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/advertisment/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   GET_HISTORY_ORDER: `${EXCHANGE_URL}api/v1/p2p-order/get-history-orders`,
-  UPDATE_STATUS_ADV: `${EXCHANGE_URL}api/v1/p2p-order/update-status-advertisment/`//3fa85f64-5717-4562-b3fc-2c963f66afa6,
+  UPDATE_STATUS_ADV: `${EXCHANGE_URL}api/v1/p2p-order/update-status-advertisment/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6,
+  CHAT_HISTORY: `${EXCHANGE_URL}api/v1/p2p-conversation/history/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6,
+  CHAT_SEND_MESSAGE: `${EXCHANGE_URL}api/v1/p2p-conversation/send-message/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6,
+  CHAT_INFO_P2P: `${EXCHANGE_URL}api/v1/p2p-conversation/`//3fa85f64-5717-4562-b3fc-2c963f66afa6,
+
 };
 export const EXCHANGE_API = {
   CHECK_API: `${EXCHANGE_URL}api/health-check`,
@@ -146,8 +150,8 @@ export const XWALLET_API = {
 //Socket API
 export const SOCKET_URL =
   env === 'dev'
-    ? 'http://54.169.88.171:6873/signalrHub?uid='
-    : 'https://market-watch.financex.io/signalrHub?uid='; //uid is user id response when user login
+    ? 'http://54.169.221.223:6870/chat-hub/negotiate?userId='
+    : 'http://54.169.221.223:6870/chat-hub/negotiate?userId='; //uid is user id response when user login
 // export const SOCKET_URL = 'http://dev-market-watch.financex.io/signalrHub?uid=' //uid is user id response when user login
 export const SOCKET_EVENT = {
   timeServiceNotifyListener: 'timeServiceNotifyListener',

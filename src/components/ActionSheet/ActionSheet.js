@@ -10,7 +10,7 @@ import TextFnx from '../Text/TextFnx';
 
 const BottomSheet = ({
     content,
-    title="ok",
+    title="",
     actionRef,
     children
 }) => {

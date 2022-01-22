@@ -15,7 +15,7 @@ import TextFnx from './Text/TextFnx';
 let hasNotch = DeviceInfo.hasNotch();
 const TopBarView = ({
   isFilter,
-  title = 'Title',
+  title = '',
   onClickRight,
   onClickLeft,
   nameLeft = 'arrow-left',

@@ -3,7 +3,7 @@ import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import WebView from 'react-native-webview';
 import Container from '../../components/Container';
 
-const url = 'http://dicvietnam.vn/services.html#issues';
+const url = 'https://dicvietnam.vn/services.html#issues';
 const DicWebview = () => {
   return (
     <WebView

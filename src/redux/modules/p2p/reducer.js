@@ -11,6 +11,8 @@ import {
   GET_MARKET_INFO_SUCCESS,
   GET_HISTORY_ORDER_SUCCESS,
   GET_DETIAL_ADVERTISMENT_SUCCESS,
+  GET_CHAT_INFO_P2P_SUCCESS,
+  GET_CHAT_HISTORY_SUCCESS,
 } from './actions';
 import {get, set} from '../../../configs/utils';
 import i18n from 'react-native-i18n';
@@ -30,6 +32,8 @@ export const DEFAULT = {
     source: [],
   },
   advertismentDetails: {},
+  chatInfoP2p:{},
+  chatHistory:{}
 };
 
 export default p2p = (state = DEFAULT, action = {}) => {
@@ -39,7 +43,6 @@ export default p2p = (state = DEFAULT, action = {}) => {
       if (get(payload, 'pageIndex') == 1) {
         set(state, 'advertisments.source', []);
       }
-
       return {
         ...state,
         advertisments: {
@@ -57,7 +60,8 @@ export default p2p = (state = DEFAULT, action = {}) => {
         marketInfo: {
           ...payload,
           lastestPrice:
-            get(state.advertismentDetails, 'price') || get(payload, 'lastestPrice'),
+            get(state.advertismentDetails, 'price') ||
+            get(payload, 'lastestPrice'),
         },
       };
     case GET_MY_ADVERTISMENT_SUCCESS:
@@ -94,6 +98,26 @@ export default p2p = (state = DEFAULT, action = {}) => {
       return {
         ...state,
         offerOrder: payload,
+      };
+      case GET_CHAT_INFO_P2P_SUCCESS:
+      return {
+        ...state,
+        chatInfoP2p: payload,
+      };
+      case GET_CHAT_HISTORY_SUCCESS:
+      if (get(payload, 'skip') == 0) {
+        set(state, 'chatHistory.source', []);
+      }
+      return {
+        ...state,
+        chatHistory: {
+          ...state.chatHistory,
+          ...payload,
+          source: [
+            ...get(state.chatHistory, 'source'),
+            ...get(payload, 'source'),
+          ],
+        },
       };
     case 'GET_OFFER_ORDER_ID_SUCCESS':
       return {

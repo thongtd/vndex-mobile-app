@@ -74,9 +74,7 @@ export default function Step3Kyc({
       };
 
       authService.updateUserInfo(data).then(res => {
-        console.log(res, 'REss');
         if (get(res, 'status')) {
-          // popToRoo(componentId,SETTING_SCREEN);
           toast(get(res, 'message'));
           Navigation.popToRoot(componentId);
         } else {

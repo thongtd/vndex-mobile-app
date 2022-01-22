@@ -116,6 +116,7 @@ import {
   STEP_2FA_BUY_SELL_SCREEN,
   STEP_2FA_ADS_ADD_SCREEN,
   STEP_ADS_ADD_SUCCESS,
+  CHAT_SCREEN,
 } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
@@ -145,6 +146,7 @@ import AddNewAdvertisementScreen from '../screens/Advertisement/AddNewAdvertisem
 import Step2FA from '../screens/HomeScreen/BuySellScreen/Step2FA';
 import Step2FaAdsAdd from '../screens/Advertisement/AddNewAdvertisement/components/Step2FaAdsAdd';
 import StepSuccess from '../screens/Advertisement/AddNewAdvertisement/components/StepSuccess';
+import ChatScreen from '../screens/CommandScreen/ChatScreen';
 
 const WrapScreen = (ReduxScreen, store) => props =>
   (
@@ -213,6 +215,11 @@ export const registerScreens = store => {
     ACCOUNTP2P_SCREEN,
     () => withNavigationProvider(WrapScreen(AccountP2PScreen, store)),
     () => AccountP2PScreen,
+  );
+  Navigation.registerComponent(
+    CHAT_SCREEN,
+    () => withNavigationProvider(WrapScreen(ChatScreen, store)),
+    () => ChatScreen,
   );
   Navigation.registerComponent(
     PAYMENT_METHOD_SCREEN,

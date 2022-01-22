@@ -4,7 +4,7 @@ import Button from '../../components/Button/Button';
 import {LOGIN_SCREEN, pushSingleScreenApp} from '../../navigation';
 import WebView from 'react-native-webview';
 import Container from '../../components/Container';
-const url = 'http://dicvietnam.vn/services.html#issues';
+const url = 'https://dicvietnam.vn/services.html#issues';
 const DicWebview = ({componentId}) => {
   return (
     <WebView
@@ -25,7 +25,7 @@ const LiquidSwapScreen = ({componentId}) => {
     <Container
       isLoadding={isLoaded}
       componentId={componentId}
-      title="Smart Issues"
+      title="AMM"
       isTopBar>
       <WebView
         source={{uri: url}}

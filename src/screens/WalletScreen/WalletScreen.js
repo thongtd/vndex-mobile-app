@@ -170,7 +170,7 @@ const WalletScreen = ({componentId}) => {
       onClickLeft={() => {}}
       isTopBar={false}
       customTopBar={<HeaderWalletScreen componentId={componentId} />}>
-      <SignalRService />
+      {/* <SignalRService /> */}
      <View style={{
        flexDirection:"row",
        paddingBottom:20,

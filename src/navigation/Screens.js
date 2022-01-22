@@ -37,7 +37,7 @@ export const ADD_PAYMENT_METHOD_SCREEN = 'vndex.title.addPaymentMethod';
 export const ACCOUNTP2P_SCREEN = 'vndex.title.AccountP2p';
 export const HISTORY_LOGIN_SCREEN = 'vndex.title.HistoryLogin';
 export const FA_CODE_EMAIL = 'vndex.title.faCodeEmail';
-
+export const CHAT_SCREEN = 'vndex.title.CHAT_SCREEN';
 export const ENABLE_2FA_GG = 'vndex.title.enable2FaGG';
 export const BACK_UP_KEY = 'vndex.title.backupkey';
 export const SET_UP_CODE = 'vndex.title.setupCode';
