@@ -63,6 +63,19 @@ const Step3BuySellScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const [offerOrderState, setOfferOrderState] = useState(offerOrder || {});
+  const [isPushChat, setIsPushChat] = useState(false);
+  useEffect(() => {
+    
+    if(isPushChat){
+      pushSingleScreenApp(componentId,CHAT_SCREEN,{orderId: get(offerOrder, 'id'),email:get(advertisment,'traderInfo.emailAddress')})
+      setIsPushChat(false);
+    }
+  
+    return () => {
+      
+    };
+  }, [isPushChat]);
+  
   useEffect(() => {
     if (
       get(UserInfo, 'id') ===
@@ -126,7 +139,7 @@ const Step3BuySellScreen = ({
     Navigation.events().registerNavigationButtonPressedListener(
       ({buttonId}) => {
         if (buttonId == IdNavigation.PressIn.chat) {
-          pushSingleScreenApp(componentId,CHAT_SCREEN,{orderId: get(offerOrder, 'p2PTradingOrderId'),email:get(advertisment,'traderInfo.emailAddress')})
+          setIsPushChat(true);
         }
       },
     );

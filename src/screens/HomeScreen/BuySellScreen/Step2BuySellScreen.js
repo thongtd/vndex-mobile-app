@@ -57,14 +57,14 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
 
   useEffect(() => {
-    const navigationButtonEventListener =
-    Navigation.events().registerNavigationButtonPressedListener(
-      ({buttonId}) => {
-        if (buttonId == IdNavigation.PressIn.chat) {
-          pushSingleScreenApp(componentId,CHAT_SCREEN,{orderId:get(advertisment, 'orderId'), email:get(advertisment,'traderInfo.emailAddress')})
-        }
-      },
-    );
+    // const navigationButtonEventListener =
+    // Navigation.events().registerNavigationButtonPressedListener(
+    //   ({buttonId}) => {
+    //     if (buttonId == IdNavigation.PressIn.chat) {
+    //       pushSingleScreenApp(componentId,CHAT_SCREEN,{orderId:get(advertisment, 'orderId'), email:get(advertisment,'traderInfo.emailAddress')})
+    //     }
+    //   },
+    // );
     const ev = listenerEventEmitter('pushOfferOrder', data => {
       if (get(data, 'offerOrder.offerSide') === BUY) {
         pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN, {
@@ -100,7 +100,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
 
     return () => {
       ev.remove();
-      navigationButtonEventListener.remove();
+      // navigationButtonEventListener.remove();
     };
   }, [componentId]);
   return (

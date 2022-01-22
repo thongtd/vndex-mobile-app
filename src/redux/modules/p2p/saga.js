@@ -558,6 +558,7 @@ export function* watchGetChatHistory() {
 export function* asyncGetChatInfoP2p({payload}) {
   try {
     const res = yield call(P2pService.chatInfoP2p, payload);
+    console.log('res chatInfoP2p: ', res);
     emitEventEmitter('doneApi', true);
     if (get(res, 'success')) {
       yield put(actionsReducerP2p.getChatInfoP2pSuccess(get(res, 'data')));

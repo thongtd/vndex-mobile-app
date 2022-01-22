@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@aspnet/signalr": "^1.0.27",
+    "@microsoft/signalr": "^6.0.1",
     "@react-native-async-storage/async-storage": "^1.15.14",
     "@react-native-community/checkbox": "^0.5.9",
     "axios": "^0.24.0",

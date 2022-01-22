@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, size } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import FastImage from 'react-native-fast-image';
@@ -7,7 +7,9 @@ import {  StyleSheet, View, } from 'react-native';
 // TODO: support web
 // @ts-ignore
 import Lightbox from 'react-native-lightbox';
-import { StylePropType } from './utils';
+import { StylePropType } from 'react-native-gifted-chat/lib/utils';
+// import { StylePropType } from './utils';
+
 const styles = StyleSheet.create({
     container: {
         flexDirection:"row",

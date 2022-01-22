@@ -24,8 +24,15 @@ import colors from '../../configs/styles/colors';
 import {isArray, size, toast} from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
 import SignalRService from '../../services/signalr.service';
-import {HubConnectionBuilder,LogLevel} from '@aspnet/signalr';
+import {
+  HubConnectionBuilder,
+  JsonHubProtocol,
+  LogLevel,
+  HttpTransportType,
+} from '@aspnet/signalr';
 import {SOCKET_URL} from '../../configs/api';
+import MessageImage from '../../components/MessageImage';
+import InputToolbar from '../../components/InputToolbar';
 
 export default function ChatScreen({componentId, orderId, email = ''}) {
   const [messages, setMessages] = useState([]);
@@ -36,61 +43,61 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
   const [skip, setSkip] = useState(0);
   const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
-    useActionsP2p(dispatcher).handleGetChatInfoP2p(orderId);
+    let dataInterval = setInterval(() => {
+      useActionsP2p(dispatcher).handleGetChatInfoP2p(orderId);
+    }, 5000);
     // useActionsP2p(dispatcher).handleGetChatHistory({
 
     // })
-
-    return () => {};
+console.log(orderId,"orderId");
+    return () => {
+      clearInterval(dataInterval);
+    };
   }, [orderId]);
   useEffect(() => {
-    useActionsP2p(dispatcher).handleGetChatHistory({
-      orderId: orderId,
-      data: {
-        skip: skip,
-        take: 10,
-      },
-    });
+    useActionsP2p(dispatcher).handleGetChatInfoP2p(orderId);
+    if (skip !== 0) {
+      useActionsP2p(dispatcher).handleGetChatHistory({
+        orderId: orderId,
+        data: {
+          skip: skip,
+          take: 10,
+        },
+      });
+    }
 
     return () => {};
   }, [skip]);
 
   useEffect(() => {
-    let url = `http://54.169.221.223:6870/chat-hub/negotiate?userId=${get(UserInfo, 'id')}`;
-    var hubConnection = new HubConnectionBuilder()
-    .withUrl(url)
-    .configureLogging(LogLevel.None)
-    .build();
-
-    // const hubConnection = new HubConnectionBuilder()
-    //   .configureLogging(LogLevel.None)
-    //   .withUrl(url)
-    //   .withHubProtocol(new JsonHubProtocol())
-    //   .build();
-    console.log(hubConnection,url, 'hubConnection');
-    // hubConnection.on('newMessage', data => {
-    //   console.log(data, 'daaat');
-    // });
+    let url = `${SOCKET_URL}${get(UserInfo, 'id')}`;
+    const hubConnection = new HubConnectionBuilder()
+      .configureLogging(LogLevel.None)
+      .withUrl(url)
+      .withHubProtocol(new JsonHubProtocol())
+      .build();
+    console.log(hubConnection, url, 'hubConnection');
     hubConnection
       .start()
       .then(res => {
-        console.log('res: ', res);
-       
+        hubConnection.on('newMessage', data => {
+          console.log(data, 'daaat');
+        });
       })
       .catch(err => console.log('err: ', err));
-    hubConnection.onclose(data => {
-      var reconnectInterval = setInterval(() => {
-        hubConnection
-          .start()
-          .then(res => {
-            clearInterval(reconnectInterval);
-            hubConnection.on('newMessage', data => {
-              console.log(data, 'daaat');
-            });
-          })
-          .catch(err => console.log('err: ', err));
-      }, 5000);
-    });
+    // hubConnection.onclose(data => {
+    //   var reconnectInterval = setInterval(() => {
+    //     hubConnection
+    //       .start()
+    //       .then(res => {
+    //         clearInterval(reconnectInterval);
+    //         hubConnection.on('newMessage', data => {
+    //           console.log(data, 'daaat');
+    //         });
+    //       })
+    //       .catch(err => console.log('err: ', err));
+    //   }, 5000);
+    // });
 
     if (size(get(chatHistory, 'source')) > 0) {
       let historyData = handleFormatData(
@@ -98,16 +105,16 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
         get(UserInfo, 'id'),
       );
       console.log(historyData, 'historyData');
-      setMessages([...historyData]);
+      setMessages([...historyData].reverse());
     } else {
       setMessages([]);
     }
     return () => {
       setMessages([]);
-      hubConnection
-        .stop()
-        .then(res => {})
-        .catch(err => {});
+      // hubConnection
+      //   .stop()
+      //   .then(res => {})
+      //   .catch(err => {});
     };
   }, [chatHistory, UserInfo]);
 
@@ -169,6 +176,7 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
             color={colors.app.yellowHightlight}
           />
         )}
+        renderMessageImage={data => <MessageImage {...data} />}
         renderComposer={data => {
           console.log('data: ', data);
           return (
@@ -243,6 +251,7 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
         user={{
           _id: get(UserInfo, 'id'),
         }}
+        renderInputToolbar={data => <InputToolbar {...data} />}
         // renderMessageImage={data => {
         //   console.log('data: ', data);
 
@@ -256,7 +265,7 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
         // }}
         infiniteScroll={true}
       />
-      {Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />}
+      {/* {Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />} */}
     </Container>
   );
 }

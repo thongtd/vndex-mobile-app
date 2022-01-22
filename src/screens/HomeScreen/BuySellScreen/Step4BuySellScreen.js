@@ -27,6 +27,7 @@ import Image from '../../../components/Image/Image';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
 import {
+  CHAT_SCREEN,
   pushSingleScreenApp,
   STEP_2FA_BUY_SELL_SCREEN,
   STEP_2_BUY_SELL_SCREEN,
@@ -41,6 +42,7 @@ import {ceil, get, isNumber} from 'lodash';
 import {formatCurrency, to_UTCDate} from '../../../configs/utils';
 import {useActionsP2p} from '../../../redux';
 import CountDown from 'react-native-countdown-component';
+import { Navigation } from 'react-native-navigation';
 const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const actionSheetRef = useRef(null);
   const dispatch = useDispatch();
@@ -50,6 +52,18 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const offerOrderId = useSelector(state => state.p2p.offerOrderId);
   const [offerOrderState, setOfferOrderState] = useState(offerOrder || {});
   const UserInfo = useSelector(state => state.authentication.userInfo);
+  const [isPushChat, setIsPushChat] = useState(false);
+  useEffect(() => {
+    if(isPushChat){
+      pushSingleScreenApp(componentId,CHAT_SCREEN,{orderId: offerOrderId,email:get(advertisment,'traderInfo.emailAddress')})
+      setIsPushChat(false);
+    }
+  
+    return () => {
+      
+    };
+  }, [isPushChat]);
+  
   useEffect(() => {
     if (
       get(UserInfo, 'id') ===
@@ -74,11 +88,22 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     return () => {};
   }, [offerOrder, UserInfo]);
   useEffect(() => {
+    const navigationButtonEventListener =
+    Navigation.events().registerNavigationButtonPressedListener(
+      ({buttonId}) => {
+        if (buttonId == IdNavigation.PressIn.chat) {
+          setIsPushChat(true);
+          
+        }
+      },
+    );
     useActionsP2p(dispatch).handleGetAdvertisment(
       get(offerOrder, 'p2PTradingOrderId'),
     );
     useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
-    return () => {};
+    return () => {
+      navigationButtonEventListener.remove();
+    };
   }, []);
   // useEffect(() => {
   //   useActionsP2p(dispatch).handleGetAdvertisment(
@@ -90,6 +115,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const [disabledSubmit, setDisabledSubmit] = useState(false);
 
   useEffect(() => {
+    
     var intervalID = setInterval(
       (offerData, offerOrderIdData) => {
         // console.log(offerData,"offerData");
