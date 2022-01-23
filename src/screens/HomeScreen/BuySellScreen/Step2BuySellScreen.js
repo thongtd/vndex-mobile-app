@@ -328,11 +328,11 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
          <>
          <Layout space={5} spaceTop={20} isLineCenter>
           <Icon iconComponent={icons.IcChecked} />
-          <TextFnx> VNDEX đã khóa token của người bán</TextFnx>
+          <TextFnx> VNDEx đã khóa token của người bán</TextFnx>
         </Layout>
         <Layout space={5} isLineCenter>
           <Icon iconComponent={icons.IcChecked} />
-          <TextFnx> VNDEX hỗ trợ 24/7</TextFnx>
+          <TextFnx> VNDEx hỗ trợ 24/7</TextFnx>
         </Layout></>
        )} 
         <Layout
@@ -345,7 +345,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
           <TextFnx space={10}>Điều khoản</TextFnx>
           <TextFnx color={colors.app.textContentLevel3}>
             Bạn có thể thêm đến 20 phương thức thanh toán. Kích hoạt phương thức
-            thanh toán bạn muốn, và bắt đầu giao dịch ngay trên Vndex P2P.
+            thanh toán bạn muốn, và bắt đầu giao dịch ngay trên VNDEx P2P.
           </TextFnx>
         </Layout>
         <Button

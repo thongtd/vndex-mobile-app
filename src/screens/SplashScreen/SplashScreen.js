@@ -156,7 +156,7 @@ const SplashScreen = ({componentId}) => {
         <TextFnx
           space={5}
           align="center"
-          value={'© 2021 Vndex.com. All Rights Reserved'}
+          value={'© 2021 VNDEx.com. All Rights Reserved'}
         />
       </View>
     </LayoutSplashScreen>

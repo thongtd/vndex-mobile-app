@@ -558,7 +558,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
           <TextFnx space={10}>Điều khoản</TextFnx>
           <TextFnx color={colors.app.textContentLevel3}>
             Bạn có thể thêm đến 20 phương thức thanh toán. Kích hoạt phương thức
-            thanh toán bạn muốn, và bắt đầu giao dịch ngay trên Vndex P2P.
+            thanh toán bạn muốn, và bắt đầu giao dịch ngay trên VNDEx P2P.
           </TextFnx>
         </Layout>
       </View>
