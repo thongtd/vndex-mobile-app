@@ -350,6 +350,9 @@ const HomeScreen = ({componentId}) => {
                   if (!get(UserInfo, 'twoFactorEnabled')) {
                     return toast('Vui lòng bật thiết lập 2FA để tạo lệnh');
                   }
+                  if(!get(UserInfo, 'customerMetaData.isKycUpdated')){
+                    return toast("Vui lòng KYC tài khoản để tạo lệnh");
+                  }
                   pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN, {
                     item,
                   });

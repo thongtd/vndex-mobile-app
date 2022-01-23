@@ -474,6 +474,10 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
       if(!get(UserInfo,"twoFactorEnabled")){
         return toast("Vui lòng bật thiết lập 2FA để đăng quảng cáo");
       }
+      if(!get(UserInfo, 'customerMetaData.isKycUpdated')){
+        return toast("Vui lòng KYC tài khoản để đăng quảng cáo");
+      }
+      
       if (price.str2Number() <= 0 || isEmpty(price)) {
         return toast('Vui lòng nhập giá của bạn phải lớn hơn 0');
       } else if (
