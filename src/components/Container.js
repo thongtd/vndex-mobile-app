@@ -58,7 +58,8 @@ const Container = ({
   onRefresh,
   isFilter,
   spaceHorizontal = spacingApp,
-  backgroundColor=colors.app.backgroundLevel1
+  backgroundColor=colors.app.backgroundLevel1,
+  isNotTranslateTitle
 }) => {
   const scrollRef = useRef();
   useEffect(() => {
@@ -67,7 +68,7 @@ const Container = ({
         topBar: {
           animate: true,
           title: {
-            text: title.t(),
+            text:isNotTranslateTitle?title: title.t(),
           },
         },
       });
@@ -81,7 +82,7 @@ const Container = ({
     }
 
     return () => {};
-  }, [isTopBar, componentId]);
+  }, [isTopBar, componentId,isNotTranslateTitle, title]);
   const onPressTouch = () => {
     scrollRef.current?.scrollToPosition(0, 0);
   };

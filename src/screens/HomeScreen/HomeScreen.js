@@ -151,27 +151,24 @@ const HomeScreen = ({componentId}) => {
       setIsLoading(false);
     });
     if (ActiveSymbol) {
-      console.log('ActiveSymbol: ', ActiveSymbol);
       setLoadMore(false);
-      getAdvertisments(ActiveType,ActiveSymbol, pageIndex);
+      getAdvertisments(ActiveType, ActiveSymbol, pageIndex);
       setIsLoading(true);
-      setPageIndex(1)
+      setPageIndex(1);
     }
 
     return () => {
       evDone.remove();
     };
   }, [dispatch, ActiveType, ActiveSymbol, isRefresh]);
-useEffect(() => {
-  getAdvertisments(ActiveType,ActiveSymbol, pageIndex);
-  setIsLoading(true);
+  useEffect(() => {
+    getAdvertisments(ActiveType, ActiveSymbol, pageIndex);
+    setIsLoading(true);
 
-  return () => {
-    
-  };
-}, [pageIndex]);
+    return () => {};
+  }, [pageIndex]);
 
-  const getAdvertisments = (ActiveType,ActiveSymbol, pageIndex) => {
+  const getAdvertisments = (ActiveType, ActiveSymbol, pageIndex) => {
     useActionsP2p(dispatch).handleGetAdvertisments({
       pageIndex: pageIndex || 1,
       pageSize: 15,
@@ -182,20 +179,13 @@ useEffect(() => {
   const logged = useSelector(state => state.authentication.logged);
   const currencyList = useSelector(state => state.market.currencyList);
   const _onScroll = event => {
-    
     if (isLoadMore || pageIndex >= get(advertisments, 'pages')) {
-      // alert("ok");
       return;
     }
     let y = event.nativeEvent.contentOffset.y;
-    console.log('y: ', y);
     let height = event.nativeEvent.layoutMeasurement.height;
-    console.log('height: ', height);
     let contentHeight = event.nativeEvent.contentSize.height;
-    console.log('contentHeight: ', contentHeight);
-    
     if (y + height >= contentHeight - 20) {
-      console.log("ok r")
       setPageIndex(pageIndex + 1);
       setLoadMore(true);
     }
@@ -251,17 +241,6 @@ useEffect(() => {
             }
           />
         </View>
-
-        {/* <Button
-          isPlaceholder={false}
-          spaceHorizontal={20}
-          height={40}
-          isInput
-          iconRight="caret-down"
-          iconLeft="globe-americas"
-          placeholder={'VND'}
-        />
-        <ButtonIcon iconComponent={icons.icFilter} /> */}
       </View>
 
       <View>
@@ -362,11 +341,14 @@ useEffect(() => {
                   if (!logged) {
                     return pushSingleScreenApp(componentId, LOGIN_SCREEN);
                   }
-                  if(get(item,"traderInfo.identityUserId") == get(UserInfo,"id")){
-                    return toast("Không được đặt lệnh bạn đã tạo");
+                  if (
+                    get(item, 'traderInfo.identityUserId') ==
+                    get(UserInfo, 'id')
+                  ) {
+                    return toast('Không được đặt lệnh bạn đã tạo');
                   }
-                  if(!get(UserInfo,"twoFactorEnabled")){
-                    return toast("Vui lòng bật thiết lập 2FA để tạo lệnh");
+                  if (!get(UserInfo, 'twoFactorEnabled')) {
+                    return toast('Vui lòng bật thiết lập 2FA để tạo lệnh');
                   }
                   pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN, {
                     item,
@@ -476,11 +458,9 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({});
 
-
-
-
 // import React, { useState, useCallback, useEffect } from 'react'
 // import { GiftedChat } from 'react-native-gifted-chat'
+// import ChatScreen from '../CommandScreen/ChatScreen';
 
 // export default function Example() {
 //   const [messages, setMessages] = useState([]);
@@ -506,12 +486,6 @@ const styles = StyleSheet.create({});
 //   }, [])
 
 //   return (
-//     <GiftedChat
-//       messages={messages}
-//       onSend={messages => onSend(messages)}
-//       user={{
-//         _id: 1,
-//       }}
-//     />
+//    <ChatScreen />
 //   )
 // }

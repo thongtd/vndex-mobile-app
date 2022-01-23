@@ -49,7 +49,7 @@ import {
 import {ceil, isEmpty, isNumber} from 'lodash';
 import {useSelector} from 'react-redux';
 import CountDown from 'react-native-countdown-component';
-import { Navigation } from 'react-native-navigation';
+import {Navigation} from 'react-native-navigation';
 const Step3BuySellScreen = ({
   item,
   componentId,
@@ -64,18 +64,20 @@ const Step3BuySellScreen = ({
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const [offerOrderState, setOfferOrderState] = useState(offerOrder || {});
   const [isPushChat, setIsPushChat] = useState(false);
+  const infoChat = useSelector(state => state.p2p.chatInfoP2p);
+  
   useEffect(() => {
-    
-    if(isPushChat){
-      pushSingleScreenApp(componentId,CHAT_SCREEN,{orderId: get(offerOrder, 'id'),email:get(advertisment,'traderInfo.emailAddress')})
+    if (isPushChat) {
+      pushSingleScreenApp(componentId, CHAT_SCREEN, {
+        orderId: get(offerOrder, 'offerOrderId'),
+        email: get(advertisment, 'traderInfo.emailAddress'),
+      });
       setIsPushChat(false);
     }
-  
-    return () => {
-      
-    };
+
+    return () => {};
   }, [isPushChat]);
-  
+
   useEffect(() => {
     if (
       get(UserInfo, 'id') ===
@@ -100,13 +102,12 @@ const Step3BuySellScreen = ({
     useActionsP2p(dispatch).handleGetOfferOrder(
       get(offerOrder, 'offerOrderId'),
     );
- 
+    useActionsP2p(dispatch).handleGetChatInfoP2p(get(offerOrder, 'offerOrderId'));
+
     const ev = listenerEventEmitter('pushStep', dataConfirm => {
-      console.log(dataConfirm, offerOrderState, 'data confirm');
-      // alert(JSON.stringify(item));
       setIsLoading(false);
       if (get(dataConfirm, 'isHasPayment') === false) {
-        pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN,null,{
+        pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN, null, {
           topBar: {
             rightButtons: [
               {
@@ -120,32 +121,38 @@ const Step3BuySellScreen = ({
         get(dataConfirm, 'isHasPayment') &&
         get(item, 'side') == SELL
       ) {
-        pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, {
-          paymentMethodData,
-          item,
-        },{
-          topBar: {
-            rightButtons: [
-              {
-                id: IdNavigation.PressIn.chat,
-                icon: require('assets/icons/ic_chat.png'),
-              },
-            ],
+        pushSingleScreenApp(
+          componentId,
+          STEP_4_BUY_SELL_SCREEN,
+          {
+            paymentMethodData,
+            item,
           },
-        });
+          {
+            topBar: {
+              rightButtons: [
+                {
+                  id: IdNavigation.PressIn.chat,
+                  icon: require('assets/icons/ic_chat.png'),
+                },
+              ],
+            },
+          },
+        );
       }
     });
     const navigationButtonEventListener =
-    Navigation.events().registerNavigationButtonPressedListener(
-      ({buttonId}) => {
-        if (buttonId == IdNavigation.PressIn.chat) {
-          setIsPushChat(true);
-        }
-      },
-    );
+      Navigation.events().registerNavigationButtonPressedListener(
+        ({buttonId}) => {
+          if (buttonId == IdNavigation.PressIn.chat) {
+            setIsPushChat(true);
+          }
+        },
+      );
     return () => {
       navigationButtonEventListener.remove();
-      ev.remove()};
+      ev.remove();
+    };
   }, []);
 
   const hanldeCopy = url => {
@@ -224,7 +231,7 @@ const Step3BuySellScreen = ({
               : colors.app.sell
           }>
           {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${
-            get(advertisment, 'symbol') || get(item,"symbol")
+            get(advertisment, 'symbol') || get(item, 'symbol')
           }`}
         </TextFnx>
         <Layout
@@ -246,11 +253,11 @@ const Step3BuySellScreen = ({
             }>
             {`${formatCurrency(
               get(offerOrderState, 'price'),
-              get(advertisment, 'paymentUnit') || get(item,"paymentUnit"),
+              get(advertisment, 'paymentUnit') || get(item, 'paymentUnit'),
               currencyList,
             )} `}
             <TextFnx color={colors.app.textContentLevel3}>
-              {get(advertisment, 'paymentUnit') || get(item,"paymentUnit")}
+              {get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')}
             </TextFnx>
           </TextFnx>
         </Layout>
@@ -258,22 +265,25 @@ const Step3BuySellScreen = ({
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
             get(offerOrderState, 'quantity'),
-            get(advertisment, 'paymentUnit') || get(item,"paymentUnit"),
+            get(advertisment, 'paymentUnit') || get(item, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'symbol') || get(item,"symbol")}`}</TextFnx>
+          )} ${get(advertisment, 'symbol') || get(item, 'symbol')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(offerOrderState, 'price') * (get(advertisment, 'fee') || get(item,"fee")),
+            get(offerOrderState, 'price') *
+              (get(advertisment, 'fee') || get(item, 'fee')),
             get(advertisment, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'paymentUnit') || get(item,"paymentUnit")}`}</TextFnx>
+          )} ${
+            get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')
+          }`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            0 {get(advertisment, 'paymentUnit') || get(item,"paymentUnit")}
+            0 {get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')}
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
@@ -453,9 +463,48 @@ const Step3BuySellScreen = ({
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
+           
           </Layout>
         )}
-      
+         <Layout
+          style={{
+            backgroundColor: colors.app.lineSetting,
+            borderRadius: 10,
+            paddingLeft: 16,
+          }}
+          isSpaceBetween
+          space={15}>
+          <Layout>
+            <View
+              style={{
+                paddingRight: 15,
+              }}>
+              <Image
+                source={icons.avatar}
+                style={{
+                  width: 30,
+                  height: 30,
+                }}
+              />
+            </View>
+            <Layout type="column">
+              <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
+                Người {get(advertisment, 'side') == SELL ? 'bán' : 'mua'}
+              </TextFnx>
+              <TextFnx
+                space={8}
+                color={colors.app.lightWhite}
+                size={fontSize.f16}>
+                {get(advertisment, 'traderInfo.identityUserId') == get(infoChat,'offerIdentityUser.id')?get(infoChat,"offerIdentityUser.email"):get(infoChat,"provideIdentityUser.email")}
+              </TextFnx>
+              <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
+                {get(advertisment, 'traderInfo.identityUserId') == get(infoChat,'offerIdentityUser.id')?get(infoChat,"offerIdentityUser.phoneNumber"):get(infoChat,"provideIdentityUser.phoneNumber")}
+              </TextFnx>
+            </Layout>
+          </Layout>
+          {/* <ButtonIcon name="eye" color={colors.app.yellowHightlight} /> */}
+        </Layout>
+ 
         <Layout spaceBottom={10} type="column">
           <TextFnx space={10} color={colors.app.yellowHightlight}>
             Lưu ý

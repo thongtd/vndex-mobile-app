@@ -46,10 +46,6 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
     let dataInterval = setInterval(() => {
       useActionsP2p(dispatcher).handleGetChatInfoP2p(orderId);
     }, 5000);
-    // useActionsP2p(dispatcher).handleGetChatHistory({
-
-    // })
-console.log(orderId,"orderId");
     return () => {
       clearInterval(dataInterval);
     };
@@ -85,20 +81,6 @@ console.log(orderId,"orderId");
         });
       })
       .catch(err => console.log('err: ', err));
-    // hubConnection.onclose(data => {
-    //   var reconnectInterval = setInterval(() => {
-    //     hubConnection
-    //       .start()
-    //       .then(res => {
-    //         clearInterval(reconnectInterval);
-    //         hubConnection.on('newMessage', data => {
-    //           console.log(data, 'daaat');
-    //         });
-    //       })
-    //       .catch(err => console.log('err: ', err));
-    //   }, 5000);
-    // });
-
     if (size(get(chatHistory, 'source')) > 0) {
       let historyData = handleFormatData(
         chatHistory.source,
@@ -111,10 +93,6 @@ console.log(orderId,"orderId");
     }
     return () => {
       setMessages([]);
-      // hubConnection
-      //   .stop()
-      //   .then(res => {})
-      //   .catch(err => {});
     };
   }, [chatHistory, UserInfo]);
 
@@ -165,7 +143,7 @@ console.log(orderId,"orderId");
     });
   };
   return (
-    <Container componentId={componentId} isFlex title={email}>
+    <Container isNotTranslateTitle componentId={componentId} isTopBar isFlex title={get(infoChat,"offerIdentityUser.id") == get(UserInfo,"id")?`${get(infoChat,"provideIdentityUser.email")}`:`${get(infoChat,"offerIdentityUser.email")}`}>
       <GiftedChat
         renderLoading={() => <ActivityIndicator />}
         scrollToBottom
@@ -234,7 +212,7 @@ console.log(orderId,"orderId");
                   ))}
                 </ScrollView>
               )}
-              <Composer {...data} />
+              <Composer textInputStyle={{color:"#000"}} {...data} />
             </View>
           );
         }}

@@ -53,6 +53,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const [offerOrderState, setOfferOrderState] = useState(offerOrder || {});
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const [isPushChat, setIsPushChat] = useState(false);
+  const infoChat = useSelector(state => state.p2p.chatInfoP2p);
   useEffect(() => {
     if(isPushChat){
       pushSingleScreenApp(componentId,CHAT_SCREEN,{orderId: offerOrderId,email:get(advertisment,'traderInfo.emailAddress')})
@@ -100,6 +101,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     useActionsP2p(dispatch).handleGetAdvertisment(
       get(offerOrder, 'p2PTradingOrderId'),
     );
+    useActionsP2p(dispatch).handleGetChatInfoP2p(offerOrderId);
     useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
     return () => {
       navigationButtonEventListener.remove();
@@ -339,7 +341,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                   }}
                 />
                 <TextFnx spaceLeft={5}>
-                  {get(paymentMethodData, 'name')}
+                  Momo
                 </TextFnx>
               </View>
             </Layout>
@@ -364,7 +366,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                   }}
                 />
                 <TextFnx spaceLeft={5}>
-                  {get(paymentMethodData, 'name')}
+                  Chuyển khoản
                 </TextFnx>
               </View>
             </Layout>
@@ -468,14 +470,14 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             </Layout>
           </Layout>
         )}
-        <Layout
+          <Layout
           style={{
             backgroundColor: colors.app.lineSetting,
             borderRadius: 10,
             paddingLeft: 16,
           }}
           isSpaceBetween
-          spaceTop={10}>
+          space={15}>
           <Layout>
             <View
               style={{
@@ -491,15 +493,22 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             </View>
             <Layout type="column">
               <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-                Người bán
+                Người {get(advertisment, 'side') == SELL ? 'bán' : 'mua'}
+              </TextFnx>
+              <TextFnx
+                space={8}
+                color={colors.app.lightWhite}
+                size={fontSize.f16}>
+                {get(advertisment, 'traderInfo.identityUserId') == get(infoChat,'offerIdentityUser.id')?get(infoChat,"offerIdentityUser.email"):get(infoChat,"provideIdentityUser.email")}
               </TextFnx>
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
-                {get(advertisment, 'traderInfo.emailAddress')}
+                {get(advertisment, 'traderInfo.identityUserId') == get(infoChat,'offerIdentityUser.id')?get(infoChat,"offerIdentityUser.phoneNumber"):get(infoChat,"provideIdentityUser.phoneNumber")}
               </TextFnx>
             </Layout>
           </Layout>
-          <ButtonIcon name="eye" color={colors.app.yellowHightlight} />
+          {/* <ButtonIcon name="eye" color={colors.app.yellowHightlight} /> */}
         </Layout>
+   
         <Layout spaceBottom={10} type="column">
           <TextFnx space={10} color={colors.app.yellowHightlight}>
             Lưu ý
