@@ -391,7 +391,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
                       data: {
                         orderId: get(advertisment, 'orderId'),
                         orderQtty: get(data, 'quantity'),
-                        orderPrice: get(data, 'price'),
+                        orderPrice: get(advertisment, 'price'),
                         p2PAccountPaymentMethodId: get(item, 'id'),
                       },
                       paymentMethodData: item,

@@ -112,7 +112,7 @@ const Step3AddNewAds = ({submitNextStep, bntClose, dataState,...rest}) => {
             </View>
           }
         />
-        <CheckBox
+        {/* <CheckBox
           isChecked={get(dataState,"isSelectedRegister")}
           onClick={rest.onCheckReg}
           style={styles.checkbox}
@@ -134,7 +134,7 @@ const Step3AddNewAds = ({submitNextStep, bntClose, dataState,...rest}) => {
               </Layout>
             </View>
           }
-        />
+        /> */}
         {/* <CheckBox
           isChecked={isSelectedAIFT}
           onClick={() => setSelectedAIFT(!isSelectedAIFT)}

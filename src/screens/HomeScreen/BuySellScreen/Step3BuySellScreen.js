@@ -252,7 +252,7 @@ const Step3BuySellScreen = ({
                 : colors.app.sell
             }>
             {`${formatCurrency(
-              get(offerOrderState, 'price'),
+              get(offerOrderState, 'price') * get(offerOrderState, 'quantity'),
               get(advertisment, 'paymentUnit') || get(item, 'paymentUnit'),
               currencyList,
             )} `}
@@ -260,6 +260,14 @@ const Step3BuySellScreen = ({
               {get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')}
             </TextFnx>
           </TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Giá</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
+            get(advertisment, 'price') || get(item, 'price'),
+            get(advertisment, 'paymentUnit') || get(item, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>

@@ -48,6 +48,7 @@ const screenHeight = Dimensions.get('screen').height;
 const windowHeight = Dimensions.get('window').height;
 const navbarHeight = screenHeight - windowHeight + StatusBar.currentHeight;
 import {
+  createAction,
   formatCurrency,
   listenerEventEmitter,
   removeEventEmitter,
@@ -56,6 +57,7 @@ import {
 } from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
 import {useDispatch} from 'react-redux';
+import { GET_USERS_KYC } from '../../redux/modules/authentication/actions';
 
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
@@ -71,6 +73,8 @@ const HomeScreen = ({componentId}) => {
     if (size(get(tradingMarket, 'assets')) > 0) {
       setActiveSymbol(get(tradingMarket, 'assets')[0]);
     }
+    dispatch(createAction(GET_USERS_KYC, get(UserInfo, 'id')))
+    // useActionsP2p(dispatch).handleGetUserKyc(get(UserInfo, 'id'));
     return () => {};
   }, [tradingMarket]);
   const tradingMarket = useSelector(state => state.p2p.tradingMarket);

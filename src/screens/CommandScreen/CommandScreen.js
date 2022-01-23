@@ -296,7 +296,7 @@ const CommandScreen2 = ({componentId}) => {
             type={get(item, 'offerSide') == 'B' ? 'MUA' : 'BÁN'}
             isSell={get(item, 'offerSide') !== 'B'}
             price={formatCurrency(
-              get(item, 'price') || 0,
+              get(item, 'price') * get(item, 'quantity') || 0,
               get(item, 'p2PTradingOrder.paymentUnit') || '',
               currencyList,
             )}

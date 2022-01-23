@@ -29,18 +29,30 @@ import {
   size,
   toast,
 } from '../../../../configs/utils';
-import {PICKER_SEARCH} from '../../../../navigation';
+import {PAYMENT_METHOD_SCREEN, PICKER_SEARCH, pushSingleScreenApp} from '../../../../navigation';
 import {dismissAllModal, showModal} from '../../../../navigation/Navigation';
 import {useActionsP2p} from '../../../../redux';
 
-const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
+const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...rest}) => {
   const actionSheetRef = useRef(null);
   const marketInfo = useSelector(state => state.p2p.marketInfo);
+  const [isPushPayment, setIsPushPayment] = useState(false);
   const cryptoWallet = useSelector(state => state.market.cryptoWallet);
   const currencyList = useSelector(state => state.market.currencyList);
   const onSubmitNextStep = () => {
     submitNextStep();
   };
+  useEffect(() => {
+    if(isPushPayment){
+      pushSingleScreenApp(componentId,PAYMENT_METHOD_SCREEN)
+      setIsPushPayment(false);
+    }
+  
+    return () => {
+      // setIsPushPayment(false);
+    };
+  }, []);
+  
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
 
   return (
@@ -191,6 +203,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
         <TouchableOpacity
           onPress={() => {
             actionSheetRef.current?.show();
+            // pushSingleScreenApp(componentId,PAYMENT_METHOD_SCREEN)
           }}>
           <Layout isSpaceBetween isLineCenter>
             <TextFnx color={colors.highlight} spaceRight={10}>
@@ -287,6 +300,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
           onMomentumScrollEnd={() =>
             actionSheetRef.current?.handleChildScrollEnd()
           }>
+           
           {paymentMethods &&
             size(paymentMethods) > 0 &&
             paymentMethods.map((item, index) => {
@@ -363,7 +377,13 @@ const Step2AddNewAds = ({submitNextStep, bntClose, dataState, ...rest}) => {
                 </TouchableOpacity>
               );
             })}
+            <Button onPress={()=>{
+              pushSingleScreenApp(componentId,PAYMENT_METHOD_SCREEN)
+              // setIsPushPayment(true)
+              actionSheetRef.current?.hide();
+              }} isNormal title={"Thêm phương thức"} />
         </ScrollView>
+        
       </BottomSheet>
     </View>
   );

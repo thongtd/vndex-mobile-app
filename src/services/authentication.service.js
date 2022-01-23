@@ -8,8 +8,10 @@ import {get} from '../configs/utils';
 export const authService = {
   getUserInfo: async identityUserId => {
     let response = await httpService.post(EXCHANGE_API.GET_USER_INFO, {
+      
       identityUserId,
     });
+    console.log('response: ', response);
     if (response.status == 200) {
       return response.data;
     }

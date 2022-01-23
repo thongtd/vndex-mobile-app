@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { isEmpty} from 'lodash';
+import {isEmpty} from 'lodash';
 import Container from '../../../components/Container';
 import Icon from '../../../components/Icon';
 import Layout from '../../../components/Layout/Layout';
@@ -42,7 +42,7 @@ import {ceil, get, isNumber} from 'lodash';
 import {formatCurrency, to_UTCDate} from '../../../configs/utils';
 import {useActionsP2p} from '../../../redux';
 import CountDown from 'react-native-countdown-component';
-import { Navigation } from 'react-native-navigation';
+import {Navigation} from 'react-native-navigation';
 const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const actionSheetRef = useRef(null);
   const dispatch = useDispatch();
@@ -55,16 +55,17 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
   useEffect(() => {
-    if(isPushChat){
-      pushSingleScreenApp(componentId,CHAT_SCREEN,{orderId: offerOrderId,email:get(advertisment,'traderInfo.emailAddress')})
+    if (isPushChat) {
+      pushSingleScreenApp(componentId, CHAT_SCREEN, {
+        orderId: offerOrderId,
+        email: get(advertisment, 'traderInfo.emailAddress'),
+      });
       setIsPushChat(false);
     }
-  
-    return () => {
-      
-    };
+
+    return () => {};
   }, [isPushChat]);
-  
+
   useEffect(() => {
     if (
       get(UserInfo, 'id') ===
@@ -74,12 +75,17 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         ...offerOrder,
         offerSide: get(offerOrder, 'offerSide') === BUY ? SELL : BUY,
       });
-      if(get(offerOrder, 'offerSide') === BUY &&  !get(offerOrder, 'isPaymentConfirm')){
+      if (
+        get(offerOrder, 'offerSide') === BUY &&
+        !get(offerOrder, 'isPaymentConfirm')
+      ) {
         setDisabledSubmit(true);
       }
     } else {
-      if( get(offerOrder, 'offerSide') === SELL &&
-      !get(offerOrder, 'isPaymentConfirm')){
+      if (
+        get(offerOrder, 'offerSide') === SELL &&
+        !get(offerOrder, 'isPaymentConfirm')
+      ) {
         setDisabledSubmit(true);
       }
       setOfferOrderState({
@@ -90,14 +96,13 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   }, [offerOrder, UserInfo]);
   useEffect(() => {
     const navigationButtonEventListener =
-    Navigation.events().registerNavigationButtonPressedListener(
-      ({buttonId}) => {
-        if (buttonId == IdNavigation.PressIn.chat) {
-          setIsPushChat(true);
-          
-        }
-      },
-    );
+      Navigation.events().registerNavigationButtonPressedListener(
+        ({buttonId}) => {
+          if (buttonId == IdNavigation.PressIn.chat) {
+            setIsPushChat(true);
+          }
+        },
+      );
     useActionsP2p(dispatch).handleGetAdvertisment(
       get(offerOrder, 'p2PTradingOrderId'),
     );
@@ -117,7 +122,6 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const [disabledSubmit, setDisabledSubmit] = useState(false);
 
   useEffect(() => {
-    
     var intervalID = setInterval(
       (offerData, offerOrderIdData) => {
         // console.log(offerData,"offerData");
@@ -129,8 +133,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           get(offerData, 'offerSide') === BUY &&
           get(offerData, 'isUnLockConfirm')
         ) {
-          pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN,null
-          );
+          pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN, null);
         }
         if (
           get(offerData, 'offerSide') === SELL &&
@@ -145,12 +148,12 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           setDisabledSubmit(true);
         }
         if (get(offerData, 'isPaymentCancel')) {
-          pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN,null);
+          pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN, null);
         }
       },
       3000,
       offerOrderState,
-      offerOrderId
+      offerOrderId,
     );
     return () => {
       clearInterval(intervalID);
@@ -248,7 +251,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                 : colors.app.sell
             }>
             {`${formatCurrency(
-              get(offerOrderState, 'price'),
+              get(offerOrderState, 'price') * get(offerOrderState, 'quantity'),
               get(advertisment, 'paymentUnit'),
               currencyList,
             )} `}
@@ -340,9 +343,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                     height: 10,
                   }}
                 />
-                <TextFnx spaceLeft={5}>
-                  Momo
-                </TextFnx>
+                <TextFnx spaceLeft={5}>Momo</TextFnx>
               </View>
             </Layout>
           ) : (
@@ -365,9 +366,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                     height: 10,
                   }}
                 />
-                <TextFnx spaceLeft={5}>
-                  Chuyển khoản
-                </TextFnx>
+                <TextFnx spaceLeft={5}>Chuyển khoản</TextFnx>
               </View>
             </Layout>
           )}
@@ -470,7 +469,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             </Layout>
           </Layout>
         )}
-          <Layout
+        <Layout
           style={{
             backgroundColor: colors.app.lineSetting,
             borderRadius: 10,
@@ -499,16 +498,22 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                 space={8}
                 color={colors.app.lightWhite}
                 size={fontSize.f16}>
-                {get(advertisment, 'traderInfo.identityUserId') == get(infoChat,'offerIdentityUser.id')?get(infoChat,"offerIdentityUser.email"):get(infoChat,"provideIdentityUser.email")}
+                {get(advertisment, 'traderInfo.identityUserId') ==
+                get(infoChat, 'offerIdentityUser.id')
+                  ? get(infoChat, 'offerIdentityUser.email')
+                  : get(infoChat, 'provideIdentityUser.email')}
               </TextFnx>
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
-                {get(advertisment, 'traderInfo.identityUserId') == get(infoChat,'offerIdentityUser.id')?get(infoChat,"offerIdentityUser.phoneNumber"):get(infoChat,"provideIdentityUser.phoneNumber")}
+                {get(advertisment, 'traderInfo.identityUserId') ==
+                get(infoChat, 'offerIdentityUser.id')
+                  ? get(infoChat, 'offerIdentityUser.phoneNumber')
+                  : get(infoChat, 'provideIdentityUser.phoneNumber')}
               </TextFnx>
             </Layout>
           </Layout>
           {/* <ButtonIcon name="eye" color={colors.app.yellowHightlight} /> */}
         </Layout>
-   
+
         <Layout spaceBottom={10} type="column">
           <TextFnx space={10} color={colors.app.yellowHightlight}>
             Lưu ý

@@ -72,7 +72,7 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
   const [checkedStatus, setCheckedStatus] = useState('first');
   const [autoReplyMessage, setAutoReplyMessage] = useState('');
   const [isSelectedKYC, setSelectionKYC] = useState(true);
-  const [isSelectedRegister, setSelectedRegister] = useState(true);
+  const [isSelectedRegister, setSelectedRegister] = useState(false);
 
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
   const [paymentMethodData, setPaymentMethodData] = useState([]);
@@ -233,11 +233,13 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
     isSelectedRegister,
     checkedStatus,
     paymentMethodIdData,
+    componentId
   }) => {
     switch (step) {
       case 0:
         return (
           <Step1AddNewAds
+            componentId={componentId}
             onSelectType={__i => SetActiveType(__i?.type || 1)}
             dataState={{
               activeType,
@@ -422,6 +424,7 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
             onQuantityChange={txt => {
               setQuantity(formatNumberOnChange(currencyList, txt, ActiveAsset));
             }}
+            componentId={componentId}
             bntClose={bntClose}
             submitNextStep={submitNextStep}
           />
@@ -574,6 +577,7 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
         isSelectedRegister,
         checkedStatus,
         paymentMethodIdData,
+        componentId
       })}
     </Container>
   );
