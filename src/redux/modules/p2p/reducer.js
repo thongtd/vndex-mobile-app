@@ -16,6 +16,7 @@ import {
 } from './actions';
 import {get, set} from '../../../configs/utils';
 import i18n from 'react-native-i18n';
+import _ from 'lodash';
 export const DEFAULT = {
   advertisments: {},
   myAdvertisments: {
@@ -32,8 +33,8 @@ export const DEFAULT = {
     source: [],
   },
   advertismentDetails: {},
-  chatInfoP2p:{},
-  chatHistory:{}
+  chatInfoP2p: {},
+  chatHistory: {},
 };
 
 export default p2p = (state = DEFAULT, action = {}) => {
@@ -99,14 +100,26 @@ export default p2p = (state = DEFAULT, action = {}) => {
         ...state,
         offerOrder: payload,
       };
-      case GET_CHAT_INFO_P2P_SUCCESS:
+    case GET_CHAT_INFO_P2P_SUCCESS:
       return {
         ...state,
         chatInfoP2p: payload,
       };
-      case GET_CHAT_HISTORY_SUCCESS:
-      if (get(payload, 'skip') == 0) {
+    case GET_CHAT_HISTORY_SUCCESS:
+      if (get(payload, 'skip') == 0 && !get(payload, 'isLoadmore')) {
         set(state, 'chatHistory.source', []);
+      }
+      if (get(payload, 'isLoadmore')) {
+        return {
+          ...state,
+          chatHistory: {
+            ...state.chatHistory,
+            source: _.uniqBy([
+              ...get(payload, 'source'),
+              ...get(state.chatHistory, 'source'),
+            ],'id'),
+          },
+        };
       }
       return {
         ...state,

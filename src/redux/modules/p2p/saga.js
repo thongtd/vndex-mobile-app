@@ -533,17 +533,17 @@ export function* watchUpdateStatusAdv() {
 export function* asyncGetChatHistory({payload}) {
   try {
     const res = yield call(
-      
       P2pService.chatHistory,
       get(payload, 'data'),
       get(payload, 'orderId'),
     );
-    console.log('reshi: ',get(payload, 'orderId'), res);
+    console.log('reshi: ', get(payload, 'orderId'), res);
     emitEventEmitter('doneApi', true);
     emitEventEmitter('doneChatHistory', true);
     yield put(
       actionsReducerP2p.getChatHistorySuccess({
         ...res,
+        isLoadmore:get(payload,"isLoadmore"),
         skip: get(payload, 'data.skip'),
         pages: ceil(get(res, 'totalRecords') / get(payload, 'data.take')),
       }),
@@ -562,11 +562,11 @@ export function* asyncGetChatInfoP2p({payload}) {
     emitEventEmitter('doneApi', true);
     if (get(res, 'success')) {
       yield put(actionsReducerP2p.getChatInfoP2pSuccess(get(res, 'data')));
-      yield put(actionsReducerP2p.getChatHistorySuccess({
-        ...get(res,'data.p2PConversationMessagePaging'),
-        skip:0,
-        pages: ceil(get(res, 'data.p2PConversationMessagePaging.totalRecords') / 10),
-      }))
+      // yield put(actionsReducerP2p.getChatHistorySuccess({
+      //   ...get(res,'data.p2PConversationMessagePaging'),
+      //   skip:0,
+      //   pages: ceil(get(res, 'data.p2PConversationMessagePaging.totalRecords') / 10),
+      // }))
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);

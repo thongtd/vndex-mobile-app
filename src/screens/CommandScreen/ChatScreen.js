@@ -43,27 +43,51 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
   const [skip, setSkip] = useState(0);
   const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
-    let dataInterval = setInterval(() => {
-      useActionsP2p(dispatcher).handleGetChatInfoP2p(orderId);
-    }, 5000);
-    return () => {
-      clearInterval(dataInterval);
-    };
-  }, [orderId]);
-  useEffect(() => {
+    useActionsP2p(dispatcher).handleGetChatHistory({
+      orderId: orderId,
+      data: {
+        skip: skip,
+        take: 10,
+      },
+      isLoadmore:false
+    });
     useActionsP2p(dispatcher).handleGetChatInfoP2p(orderId);
-    if (skip !== 0) {
+     
+    return () => {
+      
+    };
+  }, []);
+  useEffect(() => {
+    let dataInterval = setInterval(() => {
       useActionsP2p(dispatcher).handleGetChatHistory({
         orderId: orderId,
         data: {
-          skip: skip,
+          skip: 0,
           take: 10,
         },
+        isLoadmore:true
       });
-    }
+    }, 2000);
 
-    return () => {};
-  }, [skip]);
+
+    return () => {
+      clearInterval(dataInterval);
+    };
+  }, [skip, orderId]);
+useEffect(() => {
+  useActionsP2p(dispatcher).handleGetChatHistory({
+    orderId: orderId,
+    data: {
+      skip: skip,
+      take: 10,
+    },
+    isLoadmore:false
+  });
+  
+  return () => {
+    
+  };
+}, [skip]);
 
   useEffect(() => {
     let url = `${SOCKET_URL}${get(UserInfo, 'id')}`;
@@ -87,7 +111,7 @@ export default function ChatScreen({componentId, orderId, email = ''}) {
         get(UserInfo, 'id'),
       );
       console.log(historyData, 'historyData');
-      setMessages([...historyData].reverse());
+      setMessages([...historyData]);
     } else {
       setMessages([]);
     }
