@@ -65,6 +65,9 @@ export const STEP_5_BUY_SELL_SCREEN = 'vndex.title.Step5BuySellScreen';
 export const STEP_2FA_BUY_SELL_SCREEN = 'vndex.title.STEP_2FA_BUY_SELL_SCREEN';
 export const STEP_2FA_ADS_ADD_SCREEN = 'vndex.title.STEP_2FA_ADS_ADD_SCREEN';
 export const STEP_ADS_ADD_SUCCESS = 'vndex.title.STEP_ADS_ADD_SUCCESS';
+export const COMPLAIN_PROCESSING = 'vndex.title.COMPLAIN_PROCESSING';
+export const COMPLAIN_PROVIDE = 'vndex.title.COMPLAIN_PROVIDE';
+export const COMPLAINING = 'vndex.title.COMPLAINING';
 
 // register ModalMy
 export const ALERT_NOTICE_PASSWORD = 'modal.AlertNoticePassword';

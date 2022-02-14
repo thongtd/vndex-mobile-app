@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 import {useSelector, useDispatch} from 'react-redux';
 import {LoginScreen} from '..';
 import ButtonIcon from '../../components/Button/ButtonIcon';
@@ -262,7 +263,18 @@ const CommandScreen2 = ({componentId}) => {
     });
   };
   return (
-    <Container componentId={componentId} title="Lịch sử giao dịch">
+    <Container 
+    customsNavigation={()=>{
+      Navigation.mergeOptions(componentId, {
+        topBar: {
+          rightButtons:[{
+            id: IdNavigation.PressIn.historyTransaction,
+            icon:require("assets/icons/Filter.png")
+          }]
+        },
+      });
+    }}
+    componentId={componentId} title="Lịch sử giao dịch">
       <ButtonTop
         onChangeActive={onChangeActive}
         activeMenu={activeMenu}
@@ -373,7 +385,8 @@ const CommandScreen2 = ({componentId}) => {
 const CommandScreen = ({componentId}) => {
   const logged = useSelector(state => state.authentication.logged);
   if (logged) {
-    return <CommandScreen2 componentId={componentId} />;
+    return <CommandScreen2 
+    componentId={componentId} />;
   }
   return <LoginScreen componentId={componentId} />;
 };
