@@ -61,6 +61,7 @@ const Input = ({
   titleRight,
   restInput,
   prefix,
+  isRequired,
   ...rest
 }) => {
   const [valueInput, setValue] = useState(value);
@@ -115,7 +116,10 @@ const Input = ({
   };
   return (
     <>
-      {rest.isLabel && <TextFnx style={stylest.label} value={label} />}
+      {rest.isLabel && <TextFnx style={stylest.label}>
+        {label} {isRequired && <TextFnx color={colors.app.sell} value={'*'} />}
+        </TextFnx>}
+      
       <View
         style={[
           rest.isCircle ? stylest.inputCircle : [styleView, styleBorder],
@@ -173,6 +177,7 @@ const Input = ({
             placeholderTextColor={colors.description}
             placeholder={placeholder}
             onSubmitEditing={onSubmitEditing}
+            {...restInput}
           />
         )}
         {prefix && (

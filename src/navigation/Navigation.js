@@ -25,7 +25,7 @@ import {
   isSameScreen,
   resetScreenGlobal,
 } from '../configs/utils';
-import {BUTTON_ICON_LEFT_NAV, COMMAND_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, STO_SCREEN} from '.';
+import {BUTTON_ICON_LEFT_NAV, COMMAND_SCREEN, COMPLAIN_PROVIDE, HOME_SCREEN, LIQUID_SWAP_SCREEN, STO_SCREEN} from '.';
 
 // Register all screens on launch
 // registerScreens();
@@ -252,7 +252,7 @@ export function pushTabBasedApp(currenIndex = 0) {
           bottomTabs: {
             children: [
               Tabbar(
-                HOME_SCREEN,
+                COMPLAIN_PROVIDE,
                 require('assets/icons/Home.png'),
                 'P2P',
                 IdNavigation.Home.menu,
