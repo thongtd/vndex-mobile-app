@@ -13,6 +13,7 @@ import {
   ADS_ADD_NEW_SCREEN,
   ADS_HISTORY_EXCHANGE_SCREEN,
   ADS_MY_ADVERTISENMENT_SCREEN,
+  FEEDBACK_SCREEN,
   LOGIN_SCREEN,
   SETTING_SCREEN,
   STEP_1_BUY_SELL_SCREEN,
@@ -57,7 +58,7 @@ import {
 } from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
 import {useDispatch} from 'react-redux';
-import { GET_USERS_KYC } from '../../redux/modules/authentication/actions';
+import {GET_USERS_KYC} from '../../redux/modules/authentication/actions';
 
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
@@ -73,7 +74,7 @@ const HomeScreen = ({componentId}) => {
     if (size(get(tradingMarket, 'assets')) > 0) {
       setActiveSymbol(get(tradingMarket, 'assets')[0]);
     }
-    dispatch(createAction(GET_USERS_KYC, get(UserInfo, 'id')))
+    dispatch(createAction(GET_USERS_KYC, get(UserInfo, 'id')));
     // useActionsP2p(dispatch).handleGetUserKyc(get(UserInfo, 'id'));
     return () => {};
   }, [tradingMarket]);
@@ -246,7 +247,28 @@ const HomeScreen = ({componentId}) => {
           />
         </View>
       </View>
-
+      <Button
+        onPress={() => {
+          pushSingleScreenApp(componentId, FEEDBACK_SCREEN, null, {
+            topBar: {
+              rightButtons: [
+                {
+                  id: IdNavigation.PressIn.filterFeedback,
+                  icon: require('assets/icons/ic_feedback.png'),
+                },
+              ],
+            },
+          });
+        }}
+        isNormal
+        width={75}
+        title={'KHIẾU NẠI'}
+        height={40}
+        colorTitle={ActiveType == SELL ? colors.app.sell : colors.text}
+        bgButtonColor={
+          ActiveType == SELL ? colors.app.bgSell : colors.app.backgroundLevel1
+        }
+      />
       <View>
         <FlatList
           style={{
@@ -354,8 +376,8 @@ const HomeScreen = ({componentId}) => {
                   if (!get(UserInfo, 'twoFactorEnabled')) {
                     return toast('Vui lòng bật thiết lập 2FA để tạo lệnh');
                   }
-                  if(!get(UserInfo, 'customerMetaData.isKycUpdated')){
-                    return toast("Vui lòng KYC tài khoản để tạo lệnh");
+                  if (!get(UserInfo, 'customerMetaData.isKycUpdated')) {
+                    return toast('Vui lòng KYC tài khoản để tạo lệnh');
                   }
                   pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN, {
                     item,

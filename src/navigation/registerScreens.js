@@ -117,6 +117,9 @@ import {
   STEP_2FA_ADS_ADD_SCREEN,
   STEP_ADS_ADD_SUCCESS,
   CHAT_SCREEN,
+  FEEDBACK_SCREEN,
+  COMPLAINING_SCREEN,
+  COMPLAINING_PROCESS_SCREEN
 } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
@@ -147,7 +150,10 @@ import Step2FA from '../screens/HomeScreen/BuySellScreen/Step2FA';
 import Step2FaAdsAdd from '../screens/Advertisement/AddNewAdvertisement/components/Step2FaAdsAdd';
 import StepSuccess from '../screens/Advertisement/AddNewAdvertisement/components/StepSuccess';
 import ChatScreen from '../screens/CommandScreen/ChatScreen';
-
+import FeedbackScreen from '../screens/Complain/ComplainInfoScreen';
+import ComplainingScreen from '../screens/Complain/ComplainingScreen';
+import ComplaintProcessScreen from '../screens/Complain/ComplaintProcessScreen';
+ 
 const WrapScreen = (ReduxScreen, store) => props =>
   (
     <Provider store={store}>
@@ -464,6 +470,21 @@ export const registerScreens = store => {
     () => withNavigationProvider(WrapScreen(Step2FA, store)),
     () => Step2FA,
   );
+  Navigation.registerComponent(
+    FEEDBACK_SCREEN,
+    () => withNavigationProvider(WrapScreen(FeedbackScreen, store)),
+    () => FeedbackScreen,
+  );
+  Navigation.registerComponent(
+    COMPLAINING_SCREEN,
+    () => withNavigationProvider(WrapScreen(ComplainingScreen, store)),
+    () => ComplainingScreen,
+  ); 
+  Navigation.registerComponent(
+    COMPLAINING_PROCESS_SCREEN,
+    () => withNavigationProvider(WrapScreen(ComplaintProcessScreen, store)),
+    () => ComplaintProcessScreen,
+  ); 
 
   //modal screen
   Navigation.registerComponent(

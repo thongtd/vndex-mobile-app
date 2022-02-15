@@ -163,6 +163,7 @@ export const IdNavigation = {
     filterCommand: 'Id.PressIn.filterCommand',
     filterMyAdvertisement: 'Id.PressIn.filterMyAdvertisement',
     warningAddNewAds: 'Id.PressIn.warningAddNewAds',
+    filterFeedback: 'Id.PressIn.filterFeedback',
     notification: 'Id.PressIn.notification',
     menuLeft: 'Id.PressIn.menuLeft',
     profile: 'Id.PressIn.profile',
