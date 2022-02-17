@@ -1,8 +1,12 @@
-const env = 'prod';
+const env = 'dev';
 // const MARKET_WATCH_URL = 'http://54.169.27.91:6873/';
 
 const MARKET_WATCH_URL =
   env === 'dev' ? 'http://54.169.221.223:6870/' : 'http://13.229.182.120:8870/';
+export const CALLBACK_REG =
+  env === 'dev'
+    ? 'http://54.169.221.223:8868/confirm-email'
+    : 'https://vndex.io/confirm-email';
 
 export const MARKET_API = {
   GET_MARKET_WATCH: `${MARKET_WATCH_URL}api/v1/market-watch/get-market-watch`, //GET
@@ -15,7 +19,7 @@ const EXCHANGE_URL =
   env === 'dev' ? 'http://54.169.221.223:6870/' : 'http://13.229.182.120:8870/';
 // const EXCHANGE_URL = 'http://dev-api.financex.io/';
 export const P2P_API = {
-  VERIFY_2FA:`${EXCHANGE_URL}api/v1/user/validate-2fa-code`,
+  VERIFY_2FA: `${EXCHANGE_URL}api/v1/user/validate-2fa-code`,
   advertisments: `${EXCHANGE_URL}api/v1/p2p-order/advertisments`,
   GET_TRADING_MARKETS: `${EXCHANGE_URL}api/v1/trade/get-trading-markets`,
   GET_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/advertisment`, //orderId,
@@ -34,11 +38,10 @@ export const P2P_API = {
   REMOVE_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/delete-advertisment/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   DETAIL_ADVERTISMENT: `${EXCHANGE_URL}api/v1/p2p-order/advertisment/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   GET_HISTORY_ORDER: `${EXCHANGE_URL}api/v1/p2p-order/get-history-orders`,
-  UPDATE_STATUS_ADV: `${EXCHANGE_URL}api/v1/p2p-order/update-status-advertisment/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6,
-  CHAT_HISTORY: `${EXCHANGE_URL}api/v1/p2p-conversation/history/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6,
-  CHAT_SEND_MESSAGE: `${EXCHANGE_URL}api/v1/p2p-conversation/send-message/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6,
-  CHAT_INFO_P2P: `${EXCHANGE_URL}api/v1/p2p-conversation/`//3fa85f64-5717-4562-b3fc-2c963f66afa6,
-
+  UPDATE_STATUS_ADV: `${EXCHANGE_URL}api/v1/p2p-order/update-status-advertisment/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
+  CHAT_HISTORY: `${EXCHANGE_URL}api/v1/p2p-conversation/history/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
+  CHAT_SEND_MESSAGE: `${EXCHANGE_URL}api/v1/p2p-conversation/send-message/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
+  CHAT_INFO_P2P: `${EXCHANGE_URL}api/v1/p2p-conversation/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
 };
 export const EXCHANGE_API = {
   CHECK_API: `${EXCHANGE_URL}api/health-check`,
