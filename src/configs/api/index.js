@@ -2,7 +2,7 @@ const env = 'dev';
 // const MARKET_WATCH_URL = 'http://54.169.27.91:6873/';
 
 const MARKET_WATCH_URL =
-  env === 'dev' ? 'http://54.169.221.223:6870/' : 'http://13.229.182.120:8870/';
+  env === 'dev' ? 'http://54.169.221.223:8870/' : 'http://13.229.182.120:8870/';
 export const CALLBACK_REG =
   env === 'dev'
     ? 'http://54.169.221.223:8868/confirm-email'
@@ -16,7 +16,7 @@ export const MARKET_API = {
 
 //Exchange
 const EXCHANGE_URL =
-  env === 'dev' ? 'http://54.169.221.223:6870/' : 'http://13.229.182.120:8870/';
+  env === 'dev' ? 'http://54.169.221.223:8870/' : 'http://13.229.182.120:8870/';
 // const EXCHANGE_URL = 'http://dev-api.financex.io/';
 export const P2P_API = {
   VERIFY_2FA: `${EXCHANGE_URL}api/v1/user/validate-2fa-code`,
@@ -42,6 +42,10 @@ export const P2P_API = {
   CHAT_HISTORY: `${EXCHANGE_URL}api/v1/p2p-conversation/history/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
   CHAT_SEND_MESSAGE: `${EXCHANGE_URL}api/v1/p2p-conversation/send-message/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
   CHAT_INFO_P2P: `${EXCHANGE_URL}api/v1/p2p-conversation/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
+  CREATE_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/create-complain`,
+  GET_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/get-complain/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
+  CANCEL_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/cancel-complain/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
+  GET_COMPLAIN_PROCESS: `${EXCHANGE_URL}api/v1/p2p-order/get-complain-process/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
 };
 export const EXCHANGE_API = {
   CHECK_API: `${EXCHANGE_URL}api/health-check`,

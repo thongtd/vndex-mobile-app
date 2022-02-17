@@ -59,10 +59,12 @@ const Container = ({
   isFilter,
   spaceHorizontal = spacingApp,
   backgroundColor=colors.app.backgroundLevel1,
-  isNotTranslateTitle
+  isNotTranslateTitle,
+  customsNavigation=()=>{}
 }) => {
   const scrollRef = useRef();
   useEffect(() => {
+    customsNavigation();
     if (isTopBar) {
       Navigation.mergeOptions(componentId, {
         topBar: {

@@ -40,6 +40,14 @@ export const GET_CHAT_INFO_P2P = `${CONTEXT}/GET_CHAT_INFO_P2P`;
 export const GET_CHAT_INFO_P2P_SUCCESS = `${CONTEXT}/GET_CHAT_INFO_P2P_SUCCESS`;
 export const SEND_CHAT_MESSAGE = `${CONTEXT}/SEND_CHAT_MESSAGE`;
 
+export const GET_COMPLAIN = `${CONTEXT}/GET_COMPLAIN`;
+export const GET_COMPLAIN_SUCCESS = `${CONTEXT}/GET_COMPLAIN_SUCCESS`;
+export const CANCEL_COMPLAIN = `${CONTEXT}/CANCEL_COMPLAIN`;
+export const CANCEL_COMPLAIN_SUCCESS = `${CONTEXT}/CANCEL_COMPLAIN_SUCCESS`;
+export const GET_COMPLAIN_PROCESS = `${CONTEXT}/GET_COMPLAIN_PROCESS`;
+export const GET_COMPLAIN_PROCESS_SUCCESS = `${CONTEXT}/GET_COMPLAIN_PROCESS_SUCCESS`;
+export const CREATE_COMPLAIN = `${CONTEXT}/CREATE_COMPLAIN`;
+
 export const CREATE_OFFER_ADVERTISMENT = `${CONTEXT}/CREATE_OFFER_ADVERTISMENT`;
 export const GET_DETIAL_ADVERTISMENT = `${CONTEXT}/GET_DETIAL_ADVERTISMENT`;
 
@@ -53,6 +61,10 @@ export function useActionsP2p(dispatch) {
     dispatch = useDispatch();
   }
   return {
+    handleCreateComplain:data => dispatch(createAction(CREATE_COMPLAIN,data)),
+    handleGetComplain:orderId => dispatch(createAction(GET_COMPLAIN,orderId)),
+    handleGetComplainProcess:complainId => dispatch(createAction(GET_COMPLAIN_PROCESS,complainId)),
+    handleCancelComplain:complainId => dispatch(createAction(CANCEL_COMPLAIN,complainId)),
     handleGetAdvertisments: data =>
       dispatch(createAction(GET_ADVERTISMENTS, data)),
     handleGetChatHistory: data =>
@@ -101,6 +113,10 @@ export function useActionsP2p(dispatch) {
 }
 export const actionsReducerP2p = {
   getMarketInfoSuccess: data => createAction(GET_MARKET_INFO_SUCCESS, data),
+  getComplainSuccess: data => createAction(GET_COMPLAIN_SUCCESS, data),
+  getComplainProcessSuccess: data => createAction(GET_COMPLAIN_PROCESS_SUCCESS, data),
+  cancelComplainSuccess: data => createAction(CANCEL_COMPLAIN_SUCCESS, data),
+  
   getAdvertismentsSuccess: advertisment =>
     createAction(GET_ADVERTISMENTS_SUCCESS, advertisment),
   getDetailItemAdvertismentsSuccess: advertisment =>

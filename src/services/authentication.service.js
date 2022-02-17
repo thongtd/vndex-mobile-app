@@ -200,9 +200,11 @@ export const authService = {
         ipAddress,
       };
       let data = await httpService.post_without_token(
+        
         EXCHANGE_API.LOGIN,
         login_data,
       );
+      console.log('data: ', data);
       return {
         result: 'ok',
         data,

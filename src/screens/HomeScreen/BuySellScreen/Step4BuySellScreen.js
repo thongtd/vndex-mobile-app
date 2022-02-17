@@ -28,6 +28,7 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
 import {
   CHAT_SCREEN,
+  FEEDBACK_SCREEN,
   pushSingleScreenApp,
   STEP_2FA_BUY_SELL_SCREEN,
   STEP_2_BUY_SELL_SCREEN,
@@ -39,7 +40,11 @@ import Copy from 'assets/svg/ic_copy.svg';
 import BottomSheet from '../../../components/ActionSheet/ActionSheet';
 import {useDispatch, useSelector} from 'react-redux';
 import {ceil, get, isNumber} from 'lodash';
-import {formatCurrency, to_UTCDate} from '../../../configs/utils';
+import {
+  formatCurrency,
+  listenerEventEmitter,
+  to_UTCDate,
+} from '../../../configs/utils';
 import {useActionsP2p} from '../../../redux';
 import CountDown from 'react-native-countdown-component';
 import {Navigation} from 'react-native-navigation';
@@ -54,6 +59,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (isPushChat) {
       pushSingleScreenApp(componentId, CHAT_SCREEN, {
@@ -103,6 +109,9 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           }
         },
       );
+    const ev = listenerEventEmitter('doneApi', () => {
+      setIsLoading(false);
+    });
     useActionsP2p(dispatch).handleGetAdvertisment(
       get(offerOrder, 'p2PTradingOrderId'),
     );
@@ -110,6 +119,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
     return () => {
       navigationButtonEventListener.remove();
+      ev.remove();
     };
   }, []);
   // useEffect(() => {
@@ -166,6 +176,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
       spaceHorizontal={0}
       isTopBar
       isScroll
+      isLoadding={isLoading}
       componentId={componentId}
       title="Đang mở khóa">
       <Layout
@@ -549,18 +560,27 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           onSubmit={() => {
             if (get(offerOrderState, 'offerSide') === SELL) {
               pushSingleScreenApp(componentId, STEP_2FA_BUY_SELL_SCREEN);
+            } else {
+              pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
+                orderId: offerOrderId,
+              });
             }
           }}
           colorTitle={colors.text}
           weightTitle={'700'}
           onClose={() => {
             if (get(offerOrderState, 'offerSide') === BUY) {
+              setIsLoading(true);
               useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
                 offerOrderId: offerOrderId,
                 isHasPayment: false,
                 pofPayment: '',
                 pofPaymentComment: '',
                 cancellationReason: '',
+              });
+            } else {
+              pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
+                orderId: offerOrderId,
               });
             }
           }}

@@ -6,7 +6,7 @@ import Container from '../../components/Container';
 import Input from '../../components/Input';
 import ItemList from '../../components/Item/ItemList';
 import {constant, fontSize, spacingApp} from '../../configs/constant';
-import {dismissAllModal, showModal} from '../../navigation/Navigation';
+import {dismissAllModal, pop, showModal} from '../../navigation/Navigation';
 import {isEmpty} from 'lodash';
 import {
   PICKER_SEARCH,
@@ -257,6 +257,7 @@ const KycScreen = ({componentId}) => {
         <Button
           textSubmit={'NEXT'.t()}
           textClose={'Cancel'.t()}
+          onClose={()=>pop(componentId)}
           onSubmit={() =>
             handleNext({
               birthDate: moment(birthDate).format('YYYY-MM-DD'),

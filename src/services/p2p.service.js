@@ -17,10 +17,28 @@ export const P2pService = {
       `side=${data.side}&coinSymbol=${data.coinSymbol}&paymentUnit=${data.paymentUnit}&priceType=${data.priceType}&orderAmount=${data.orderAmount}&exPaymentMethodIds=${data.exPaymentMethodIds}&requiredKyc=${data.requiredKyc}&requiredAgeInday=${data.requiredAgeInday}&createdFrom=${data.createdFrom}&createdTo=${data.createdTo}&status=${data.status}&pageIndex=${data.pageIndex}&pageSize=${data.pageSize}`,
     );
     let urlGetAdvertisments = `${P2P_API.advertisments}?${dataRemoved}`;
-
     let response = await httpService.get_without_token(urlGetAdvertisments);
-
     return response;
+  },
+  getComplain: async orderId => {
+    let urlGetComplain = `${P2P_API.GET_COMPLAIN}${orderId}`;
+    let response = await httpService.get(urlGetComplain);
+    return response.data;
+  },
+  getComplainProcess: async complainId => {
+    let urlGetComplainProcess = `${P2P_API.GET_COMPLAIN_PROCESS}${complainId}`;
+    let response = await httpService.get(urlGetComplainProcess);
+    return response.data;
+  },
+  getCancelComplain: async complainId => {
+    let urlCancelComplain = `${P2P_API.CANCEL_COMPLAIN}${complainId}`;
+    let response = await httpService.get(urlCancelComplain);
+    return response.data;
+  },
+  createlComplain: async data => {
+    let urlCreateComplain = `${P2P_API.CREATE_COMPLAIN}`;
+    let response = await httpService.post(urlCreateComplain,data);
+    return response.data;
   },
   getAdvertisment: async orderId => {
     let urlGetAdvertisment = `${P2P_API.GET_ADVERTISMENT}/${orderId}`;
@@ -119,33 +137,31 @@ export const P2pService = {
     let response = await httpService.get(url);
     return response.data;
   },
-  updateStatusAdv: async (data,orderId) => {
+  updateStatusAdv: async (data, orderId) => {
     let url = `${P2P_API.UPDATE_STATUS_ADV}${orderId}`;
-    let response = await httpService.post(url,data);
+    let response = await httpService.post(url, data);
     return response.data;
   },
-  chatHistory: async (data,orderId) => {
-    let dataRemoved = removeEmptyUrl(
-      `skip=${data.skip}&take=${data.take}`,
-    );
+  chatHistory: async (data, orderId) => {
+    let dataRemoved = removeEmptyUrl(`skip=${data.skip}&take=${data.take}`);
     let url = `${P2P_API.CHAT_HISTORY}${orderId}?${dataRemoved}`;
     let response = await httpService.get(url);
     return response.data;
   },
-  chatSendMessage: async (data,orderId) => {
+  chatSendMessage: async (data, orderId) => {
     let url = `${P2P_API.CHAT_SEND_MESSAGE}${orderId}`;
-    let response = await httpService.post(url,data);
+    let response = await httpService.post(url, data);
     return response.data;
   },
-  chatInfoP2p: async (orderId) => {
+  chatInfoP2p: async orderId => {
     let url = `${P2P_API.CHAT_INFO_P2P}${orderId}`;
     let response = await httpService.get(url);
     return response.data;
   },
-  verify2Fa:async (data) => {
+  verify2Fa: async data => {
     let url = `${P2P_API.VERIFY_2FA}`;
-    let response = await httpService.post(url,data);
+    let response = await httpService.post(url, data);
     console.log('response verify 2fa: ', response);
     return response.data;
-  }
+  },
 };

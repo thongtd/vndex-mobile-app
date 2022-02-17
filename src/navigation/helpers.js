@@ -57,55 +57,7 @@ export const switchLangTabbar = () => {
 }
 
 export const itemScreen = ( nameScreen,title="") => {
-    if((nameScreen == WALLET_SCREEN)){
-        return {
-            component: {
-                name: nameScreen,
-                options: {
-                    statusBar: {
-                        backgroundColor: colors.app.backgroundLevel2,
-                        style:'dark',
-                        // drawBehind: true,
-                        visible: true
-                    },
-                    topBar:{
-                        
-                        title:{
-                            text:title
-                        },
-                        rightButtons:[{
-                            id: IdNavigation.PressIn.historyTransaction,
-                            icon:require("assets/icons/timer.png")
-                          }]
-                    }
-                }
-            }
-        }
-    }else if((nameScreen == COMMAND_SCREEN)){
-        return {
-            component: {
-                name: nameScreen,
-                options: {
-                    statusBar: {
-                        backgroundColor: colors.app.backgroundLevel2,
-                        style:'dark',
-                        // drawBehind: true,
-                        visible: true
-                    },
-                    topBar:{
-                        
-                        title:{
-                            text:title
-                        },
-                        rightButtons:[{
-                            id: IdNavigation.PressIn.filterCommand,
-                            icon:require("assets/icons/Filter.png")
-                          }]
-                    }
-                }
-            }
-        }
-    }else if(nameScreen == HOME_SCREEN){
+    if(nameScreen == HOME_SCREEN){
         return {
             component: {
                 name: nameScreen,

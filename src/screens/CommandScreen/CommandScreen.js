@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Navigation} from 'react-native-navigation';
 import {useSelector, useDispatch} from 'react-redux';
 import {LoginScreen} from '..';
 import ButtonIcon from '../../components/Button/ButtonIcon';
@@ -26,6 +27,8 @@ import {
 } from '../../configs/utils';
 import {
   CHAT_SCREEN,
+  COMPLAINING_SCREEN,
+  FEEDBACK_SCREEN,
   pushSingleScreenApp,
   STEP_3_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
@@ -221,6 +224,14 @@ const CommandScreen2 = ({componentId}) => {
           ],
         },
       });
+    } else if (
+      get(item, 'isPaymentConfirm') &&
+      get(item, 'timeToLiveInSecond') == 0 &&
+      !get(item, 'isUnLockConfirm') &&
+      !get(item, 'isPaymentCancel') &&
+      get(item, 'offerSide') == BUY
+    ) {
+      useActionsP2p(dispatch).handleGetComplain(get(item, 'id'));
     } else {
       pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
     }
@@ -248,6 +259,20 @@ const CommandScreen2 = ({componentId}) => {
     }
     return () => {};
   }, [activeMenu]);
+  useEffect(() => {
+    const evGetComplain = listenerEventEmitter('doneGetComplain', data => {
+      if(get(data,"id")){
+        pushSingleScreenApp(componentId,COMPLAINING_SCREEN);
+      }else{
+        pushSingleScreenApp(componentId,FEEDBACK_SCREEN);
+      }
+    });
+
+    return () => {
+      evGetComplain.remove();
+    };
+  }, []);
+
   const getHistoryOrder = (pageIndex, data) => {
     useActionsP2p(dispatch).handleGetHistoryOrder({
       pageIndex: pageIndex,
@@ -262,7 +287,21 @@ const CommandScreen2 = ({componentId}) => {
     });
   };
   return (
-    <Container componentId={componentId} title="Lịch sử giao dịch">
+    <Container
+      customsNavigation={() => {
+        Navigation.mergeOptions(componentId, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.historyTransaction,
+                icon: require('assets/icons/Filter.png'),
+              },
+            ],
+          },
+        });
+      }}
+      componentId={componentId}
+      title="Lịch sử giao dịch">
       <ButtonTop
         onChangeActive={onChangeActive}
         activeMenu={activeMenu}
@@ -340,7 +379,7 @@ const CommandScreen2 = ({componentId}) => {
                   onPress={() => {
                     pushSingleScreenApp(componentId, CHAT_SCREEN, {
                       orderId: get(item, 'id'),
-                      email:get(item, 'p2PTradingOrder.identityUser.userName')
+                      email: get(item, 'p2PTradingOrder.identityUser.userName'),
                     });
                   }}
                   iconComponent={icons.IcChat}
@@ -401,13 +440,23 @@ const mapStatus = ({
       bg: colors.app.bgBuy,
       label: 'Hoàn thành',
     };
-  } else if (isPaymentConfirm && !isPaymentCancel && !isUnLockConfirm) {
+  } else if (
+    isPaymentConfirm &&
+    !isPaymentCancel &&
+    !isUnLockConfirm &&
+    timeToLiveInSecond > 0
+  ) {
     return {
       color: colors.app.buy,
       bg: colors.app.bgBuy,
       label: 'Đã thanh toán',
     };
-  } else if (isPaymentConfirm && !isPaymentCancel && timeToLiveInSecond == 0) {
+  } else if (
+    isPaymentConfirm &&
+    !isPaymentCancel &&
+    !isUnLockConfirm &&
+    timeToLiveInSecond == 0
+  ) {
     return {
       color: colors.app.sell,
       bg: colors.app.bgSell,

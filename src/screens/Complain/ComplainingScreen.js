@@ -13,15 +13,21 @@ import {
   FEEDBACK_SCREEN,
   COMPLAINING_PROCESS_SCREEN,
 } from '../../navigation';
-import {IdNavigation} from '../../configs/constant';
+import {fontSize, IdNavigation} from '../../configs/constant';
 import {pop} from '../../navigation/Navigation';
 import Icon from '../../components/Icon';
 import icons from '../../configs/icons';
+import CountDown from 'react-native-countdown-component';
+import {get, isNumber} from 'lodash';
+import {useSelector} from 'react-redux';
 
 const ComplainingScreen = ({componentId}) => {
+  const complainInfo = useSelector(state => state.p2p.complainInfo);
   return (
     <Container
-      spaceHorizontal={20}
+      // spaceHorizontal={20}
+      space={15}
+      spaceHorizontal={0}
       componentId={componentId}
       isTopBar
       isScroll
@@ -47,18 +53,47 @@ const ComplainingScreen = ({componentId}) => {
           align="center">
           Hãy chờ người bị khiếu nại xử lý
         </TextFnx>
-        <TextFnx
-          color={colors.btnClose}
-          spaceBottom={20}
-          size={14}
-          align="center">
-          {`Thời gian còn lại `}
-          <TextFnx color={colors.highlight} size={20}>
-            03:31
+        <Layout
+          isLineCenter
+          style={{
+            backgroundColor: '#41330D',
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            marginBottom: 15,
+          }}>
+          <Icon iconComponent={icons.IcTimer} />
+          <TextFnx spaceHorizontal={10} size={fontSize.f12}>
+            Thời gian còn lại
           </TextFnx>
-        </TextFnx>
 
-        <TextFnx color={colors.description} spaceBottom={5} size={14}>
+          <CountDown
+            until={
+              isNumber(get(complainInfo, 'timeToLiveInSecond'))
+                ? parseInt(get(complainInfo, 'timeToLiveInSecond'))
+                : 0
+            }
+            size={14}
+            timeLabels={{m: '', s: ''}}
+            style={{
+              flexDirection: 'row',
+            }}
+            onFinish={() => {
+              // useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
+            }}
+            digitStyle={{height: 15, width: 20}}
+            digitTxtStyle={{
+              color: colors.app.yellowHightlight,
+              fontWeight: '400',
+            }}
+            timeToShow={['M', 'S']}
+            showSeparator
+            separatorStyle={{
+              color: colors.app.yellowHightlight,
+            }}
+          />
+        </Layout>
+       <Layout type='column' spaceHorizontal={10}>
+       <TextFnx color={colors.description} spaceBottom={5} size={14}>
           1. Nếu cả hai đã được thỏa thuận, bạn có thể HỦY KHIẾU NẠI và tiến
           hành hoàn tất giao dịch
         </TextFnx>
@@ -68,18 +103,14 @@ const ComplainingScreen = ({componentId}) => {
         </TextFnx>
         <TextFnx color={colors.description} spaceBottom={5} size={14}>
           3. Hãy{' '}
-          <TouchableOpacity
-            onPress={() => {
-              pop(componentId);
-            }}>
-            <TextFnx color={colors.highlight} style={{marginBottom: -3}}>
-              Cung cấp thêm thông tin
-            </TextFnx>
-          </TouchableOpacity>
+          <TextFnx color={colors.highlight} style={{marginBottom: -3}}>
+            Cung cấp thêm thông tin
+          </TextFnx>
           . Thông tin cung cấp bởi người dùng và hỗ trợ khách hàng có thể tìm
           thấy ở "Tiến trình khiếu nại
         </TextFnx>
         <TextFnx color={colors.highlight}></TextFnx>
+       </Layout>
       </Layout>
       <Layout
         type="column"
@@ -89,6 +120,7 @@ const ComplainingScreen = ({componentId}) => {
           borderColor: colors.app.lineSetting,
         }}>
         <ButtonIcon
+          name=""
           title={'Tiến trình khiếu nại'}
           onPress={() => {
             pushSingleScreenApp(componentId, COMPLAINING_PROCESS_SCREEN, null, {

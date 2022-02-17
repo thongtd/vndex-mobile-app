@@ -13,6 +13,8 @@ import {
   GET_DETIAL_ADVERTISMENT_SUCCESS,
   GET_CHAT_INFO_P2P_SUCCESS,
   GET_CHAT_HISTORY_SUCCESS,
+  GET_COMPLAIN_SUCCESS,
+  GET_COMPLAIN_PROCESS_SUCCESS,
 } from './actions';
 import {get, set} from '../../../configs/utils';
 import i18n from 'react-native-i18n';
@@ -35,6 +37,8 @@ export const DEFAULT = {
   advertismentDetails: {},
   chatInfoP2p: {},
   chatHistory: {},
+  complainInfo:{},
+  complainProcess:{}
 };
 
 export default p2p = (state = DEFAULT, action = {}) => {
@@ -99,6 +103,16 @@ export default p2p = (state = DEFAULT, action = {}) => {
       return {
         ...state,
         offerOrder: payload,
+      };
+      case GET_COMPLAIN_SUCCESS:
+      return {
+        ...state,
+        complainInfo: payload,
+      };
+      case GET_COMPLAIN_PROCESS_SUCCESS:
+      return {
+        ...state,
+        complainProcess: payload,
       };
     case GET_CHAT_INFO_P2P_SUCCESS:
       return {

@@ -36,6 +36,10 @@ import {
   GET_CHAT_HISTORY_SUCCESS,
   GET_CHAT_INFO_P2P,
   SEND_CHAT_MESSAGE,
+  GET_COMPLAIN,
+  GET_COMPLAIN_PROCESS,
+  CANCEL_COMPLAIN,
+  CREATE_COMPLAIN,
 } from './actions';
 
 import {
@@ -543,7 +547,7 @@ export function* asyncGetChatHistory({payload}) {
     yield put(
       actionsReducerP2p.getChatHistorySuccess({
         ...res,
-        isLoadmore:get(payload,"isLoadmore"),
+        isLoadmore: get(payload, 'isLoadmore'),
         skip: get(payload, 'data.skip'),
         pages: ceil(get(res, 'totalRecords') / get(payload, 'data.take')),
       }),
@@ -594,6 +598,78 @@ export function* asyncSendMessage({payload}) {
 export function* watchSendMessage() {
   yield takeEvery(SEND_CHAT_MESSAGE, asyncSendMessage);
 }
+export function* asyncGetComplain({payload}) {
+  try {
+    const res = yield call(P2pService.getComplain, payload);
+    emitEventEmitter('doneApi', true);
+    if (!get(res, 'success')) {
+      toast(get(res, 'message'));
+    } else {
+      emitEventEmitter('doneGetComplain', get(res, 'data'));
+      console.log(res,"resGetComplain")
+      yield put(actionsReducerP2p.getComplainSuccess(get(res, 'data')));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetComplain() {
+  yield takeEvery(GET_COMPLAIN, asyncGetComplain);
+}
+export function* asyncGetComplainProcess({payload}) {
+  try {
+    const res = yield call(P2pService.getComplainProcess, payload);
+    emitEventEmitter('doneApi', true);
+    if (!get(res, 'success')) {
+      toast(get(res, 'message'));
+    } else {
+      yield put(actionsReducerP2p.getComplainProcessSuccess(get(res, 'data')));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetComplainProcess() {
+  yield takeEvery(GET_COMPLAIN_PROCESS, asyncGetComplainProcess);
+}
+export function* asyncCancelComplain({payload}) {
+  try {
+    const res = yield call(P2pService.getCancelComplain, payload);
+    emitEventEmitter('doneApi', true);
+    if (!get(res, 'success')) {
+      toast(get(res, 'message'));
+    } else {
+      toast(get(res, 'message'));
+      // yield put(actionsReducerP2p.cancelComplainSuccess(get(res, 'data')));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchCancelComplain() {
+  yield takeEvery(CANCEL_COMPLAIN, asyncCancelComplain);
+}
+export function* asyncCreateComplain({payload}) {
+  try {
+    const res = yield call(P2pService.createlComplain, payload);
+    console.log('res Complain: ', res);
+    emitEventEmitter('doneApi', true);
+    if (get(res, 'success')) {
+      emitEventEmitter('createSuccess', true);
+      yield put(createAction(GET_COMPLAIN,get(res,"data.orderId")));
+    } else {
+      toast(get(res, 'message'));
+      // toast(get(res, 'message'));
+     
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchCreateComplain() {
+  yield takeEvery(CREATE_COMPLAIN, asyncCreateComplain);
+}
+
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
   yield all([fork(watchGetTrading)]);
@@ -616,4 +692,8 @@ export default function* () {
   yield all([fork(watchGetChatHistory)]);
   yield all([fork(watchGetChatInfoP2p)]);
   yield all([fork(watchSendMessage)]);
+  yield all([fork(watchGetComplain)]);
+  yield all([fork(watchGetComplainProcess)]);
+  yield all([fork(watchCancelComplain)]);
+  yield all([fork(watchCreateComplain)]);
 }

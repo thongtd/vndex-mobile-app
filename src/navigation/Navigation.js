@@ -25,7 +25,7 @@ import {
   isSameScreen,
   resetScreenGlobal,
 } from '../configs/utils';
-import {BUTTON_ICON_LEFT_NAV, COMMAND_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, STO_SCREEN} from '.';
+import {BUTTON_ICON_LEFT_NAV, COMMAND_SCREEN, COMPLAIN_PROVIDE, FEEDBACK_SCREEN, HOME_SCREEN, LIQUID_SWAP_SCREEN, STO_SCREEN} from '.';
 
 // Register all screens on launch
 // registerScreens();

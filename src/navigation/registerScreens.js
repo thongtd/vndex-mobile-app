@@ -153,6 +153,7 @@ import ChatScreen from '../screens/CommandScreen/ChatScreen';
 import FeedbackScreen from '../screens/Complain/ComplainInfoScreen';
 import ComplainingScreen from '../screens/Complain/ComplainingScreen';
 import ComplaintProcessScreen from '../screens/Complain/ComplaintProcessScreen';
+import ComplainProvide from '../screens/Complain/ComplainProvide';
  
 const WrapScreen = (ReduxScreen, store) => props =>
   (
@@ -248,6 +249,7 @@ export const registerScreens = store => {
     () => withNavigationProvider(WrapScreen(KycScreen, store)),
     () => KycScreen,
   );
+  
   Navigation.registerComponent(
     STEP2KYC_SCREEN,
     () => withNavigationProvider(WrapScreen(Step2Kyc, store)),
@@ -472,8 +474,8 @@ export const registerScreens = store => {
   );
   Navigation.registerComponent(
     FEEDBACK_SCREEN,
-    () => withNavigationProvider(WrapScreen(FeedbackScreen, store)),
-    () => FeedbackScreen,
+    () => withNavigationProvider(WrapScreen(ComplainProvide, store)),
+    () => ComplainProvide,
   );
   Navigation.registerComponent(
     COMPLAINING_SCREEN,
