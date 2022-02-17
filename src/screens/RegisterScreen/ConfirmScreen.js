@@ -32,6 +32,7 @@ import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
 import {pop, pushSingleHiddenTopBarApp, showModal} from '../../navigation/Navigation';
 import Layout from '../../components/Layout/Layout';
 import { size } from 'lodash';
+import { CALLBACK_REG } from '../../configs/api';
 
 const ConfirmScreen = ({countryCode = 'VN', componentId}) => {
   const [isCheck, setCheck] = useState(false);
@@ -63,7 +64,7 @@ const ConfirmScreen = ({countryCode = 'VN', componentId}) => {
       fromReferralId: referralId,
       countryCode: countryCode,
       via: 2,
-      CallbackUrl:"https://vndex.io/confirm-email"
+      CallbackUrl:CALLBACK_REG
     };
 
     let isValid = _validateAuth(password, rePassword);
