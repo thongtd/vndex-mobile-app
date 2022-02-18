@@ -248,15 +248,7 @@ const HomeScreen = ({componentId}) => {
           />
         </View>
       </View>
-      <Button
-        onPress={() => {
-          pushSingleScreenApp(componentId, RATING_BUY_SELL_SCREEN, null, {});
-        }}
-        isNormal
-        width={75}
-        title={'Đánh giá'}
-        height={40}
-      />
+
       <View>
         <FlatList
           style={{

@@ -72,7 +72,6 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
       });
       setIsPushChat(false);
     }
-
     return () => {};
   }, [isPushChat]);
 

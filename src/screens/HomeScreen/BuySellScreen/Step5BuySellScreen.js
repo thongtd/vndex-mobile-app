@@ -11,7 +11,7 @@ import {BUY, fontSize, SELL, spacingApp} from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
 import {formatCurrency, get} from '../../../configs/utils';
-import {pushTabBasedApp} from '../../../navigation';
+import {pushSingleScreenApp, pushTabBasedApp, RATING_BUY_SELL_SCREEN} from '../../../navigation';
 import {useActionsP2p} from '../../../redux';
 import TimelineBuySell from './TimelineBuySell';
 
@@ -119,7 +119,7 @@ const Step5BuySellScreen = ({componentId}) => {
               showRating
               style={{paddingVertical: 2}}
             />
-            <Button isTitle title={'Để lại bình luận'} />
+            <Button onTitle={()=>pushSingleScreenApp(componentId, RATING_BUY_SELL_SCREEN, null)} isTitle title={'Để lại bình luận'} />
           </>
         )}
       </Layout>
