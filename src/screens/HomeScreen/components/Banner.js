@@ -24,7 +24,7 @@ const Banner = () => {
       style={styles.wrapper}>
         <Images 
         source={{
-            uri:"https://mona.media/wp-content/uploads/2021/06/banner-website.png"
+            uri:"https://serving.photos.photobox.com/54018733882965b7e4e3d22ca4be74d7d103fa5f0b284dd3983249bf4e41dca7fb8ba232.jpg"
         }}
         style={{
             height:160,
@@ -34,7 +34,7 @@ const Banner = () => {
         />
          <Images 
         source={{
-            uri:"https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg"
+            uri:"https://serving.photos.photobox.com/97306829287e44cda1dba5a843490f9af41e5ea28d22949863e4d26c557b463e9cac6e21.jpg"
         }}
         style={{
             height:160,
@@ -44,7 +44,7 @@ const Banner = () => {
         />
          <Images 
         source={{
-            uri:"https://khunganhonline.com/uploads/worigin/2019/07/02/anh-bia-thang-7-hello-july-85d1aafa4abe5e_f9f446b34edfc32b105ac840ac04eb94.jpg"
+            uri:"https://serving.photos.photobox.com/69987212250d7e88782fd863f7472470fee5ff2d238ba145af54eb5b2d5ab0d6163df13b.jpg"
         }}
         style={{
             height:160,

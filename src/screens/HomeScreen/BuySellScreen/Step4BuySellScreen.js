@@ -26,6 +26,7 @@ import {Rating, AirbnbRating} from 'react-native-ratings';
 import Image from '../../../components/Image/Image';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
+
 import {
   CHAT_SCREEN,
   FEEDBACK_SCREEN,
@@ -44,6 +45,7 @@ import {
   formatCurrency,
   listenerEventEmitter,
   to_UTCDate,
+  toast,
 } from '../../../configs/utils';
 import {useActionsP2p} from '../../../redux';
 import CountDown from 'react-native-countdown-component';
@@ -60,6 +62,8 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
   const [isLoading, setIsLoading] = useState(false);
+  const [isStopComplain, setIsStopComplain] = useState(false);
+  const complainInfo = useSelector(state => state.p2p.complainInfo);
   useEffect(() => {
     if (isPushChat) {
       pushSingleScreenApp(componentId, CHAT_SCREEN, {
@@ -112,6 +116,17 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     const ev = listenerEventEmitter('doneApi', () => {
       setIsLoading(false);
     });
+    const evGetComplain = listenerEventEmitter(
+      'doneGetComplain',
+      ({type, data}) => {
+        if (get(data, 'id') && type == '4') {
+          setIsStopComplain(true);
+          pushSingleScreenApp(componentId, COMPLAINING_SCREEN, {
+            orderId: get(data, 'orderId'),
+          });
+        }
+      },
+    );
     useActionsP2p(dispatch).handleGetAdvertisment(
       get(offerOrder, 'p2PTradingOrderId'),
     );
@@ -120,6 +135,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     return () => {
       navigationButtonEventListener.remove();
       ev.remove();
+      evGetComplain.remove();
     };
   }, []);
   // useEffect(() => {
@@ -133,12 +149,17 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
 
   useEffect(() => {
     var intervalID = setInterval(
-      (offerData, offerOrderIdData) => {
+      (offerData, offerOrderIdData, isStopComplainState = false) => {
         // console.log(offerData,"offerData");
         useActionsP2p(dispatch).handleGetAdvertisment(
           get(offerData, 'p2PTradingOrderId'),
         );
         useActionsP2p(dispatch).handleGetOfferOrder(offerOrderIdData);
+        useActionsP2p(dispatch).handleGetComplain({
+          orderId: offerOrderIdData,
+          type: '4',
+          isStop: isStopComplainState,
+        });
         if (
           get(offerData, 'offerSide') === BUY &&
           get(offerData, 'isUnLockConfirm')
@@ -164,11 +185,12 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
       3000,
       offerOrderState,
       offerOrderId,
+      isStopComplain,
     );
     return () => {
       clearInterval(intervalID);
     };
-  }, [offerOrderState, offerOrderId, offerOrder]);
+  }, [offerOrderState, offerOrderId, offerOrder, isStopComplain]);
 
   return (
     <Container
@@ -559,11 +581,21 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           isClose
           onSubmit={() => {
             if (get(offerOrderState, 'offerSide') === SELL) {
-              pushSingleScreenApp(componentId, STEP_2FA_BUY_SELL_SCREEN);
+              if (get(complainInfo, 'id')) {
+                toast('Bạn đang bị khiếu nại không thể mở khoá');
+              } else {
+                pushSingleScreenApp(componentId, STEP_2FA_BUY_SELL_SCREEN);
+              }
             } else {
-              pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
-                orderId: offerOrderId,
-              });
+              if (get(offerOrderState, 'timeToLiveInSecond') <= 0) {
+                pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
+                  orderId: offerOrderId,
+                });
+              } else {
+                toast(
+                  'Vui lòng chờ thời gian giao dịch bạn mới được khiếu nại',
+                );
+              }
             }
           }}
           colorTitle={colors.text}
@@ -579,9 +611,15 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                 cancellationReason: '',
               });
             } else {
-              pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
-                orderId: offerOrderId,
-              });
+              if (get(offerOrderState, 'timeToLiveInSecond') <= 0) {
+                pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
+                  orderId: offerOrderId,
+                });
+              } else {
+                toast(
+                  'Vui lòng chờ hết thời gian giao dịch bạn mới được gửi khiếu nại',
+                );
+              }
             }
           }}
           textClose={

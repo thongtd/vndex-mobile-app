@@ -13,6 +13,7 @@ import {
   FEEDBACK_SCREEN,
   COMPLAINING_PROCESS_SCREEN,
   CHAT_SCREEN,
+  STEP_4_BUY_SELL_SCREEN,
 } from '../../navigation';
 import {
   BUY,
@@ -39,15 +40,41 @@ const ComplainingScreen = ({componentId, orderId}) => {
   const advertisment = useSelector(state => state.p2p.advertisment);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
   const UserInfo = useSelector(state => state.authentication.userInfo);
+  const [isCheckFalse, setIsCheckFalse] = useState(false);
   const dispatch = useDispatch();
+ 
   useEffect(() => {
     useActionsP2p(dispatch).handleGetComplainProcess(
       get(complainInfo, 'id'),
     );
 
-    return () => {};
-  }, [dispatch,complainInfo]);
+    const evGetComplain = listenerEventEmitter('doneGetComplain', ({type,data}) => {
+      if(!get(data,"id") && type == '3'){
+        pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.chat,
+                icon: require('assets/icons/ic_chat.png'),
+              },
+            ],
+          },
+        });
+      }
+    });
+    
+    return () => {
+      evGetComplain.remove();
+    };
+  }, [complainInfo]);
   useEffect(() => {
+    useActionsP2p(dispatch).handleGetComplainProcess(
+      get(complainInfo, 'id'),
+    );
+    useActionsP2p(dispatch).handleGetComplain({
+      orderId,
+      type:'2'
+    });
     const navigationButtonEventListener =
       Navigation.events().registerNavigationButtonPressedListener(
         ({buttonId}) => {
@@ -63,7 +90,16 @@ const ComplainingScreen = ({componentId, orderId}) => {
         setIsLoading(false);
       });
       const evCancel = listenerEventEmitter('cancelSuccess', () => {
-        Navigation.popToRoot(componentId);
+        pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.chat,
+                icon: require('assets/icons/ic_chat.png'),
+              },
+            ],
+          },
+        });
       });
       
     return () => {
@@ -85,6 +121,9 @@ const ComplainingScreen = ({componentId, orderId}) => {
       customsNavigation={() => {
         Navigation.mergeOptions(componentId, {
           topBar: {
+            title:{
+              text:"Đang khiếu nại"
+            },
             rightButtons: [
               {
                 id: IdNavigation.PressIn.chat,
@@ -102,9 +141,12 @@ const ComplainingScreen = ({componentId, orderId}) => {
           borderBottomWidth: 1,
           borderColor: colors.app.lineSetting,
         }}>
-        <TextFnx spaceBottom={5} size={14} align="center">
+        {get(UserInfo, 'id') == get(complainInfo, 'accId') ? (
+          <TextFnx spaceBottom={5} size={14} align="center">
           Hãy chờ người bị khiếu nại xử lý
-        </TextFnx>
+        </TextFnx>): isCheckFalse?(<TextFnx spaceBottom={5} size={14} align="center">Hãy chờ bộ phận hỗ trợ khách hàng của VNDEX</TextFnx>): (<TextFnx spaceBottom={5} size={14} align="center">
+        Hãy trả lời khiếu nại
+      </TextFnx>)}
         <Layout
           isLineCenter
           style={{
@@ -144,7 +186,8 @@ const ComplainingScreen = ({componentId, orderId}) => {
             }}
           />
         </Layout>
-        <Layout type="column" spaceHorizontal={10}>
+        {(get(UserInfo, 'id') == get(complainInfo, 'accId') || isCheckFalse) ?(
+          <Layout type="column" spaceHorizontal={10}>
           <TextFnx spaceBottom={5} size={14}>
             1. Nếu cả hai đã được thỏa thuận, bạn có thể HỦY KHIẾU NẠI và tiến
             hành hoàn tất giao dịch
@@ -163,6 +206,30 @@ const ComplainingScreen = ({componentId, orderId}) => {
           </TextFnx>
           <TextFnx color={colors.highlight}></TextFnx>
         </Layout>
+        ):(
+          <Layout type="column" spaceHorizontal={10}>
+          <TextFnx spaceBottom={5} size={14}>
+          1. Nếu bạn đã đạt được thỏa thuận với đối tác, hãy nhấn ĐẠT THỎA THUẬN và đợi xác nhận. Khi được đối tác xác nhận thỏa thuận, khiếu nại sẽ bị hủy. Nếu đối tác không xác nhận thỏa thuận, bộ phận hỗ trợ khách hàng sẽ can thiệp và tiến hành phân xử.
+          </TextFnx>
+          <TextFnx spaceBottom={5} size={14}>
+          2. Nếu bạn không thể đạt được thỏa thuận với đối tác, hãy nhấn ĐÀM PHÁN THẤT BẠI. Bộ phận hỗ trợ khách hàng sẽ can thiệp và tiến hành phân xử.
+          </TextFnx>
+          <TextFnx spaceBottom={5} size={14}>
+            3. Nếu người khiếu nại không phản hồi kịp thời, hỗ trợ khách hàng sẽ
+            can thiệp và tiến hành phân xử.
+          </TextFnx>
+          <TextFnx spaceBottom={5} size={14}>
+            4. Hãy{' '}
+            <TextFnx color={colors.highlight} style={{marginBottom: -3}}>
+              Cung cấp thêm thông tin
+            </TextFnx>
+            . Thông tin cung cấp bởi người dùng và hỗ trợ khách hàng có thể tìm
+            thấy ở "Tiến trình khiếu nại
+          </TextFnx>
+          <TextFnx color={colors.highlight}></TextFnx>
+        </Layout>
+        )}
+        
       </Layout>
 
       <TouchableOpacity
@@ -614,7 +681,8 @@ const ComplainingScreen = ({componentId, orderId}) => {
             mở khóa”.
           </TextFnx>
         </Layout>
-        {get(UserInfo, 'id') == get(complainInfo, 'accId') ? (
+        {!isCheckFalse && <>
+          {get(UserInfo, 'id') == get(complainInfo, 'accId') ? (
           <Button
             textClose={'Hủy khiếu nại'}
             isClose
@@ -636,8 +704,18 @@ const ComplainingScreen = ({componentId, orderId}) => {
             // disabledClose={disabledSubmit}
             // disabledSubmit={disabledSubmit}
             isClose
-            onSubmit={() => {}}
-            onClose={() => {}}
+            onSubmit={() => {
+              setIsLoading(true);
+              useActionsP2p(dispatch).handleGetComplain(
+                {
+                  orderId,
+                  type:'3'
+                }
+              );
+            }}
+            onClose={() => {
+              setIsCheckFalse(true)
+            }}
             colorTitle={colors.text}
             weightTitle={'700'}
             textClose="Đàm phán thất bại"
@@ -646,6 +724,8 @@ const ComplainingScreen = ({componentId, orderId}) => {
             //   te={'MUA USDT'}
           />
         )}
+        </>}
+       
       </View>
     </Container>
   );
