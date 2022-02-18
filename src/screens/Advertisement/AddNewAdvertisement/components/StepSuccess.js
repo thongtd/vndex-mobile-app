@@ -25,8 +25,7 @@ export default function StepSuccess({componentId}) {
         </TextFnx>
 
         <TextFnx spaceBottom={30} color={colors.app.textContentLevel2}>
-          Quảng cáo của bạn đã được đăng tải và sẽ được hiển thị cho những người
-          dùng khác. Hãy chú ý đến thông báo lệnh mới
+         Lệnh giao dịch của bạn đã đặt thành công. Chú ý đến thông báo lệnh mới trong mục giao dịch P2P của tôi.
         </TextFnx>
         <View
           style={{

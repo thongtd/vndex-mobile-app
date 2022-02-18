@@ -369,7 +369,7 @@ const SettingScreen = ({componentId}) => {
           </Layout>
           <Layout>
             <TickIc />
-            <TextFnx spaceLeft={5}>Thương nhân giao dịch lớn</TextFnx>
+            <TextFnx spaceLeft={5}>Nhà đầu tư uy tín</TextFnx>
           </Layout>
         </>
       ) : (

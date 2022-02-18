@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import Container from '../../components/Container';
 import Input from '../../components/Input';
@@ -12,70 +12,97 @@ import {
   pushSingleScreenApp,
   FEEDBACK_SCREEN,
   COMPLAINING_PROCESS_SCREEN,
+  CHAT_SCREEN,
 } from '../../navigation';
 import {IdNavigation} from '../../configs/constant';
 import {pop} from '../../navigation/Navigation';
 import Icon from '../../components/Icon';
 import icons from '../../configs/icons';
+import { Navigation } from 'react-native-navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { useActionsP2p } from '../../redux';
+import { get, isEmpty } from 'lodash';
+import { to_UTCDate } from '../../configs/utils';
 
-const ComplaintProcessScreen = ({componentId}) => {
+const ComplaintProcessScreen = ({componentId, orderId}) => {
+  const complainInfo = useSelector(state => state.p2p.complainInfo);
+  const complainProcess = useSelector(state => state.p2p.complainProcess);
+  const dispatch = useDispatch();
+
+  const advertisment = useSelector(state => state.p2p.advertisment);
+  useEffect(() => {
+    const navigationButtonEventListener =
+      Navigation.events().registerNavigationButtonPressedListener(
+        ({buttonId}) => {
+          if (buttonId == IdNavigation.PressIn.chat) {
+            pushSingleScreenApp(componentId, CHAT_SCREEN, {
+              orderId: orderId,
+              email: get(advertisment, 'traderInfo.emailAddress'),
+            });
+          }
+        },
+      );
+    return () => {
+      navigationButtonEventListener.remove();
+    }
+  }, [])
+  useEffect(() => {
+    
+    useActionsP2p(dispatch).handleGetComplainProcess(
+      get(complainInfo, 'id'),
+    );
+
+    return () => {};
+  }, [dispatch]);
   return (
     <Container
       spaceHorizontal={20}
       componentId={componentId}
       isTopBar
       isScroll
+      customsNavigation={() => {
+        Navigation.mergeOptions(componentId, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.chat,
+                icon: require('assets/icons/ic_chat.png'),
+              },
+            ],
+          },
+        });
+      }}
       title="Tiến trình khiếu nại">
-      <Layout type="column">
-        <TextFnx color={colors.app.textContentLevel3} size={12} space={10}>
-          16-11-2021 12:30:35
-        </TextFnx>
-        <View
-          style={{
-            backgroundColor: colors.app.backgroundLevel2,
-            borderRadius: 3,
-          }}>
-          <TextFnx
-            style={{borderBottomWidth: 1, borderColor: colors.line}}
-            space={10}
-            spaceLeft={10}
-            spaceRight={10}
-            color={colors.subText}
-            size={14}>
-            Bình luận của Hỗ trợ khách hàng
-          </TextFnx>
-          <TextFnx
-            space={10}
-            spaceLeft={10}
-            spaceRight={10}
-            color={colors.subText}
-            size={14}>
-            Chào người mua, chúng tôi thấy bạn đánh dấu lệnh giao dịch này “Đã
-            thanh toán”. Tuy nhiên, người bán vẫn chưa nhận được khoản tiền. Vui
-            lòng tải lên hóa đơn thanh toán hoặc bằng chứng chuyển khoản
-            <TouchableOpacity
-              onPress={() => {
-                pushSingleScreenApp(componentId, FEEDBACK_SCREEN, null, {
-                  topBar: {
-                    rightButtons: [
-                      {
-                        id: IdNavigation.PressIn.filterFeedback,
-                        icon: require('assets/icons/ic_feedback.png'),
-                      },
-                    ],
-                  },
-                });
+        {!isEmpty(complainProcess) && complainProcess.map((item,index)=>{
+          return (
+            <Layout type="column">
+            <TextFnx color={colors.app.textContentLevel3} size={12} space={10}>
+           
+            {to_UTCDate(
+              get(item, 'createdDate'),
+              'DD-MM-YYYY HH:MM:SS',
+            )}
+            </TextFnx>
+            <View
+              style={{
+                backgroundColor: colors.app.backgroundLevel2,
+                borderRadius: 3,
               }}>
-              <TextFnx color={colors.highlight} style={{marginBottom: -3}}>
-                {` tại đây`}
+             
+              <TextFnx
+                space={10}
+                spaceLeft={10}
+                spaceRight={10}
+                color={colors.subText}
+                size={14}>
+                {get(item,"content")}
               </TextFnx>
-            </TouchableOpacity>
-            . Lưu ý: Lệnh giao dịch sẽ bị hủy nếu bạn không phản hồi. Xin cảm
-            ơn.
-          </TextFnx>
-        </View>
-      </Layout>
-
+            </View>
+          </Layout>
+          )
+        })}
+    
+{/* 
       <Layout type="column">
         <TextFnx color={colors.app.textContentLevel3} size={12} space={10}>
           16-11-2021 11:30:35
@@ -162,13 +189,16 @@ const ComplaintProcessScreen = ({componentId}) => {
             </Layout>
           </Layout>
         </View>
-      </Layout>
+      </Layout> */}
 
       <Button
         title={'Chat ngay'}
         isNormal
         onPress={() => {
-          alert('Chat ngay button');
+          pushSingleScreenApp(componentId, CHAT_SCREEN, {
+            orderId: orderId,
+            email: get(advertisment, 'traderInfo.emailAddress'),
+          });
         }}
       />
     </Container>

@@ -78,10 +78,11 @@ export const itemScreen = ( nameScreen,title="") => {
                         title:{
                             text:title
                         },
-                        rightButtons:[{
-                            id: IdNavigation.PressIn.notification,
-                            icon:require("assets/icons/ic_notification.png")
-                          },
+                        rightButtons:[
+                        //     {
+                        //     id: IdNavigation.PressIn.notification,
+                        //     icon:require("assets/icons/ic_notification.png")
+                        //   },
                           {
                             id: IdNavigation.PressIn.profile,
                             icon:require("assets/icons/profile.png")

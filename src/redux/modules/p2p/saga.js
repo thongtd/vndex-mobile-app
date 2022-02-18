@@ -635,11 +635,13 @@ export function* watchGetComplainProcess() {
 export function* asyncCancelComplain({payload}) {
   try {
     const res = yield call(P2pService.getCancelComplain, payload);
+    console.log('res cancel: ', res);
     emitEventEmitter('doneApi', true);
     if (!get(res, 'success')) {
       toast(get(res, 'message'));
     } else {
-      toast(get(res, 'message'));
+      emitEventEmitter('cancelSuccess', true);
+      // toast(get(res, 'message'));
       // yield put(actionsReducerP2p.cancelComplainSuccess(get(res, 'data')));
     }
   } catch (e) {

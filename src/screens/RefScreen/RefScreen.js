@@ -16,7 +16,7 @@ import colors from '../../configs/styles/colors';
 import Fbc from 'assets/svg/fbc.svg';
 import Ttc from 'assets/svg/ttc.svg';
 import ItemSetting from '../../components/Item/ItemSetting';
-
+import Tl from 'assets/svg/tl.svg';
 import {
   get,
   hiddenTabbar,
@@ -37,6 +37,7 @@ import {useSelector} from 'react-redux';
 import {authService} from '../../services/authentication.service';
 import Layout from '../../components/Layout/Layout';
 import icons from '../../configs/icons';
+import Image from '../../components/Image/Image';
 const RefScreen = ({componentId}) => {
   const [DataSetting, setDataSetting] = useState([]);
   const [dataAssetsSumary, setDataAssetsSumary] = useState({});
@@ -148,18 +149,33 @@ const RefScreen = ({componentId}) => {
         <TextFnx spaceTop={30} size={fontSize.f16} color={colors.description}>{'Share'.t()}</TextFnx>
         <View style={[stylest.row, {paddingVertical: 10}]}>
           <TouchableOpacity
-            onPress={() => Linking.openURL(constant.SHARE.TWITTER)}
+            onPress={() => Linking.openURL(constant.SHARE.FACEBOOK)}
             style={{
               paddingRight: 10,
             }}>
             <Fbc />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => Linking.openURL(constant.SHARE.FACEBOOK)}
+            onPress={() => Linking.openURL(constant.SHARE.TWITTER)}
+            style={{
+              // paddingHorizontal: 10,
+            }}>
+            {/* <Tl /> */}
+            <Image style={{
+              width:55,
+              height:55
+            }} source={require('assets/icons/icTeleCircle.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => Linking.openURL(constant.SHARE.ZALO)}
             style={{
               paddingHorizontal: 10,
             }}>
-            <Ttc />
+            {/* <Tl /> */}
+            <Image style={{
+              width:30,
+              height:30
+            }} source={require('assets/icons/icZalo.png')} />
           </TouchableOpacity>
         </View>
       </View>

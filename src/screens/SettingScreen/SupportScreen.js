@@ -12,7 +12,7 @@ import Tl from 'assets/svg/tl.svg';
 import Email from 'assets/svg/email.svg';
 import {isEmpty} from 'lodash';
 const linkSupport = {
-  fb: '',
+  fb: 'https://www.facebook.com/dicvietnam.vn/',
   twitter: '',
   telegram: 'https://t.me/vndexsupport',
   email: 'info@dicvietnam.vn',
@@ -25,7 +25,7 @@ const SupportScreen = ({componentId}) => {
       textLeft: 'Like us on Facebook',
       iconLeft: <Fb />,
       iconRight: true,
-      onPress: () => {},
+      onPress: () => Linking.openURL(`${linkSupport.fb}`),
     },
     {
       textLeft: 'Follow us on Twitter',

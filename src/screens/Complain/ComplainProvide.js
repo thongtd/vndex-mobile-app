@@ -56,11 +56,15 @@ const ComplainProvide = ({componentId, orderId}) => {
         },
       );
       const ev = listenerEventEmitter('createSuccess', () => {
-        pushSingleScreenApp(componentId,COMPLAINING_SCREEN)
+        pushSingleScreenApp(componentId,COMPLAINING_SCREEN,{orderId:orderId})
+      });
+      const evLoading = listenerEventEmitter('doneApi', () => {
+        setIsLoading(false);
       });
     return () => {
       navigationButtonEventListener.remove();
       ev.remove();
+      evLoading.remove();
     }
   }, [])
   
@@ -85,7 +89,7 @@ const ComplainProvide = ({componentId, orderId}) => {
     }else if(isEmpty(ReasonComplain)){
       return toast('Vui lòng chọn lý do khiếu nại');
     }
-
+    setIsLoading(true);
     useActionsP2p(dispatcher).handleCreateComplain({
       orderId: orderId,
       reason: ReasonComplain,
@@ -97,12 +101,14 @@ const ComplainProvide = ({componentId, orderId}) => {
       lockedInSecond: 900,
     });
   }, [images, orderId,description, ReasonComplain, fullName, phoneNumber]);
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <Container
       title="Cung cấp thông tin khiếu nại"
       isTopBar
+      isLoadding={isLoading}
       isScroll
-      componentId={componentId}
+      componen tId={componentId}
       customsNavigation={() => {
         Navigation.mergeOptions(componentId, {
           topBar: {

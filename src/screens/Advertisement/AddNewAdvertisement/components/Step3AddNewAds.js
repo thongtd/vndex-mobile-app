@@ -93,8 +93,7 @@ const Step3AddNewAds = ({submitNextStep, bntClose, dataState,...rest}) => {
           Thêm điều kiện cho đối tác
         </TextFnx>
         <TextFnx color={colors.description} size={12} spaceBottom={20}>
-          Thêm yêu cầu cho đối tác sẽ làm quảng cáo của bạn bị giảm khả năng
-          tiếp cận
+          Thêm yêu cầu cho đối tác sẽ hạn chế khả năng giao dịch của bạn
         </TextFnx>
 
         <CheckBox

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import Container from '../../components/Container';
 import Input from '../../components/Input';
@@ -12,25 +12,88 @@ import {
   pushSingleScreenApp,
   FEEDBACK_SCREEN,
   COMPLAINING_PROCESS_SCREEN,
+  CHAT_SCREEN,
 } from '../../navigation';
-import {fontSize, IdNavigation} from '../../configs/constant';
+import {
+  BUY,
+  constant,
+  fontSize,
+  IdNavigation,
+  SELL,
+  spacingApp,
+} from '../../configs/constant';
 import {pop} from '../../navigation/Navigation';
 import Icon from '../../components/Icon';
 import icons from '../../configs/icons';
 import CountDown from 'react-native-countdown-component';
-import {get, isNumber} from 'lodash';
-import {useSelector} from 'react-redux';
-
-const ComplainingScreen = ({componentId}) => {
+import {get, isEmpty, isNumber} from 'lodash';
+import {useSelector, useDispatch} from 'react-redux';
+import {formatCurrency, listenerEventEmitter, to_UTCDate} from '../../configs/utils';
+import Copy from 'assets/svg/ic_copy.svg';
+import {Navigation} from 'react-native-navigation';
+import {useActionsP2p} from '../../redux';
+const ComplainingScreen = ({componentId, orderId}) => {
+  const currencyList = useSelector(state => state.market.currencyList);
+  const offerOrder = useSelector(state => state.p2p.offerOrder);
   const complainInfo = useSelector(state => state.p2p.complainInfo);
+  const advertisment = useSelector(state => state.p2p.advertisment);
+  const infoChat = useSelector(state => state.p2p.chatInfoP2p);
+  const UserInfo = useSelector(state => state.authentication.userInfo);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetComplainProcess(
+      get(complainInfo, 'id'),
+    );
+
+    return () => {};
+  }, [dispatch,complainInfo]);
+  useEffect(() => {
+    const navigationButtonEventListener =
+      Navigation.events().registerNavigationButtonPressedListener(
+        ({buttonId}) => {
+          if (buttonId == IdNavigation.PressIn.chat) {
+            pushSingleScreenApp(componentId, CHAT_SCREEN, {
+              orderId: orderId,
+              email: get(advertisment, 'traderInfo.emailAddress'),
+            });
+          }
+        },
+      );
+      const ev = listenerEventEmitter('doneApi', () => {
+        setIsLoading(false);
+      });
+      const evCancel = listenerEventEmitter('cancelSuccess', () => {
+        Navigation.popToRoot(componentId);
+      });
+      
+    return () => {
+      navigationButtonEventListener.remove();
+      ev.remove();
+      evCancel.remove();
+    }
+  }, [])
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <Container
+    isLoadding={isLoading} 
       // spaceHorizontal={20}
       space={15}
       spaceHorizontal={0}
       componentId={componentId}
       isTopBar
       isScroll
+      customsNavigation={() => {
+        Navigation.mergeOptions(componentId, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.chat,
+                icon: require('assets/icons/ic_chat.png'),
+              },
+            ],
+          },
+        });
+      }}
       title="Đang khiếu nại">
       <Layout
         type="column"
@@ -39,18 +102,7 @@ const ComplainingScreen = ({componentId}) => {
           borderBottomWidth: 1,
           borderColor: colors.app.lineSetting,
         }}>
-        <TextFnx
-          color={colors.description}
-          spaceBottom={5}
-          size={14}
-          align="center">
-          Hãy chờ bộ phận hỗ trợ khách hàng của VNDEX
-        </TextFnx>
-        <TextFnx
-          color={colors.description}
-          spaceBottom={5}
-          size={14}
-          align="center">
+        <TextFnx spaceBottom={5} size={14} align="center">
           Hãy chờ người bị khiếu nại xử lý
         </TextFnx>
         <Layout
@@ -92,51 +144,54 @@ const ComplainingScreen = ({componentId}) => {
             }}
           />
         </Layout>
-       <Layout type='column' spaceHorizontal={10}>
-       <TextFnx color={colors.description} spaceBottom={5} size={14}>
-          1. Nếu cả hai đã được thỏa thuận, bạn có thể HỦY KHIẾU NẠI và tiến
-          hành hoàn tất giao dịch
-        </TextFnx>
-        <TextFnx color={colors.description} spaceBottom={5} size={14}>
-          2. Nếu người khiếu nại không phản hồi kịp thời, hỗ trợ khách hàng sẽ
-          can thiệp và tiến hành phân xử.
-        </TextFnx>
-        <TextFnx color={colors.description} spaceBottom={5} size={14}>
-          3. Hãy{' '}
-          <TextFnx color={colors.highlight} style={{marginBottom: -3}}>
-            Cung cấp thêm thông tin
+        <Layout type="column" spaceHorizontal={10}>
+          <TextFnx spaceBottom={5} size={14}>
+            1. Nếu cả hai đã được thỏa thuận, bạn có thể HỦY KHIẾU NẠI và tiến
+            hành hoàn tất giao dịch
           </TextFnx>
-          . Thông tin cung cấp bởi người dùng và hỗ trợ khách hàng có thể tìm
-          thấy ở "Tiến trình khiếu nại
-        </TextFnx>
-        <TextFnx color={colors.highlight}></TextFnx>
-       </Layout>
+          <TextFnx spaceBottom={5} size={14}>
+            2. Nếu người khiếu nại không phản hồi kịp thời, hỗ trợ khách hàng sẽ
+            can thiệp và tiến hành phân xử.
+          </TextFnx>
+          <TextFnx spaceBottom={5} size={14}>
+            3. Hãy{' '}
+            <TextFnx color={colors.highlight} style={{marginBottom: -3}}>
+              Cung cấp thêm thông tin
+            </TextFnx>
+            . Thông tin cung cấp bởi người dùng và hỗ trợ khách hàng có thể tìm
+            thấy ở "Tiến trình khiếu nại
+          </TextFnx>
+          <TextFnx color={colors.highlight}></TextFnx>
+        </Layout>
       </Layout>
-      <Layout
-        type="column"
-        space={5}
+
+      <TouchableOpacity
+        onPress={() => {
+          pushSingleScreenApp(componentId, COMPLAINING_PROCESS_SCREEN,{
+            orderId:orderId
+          });
+        }}
         style={{
           borderBottomWidth: 1,
           borderColor: colors.app.lineSetting,
+          paddingVertical: 5,
         }}>
         <ButtonIcon
           name=""
-          title={'Tiến trình khiếu nại'}
           onPress={() => {
-            pushSingleScreenApp(componentId, COMPLAINING_PROCESS_SCREEN, null, {
-              topBar: {
-                rightButtons: [
-                  {
-                    id: IdNavigation.PressIn.filterFeedback,
-                    icon: require('assets/icons/ic_feedback.png'),
-                  },
-                ],
-              },
+            pushSingleScreenApp(componentId, COMPLAINING_PROCESS_SCREEN,{
+              orderId:orderId
             });
           }}
+          style={{
+            borderBottomWidth: 1,
+            borderColor: colors.app.lineSetting,
+            paddingVertical: 5,
+          }}
+          title={'Tiến trình khiếu nại'}
           size={0}
           iconRight={
-            <Icon name="chevron-right" size={14} color={colors.background} />
+            <Icon name="chevron-right" size={14} color={colors.text} />
           }
           style={{
             width: '100%',
@@ -145,10 +200,10 @@ const ComplainingScreen = ({componentId}) => {
             alignItems: 'center',
           }}
         />
-      </Layout>
+      </TouchableOpacity>
 
       {/* info create order */}
-      <Layout
+      {/* <Layout
         space={10}
         type="column"
         style={{
@@ -246,47 +301,352 @@ const ComplainingScreen = ({componentId}) => {
             />
           </TextFnx>
         </Layout>
-      </Layout>
-
-      <Layout space={10} isSpaceBetween>
-        <View style={{paddingRight: 10, marginTop: 3}}>
-          <Icon iconComponent={icons.IcNote} />
-        </View>
-
-        <TextFnx color={colors.app.textContentLevel3} style={{lineHeight: 20}}>
-          Bạn có thể hủy yêu cầu khiếu nại nếu đã liên lạc thành công với đối
-          tác hoặc giải quyết được tranh chấp. Lệnh của bạn sẽ KHÔNG bị hủy nếu
-          bạn hủy khiếu nại. Lệnh của bạn sẽ được trở lại trạng thái “Chờ mở
-          khóa”.
+      </Layout> */}
+      <View
+        style={{
+          backgroundColor: colors.app.backgroundLevel2,
+          paddingTop: 20,
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+          paddingHorizontal: spacingApp,
+        }}>
+        <TextFnx
+          weight="700"
+          color={
+            get(offerOrder, 'offerSide') == BUY
+              ? colors.app.buy
+              : colors.app.sell
+          }>
+          {`${get(offerOrder, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
+            advertisment,
+            'symbol',
+          )}`}
         </TextFnx>
-      </Layout>
+        <Layout
+          isLineCenter
+          isSpaceBetween
+          space={10}
+          style={{
+            borderBottomWidth: 1,
+            borderColor: colors.app.lineSetting,
+          }}>
+          <TextFnx color={colors.app.textContentLevel3}>Số tiền</TextFnx>
+          <TextFnx
+            size={16}
+            weight="700"
+            color={
+              get(offerOrder, 'offerSide') == BUY
+                ? colors.app.buy
+                : colors.app.sell
+            }>
+            {`${formatCurrency(
+              get(offerOrder, 'price') * get(offerOrder, 'quantity'),
+              get(advertisment, 'paymentUnit'),
+              currencyList,
+            )} `}
+            <TextFnx color={colors.app.textContentLevel3}>
+              {get(advertisment, 'paymentUnit')}
+            </TextFnx>
+          </TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Giá</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
+            get(advertisment, 'price'),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
+            get(offerOrder, 'quantity'),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'symbol')}`}</TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
+            get(offerOrder, 'price') * get(advertisment, 'fee'),
+            get(advertisment, 'paymentUnit'),
+            currencyList,
+          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>
+            0 {get(advertisment, 'paymentUnit')}
+          </TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
+          <Layout isLineCenter>
+            <TextFnx color={colors.app.textContentLevel2}>
+              {get(advertisment, 'orderNumber')}
+            </TextFnx>
+            <ButtonIcon
+              onPress={() => {
+                Clipboard.setString(get(advertisment, 'orderNumber'));
+                toast('COPY_TO_CLIPBOARD'.t());
+              }}
+              style={{
+                height: 25,
+                width: 30,
+              }}
+              iconComponent={<Copy height={20} width={20} />}
+            />
+          </Layout>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>
+            {to_UTCDate(
+              get(advertisment, 'createdDate'),
+              'DD-MM-YYYY hh:mm:ss',
+            )}
+          </TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>
+            Phương thức thanh toán
+          </TextFnx>
+          {get(offerOrder, 'exPaymentMethodCode') ==
+          constant.CODE_PAYMENT_METHOD.MOMO ? (
+            <Layout isLineCenter>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: '#3B2B2B',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
+                  paddingVertical: 2,
+                  borderRadius: 5,
+                }}>
+                <Image
+                  source={icons.icMomo}
+                  style={{
+                    marginLeft: 5,
+                    width: 10,
+                    height: 10,
+                  }}
+                />
+                <TextFnx spaceLeft={5}>Momo</TextFnx>
+              </View>
+            </Layout>
+          ) : (
+            <Layout isLineCenter>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: '#3B2B2B',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
+                  paddingVertical: 2,
+                  borderRadius: 5,
+                }}>
+                <Image
+                  source={icons.icBank}
+                  style={{
+                    marginLeft: 5,
+                    width: 10,
+                    height: 10,
+                  }}
+                />
+                <TextFnx spaceLeft={5}>Chuyển khoản</TextFnx>
+              </View>
+            </Layout>
+          )}
+        </Layout>
+        {!isEmpty(get(offerOrder, 'backAccountNo')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Số tài khoản</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(offerOrder, 'backAccountNo')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(offerOrder, 'bankAccountNo'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(offerOrder, 'bankName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>
+              Tên ngân hàng
+            </TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(offerOrder, 'bankName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(offerOrder, 'bankName'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(offerOrder, 'bankBranchName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Chi nhánh</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(offerOrder, 'bankBranchName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(offerOrder, 'bankBranchName'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(offerOrder, 'fullName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Tên</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(offerOrder, 'fullName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(offerOrder, 'fullName'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(offerOrder, 'phoneNumber')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>
+              Số điện thoại
+            </TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(offerOrder, 'phoneNumber')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(offerOrder, 'phoneNumber'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        <Layout
+          style={{
+            backgroundColor: colors.app.lineSetting,
+            borderRadius: 10,
+            paddingLeft: 16,
+          }}
+          isSpaceBetween
+          space={15}>
+          <Layout>
+            <View
+              style={{
+                paddingRight: 15,
+              }}>
+              <Image
+                source={icons.avatar}
+                style={{
+                  width: 30,
+                  height: 30,
+                }}
+              />
+            </View>
+            <Layout type="column">
+              <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
+                Người {get(advertisment, 'side') == SELL ? 'bán' : 'mua'}
+              </TextFnx>
+              <TextFnx
+                space={8}
+                color={colors.app.lightWhite}
+                size={fontSize.f16}>
+                {get(advertisment, 'traderInfo.identityUserId') ==
+                get(infoChat, 'offerIdentityUser.id')
+                  ? get(infoChat, 'offerIdentityUser.email')
+                  : get(infoChat, 'provideIdentityUser.email')}
+              </TextFnx>
+              <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
+                {get(advertisment, 'traderInfo.identityUserId') ==
+                get(infoChat, 'offerIdentityUser.id')
+                  ? get(infoChat, 'offerIdentityUser.phoneNumber')
+                  : get(infoChat, 'provideIdentityUser.phoneNumber')}
+              </TextFnx>
+            </Layout>
+          </Layout>
+          {/* <ButtonIcon name="eye" color={colors.app.yellowHightlight} /> */}
+        </Layout>
 
-      <Button
-        textClose={'Hủy khiếu nại'}
-        isClose
-        onPress={() => {
-          alert('Hủy bỏ button');
-        }}
-      />
-      <Button
-        spaceVertical={20}
-        isSubmit
-        // bgButtonColorSubmit={
-        //   disabledSubmit ? '#715611' : colors.app.yellowHightlight
-        // }
-        // bgButtonColorClose={disabledSubmit ? '#2C2B28' : colors.btnClose}
-        // disabledClose={disabledSubmit}
-        // disabledSubmit={disabledSubmit}
-        isClose
-        onSubmit={() => {}}
-        onClose={() => {}}
-        colorTitle={colors.text}
-        weightTitle={'700'}
-        textClose="Đàm phán thất bại"
-        textSubmit="Đạt thỏa thuận"
-        colorTitleClose={colors.description}
-        //   te={'MUA USDT'}
-      />
+        <Layout
+          style={{
+            paddingTop: 15,
+            borderTopWidth: 0.5,
+            borderTopColor: colors.app.lineSetting,
+          }}
+          type="column">
+          <TextFnx space={10}>Điều khoản</TextFnx>
+          <TextFnx color={colors.app.textContentLevel3}>
+            Bạn có thể hủy yêu cầu khiếu nại nếu đã liên lạc thành công với đối
+            tác hoặc giải quyết được tranh chấp. Lệnh của bạn sẽ KHÔNG bị hủy
+            nếu bạn hủy khiếu nại. Lệnh của bạn sẽ được trở lại trạng thái “Chờ
+            mở khóa”.
+          </TextFnx>
+        </Layout>
+        {get(UserInfo, 'id') == get(complainInfo, 'accId') ? (
+          <Button
+            textClose={'Hủy khiếu nại'}
+            isClose
+            onClose={() => {
+              setIsLoading(true);
+              useActionsP2p(dispatch).handleCancelComplain(
+                get(complainInfo, 'id'),
+              );
+            }}
+          />
+        ) : (
+          <Button
+            spaceVertical={20}
+            isSubmit
+            // bgButtonColorSubmit={
+            //   disabledSubmit ? '#715611' : colors.app.yellowHightlight
+            // }
+            // bgButtonColorClose={disabledSubmit ? '#2C2B28' : colors.btnClose}
+            // disabledClose={disabledSubmit}
+            // disabledSubmit={disabledSubmit}
+            isClose
+            onSubmit={() => {}}
+            onClose={() => {}}
+            colorTitle={colors.text}
+            weightTitle={'700'}
+            textClose="Đàm phán thất bại"
+            textSubmit="Đạt thỏa thuận"
+            colorTitleClose={colors.description}
+            //   te={'MUA USDT'}
+          />
+        )}
+      </View>
     </Container>
   );
 };

@@ -67,9 +67,10 @@ export const constant = {
   },
   SHARE: {
     FACEBOOK:
-      'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffinancex.io%2Fsign-up%3FreferralId',
+      'https://www.facebook.com/dicvietnam.vn/',
     TWITTER:
-      'https://twitter.com/intent/tweet?text=https://financex.io/sign-up?referralId=L7VVIXGET0',
+      'https://t.me/vndexsupport',
+      ZALO:'https://zalo.me/g/tvuttk366'
   },
   SUPPORT: {
     MAIL: 'mailto:support@financex.io',

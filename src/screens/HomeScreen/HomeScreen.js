@@ -65,7 +65,7 @@ const HomeScreen = ({componentId}) => {
   const dispatch = useDispatch();
   const [ActiveSymbol, setActiveSymbol] = useState('AIFT');
   const [isRefresh, setRefresh] = useState(false);
-  const [ActiveType, setActiveType] = useState('B');
+  const [ActiveType, setActiveType] = useState('S');
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadMore, setLoadMore] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
@@ -203,7 +203,7 @@ const HomeScreen = ({componentId}) => {
       isTopBar
       onRefresh={() => setRefresh(!isRefresh)}
       isFooter
-      title="P2P"
+      title="Giao dịch P2P"
       resAwareScrollView={{
         scrollEventThrottle: 50,
         onScroll: e => _onScroll(e),
@@ -247,7 +247,7 @@ const HomeScreen = ({componentId}) => {
           />
         </View>
       </View>
-      <Button
+      {/* <Button
         onPress={() => {
           pushSingleScreenApp(componentId, FEEDBACK_SCREEN, null, {
             topBar: {
@@ -268,7 +268,7 @@ const HomeScreen = ({componentId}) => {
         bgButtonColor={
           ActiveType == SELL ? colors.app.bgSell : colors.app.backgroundLevel1
         }
-      />
+      /> */}
       <View>
         <FlatList
           style={{
