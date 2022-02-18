@@ -600,14 +600,23 @@ export function* watchSendMessage() {
 }
 export function* asyncGetComplain({payload}) {
   try {
-    const res = yield call(P2pService.getComplain, payload);
+    const res = yield call(P2pService.getComplain, get(payload,'orderId'));
+    console.log(res,"resGetComplain2")
     emitEventEmitter('doneApi', true);
-    if (!get(res, 'success')) {
-      toast(get(res, 'message'));
-    } else {
-      emitEventEmitter('doneGetComplain', get(res, 'data'));
+    // yield put(actionsReducerP2p.getComplainSuccess(get(res, 'data')));
+    if (get(res, 'success')) {
+      if(!get(payload,"isStop")){
+        emitEventEmitter('doneGetComplain', {
+          type:get(payload,"type"),
+          data:get(res, 'data')
+        });
+      }
+      
       console.log(res,"resGetComplain")
       yield put(actionsReducerP2p.getComplainSuccess(get(res, 'data')));
+      
+    } else {
+      toast(get(res, 'message'));
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);

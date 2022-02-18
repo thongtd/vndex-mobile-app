@@ -45,16 +45,36 @@ const CommandScreen2 = ({componentId}) => {
   const currencyList = useSelector(state => state.market.currencyList);
   const historyOrders = useSelector(state => state.p2p.historyOrders);
   const logged = useSelector(state => state.authentication.logged);
-
+const [isCheckComplain, setIsCheckComplain] = useState(false);
   const onChangeActive = (menu = {}) => {
     setActiveMenu(get(menu, 'id'));
   };
+  // useEffect(() => {
+  //   if(isCheckComplain){
+  //     pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+  //       topBar: {
+  //         rightButtons: [
+  //           {
+  //             id: IdNavigation.PressIn.chat,
+  //             icon: require('assets/icons/ic_chat.png'),
+  //           },
+  //         ],
+  //       },
+  //     });
+  //   }
+  
+  //   return () => {
+      
+  //   }
+  // }, [isCheckComplain])
+  
   const onSelectUnit = () => {
     // alert('Lựa chọn đợn vị');
   };
   const dispatch = useDispatch();
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const onSeeDetailCommand = item => {
+    setIsCheckComplain(false);
     // alert(JSON.stringify(UserInfo))
     useActionsP2p(dispatch).handleGetOfferOrder(get(item, 'id'));
     useActionsP2p(dispatch).handleGetAdvertisment(
@@ -228,10 +248,22 @@ const CommandScreen2 = ({componentId}) => {
       get(item, 'isPaymentConfirm') &&
       get(item, 'timeToLiveInSecond') == 0 &&
       !get(item, 'isUnLockConfirm') &&
-      !get(item, 'isPaymentCancel') &&
-      get(item, 'offerSide') == BUY
+      !get(item, 'isPaymentCancel')
     ) {
-      useActionsP2p(dispatch).handleGetComplain(get(item, 'id'));
+      useActionsP2p(dispatch).handleGetComplain({
+        orderId:get(item, 'id'),
+        type:'2'
+      });
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.chat,
+              icon: require('assets/icons/ic_chat.png'),
+            },
+          ],
+        },
+      });
     } else {
       pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
     }
@@ -260,11 +292,11 @@ const CommandScreen2 = ({componentId}) => {
     return () => {};
   }, [activeMenu]);
   useEffect(() => {
-    const evGetComplain = listenerEventEmitter('doneGetComplain', data => {
+    const evGetComplain = listenerEventEmitter('doneGetComplain', ({type,data}) => {
       if(get(data,"id")){
-        pushSingleScreenApp(componentId,COMPLAINING_SCREEN);
-      }else{
-        pushSingleScreenApp(componentId,FEEDBACK_SCREEN);
+        pushSingleScreenApp(componentId,COMPLAINING_SCREEN,{
+          orderId:get(data,"orderId")
+        });
       }
     });
 

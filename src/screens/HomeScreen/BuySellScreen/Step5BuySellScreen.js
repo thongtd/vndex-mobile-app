@@ -101,7 +101,7 @@ const Step5BuySellScreen = ({componentId}) => {
             height: 100,
           }}>
           <Button
-            onPress={() => pushTabBasedApp(4)}
+            onPress={() => pushTabBasedApp(3)}
             width={200}
             isNormal
             title={'Kiểm tra ví'}
