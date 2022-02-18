@@ -119,7 +119,7 @@ const Step5BuySellScreen = ({componentId}) => {
               showRating
               style={{paddingVertical: 2}}
             />
-            <Button onTitle={()=>pushSingleScreenApp(componentId, RATING_BUY_SELL_SCREEN, null)} isTitle title={'Để lại bình luận'} />
+            {/* <Button onTitle={()=>pushSingleScreenApp(componentId, RATING_BUY_SELL_SCREEN, null)} isTitle title={'Để lại bình luận'} /> */}
           </>
         )}
       </Layout>
