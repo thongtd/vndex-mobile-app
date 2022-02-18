@@ -40,6 +40,7 @@ import {
   GET_COMPLAIN_PROCESS,
   CANCEL_COMPLAIN,
   CREATE_COMPLAIN,
+  CREATE_RATING_COMMENT,
 } from './actions';
 
 import {
@@ -50,7 +51,6 @@ import {
 } from '../../../configs/utils';
 import {P2pService} from '../../../services/p2p.service';
 import {ceil, isArray, size} from 'lodash';
-import {useActionsP2p} from '.';
 
 export function* asyncGetAdvertisments({payload}) {
   try {
@@ -606,7 +606,7 @@ export function* asyncGetComplain({payload}) {
       toast(get(res, 'message'));
     } else {
       emitEventEmitter('doneGetComplain', get(res, 'data'));
-      console.log(res,"resGetComplain")
+      console.log(res, 'resGetComplain');
       yield put(actionsReducerP2p.getComplainSuccess(get(res, 'data')));
     }
   } catch (e) {
@@ -658,11 +658,10 @@ export function* asyncCreateComplain({payload}) {
     emitEventEmitter('doneApi', true);
     if (get(res, 'success')) {
       emitEventEmitter('createSuccess', true);
-      yield put(createAction(GET_COMPLAIN,get(res,"data.orderId")));
+      yield put(createAction(GET_COMPLAIN, get(res, 'data.orderId')));
     } else {
       toast(get(res, 'message'));
       // toast(get(res, 'message'));
-     
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);
@@ -670,6 +669,34 @@ export function* asyncCreateComplain({payload}) {
 }
 export function* watchCreateComplain() {
   yield takeEvery(CREATE_COMPLAIN, asyncCreateComplain);
+}
+
+export function* asyncCreateCommentRating({payload}) {
+  try {
+    const res = yield call(P2pService.getAdvertisments, {
+      accountId: get(payload, 'accountId') || 1,
+      content: get(payload, 'content') || '',
+      ratingStar: get(payload, 'side') || 0,
+    });
+    emitEventEmitter('doneApi', true);
+
+    if (res) {
+      toast('Đánh giá thành công');
+      emitEventEmitter('successCreateCommentRating', true);
+
+      // gọi lại danh sách rating ở đây nếu cần
+      // yield put(createAction());
+    } else {
+      toast('Đã xảy ra lỗi xin vui lòng thử lại sau!');
+    }
+    emitEventEmitter('doneApi', true);
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+
+export function* watchCreateCommentRating() {
+  yield takeEvery(CREATE_RATING_COMMENT, asyncCreateCommentRating);
 }
 
 export default function* () {
@@ -698,4 +725,5 @@ export default function* () {
   yield all([fork(watchGetComplainProcess)]);
   yield all([fork(watchCancelComplain)]);
   yield all([fork(watchCreateComplain)]);
+  yield all([fork(watchCreateCommentRating)]);
 }

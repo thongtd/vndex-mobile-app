@@ -1,5 +1,10 @@
 import {httpService} from './http.service';
-import {EXCHANGE_API, XWALLET_API, P2P_API} from '../configs/api';
+import {
+  EXCHANGE_API,
+  XWALLET_API,
+  P2P_API,
+  CREATE_COMMENT_RATING,
+} from '../configs/api';
 import {size} from 'lodash';
 import {storageService} from './storage.service';
 import {constant, BankTransfer} from '../configs/constant';
@@ -37,7 +42,7 @@ export const P2pService = {
   },
   createlComplain: async data => {
     let urlCreateComplain = `${P2P_API.CREATE_COMPLAIN}`;
-    let response = await httpService.post(urlCreateComplain,data);
+    let response = await httpService.post(urlCreateComplain, data);
     return response.data;
   },
   getAdvertisment: async orderId => {
@@ -162,6 +167,11 @@ export const P2pService = {
     let url = `${P2P_API.VERIFY_2FA}`;
     let response = await httpService.post(url, data);
     console.log('response verify 2fa: ', response);
+    return response.data;
+  },
+  createRatingComment: async data => {
+    let url = `${P2P_API.CREATE_COMMENT_RATING}`;
+    let response = await httpService.post(url, data);
     return response.data;
   },
 };

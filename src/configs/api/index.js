@@ -46,6 +46,7 @@ export const P2P_API = {
   GET_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/get-complain/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
   CANCEL_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/cancel-complain/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
   GET_COMPLAIN_PROCESS: `${EXCHANGE_URL}api/v1/p2p-order/get-complain-process/`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
+  CREATE_COMMENT_RATING: `${EXCHANGE_URL}api/v1/p2p-comment/create`,//3fa85f64-5717-4562-b3fc-2c963f66afa6
 };
 export const EXCHANGE_API = {
   CHECK_API: `${EXCHANGE_URL}api/health-check`,

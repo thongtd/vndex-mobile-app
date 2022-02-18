@@ -56,15 +56,20 @@ export const GET_DETIAL_ADVERTISMENT_SUCCESS = `${CONTEXT}/GET_DETIAL_ADVERTISME
 export const GET_ADVERTISMENT_SUCCESS = `${CONTEXT}/GET_ADVERTISMENT_SUCCESS`;
 export const GET_MY_ADVERTISMENT_SUCCESS = `${CONTEXT}/GET_MY_ADVERTISMENT_SUCCESS`;
 
+export const CREATE_RATING_COMMENT = `${CONTEXT}/CREATE_RATING_COMMENT`;
+export const CREATE_RATING_COMMENT_SUCCESS = `${CONTEXT}/CREATE_RATING_COMMENT_SUCCESS`;
+
 export function useActionsP2p(dispatch) {
   if (!dispatch) {
     dispatch = useDispatch();
   }
   return {
-    handleCreateComplain:data => dispatch(createAction(CREATE_COMPLAIN,data)),
-    handleGetComplain:orderId => dispatch(createAction(GET_COMPLAIN,orderId)),
-    handleGetComplainProcess:complainId => dispatch(createAction(GET_COMPLAIN_PROCESS,complainId)),
-    handleCancelComplain:complainId => dispatch(createAction(CANCEL_COMPLAIN,complainId)),
+    handleCreateComplain: data => dispatch(createAction(CREATE_COMPLAIN, data)),
+    handleGetComplain: orderId => dispatch(createAction(GET_COMPLAIN, orderId)),
+    handleGetComplainProcess: complainId =>
+      dispatch(createAction(GET_COMPLAIN_PROCESS, complainId)),
+    handleCancelComplain: complainId =>
+      dispatch(createAction(CANCEL_COMPLAIN, complainId)),
     handleGetAdvertisments: data =>
       dispatch(createAction(GET_ADVERTISMENTS, data)),
     handleGetChatHistory: data =>
@@ -109,14 +114,17 @@ export function useActionsP2p(dispatch) {
       dispatch(createAction(REMOVE_ADVERTISMENT, data)),
     handleItemDetailsAdvertisment: data =>
       dispatch(createAction(GET_DETIAL_ADVERTISMENT, data)),
+    handleCreateCommentRating: data =>
+      dispatch(createAction(CREATE_RATING_COMMENT, data)),
   };
 }
 export const actionsReducerP2p = {
   getMarketInfoSuccess: data => createAction(GET_MARKET_INFO_SUCCESS, data),
   getComplainSuccess: data => createAction(GET_COMPLAIN_SUCCESS, data),
-  getComplainProcessSuccess: data => createAction(GET_COMPLAIN_PROCESS_SUCCESS, data),
+  getComplainProcessSuccess: data =>
+    createAction(GET_COMPLAIN_PROCESS_SUCCESS, data),
   cancelComplainSuccess: data => createAction(CANCEL_COMPLAIN_SUCCESS, data),
-  
+
   getAdvertismentsSuccess: advertisment =>
     createAction(GET_ADVERTISMENTS_SUCCESS, advertisment),
   getDetailItemAdvertismentsSuccess: advertisment =>
@@ -135,4 +143,6 @@ export const actionsReducerP2p = {
     createAction(UNLOCK_OFFER_ADVERTISMENT_SUCCESS, data),
   getChatHistorySuccess: data => createAction(GET_CHAT_HISTORY_SUCCESS, data),
   getChatInfoP2pSuccess: data => createAction(GET_CHAT_INFO_P2P_SUCCESS, data),
+  createCommentRatingSuccess: data =>
+    createAction(CREATE_RATING_COMMENT_SUCCESS, data),
 };

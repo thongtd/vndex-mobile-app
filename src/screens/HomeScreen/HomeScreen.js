@@ -15,6 +15,7 @@ import {
   ADS_MY_ADVERTISENMENT_SCREEN,
   FEEDBACK_SCREEN,
   LOGIN_SCREEN,
+  RATING_BUY_SELL_SCREEN,
   SETTING_SCREEN,
   STEP_1_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
@@ -247,28 +248,15 @@ const HomeScreen = ({componentId}) => {
           />
         </View>
       </View>
-      {/* <Button
+      <Button
         onPress={() => {
-          pushSingleScreenApp(componentId, FEEDBACK_SCREEN, null, {
-            topBar: {
-              rightButtons: [
-                {
-                  id: IdNavigation.PressIn.filterFeedback,
-                  icon: require('assets/icons/ic_feedback.png'),
-                },
-              ],
-            },
-          });
+          pushSingleScreenApp(componentId, RATING_BUY_SELL_SCREEN, null, {});
         }}
         isNormal
         width={75}
-        title={'KHIẾU NẠI'}
+        title={'Đánh giá'}
         height={40}
-        colorTitle={ActiveType == SELL ? colors.app.sell : colors.text}
-        bgButtonColor={
-          ActiveType == SELL ? colors.app.bgSell : colors.app.backgroundLevel1
-        }
-      /> */}
+      />
       <View>
         <FlatList
           style={{

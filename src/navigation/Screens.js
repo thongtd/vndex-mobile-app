@@ -68,6 +68,7 @@ export const STEP_ADS_ADD_SUCCESS = 'vndex.title.STEP_ADS_ADD_SUCCESS';
 export const FEEDBACK_SCREEN = 'vndex.title.FEEDBACK_SCREEN';
 export const COMPLAINING_SCREEN = 'vndex.title.ComplainingScreen';
 export const COMPLAINING_PROCESS_SCREEN = 'vndex.title.ComplaintProcessScreen';
+export const RATING_BUY_SELL_SCREEN = 'vndex.title.RatingBuySellScreen';
 
 // register ModalMy
 export const ALERT_NOTICE_PASSWORD = 'modal.AlertNoticePassword';
