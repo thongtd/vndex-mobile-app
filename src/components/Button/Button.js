@@ -190,10 +190,9 @@ const Button = ({
         }}>
         <TouchableOpacity
           onPress={() => {
-            () => {
-              Keyboard.dismiss();
-              onTitle();
-            };
+            Keyboard.dismiss();
+
+            onTitle();
           }}>
           <View style={style}>
             <TextFnx

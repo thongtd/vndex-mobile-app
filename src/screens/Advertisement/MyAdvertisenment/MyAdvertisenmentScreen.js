@@ -1,6 +1,7 @@
-import _, {get, isArray, uniq, uniqBy} from 'lodash';
+import _, {get, isArray, uniqBy} from 'lodash';
 import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, Switch, ActivityIndicator, View} from 'react-native';
+import {Navigation} from 'react-native-navigation';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {useDispatch, useSelector} from 'react-redux';
 import BottomSheet from '../../../components/ActionSheet/ActionSheet';
@@ -20,7 +21,12 @@ import {
   listenerEventEmitter,
   size,
 } from '../../../configs/utils';
-import {ADS_ADD_NEW_SCREEN, pushSingleScreenApp} from '../../../navigation';
+import {
+  ADS_ADD_NEW_SCREEN,
+  MODAL_FILTER_MY_ADS,
+  pushSingleScreenApp,
+} from '../../../navigation';
+import { showModal } from '../../../navigation/Navigation';
 import {useActionsP2p} from '../../../redux';
 import BoxCommand from '../../CommandScreen/components/BoxCommand';
 import ButtonAddNew from './ButtonAddNew';
@@ -56,9 +62,22 @@ const MyAdvertisenmentScreen = ({componentId}) => {
   const myAdvertisments = useSelector(state => state.p2p.myAdvertisments);
   const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
+    const navigationButtonEventListener =
+      Navigation.events().registerNavigationButtonPressedListener(
+        ({buttonId}) => {
+          if (buttonId == IdNavigation.PressIn.filterMyAdvertisement) {
+            showModal(MODAL_FILTER_MY_ADS);
+          }
+        },
+      );
+
+    return () => {
+      navigationButtonEventListener.remove();
+    };
+  }, []);
+  useEffect(() => {
     const evDone = listenerEventEmitter('doneApi', isDone => {
       setIsLoading(false);
-      
     });
     getMyAdvertisments(pageIndex);
 
@@ -137,7 +156,19 @@ const MyAdvertisenmentScreen = ({componentId}) => {
       componentId={componentId}
       // isScroll
       title="Quảng cáo của tôi"
-      spaceHorizontal={0}>
+      spaceHorizontal={0}
+      customsNavigation={() => {
+        Navigation.mergeOptions(componentId, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.filterMyAdvertisement,
+                icon: require('assets/icons/Filter.png'),
+              },
+            ],
+          },
+        });
+      }}>
       <SwipeListView
         ListHeaderComponent={<ButtonAddNew onPress={onAddNewAdvertisenment} />}
         showsVerticalScrollIndicator={false}
@@ -242,11 +273,16 @@ const MyAdvertisenmentScreen = ({componentId}) => {
                       trackColor={{false: '#767577', true: colors.iconButton}}
                       thumbColor={colors.greyLight}
                       ios_backgroundColor="#3e3e3e"
-                      value={get(isEnabled,"orderId") === get(item, 'orderId')?get(isEnabled,"isOpenForTrading"):get(item,"isOpenForTrading")}
+                      value={
+                        get(isEnabled, 'orderId') === get(item, 'orderId')
+                          ? get(isEnabled, 'isOpenForTrading')
+                          : get(item, 'isOpenForTrading')
+                      }
                       // value={get(item, 'status') > 0}
                       // readonly
                       onValueChange={
-                        value => {setIsEnabled({...item,isOpenForTrading:value});
+                        value => {
+                          setIsEnabled({...item, isOpenForTrading: value});
                           useActionsP2p(dispatch).handleUpdateStatusAdv({
                             data: {
                               isOpenForTrading: value,

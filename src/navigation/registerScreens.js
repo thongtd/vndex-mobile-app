@@ -46,6 +46,7 @@ import {
   INFO_COIN_SCREEN,
   INFO_FIAT_SCREEN,
   MODAL_ALERT,
+  MODAL_FILTER_COMMAND,
   DEPOSIT_COIN_SCREEN,
   DEPOSIT_FIAT_SCREEN,
   HISTORY_DEPOSIT_COIN_SCREEN,
@@ -121,6 +122,8 @@ import {
   COMPLAINING_SCREEN,
   COMPLAINING_PROCESS_SCREEN,
   RATING_BUY_SELL_SCREEN,
+  MODAL_FILTER_MY_ADS,
+  MODAL_FILTER_HOME,
 } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
@@ -156,6 +159,9 @@ import ComplainingScreen from '../screens/Complain/ComplainingScreen';
 import ComplaintProcessScreen from '../screens/Complain/ComplaintProcessScreen';
 import ComplainProvide from '../screens/Complain/ComplainProvide';
 import RatingBuySellScreen from '../screens/HomeScreen/BuySellScreen/RatingBuySellScreen';
+import FilterCommand from '../screens/CommandScreen/components/FilterCommand';
+import FilterMyAdvertisenment from '../screens/Advertisement/MyAdvertisenment/FilterMyAdvertisenment';
+import FilterHomeScreen from '../screens/HomeScreen/components/FilterHomeScreen';
 
 const WrapScreen = (ReduxScreen, store) => props =>
   (
@@ -515,7 +521,22 @@ export const registerScreens = store => {
     () => withNavigationProvider(WrapScreen(ModalAlert, store)),
     () => ModalAlert,
   );
-
+  Navigation.registerComponent(
+    MODAL_FILTER_COMMAND,
+    () => withNavigationProvider(WrapScreen(FilterCommand, store)),
+    () => FilterCommand,
+  );
+  Navigation.registerComponent(
+    MODAL_FILTER_MY_ADS,
+    () => withNavigationProvider(WrapScreen(FilterMyAdvertisenment, store)),
+    () => FilterMyAdvertisenment,
+  );
+  Navigation.registerComponent(
+    MODAL_FILTER_HOME,
+    () => withNavigationProvider(WrapScreen(FilterHomeScreen, store)),
+    () => FilterHomeScreen,
+  );
+  
   //component screen
   Navigation.registerComponent(
     BUTTON_ICON_RIGHT_NAV,

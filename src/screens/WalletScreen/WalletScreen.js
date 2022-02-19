@@ -57,7 +57,7 @@ import {
   GET_COIN_BY_TYPE_COIN_SUCCESS,
   GET_COIN_BY_TYPE_FIATS_SUCCESS,
 } from '../../redux/modules/wallet/actions';
-import { LoginScreen } from '..';
+import {LoginScreen} from '..';
 const WalletScreen = ({componentId}) => {
   const logged = useSelector(state => state.authentication.logged);
   const [i18n, setI18n] = useState(I18n);
@@ -165,64 +165,68 @@ const WalletScreen = ({componentId}) => {
     dismissAllModal();
     // InfoDataGlobal(item);
   };
-  
+
   if (logged) {
     return (
       <Container
         onClickLeft={() => {}}
         isTopBar={true}
-        customsNavigation={()=>{
+        customsNavigation={() => {
           Navigation.mergeOptions(componentId, {
             topBar: {
-              rightButtons:[{
-                id: IdNavigation.PressIn.historyTransaction,
-                icon:require("assets/icons/timer.png")
-              }]
+              rightButtons: [
+                {
+                  id: IdNavigation.PressIn.historyTransaction,
+                  icon: require('assets/icons/timer.png'),
+                },
+              ],
             },
           });
         }}
         customTopBar={<HeaderWalletScreen componentId={componentId} />}>
         {/* <SignalRService /> */}
-       <View style={{
-         flexDirection:"row",
-         paddingBottom:20,
-         marginTop:-30
-       }}>
-         <View style={{
-           flex:0.5
-         }}>
-  
-         </View>
-         <View style={{
-           flex:1.5
-         }}>
-         <Button
-          isReverse
-          onSubmit={() => onSelectCoin(false)}
-          onClose={() => onSelectCoin(true)}
-          isSubmit
-          isClose
-          textSubmit={'WITHDRAW'.t()}
-          textClose={'DEPOSIT'.t()}
-          colorTitleClose={colors.black}
-          bgButtonColorSubmit={colors.app.yellowHightlight}
-          bgButtonColorClose={colors.app.yellowHightlight}
-          iconLeftSubmit={<WithdrawSvg />}
-          iconLeftClose={<DepsitSvg />}
-        />
-         </View>
-       </View>
-        <View style={{
-            backgroundColor:colors.app.backgroundLevel2,
-            marginHorizontal:-spacingApp,
-            paddingHorizontal:spacingApp,
-            paddingTop:20,
-            borderTopLeftRadius:15,
-            borderTopRightRadius:15,
-            flex:1
-        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingBottom: 20,
+            marginTop: -30,
+          }}>
+          <View
+            style={{
+              flex: 0.5,
+            }}></View>
+          <View
+            style={{
+              flex: 1.5,
+            }}>
+            <Button
+              isReverse
+              onSubmit={() => onSelectCoin(false)}
+              onClose={() => onSelectCoin(true)}
+              isSubmit
+              isClose
+              textSubmit={'WITHDRAW'.t()}
+              textClose={'DEPOSIT'.t()}
+              colorTitleClose={colors.black}
+              bgButtonColorSubmit={colors.app.yellowHightlight}
+              bgButtonColorClose={colors.app.yellowHightlight}
+              iconLeftSubmit={<WithdrawSvg />}
+              iconLeftClose={<DepsitSvg />}
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            backgroundColor: colors.app.backgroundLevel2,
+            marginHorizontal: -spacingApp,
+            paddingHorizontal: spacingApp,
+            paddingTop: 20,
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+            flex: 1,
+          }}>
           <SearchInput />
-  
+
           <ListCoin
             componentId={componentId}
             isCheck={isCheck}
@@ -233,7 +237,6 @@ const WalletScreen = ({componentId}) => {
     );
   }
   return <LoginScreen componentId={componentId} />;
-  
 };
 const stylest = StyleSheet.create({
   blockTopWallet: {

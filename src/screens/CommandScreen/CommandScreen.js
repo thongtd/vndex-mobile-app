@@ -29,11 +29,13 @@ import {
   CHAT_SCREEN,
   COMPLAINING_SCREEN,
   FEEDBACK_SCREEN,
+  MODAL_FILTER_COMMAND,
   pushSingleScreenApp,
   STEP_3_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
   STEP_5_BUY_SELL_SCREEN,
 } from '../../navigation';
+import { showModal } from '../../navigation/Navigation';
 import {useActionsP2p} from '../../redux';
 import BoxCommand from './components/BoxCommand';
 import ButtonTop from './components/ButtonTop';
@@ -267,9 +269,18 @@ const CommandScreen2 = ({componentId}) => {
         pushSingleScreenApp(componentId,FEEDBACK_SCREEN);
       }
     });
+    const navigationButtonEventListener =
+    Navigation.events().registerNavigationButtonPressedListener(
+      ({buttonId}) => {
+        if (buttonId == IdNavigation.PressIn.filterCommand) {
+         showModal(MODAL_FILTER_COMMAND)
+        }
 
+      },
+    );
     return () => {
       evGetComplain.remove();
+      navigationButtonEventListener.remove();
     };
   }, []);
 
@@ -293,7 +304,7 @@ const CommandScreen2 = ({componentId}) => {
           topBar: {
             rightButtons: [
               {
-                id: IdNavigation.PressIn.historyTransaction,
+                id: IdNavigation.PressIn.filterCommand,
                 icon: require('assets/icons/Filter.png'),
               },
             ],

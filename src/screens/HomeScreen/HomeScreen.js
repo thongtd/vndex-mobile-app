@@ -15,6 +15,7 @@ import {
   ADS_MY_ADVERTISENMENT_SCREEN,
   FEEDBACK_SCREEN,
   LOGIN_SCREEN,
+  MODAL_FILTER_HOME,
   RATING_BUY_SELL_SCREEN,
   SETTING_SCREEN,
   STEP_1_BUY_SELL_SCREEN,
@@ -143,11 +144,12 @@ const HomeScreen = ({componentId}) => {
           }
         },
       );
+
     return () => {
-      navigationButtonEventListener.remove();
       listenerEmit.remove();
       screenPoppedListener.remove();
       listenerPushNewAds.remove();
+      navigationButtonEventListener.remove();
     };
   }, []);
 
@@ -247,6 +249,9 @@ const HomeScreen = ({componentId}) => {
             }
           />
         </View>
+        <TouchableOpacity onPress={() => showModal(MODAL_FILTER_HOME)}>
+          <Icon name="filter" color={colors.highlight} size={18}/>
+        </TouchableOpacity>
       </View>
       <Button
         onPress={() => {

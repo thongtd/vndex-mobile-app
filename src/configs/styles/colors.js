@@ -55,4 +55,5 @@ export default {
   textTransfer: '#C3B58E',
   textMomo: '#C38E8E',
   cl3A3A3A: '#3A3A3A',
+  cl353535: '#353535',
 };

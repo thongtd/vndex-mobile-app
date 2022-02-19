@@ -75,6 +75,9 @@ export const ALERT_NOTICE_PASSWORD = 'modal.AlertNoticePassword';
 export const PICKER_SEARCH = 'modal.PickerSearch'
 export const ALERT_ACCOUNT_ACTIVE = 'modal.AlertAccountActive'
 export const MODAL_ALERT = 'modal.Alert'
+export const MODAL_FILTER_COMMAND = 'modal.MODAL_FILTER_COMMAND'
+export const MODAL_FILTER_MY_ADS = 'modal.MODAL_FILTER_MY_ADS'
+export const MODAL_FILTER_HOME = 'modal.MODAL_FILTER_HOME'
 
 // register Component
 export const BUTTON_ICON_RIGHT_NAV = 'nav.btnIconRight';
