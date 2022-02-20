@@ -6,7 +6,7 @@ import TextFnx from '../../../components/Text/TextFnx';
 import Button from '../../../components/Button/Button';
 import {IdNavigation} from '../../../configs/constant';
 import Container from '../../../components/Container';
-import {pop, pushSingleHiddenTopBarApp} from '../../../navigation/Navigation';
+import {pop, pushSingleHiddenTopBarApp, pushTabBasedApp} from '../../../navigation/Navigation';
 import {Rating} from 'react-native-ratings';
 import {useDispatch, useSelector} from 'react-redux';
 import {CREATE_RATING_COMMENT} from '../../../redux/modules/p2p/actions';
@@ -15,7 +15,7 @@ import {HOME_SCREEN} from '../../../navigation';
 import { get } from 'lodash';
 import { useCallback } from 'react';
 
-const RatingBuySellScreen = ({componentId}) => {
+const RatingBuySellScreen = ({componentId, onCancel=()=>{}}) => {
   const [content, setContent] = useState('');
   const [ratingStar, setRatingStar] = useState(5);
   const dispatcher = useDispatch();
@@ -23,8 +23,10 @@ const RatingBuySellScreen = ({componentId}) => {
   const offerOrder = useSelector(state => state.p2p.offerOrder);
   useEffect(() => {
     const ev = listenerEventEmitter('successCreateCommentRating', () => {
+      console.log("kkakkaka");
       // pushSingleHiddenTopBarApp(componentId, HOME_SCREEN);
       pushTabBasedApp();
+      
     });
     return () => {
       ev.remove();
@@ -81,7 +83,7 @@ const RatingBuySellScreen = ({componentId}) => {
         onSubmit={onRatingComment}
         colorTitle={colors.text}
         weightTitle={'700'}
-        onClose={() => pop(componentId)}
+        onClose={() => onCancel()}
         textClose="Hủy bỏ"
         textSubmit="Gửi"
         colorTitleClose={colors.description}
