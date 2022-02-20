@@ -253,15 +253,7 @@ const HomeScreen = ({componentId}) => {
           <Icon name="filter" color={colors.highlight} size={18}/>
         </TouchableOpacity>
       </View>
-      <Button
-        onPress={() => {
-          pushSingleScreenApp(componentId, RATING_BUY_SELL_SCREEN, null, {});
-        }}
-        isNormal
-        width={75}
-        title={'Đánh giá'}
-        height={40}
-      />
+
       <View>
         <FlatList
           style={{

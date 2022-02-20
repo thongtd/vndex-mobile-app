@@ -63,6 +63,9 @@ const ComplaintProcessScreen = ({componentId, orderId}) => {
       customsNavigation={() => {
         Navigation.mergeOptions(componentId, {
           topBar: {
+            title:{
+              text:"Tiến trình khiếu nại"
+            },
             rightButtons: [
               {
                 id: IdNavigation.PressIn.chat,

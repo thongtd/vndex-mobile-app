@@ -342,9 +342,6 @@ export function checkIndexSetting(x) {
   let index;
   switch (x) {
     case IdNavigation.Home.menu:
-      index = 4;
-      break;
-    case IdNavigation.Sto.menu:
       index = 3;
       break;
     case IdNavigation.LiquidSwap.menu:

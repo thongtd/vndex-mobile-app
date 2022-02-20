@@ -11,8 +11,9 @@ import {BUY, fontSize, SELL, spacingApp} from '../../../configs/constant';
 import icons from '../../../configs/icons';
 import colors from '../../../configs/styles/colors';
 import {formatCurrency, get} from '../../../configs/utils';
-import {pushTabBasedApp} from '../../../navigation';
+import {pushSingleScreenApp, pushTabBasedApp, RATING_BUY_SELL_SCREEN} from '../../../navigation';
 import {useActionsP2p} from '../../../redux';
+import RatingBuySellScreen from './RatingBuySellScreen';
 import TimelineBuySell from './TimelineBuySell';
 
 const Step5BuySellScreen = ({componentId}) => {
@@ -23,6 +24,7 @@ const Step5BuySellScreen = ({componentId}) => {
   const [offerOrderState, setOfferOrderState] = useState(offerOrder || {});
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const dispatch = useDispatch();
+  const [isRating, setIsRating] = useState(false);
   useEffect(() => {
     useActionsP2p(dispatch).handleGetAdvertisment(
       get(offerOrder, 'p2PTradingOrderId'),
@@ -46,6 +48,9 @@ const Step5BuySellScreen = ({componentId}) => {
     }
     return () => {};
   }, [offerOrder, UserInfo]);
+  if(isRating){
+    return <RatingBuySellScreen onCancel={()=>setIsRating(false)} componentId={componentId} />
+  }
   return (
     <Container
       isTopBar
@@ -101,7 +106,7 @@ const Step5BuySellScreen = ({componentId}) => {
             height: 100,
           }}>
           <Button
-            onPress={() => pushTabBasedApp(4)}
+            onPress={() => pushTabBasedApp(3)}
             width={200}
             isNormal
             title={'Kiểm tra ví'}
@@ -119,7 +124,9 @@ const Step5BuySellScreen = ({componentId}) => {
               showRating
               style={{paddingVertical: 2}}
             />
-            <Button isTitle title={'Để lại bình luận'} />
+            <Button onTitle={()=>{
+              setIsRating(true)
+            }} isTitle title={'Để lại bình luận'} />
           </>
         )}
       </Layout>

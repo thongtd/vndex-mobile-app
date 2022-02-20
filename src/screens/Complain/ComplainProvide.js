@@ -104,7 +104,6 @@ const ComplainProvide = ({componentId, orderId}) => {
   const [isLoading, setIsLoading] = useState(false);
   return (
     <Container
-      title="Cung cấp thông tin khiếu nại"
       isTopBar
       isLoadding={isLoading}
       isScroll
@@ -112,6 +111,9 @@ const ComplainProvide = ({componentId, orderId}) => {
       customsNavigation={() => {
         Navigation.mergeOptions(componentId, {
           topBar: {
+            title:{
+              text:"Cung cấp thông tin khiếu nại"
+            },
             rightButtons: [
               {
                 id: IdNavigation.PressIn.chat,

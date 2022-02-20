@@ -191,7 +191,6 @@ const Button = ({
         <TouchableOpacity
           onPress={() => {
             Keyboard.dismiss();
-
             onTitle();
           }}>
           <View style={style}>
