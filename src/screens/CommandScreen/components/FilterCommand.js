@@ -46,7 +46,7 @@ export default function FilterCommand({
   const [items, setItems] = useState(coinsWalletType);
   const [itemsStatus, setItemsStatus] = useState([]);
   const [value, setValue] = useState(null);
-  
+
   const [StatusActive, setStatusActive] = useState({name: '', value: ''});
   const [SelectCoinActive, setSelectCoinActive] = useState({
     symbol: '',
@@ -109,7 +109,9 @@ export default function FilterCommand({
             setModalCalendar(!isModalCalendar);
           }}
         />
-        <TextFnx space={16} color={colors.subText}>Token</TextFnx>
+        <TextFnx space={16} color={colors.subText}>
+          Token
+        </TextFnx>
         <DropDownPicker
           schema={{
             label: 'name',
@@ -132,7 +134,6 @@ export default function FilterCommand({
           }}
           dropDownContainerStyle={{
             backgroundColor: colors.app.backgroundLevel2,
-            
           }}
           // zIndexInverse={7000}
           zIndex={7000}
@@ -148,16 +149,16 @@ export default function FilterCommand({
           }}
           placeholder="Token"
         />
-         <TextFnx space={16} color={colors.subText}>Trạng thái</TextFnx>
+        <TextFnx space={16} color={colors.subText}>
+          Trạng thái
+        </TextFnx>
         <DropDownPicker
-         
           open={openStatus}
           value={value}
           items={itemsStatus}
           setOpen={setOpenStatus}
           setValue={setValue}
           setItems={setItemsStatus}
-          
           style={{
             backgroundColor: colors.app.backgroundLevel1,
             borderColor: colors.line,
@@ -181,19 +182,19 @@ export default function FilterCommand({
           }}
           placeholder="Trạng thái"
         />
-       <Button 
-       isNormal
-       title={"Tìm kiếm"}
-       onPress={()=>{
-          emitEventEmitter('submitSearchFilterCommand',{
-            fromDate:StartDateData,
-            toDate:EndDateData,
-            symbol:value
-          })
-          dismissAllModal();
-       }}
-       marginTop={10}
-       />
+        <Button
+          isNormal
+          title={'Tìm kiếm'}
+          onPress={() => {
+            emitEventEmitter('submitSearchFilterCommand', {
+              fromDate: StartDateData,
+              toDate: EndDateData,
+              symbol: value,
+            });
+            dismissAllModal();
+          }}
+          marginTop={10}
+        />
       </Layout>
       <CalendarScreen
         isModalCalendar={isModalCalendar}

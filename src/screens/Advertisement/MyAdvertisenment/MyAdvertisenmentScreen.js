@@ -58,10 +58,15 @@ const MyAdvertisenmentScreen = ({componentId}) => {
   const [ActiveType, setActiveType] = useState('');
   const [ActiveSymbol, setActiveSymbol] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [dataSubmit, setDataSubmit] = useState({});
   const currencyList = useSelector(state => state.market.currencyList);
   const myAdvertisments = useSelector(state => state.p2p.myAdvertisments);
   const UserInfo = useSelector(state => state.authentication.userInfo);
+  
   useEffect(() => {
+    const evFilter = listenerEventEmitter('submitSearchFilterMyAdv', data => {
+      setDataSubmit(data);
+    });
     const navigationButtonEventListener =
       Navigation.events().registerNavigationButtonPressedListener(
         ({buttonId}) => {
@@ -73,19 +78,20 @@ const MyAdvertisenmentScreen = ({componentId}) => {
 
     return () => {
       navigationButtonEventListener.remove();
+      evFilter.remove();
     };
   }, []);
   useEffect(() => {
     const evDone = listenerEventEmitter('doneApi', isDone => {
       setIsLoading(false);
     });
-    getMyAdvertisments(pageIndex);
+    getMyAdvertisments(pageIndex,dataSubmit);
 
     return () => {
       evDone.remove();
     };
-  }, [pageIndex]);
-  const getMyAdvertisments = pageIndex => {
+  }, [pageIndex,dataSubmit]);
+  const getMyAdvertisments = (pageIndex,dataSubmit) => {
     console.log('pageIndex: ', pageIndex);
     setIsEnabled({});
     useActionsP2p(dispatch).handleGetMyAdvertisments({
@@ -93,6 +99,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
       pageSize: 15,
       side: '',
       coinSymbol: ActiveSymbol,
+      ...dataSubmit
     });
     setIsLoading(true);
   };

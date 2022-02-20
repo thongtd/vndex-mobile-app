@@ -21,111 +21,158 @@ import {CALENDAR_SCREEN, PICKER_SEARCH} from '../../../navigation';
 import colors from '../../../configs/styles/colors';
 import ItemFilter from '../../SwapScreen/components/ItemFilter';
 import CalendarScreen from '../../SwapScreen/childrensScreens/CalendarScreen';
-import { constant } from '../../../configs/constant';
-
+import {constant} from '../../../configs/constant';
+import Icon from '../../../components/Icon';
+import DropDownPicker from 'react-native-dropdown-picker';
+import Button from '../../../components/Button/Button';
 export default function FilterMyAdvertisenment({
   startDate = new Date(),
   endDate = new Date(),
   onSubmitSearch,
 }) {
   // hanld for date
-  const [isModalCalendar, setModalCalendar] = useState(false);
-  const [ActiveDate, setActiveDate] = useState('');
-  const [StartDate, setStartDate] = useState(startDate.show);
-  const [EndDate, setEndDate] = useState(endDate.show);
-  const [currentDate, setCurrentDate] = useState('');
-
-  const [StartDateData, setStartDateData] = useState(startDate.api);
-  const [EndDateData, setEndDateData] = useState(endDate.api);
   const coinsWalletType = useSelector(state => state.market.cryptoWallet);
-
-  const [WalletTypeActive, setWalletTypeActive] = useState({
-    name: 'FIAT'.t(),
-    value: '1',
-  });
-  const [StatusActive, setStatusActive] = useState({name: '', value: ''});
-  const [SelectCoinActive, setSelectCoinActive] = useState({
-    symbol: '',
-    name: '',
-    image: '',
-  });
-  useEffect(() => {
-    listenerEventEmitter('startDate', startDate => {
-      setStartDate(startDate.show);
-      setStartDateData(startDate.api);
-    });
-    listenerEventEmitter('endDate', endDate => {
-      setEndDate(endDate.show);
-      setEndDateData(endDate.api);
-    });
-    return () => {
-      removeEventEmitter('endDate');
-      removeEventEmitter('startDate');
-    };
-  }, []);
-  const onWalletType = () => {
-    let walletTypes = [
-      {name: 'FIAT'.t(), value: '1'},
-      {name: 'Coin', value: '2'},
-    ];
-    let propsData = getPropsData(
-      walletTypes,
-      '',
-      'name',
-      get(WalletTypeActive, 'name'),
-      item => handleActiveWalletType(item),
-      false,
-    );
-    showModal(PICKER_SEARCH, propsData);
-  };
-  const onStatus = () => {
-    let statusList = [
-      {name: 'ALL'.t(), value: ''},
-      {name: 'Open'.t(), value: constant.STATUS_FUNDS.Open},
-      {name: 'Email Sent'.t(), value: constant.STATUS_FUNDS.EmailSent},
-      {name: 'Processing'.t(), value: constant.STATUS_FUNDS.Processing},
-      {name: 'Completed'.t(), value: constant.STATUS_FUNDS.Completed},
-      {name: 'Cancelled'.t(), value: constant.STATUS_FUNDS.Cancelled},
-      {name: 'Rejected'.t(), value: constant.STATUS_FUNDS.Rejected},
-      {name: 'Pending'.t(), value: constant.STATUS_FUNDS.Pending},
-    ];
-    let propsData = getPropsData(
-      statusList,
-      '',
-      'name',
-      get(StatusActive, 'name'),
-      item => handleActiveStatus(item),
-      false,
-    );
-    showModal(PICKER_SEARCH, propsData);
-  };
-  const handleActiveStatus = active => {
-    setStatusActive(active);
-    dismissAllModal();
-  };
-
-  const onSelectCoin = () => {
-    let propsData = getPropData(
-      coinsWalletType,
-      'images',
-      'symbol',
-      get(SelectCoinActive, 'symbol'),
-      item => handleActiveSelectCoin(item),
-    );
-    showModal(PICKER_SEARCH, propsData);
-  };
-  const handleActiveSelectCoin = active => {
-    setSelectCoinActive(active);
-    dismissAllModal();
-  };
-
+  const [openBuySell, setOpenBuySell] = useState(false);
+  const [openStatus, setOpenStatus] = useState(false);
+  const [openSymbol, setOpenSymbol] = useState(false);
+  const [valueBuySell, setValueBuySell] = useState(null);
+  const [valueStatus, setValueStatus] = useState(null);
+  const [valueSymbol, setValueSymbol] = useState(null);
+  const [itemsSymbol, setItemsSymbol] = useState(coinsWalletType);
+  const [itemsBuySell, setItemsBuySell] = useState([
+    {label: 'Tất cả', value: ''},
+    {label: 'Mua', value: 'B'},
+    {label: 'Bán', value: 'S'},
+  ]);
+  const [itemsStatus, setItemsStatus] = useState([]);
   return (
     <LayoutMofalFilter title="Bộ Lọc" isTitle>
       <Layout
         type={'column'}
         spaceHorizontal={0}
         style={[stylest.layoutHistory]}>
-        
+        <TextFnx space={16} color={colors.subText}>
+          Token
+        </TextFnx>
+        <DropDownPicker
+          schema={{
+            label: 'name',
+            value: 'symbol',
+            icon: 'icon',
+          }}
+          open={openSymbol}
+          value={valueSymbol}
+          items={itemsSymbol}
+          setOpen={setOpenSymbol}
+          setValue={setValueSymbol}
+          setItems={setItemsSymbol}
+          style={{
+            backgroundColor: colors.app.backgroundLevel1,
+            borderColor: colors.line,
+          }}
+          textStyle={{
+            color: colors.text,
+            fontWeight: '500',
+          }}
+          dropDownContainerStyle={{
+            backgroundColor: colors.app.backgroundLevel2,
+          }}
+          // zIndexInverse={7000}
+          zIndex={7000}
+          ArrowDownIconComponent={({style}) => (
+            <Icon
+              name={'caret-down'}
+              size={16}
+              color={colors.app.textContentLevel3}
+            />
+          )}
+          placeholderStyle={{
+            color: colors.description,
+          }}
+          placeholder="Token"
+        />
+        <TextFnx space={16} color={colors.subText}>
+          Hình thức
+        </TextFnx>
+        <DropDownPicker
+          open={openBuySell}
+          value={valueBuySell}
+          items={itemsBuySell}
+          setOpen={setOpenBuySell}
+          setValue={setValueBuySell}
+          setItems={setItemsBuySell}
+          zIndex={6999}
+          style={{
+            backgroundColor: colors.app.backgroundLevel1,
+            borderColor: colors.line,
+          }}
+          textStyle={{
+            color: colors.text,
+            fontWeight: '500',
+          }}
+          dropDownContainerStyle={{
+            backgroundColor: colors.app.backgroundLevel2,
+          }}
+          ArrowDownIconComponent={({style}) => (
+            <Icon
+              name={'caret-down'}
+              size={16}
+              color={colors.app.textContentLevel3}
+            />
+          )}
+          placeholderStyle={{
+            color: colors.description,
+          }}
+          placeholder="Trạng thái"
+        />
+        <TextFnx space={16} color={colors.subText}>
+          Trạng thái
+        </TextFnx>
+        <DropDownPicker
+          open={openStatus}
+          value={valueStatus}
+          zIndex={6800}
+          items={itemsStatus}
+          setOpen={setOpenStatus}
+          setValue={setValueStatus}
+          setItems={setItemsStatus}
+          style={{
+            backgroundColor: colors.app.backgroundLevel1,
+            borderColor: colors.line,
+          }}
+          textStyle={{
+            color: colors.text,
+            fontWeight: '500',
+          }}
+          dropDownContainerStyle={{
+            backgroundColor: colors.app.backgroundLevel2,
+          }}
+          ArrowDownIconComponent={({style}) => (
+            <Icon
+              name={'caret-down'}
+              size={16}
+              color={colors.app.textContentLevel3}
+            />
+          )}
+          placeholderStyle={{
+            color: colors.description,
+          }}
+          placeholder="Trạng thái"
+        />
+        <Button
+          isNormal
+          title={'Tìm kiếm'}
+          onPress={() => {
+            emitEventEmitter('submitSearchFilterMyAdv', {
+              coinSymbol: valueSymbol,
+              side: valueBuySell,
+              status: valueStatus,
+            });
+            dismissAllModal();
+          }}
+          marginTop={10}
+        />
+        {/*         
         <ItemFilter
           LabelSecond={'Token'}
           isColumn
@@ -168,14 +215,14 @@ export default function FilterMyAdvertisenment({
               endDate: EndDateData,
             })
           }
-        />
+        />*/}
       </Layout>
-      <CalendarScreen
+      {/* <CalendarScreen
         isModalCalendar={isModalCalendar}
         date={ActiveDate}
         currentDate={currentDate}
         setModalCalendar={() => setModalCalendar(!isModalCalendar)}
-      />
+      /> */}
     </LayoutMofalFilter>
   );
 }
