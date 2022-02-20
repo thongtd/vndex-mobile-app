@@ -136,9 +136,10 @@ export const P2pService = {
   },
   getHistoryOrder: async data => {
     let dataRemoved = removeEmptyUrl(
-      `side=${data.side}&paymentUnit=${data.paymentUnit}&priceType=${data.priceType}&isPaymentConfirm=${data.isPaymentConfirm}&isPaymentCancel=${data.isPaymentCancel}&fromDate=${data.fromDate}&toDate=${data.toDate}&pageIndex=${data.pageIndex}&pageSize=${data.pageSize}`,
+      `symbol=${data.symbol}&side=${data.side}&paymentUnit=${data.paymentUnit}&priceType=${data.priceType}&isPaymentConfirm=${data.isPaymentConfirm}&isPaymentCancel=${data.isPaymentCancel}&fromDate=${data.fromDate}&toDate=${data.toDate}&pageIndex=${data.pageIndex}&pageSize=${data.pageSize}`,
     );
     let url = `${P2P_API.GET_HISTORY_ORDER}?${dataRemoved}`;
+    console.log('url: ', url);
     let response = await httpService.get(url);
     return response.data;
   },

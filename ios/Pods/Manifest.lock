@@ -377,6 +377,8 @@ PODS:
     - React-Core
   - RNCCheckbox (0.5.9):
     - React-Core
+  - RNCPicker (2.2.1):
+    - React-Core
   - RNDeviceInfo (8.4.8):
     - React-Core
   - RNFastImage (8.5.11):
@@ -465,6 +467,7 @@ DEPENDENCIES:
   - ReactNativeNavigation (from `../node_modules/react-native-navigation`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
+  - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNI18n (from `../node_modules/react-native-i18n`)
@@ -574,6 +577,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCCheckbox:
     :path: "../node_modules/@react-native-community/checkbox"
+  RNCPicker:
+    :path: "../node_modules/@react-native-picker/picker"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   RNFastImage:
@@ -644,6 +649,7 @@ SPEC CHECKSUMS:
   ReactNativeNavigation: 23ac4081ca7439b35412242cb3a0a33adf615887
   RNCAsyncStorage: ea6b5c280997b2b32a587793163b1f10e580c4f7
   RNCCheckbox: 6369808337432cdbd5025d62ceced2480b4c51df
+  RNCPicker: cb57c823d5ce8d2d0b5dfb45ad97b737260dc59e
   RNDeviceInfo: 0400a6d0c94186d1120c3cbd97b23abc022187a9
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8

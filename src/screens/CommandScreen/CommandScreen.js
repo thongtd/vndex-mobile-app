@@ -44,6 +44,7 @@ const CommandScreen2 = ({componentId}) => {
   const [activeMenu, setActiveMenu] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
+  const [dataSubmit, setDataSubmit] = useState({});
   const currencyList = useSelector(state => state.market.currencyList);
   const historyOrders = useSelector(state => state.p2p.historyOrders);
   const logged = useSelector(state => state.authentication.logged);
@@ -282,11 +283,12 @@ const [isCheckComplain, setIsCheckComplain] = useState(false);
     });
     getHistoryOrder(pageIndex, {
       side: activeMenu,
+      ...dataSubmit
     });
     return () => {
       evDone.remove();
     };
-  }, [pageIndex, activeMenu]);
+  }, [pageIndex, activeMenu,dataSubmit]);
   useEffect(() => {
     if (pageIndex > 1) {
       setPageIndex(1);
@@ -301,6 +303,10 @@ const [isCheckComplain, setIsCheckComplain] = useState(false);
         });
       }
     });
+    const evSubmitFiler = listenerEventEmitter('submitSearchFilterCommand', (data) => {
+      
+      setDataSubmit(data);
+    });
     const navigationButtonEventListener =
     Navigation.events().registerNavigationButtonPressedListener(
       ({buttonId}) => {
@@ -312,6 +318,7 @@ const [isCheckComplain, setIsCheckComplain] = useState(false);
     );
     return () => {
       evGetComplain.remove();
+      evSubmitFiler.remove();
       navigationButtonEventListener.remove();
     };
   }, []);
@@ -321,6 +328,9 @@ const [isCheckComplain, setIsCheckComplain] = useState(false);
       pageIndex: pageIndex,
       pageSize: 15,
       side: get(data, 'side'),
+      symbol:get(data, 'symbol'),
+      fromDate:get(data, 'fromDate'),
+      toDate:get(data, 'toDate'),
     });
     setIsLoading(true);
   };

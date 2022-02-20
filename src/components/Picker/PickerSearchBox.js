@@ -25,7 +25,12 @@ const PickerSearchBox = ({
   const [source, setSource] = useState(data || []);
   var arrayholder = data || [];
   const handleClose = () => {
-    dismissAllModal();
+    if (componentId) {
+      Navigation.dismissModal(componentId);
+    } else {
+      dismissAllModal();
+    }
+
     // Navigation.dismissModal(componentId);
   };
   const searchFilterFunction = text => {
@@ -50,7 +55,6 @@ const PickerSearchBox = ({
           style={{
             height: hasNotch ? 115 : StatusBar.currentHeight > 24 ? 110 : 90,
             paddingTop: isAndroid() && StatusBar.currentHeight > 24 ? 35 : 25,
-           
           }}>
           <SafeAreaViewFnx>
             <LayoutSpaceHorizontal space={15}>
@@ -60,9 +64,7 @@ const PickerSearchBox = ({
                   height: 40,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  
                 }}
-                
                 nameIconLeft="search"
                 isIconLeft
                 isCircle
@@ -82,7 +84,7 @@ const PickerSearchBox = ({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           // paddingBottom: '40%',
-          height:"100%"
+          height: '100%',
         }}
         keyboardShouldPersistTaps="handled"
         data={source || []}
