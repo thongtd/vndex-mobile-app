@@ -14,8 +14,8 @@ import Image from '../../../components/Image/Image';
 import TextFnx from '../../../components/Text/TextFnx';
 import {useDispatch, useSelector} from 'react-redux';
 // import {get, orderBy, uniqBy} from 'lodash';
-import {fullHeight} from '../../../configs/utils';
-import {uniqBy, orderBy} from 'lodash';
+import {emitEventEmitter, fullHeight} from '../../../configs/utils';
+import {uniqBy, orderBy, isEmpty} from 'lodash';
 import {showModal, dismissAllModal} from '../../../navigation/Navigation';
 import {CALENDAR_SCREEN, PICKER_SEARCH} from '../../../navigation';
 import colors from '../../../configs/styles/colors';
@@ -25,28 +25,42 @@ import Input from '../../../components/Input';
 import ButtonIcon from '../../../components/Button/ButtonIcon';
 import Icon from '../../../components/Icon';
 import Button from '../../../components/Button/Button';
+import {constant} from '../../../configs/constant';
 
 export default function FilterHomeScreen() {
   const [qtty, setQtty] = useState(0);
   const [checked, setChecked] = useState(true);
+  const exchangePaymentMethod = useSelector(
+    state => state.p2p.exchangePaymentMethod,
+  );
   const [dataFil, setDataFil] = useState([
-    {id: 1, name: 'Tất cả', isActive: true},
-    {id: 2, name: 'Chuyển khoản', isActive: false},
-    {id: 3, name: 'Momo', isActive: false},
-    {id: 4, name: 'Viettel Pay', isActive: false},
-    {id: 5, name: 'Zalo Pay', isActive: false},
-    {id: 6, name: 'Paypal', isActive: false},
+    {id: '', name: 'Tất cả', isActive: true},
+    ...exchangePaymentMethod.map(obj => ({...obj, isActive: false})),
+    // {id: 2, name: 'Chuyển khoản', isActive: false, value:constant.CODE_PAYMENT_METHOD.BANK_TRANSFER},
+    // {id: 3, name: 'Momo', isActive: false, value:constant.CODE_PAYMENT_METHOD.MOMO},
+    // {id: 4, name: 'Viettel Pay', isActive: false},
+    // {id: 5, name: 'Zalo Pay', isActive: false},
+    // {id: 6, name: 'Paypal', isActive: false},
   ]);
 
   const onSelectFilter = id => {
     const data = dataFil.map(ite => {
       return {
         ...ite,
-        isActive: ite?.id == id ? !ite.isActive : ite.isActive,
+        isActive: ite?.id == id ? true : false,
       };
     });
     setDataFil([...data]);
   };
+  useEffect(() => {
+    emitEventEmitter('filerHomeEvent', {
+      exPaymentMethodIdsEv: dataFil
+        .filter(t => t.isActive == true)
+        .map(s => s.id),
+    });
+    return () => {};
+  }, [dataFil]);
+
   return (
     <LayoutMofalFilter title="Bộ Lọc" isTitle>
       <Layout
@@ -59,7 +73,16 @@ export default function FilterHomeScreen() {
           isLabel
           titleRight="VND"
           value={qtty}
-          handleChange={qtty => setQtty(qtty)}
+          hasValue
+          onChangeText={qtty => {
+            setQtty(qtty);
+            // alert("ok");
+            emitEventEmitter('filerHomeEvent', {
+              orderAmountEv:isEmpty(qtty)?"empty": parseFloat(qtty)
+            });
+          }}
+          keyboardType={'decimal-pad'}
+          // handleChange={}
         />
 
         <Layout type="column" space={10}>
@@ -93,6 +116,9 @@ export default function FilterHomeScreen() {
         </Layout>
 
         <Input
+          style={{
+            fontSize: 12,
+          }}
           value="Chỉ hiển thị quảng cáo của thương nhân"
           hasValue
           editable={true}

@@ -5,6 +5,8 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  SafeAreaView,
+  StatusBar
 } from 'react-native';
 import AlertAuth from './AlertAuth';
 import TextFnx from '../Text/TextFnx';
@@ -16,6 +18,7 @@ import LayoutSpaceHorizontal from '../Layout/LayoutSpaceHorizontal';
 import Container from '../Container';
 import {fontSize, constant} from '../../configs/constant';
 import Icon from '../Icon';
+// import { SafeAreaView } from '..';
 const heightScreen = Dimensions.get('window').height;
 
 const LayoutMofalFilter = ({title = 'this is title', isTitle, children}) => {
@@ -29,11 +32,11 @@ const LayoutMofalFilter = ({title = 'this is title', isTitle, children}) => {
     dismissAllModal();
   };
   return (
-    <View
+    <SafeAreaView
       style={stylest.container}
       //   onStartShouldSetResponder={dismissModal}
     >
-      <View style={[stylest.block]}>
+ <View style={[stylest.block]}>
         <LayoutSpaceHorizontal style={stylest.layoutSpace}>
           <View style={stylest.titleContent}>
             {isTitle && (
@@ -55,17 +58,19 @@ const LayoutMofalFilter = ({title = 'this is title', isTitle, children}) => {
           </View>
           {children}
         </LayoutSpaceHorizontal>
-      </View>
-    </View>
+      </View> 
+      
+    </SafeAreaView>
   );
 };
-
+const windowHeight = Dimensions.get('window').height;
+const navbarHeight = heightScreen - windowHeight + StatusBar.currentHeight;
 const stylest = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.transparent,
-    position: 'relative',
-    zIndex: 1000,
+    // backgroundColor: colors.transparent,
+    // position: 'relative',
+    // zIndex: 1000,
   },
   block: {
     backgroundColor: colors.app.backgroundLevel1,
@@ -79,8 +84,8 @@ const stylest = StyleSheet.create({
   },
   layoutSpace: {
     paddingHorizontal: 20,
-    paddingTop: 10,
     paddingBottom: 30,
+    marginTop:40
   },
   textTitle: {
     paddingBottom: 10,

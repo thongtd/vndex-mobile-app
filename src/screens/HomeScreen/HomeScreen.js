@@ -71,6 +71,9 @@ const HomeScreen = ({componentId}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadMore, setLoadMore] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
+  const [exPaymentMethodIds, setExPaymentMethodIds] = useState([]);
+  const [orderAmount, setOrderAmount] = useState('');
+
   const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
     if (size(get(tradingMarket, 'assets')) > 0) {
@@ -100,6 +103,18 @@ const HomeScreen = ({componentId}) => {
         pushSingleScreenApp(componentId, LOGIN_SCREEN);
       }
     });
+    const filerHomeEvent = listenerEventEmitter(
+      'filerHomeEvent',
+      ({exPaymentMethodIdsEv, orderAmountEv}) => {
+        if (exPaymentMethodIdsEv) {
+          setExPaymentMethodIds(exPaymentMethodIdsEv);
+        }
+        console.log(orderAmountEv,"orderAmountEv")
+        if (orderAmountEv) {
+          setOrderAmount(orderAmountEv == "empty"?"":orderAmountEv);
+        }
+      },
+    );
     const listenerPushNewAds = listenerEventEmitter('pushNewAds', () => {
       if (logged) {
         useActionsP2p(dispatch).handleGetAdvertisment({});
@@ -150,6 +165,7 @@ const HomeScreen = ({componentId}) => {
       screenPoppedListener.remove();
       listenerPushNewAds.remove();
       navigationButtonEventListener.remove();
+      filerHomeEvent.remove();
     };
   }, []);
 
@@ -160,7 +176,7 @@ const HomeScreen = ({componentId}) => {
     });
     if (ActiveSymbol) {
       setLoadMore(false);
-      getAdvertisments(ActiveType, ActiveSymbol, pageIndex);
+      getAdvertisments(ActiveType, ActiveSymbol, pageIndex,exPaymentMethodIds,orderAmount);
       setIsLoading(true);
       setPageIndex(1);
     }
@@ -168,20 +184,24 @@ const HomeScreen = ({componentId}) => {
     return () => {
       evDone.remove();
     };
-  }, [dispatch, ActiveType, ActiveSymbol, isRefresh]);
+  }, [dispatch, ActiveType, ActiveSymbol,exPaymentMethodIds,orderAmount, isRefresh]);
   useEffect(() => {
-    getAdvertisments(ActiveType, ActiveSymbol, pageIndex);
+    getAdvertisments(ActiveType, ActiveSymbol, pageIndex,exPaymentMethodIds,orderAmount);
     setIsLoading(true);
 
     return () => {};
   }, [pageIndex]);
 
-  const getAdvertisments = (ActiveType, ActiveSymbol, pageIndex) => {
+  const getAdvertisments = (ActiveType, ActiveSymbol, pageIndex,exPaymentMethodIds=[],orderAmount) => {
+    
+    
     useActionsP2p(dispatch).handleGetAdvertisments({
       pageIndex: pageIndex || 1,
       pageSize: 15,
       side: ActiveType == BUY ? SELL : BUY,
       coinSymbol: ActiveSymbol,
+      exPaymentMethodIds:size(exPaymentMethodIds)>0?exPaymentMethodIds[0]:'',
+      orderAmount
     });
   };
   const logged = useSelector(state => state.authentication.logged);
@@ -250,7 +270,7 @@ const HomeScreen = ({componentId}) => {
           />
         </View>
         <TouchableOpacity onPress={() => showModal(MODAL_FILTER_HOME)}>
-          <Icon name="filter" color={colors.highlight} size={18}/>
+          <Icon name="filter" color={colors.highlight} size={18} />
         </TouchableOpacity>
       </View>
 
