@@ -58,6 +58,10 @@ export const GET_MY_ADVERTISMENT_SUCCESS = `${CONTEXT}/GET_MY_ADVERTISMENT_SUCCE
 
 export const CREATE_RATING_COMMENT = `${CONTEXT}/CREATE_RATING_COMMENT`;
 export const CREATE_RATING_COMMENT_SUCCESS = `${CONTEXT}/CREATE_RATING_COMMENT_SUCCESS`;
+export const GET_COMMENTS_BY_USER = `${CONTEXT}/GET_COMMENTS_BY_USER`;
+export const GET_COMMENTS_BY_USER_SUCCESS = `${CONTEXT}/GET_COMMENTS_BY_USER_SUCCESS`;
+export const GET_ADV_INFO = `${CONTEXT}/GET_ADV_INFO`;
+export const GET_ADV_INFO_SUCCESS = `${CONTEXT}/GET_ADV_INFO_SUCCESS`;
 
 export function useActionsP2p(dispatch) {
   if (!dispatch) {
@@ -66,6 +70,8 @@ export function useActionsP2p(dispatch) {
   return {
     handleCreateComplain: data => dispatch(createAction(CREATE_COMPLAIN, data)),
     handleGetComplain: orderId => dispatch(createAction(GET_COMPLAIN, orderId)),
+    handleGetAdvInfo: () => dispatch(createAction(GET_ADV_INFO)),
+    handleGetCommentsByUser: userId => dispatch(createAction(GET_COMMENTS_BY_USER, userId)),
     handleGetComplainProcess: complainId =>
       dispatch(createAction(GET_COMPLAIN_PROCESS, complainId)),
     handleCancelComplain: complainId =>
@@ -120,6 +126,8 @@ export function useActionsP2p(dispatch) {
 }
 export const actionsReducerP2p = {
   getMarketInfoSuccess: data => createAction(GET_MARKET_INFO_SUCCESS, data),
+  getAdvInfoSuccess: data => createAction(GET_ADV_INFO_SUCCESS, data),
+  getCommentsByUserSuccess: data => createAction(GET_COMMENTS_BY_USER_SUCCESS, data),
   getComplainSuccess: data => createAction(GET_COMPLAIN_SUCCESS, data),
   getComplainProcessSuccess: data =>
     createAction(GET_COMPLAIN_PROCESS_SUCCESS, data),

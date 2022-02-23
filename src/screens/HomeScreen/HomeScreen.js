@@ -61,6 +61,7 @@ import {
 import {useActionsP2p} from '../../redux';
 import {useDispatch} from 'react-redux';
 import {GET_USERS_KYC} from '../../redux/modules/authentication/actions';
+import Empty from '../../components/Item/Empty';
 
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
@@ -109,9 +110,9 @@ const HomeScreen = ({componentId}) => {
         if (exPaymentMethodIdsEv) {
           setExPaymentMethodIds(exPaymentMethodIdsEv);
         }
-        console.log(orderAmountEv,"orderAmountEv")
+        console.log(orderAmountEv, 'orderAmountEv');
         if (orderAmountEv) {
-          setOrderAmount(orderAmountEv == "empty"?"":orderAmountEv);
+          setOrderAmount(orderAmountEv == 'empty' ? '' : orderAmountEv);
         }
       },
     );
@@ -176,7 +177,13 @@ const HomeScreen = ({componentId}) => {
     });
     if (ActiveSymbol) {
       setLoadMore(false);
-      getAdvertisments(ActiveType, ActiveSymbol, pageIndex,exPaymentMethodIds,orderAmount);
+      getAdvertisments(
+        ActiveType,
+        ActiveSymbol,
+        pageIndex,
+        exPaymentMethodIds,
+        orderAmount,
+      );
       setIsLoading(true);
       setPageIndex(1);
     }
@@ -184,24 +191,42 @@ const HomeScreen = ({componentId}) => {
     return () => {
       evDone.remove();
     };
-  }, [dispatch, ActiveType, ActiveSymbol,exPaymentMethodIds,orderAmount, isRefresh]);
+  }, [
+    dispatch,
+    ActiveType,
+    ActiveSymbol,
+    exPaymentMethodIds,
+    orderAmount,
+    isRefresh,
+  ]);
   useEffect(() => {
-    getAdvertisments(ActiveType, ActiveSymbol, pageIndex,exPaymentMethodIds,orderAmount);
+    getAdvertisments(
+      ActiveType,
+      ActiveSymbol,
+      pageIndex,
+      exPaymentMethodIds,
+      orderAmount,
+    );
     setIsLoading(true);
 
     return () => {};
   }, [pageIndex]);
 
-  const getAdvertisments = (ActiveType, ActiveSymbol, pageIndex,exPaymentMethodIds=[],orderAmount) => {
-    
-    
+  const getAdvertisments = (
+    ActiveType,
+    ActiveSymbol,
+    pageIndex,
+    exPaymentMethodIds = [],
+    orderAmount,
+  ) => {
     useActionsP2p(dispatch).handleGetAdvertisments({
       pageIndex: pageIndex || 1,
       pageSize: 15,
       side: ActiveType == BUY ? SELL : BUY,
       coinSymbol: ActiveSymbol,
-      exPaymentMethodIds:size(exPaymentMethodIds)>0?exPaymentMethodIds[0]:'',
-      orderAmount
+      exPaymentMethodIds:
+        size(exPaymentMethodIds) > 0 ? exPaymentMethodIds[0] : '',
+      orderAmount,
     });
   };
   const logged = useSelector(state => state.authentication.logged);
@@ -313,7 +338,7 @@ const HomeScreen = ({componentId}) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-      {(
+      {size(get(advertisments, 'source')) >0? (
         (isArray(get(advertisments, 'source')) &&
           get(advertisments, 'source')) ||
         []
@@ -483,7 +508,7 @@ const HomeScreen = ({componentId}) => {
             </View>
           </Layout>
         </View>
-      ))}
+      )):<Empty />}
     </Container>
   );
 };

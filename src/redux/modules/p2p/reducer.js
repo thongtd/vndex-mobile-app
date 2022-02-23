@@ -15,6 +15,9 @@ import {
   GET_CHAT_HISTORY_SUCCESS,
   GET_COMPLAIN_SUCCESS,
   GET_COMPLAIN_PROCESS_SUCCESS,
+  GET_ADV_INFO_SUCCESS,
+  GET_COMMENTS_BY_USER,
+  GET_COMMENTS_BY_USER_SUCCESS,
 } from './actions';
 import {get, set} from '../../../configs/utils';
 import i18n from 'react-native-i18n';
@@ -38,7 +41,9 @@ export const DEFAULT = {
   chatInfoP2p: {},
   chatHistory: {},
   complainInfo:{},
-  complainProcess:{}
+  complainProcess:{},
+  advInfo:{},
+  commentsByUser:[]
 };
 
 export default p2p = (state = DEFAULT, action = {}) => {
@@ -69,6 +74,7 @@ export default p2p = (state = DEFAULT, action = {}) => {
             get(payload, 'lastestPrice'),
         },
       };
+      
     case GET_MY_ADVERTISMENT_SUCCESS:
       if (get(payload, 'pageIndex') == 1) {
         set(state, 'myAdvertisments.source', []);
@@ -151,6 +157,16 @@ export default p2p = (state = DEFAULT, action = {}) => {
         ...state,
         offerOrderId: payload,
       };
+      case GET_ADV_INFO_SUCCESS:
+        return {
+          ...state,
+          advInfo: payload,
+        };
+        case GET_COMMENTS_BY_USER_SUCCESS:
+        return {
+          ...state,
+          commentsByUser: payload,
+        };
     case GET_ADVERTISMENT_SUCCESS:
       return {
         ...state,

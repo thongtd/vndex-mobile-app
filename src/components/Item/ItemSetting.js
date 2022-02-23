@@ -39,6 +39,7 @@ const ItemSetting = ({
   colorLabel,
   colorValue,
   weightvalue,
+  weightTextLeft,
   sizeValue,
   colorTitle=colors.app.textDisabled,
   style,
@@ -70,6 +71,7 @@ const ItemSetting = ({
                 spaceLeft={iconLeftSvg ? '3%' : 0}
                 value={textLeft}
                 color={colorLabel}
+                weight={weightTextLeft}
               />
             </View>
             {hasSwitch ? (

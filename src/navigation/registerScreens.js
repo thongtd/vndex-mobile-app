@@ -124,6 +124,7 @@ import {
   RATING_BUY_SELL_SCREEN,
   MODAL_FILTER_MY_ADS,
   MODAL_FILTER_HOME,
+  DETAIL_ACCOUNT_P2P_SCREEN,
 } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
@@ -162,6 +163,7 @@ import RatingBuySellScreen from '../screens/HomeScreen/BuySellScreen/RatingBuySe
 import FilterCommand from '../screens/CommandScreen/components/FilterCommand';
 import FilterMyAdvertisenment from '../screens/Advertisement/MyAdvertisenment/FilterMyAdvertisenment';
 import FilterHomeScreen from '../screens/HomeScreen/components/FilterHomeScreen';
+import DetailAccountP2pScreen from '../screens/AccountP2P/DetailAccountP2pScreen';
 
 const WrapScreen = (ReduxScreen, store) => props =>
   (
@@ -175,6 +177,11 @@ export const registerScreens = store => {
     DAPP_SCREEN,
     () => withNavigationProvider(WrapScreen(DappScreen, store)),
     () => DappScreen,
+  );
+  Navigation.registerComponent(
+    DETAIL_ACCOUNT_P2P_SCREEN,
+    () => withNavigationProvider(WrapScreen(DetailAccountP2pScreen, store)),
+    () => DetailAccountP2pScreen,
   );
   Navigation.registerComponent(
     STEP_ADS_ADD_SUCCESS,

@@ -21,7 +21,8 @@ const Icon = ({
     name="search",
     size,
     color,
-    iconComponent
+    iconComponent,
+    solid
 }) => {
     let Icon;
     if(iconComponent){
@@ -29,7 +30,7 @@ const Icon = ({
     }
     switch (type) {
         case constant.TYPE_ICON.FontAwesome:
-            Icon = <FontAwesome style={style} name={name} size={size} color={color} />
+            Icon = <FontAwesome solid={solid} style={style} name={name} size={size} color={color} />
             break;
         case constant.TYPE_ICON.AntDesign:
             Icon = <AntDesign style={style} name={name} size={size} color={color} />

@@ -41,6 +41,10 @@ import {
   CANCEL_COMPLAIN,
   CREATE_COMPLAIN,
   CREATE_RATING_COMMENT,
+  GET_COMMENTS_BY_USER,
+  GET_ADV_INFO,
+  GET_COMMENTS_BY_USER_SUCCESS,
+  GET_ADV_INFO_SUCCESS,
 } from './actions';
 
 import {
@@ -600,21 +604,20 @@ export function* watchSendMessage() {
 }
 export function* asyncGetComplain({payload}) {
   try {
-    const res = yield call(P2pService.getComplain, get(payload,'orderId'));
-    console.log(res,"resGetComplain2")
+    const res = yield call(P2pService.getComplain, get(payload, 'orderId'));
+    console.log(res, 'resGetComplain2');
     emitEventEmitter('doneApi', true);
     // yield put(actionsReducerP2p.getComplainSuccess(get(res, 'data')));
     if (get(res, 'success')) {
-      if(!get(payload,"isStop")){
+      if (!get(payload, 'isStop')) {
         emitEventEmitter('doneGetComplain', {
-          type:get(payload,"type"),
-          data:get(res, 'data')
+          type: get(payload, 'type'),
+          data: get(res, 'data'),
         });
       }
-      
-      console.log(res,"resGetComplain")
+
+      console.log(res, 'resGetComplain');
       yield put(actionsReducerP2p.getComplainSuccess(get(res, 'data')));
-      
     } else {
       toast(get(res, 'message'));
     }
@@ -707,7 +710,43 @@ export function* asyncCreateCommentRating({payload}) {
 export function* watchCreateCommentRating() {
   yield takeEvery(CREATE_RATING_COMMENT, asyncCreateCommentRating);
 }
+export function* asyncGetCommentsByUser({payload}) {
+  try {
+    const res = yield call(P2pService.getCommentByUser, payload);
+    emitEventEmitter('doneApi', true);
 
+    if (res) {
+      // gọi lại danh sách rating ở đây nếu cần
+      yield put(createAction(GET_COMMENTS_BY_USER_SUCCESS, get(res, 'source')));
+    }
+    emitEventEmitter('doneApi', true);
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+
+export function* watchGetCommentsByUser() {
+  yield takeEvery(GET_COMMENTS_BY_USER, asyncGetCommentsByUser);
+}
+
+export function* asyncGetAdvInfo({payload}) {
+  try {
+    const res = yield call(P2pService.getAdvInfo);
+    emitEventEmitter('doneApi', true);
+
+    if (res) {
+      // gọi lại danh sách rating ở đây nếu cần
+      yield put(createAction(GET_ADV_INFO_SUCCESS, res));
+    }
+    emitEventEmitter('doneApi', true);
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+
+export function* watchGetAdvInfo() {
+  yield takeEvery(GET_ADV_INFO, asyncGetAdvInfo);
+}
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
   yield all([fork(watchGetTrading)]);
@@ -735,4 +774,6 @@ export default function* () {
   yield all([fork(watchCancelComplain)]);
   yield all([fork(watchCreateComplain)]);
   yield all([fork(watchCreateCommentRating)]);
+  yield all([fork(watchGetCommentsByUser)]);
+  yield all([fork(watchGetAdvInfo)]);
 }
