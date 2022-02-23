@@ -63,7 +63,7 @@ export default function DetailAccountP2pScreen({componentId}) {
           Tỷ lệ hoàn tất trong 30 ngày
         </TextFnx>
         <TextFnx weight="600">
-          {String(get(advInfo, 'percentageOfCompletedRecentTransactions') || 0)}
+          {String(ceil(get(advInfo, 'percentageOfCompletedRecentTransactions')) || 0)}
           %
         </TextFnx>
       </Layout>

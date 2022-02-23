@@ -83,7 +83,7 @@ const AccountP2PScreen = ({componentId}) => {
             flex: 1,
           }}>
           <TextFnx space={8} size={16} weight="600">
-          {String(get(advInfo,"percentageOfCompletedRecentTransactions") || 0)}%
+          {String(ceil(get(advInfo,"percentageOfCompletedRecentTransactions")) || 0)}%
           </TextFnx>
           <TextFnx color={colors.app.textContentLevel2} size={12}>Tỷ lệ hoàn tất trong 30 ngày</TextFnx>
         </Layout>
