@@ -40,7 +40,7 @@ const ComplainProvide = ({componentId, orderId}) => {
       selectionLimit: 0,
     }).then(res => {
       console.log(res.assets, 'ressss assets');
-      setImages([...res.assets]);
+      setImages([...images, ...res.assets]);
     });
   };
   useEffect(() => {

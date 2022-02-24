@@ -180,7 +180,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         if (get(offerData, 'isPaymentCancel')) {
           pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN, null);
         }
-        if (get(offerData, 'timeToLiveInSecond') <= 0) {
+        if (get(offerData, 'offerSide') === BUY && get(offerData, 'timeToLiveInSecond') <= 0) {
           pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
             orderId: offerOrderIdData,
           });

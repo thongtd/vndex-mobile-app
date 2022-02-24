@@ -89,7 +89,7 @@ const CommandScreen2 = ({componentId}) => {
     //   alert("ok");
     // }
     if (get(item, 'isPaymentCancel')) {
-      pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
     } else if (get(item, 'isUnLockConfirm')) {
       pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
     } else if (
