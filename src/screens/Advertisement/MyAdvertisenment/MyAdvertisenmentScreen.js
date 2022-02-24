@@ -158,6 +158,9 @@ const MyAdvertisenmentScreen = ({componentId}) => {
       }
     }
   };
+  const onRefresh = () => {
+    getMyAdvertisments(pageIndex,dataSubmit);
+  }
   return (
     <Container
       componentId={componentId}
@@ -177,6 +180,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         });
       }}>
       <SwipeListView
+        onRefresh={onRefresh}
         ListHeaderComponent={<ButtonAddNew onPress={onAddNewAdvertisenment} />}
         showsVerticalScrollIndicator={false}
         scrollEnabled
@@ -199,6 +203,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
           (isLoading && <ActivityIndicator style={{color: colors.text}} />) ||
           null
         }
+        refreshing={isLoading}
         renderItem={({item, index}) => (
           <View key={`item-${index}`} style={{paddingHorizontal: 20}}>
             <BoxCommand

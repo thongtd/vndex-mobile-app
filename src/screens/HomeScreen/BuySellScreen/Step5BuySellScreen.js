@@ -115,16 +115,18 @@ const Step5BuySellScreen = ({componentId}) => {
         {!get(offerOrderState, 'isPaymentCancel') && (
           <>
             <TextFnx spaceBottom={20} color={colors.app.textContentLevel2}>
-              Trải nghiệm giao dịch của bạn như thế nào?
+              Trải nghiệm giao dịch của bạn với đối tác như thế nào?
             </TextFnx>
             <Rating
+              readonly={true}
               ratingCount={5}
-              startingValue={5}
+              startingValue={get(advertisment, 'traderInfo.totalStar') || 0}
               tintColor={colors.app.backgroundLevel1}
               showRating
+              showReadOnlyText={false}
               style={{paddingVertical: 2}}
             />
-            <Button onTitle={()=>{
+            <Button marginTop={8} onTitle={()=>{
               setIsRating(true)
             }} isTitle title={'Để lại bình luận'} />
           </>
