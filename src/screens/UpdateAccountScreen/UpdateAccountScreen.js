@@ -32,7 +32,7 @@ const dataPolicy = [
 ];
 const UpdateAccountScreen = ({componentId}) => {
   const HeaderComponent = (
-    <>
+    <Layout type="column" style={[styles.borderLayout]} spaceBottom={10}>
       <TouchableOpacity style={styles.bntHeader} onPress={() => {}}>
         <TextFnx color={colors.description}>Thêm file</TextFnx>
         <View style={styles.bntPlus} onPress={() => {}}>
@@ -43,7 +43,7 @@ const UpdateAccountScreen = ({componentId}) => {
         {dataPolicy.map((_i, ind) => (
           <Layout isLineCenter key={String(`${_i}_${ind}`)} space={2}>
             <Icon name={'bullseye'} size={3} color={colors.description} />
-            <TextFnx spaceHorizontal={5} size={fontSize.f12}>
+            <TextFnx spaceHorizontal={5} size={fontSize.f12} color={colors.description}>
               {_i || ''}
               {(ind == 6 && (
                 <TextFnx size={fontSize.f12} color={colors.iconButton}>
@@ -55,7 +55,7 @@ const UpdateAccountScreen = ({componentId}) => {
           </Layout>
         ))}
       </Layout>
-    </>
+    </Layout>
   );
   return (
     <Container title="Hồ sơ Tư vấn chuyên nghiệp" componentId={componentId}>
@@ -67,12 +67,13 @@ const UpdateAccountScreen = ({componentId}) => {
           <Layout
             isSpaceBetween
             isCenter
-            style={{
-              paddingVertical: 10,
-              borderBottomWidth: 0.5,
-              borderColor: colors.line,
-              height: 70,
-            }}>
+            style={[
+              {
+                paddingVertical: 10,
+                height: 70,
+              },
+              styles.borderLayout,
+            ]}>
             <Layout type="column">
               <Layout isLineCenter spaceBottom={5}>
                 <TextFnx spaceHorizontal={5} size={fontSize.f16}>
@@ -135,5 +136,9 @@ const styles = StyleSheet.create({
     width: 28,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  borderLayout: {
+    borderBottomWidth: 0.5,
+    borderColor: colors.line,
   },
 });
