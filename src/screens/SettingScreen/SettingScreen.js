@@ -367,9 +367,18 @@ const SettingScreen = ({componentId}) => {
               </View>
             </View>
           </Layout>
-          <Layout>
+          <Layout isLineCenter>
             <TickIc />
             <TextFnx spaceLeft={5}>Nhà đầu tư uy tín</TextFnx>
+            <View style={{
+              backgroundColor:get(userInfo, 'customerMetaData.isKycUpdated')?'#28382E':'#361E21',
+              paddingHorizontal:15,
+              paddingVertical:2,
+              marginLeft:15,
+              borderRadius:5
+            }}>{get(userInfo, 'customerMetaData.isKycUpdated')?<TextFnx color={colors.app.buy}>Đã xác minh</TextFnx>:<TextFnx color={colors.app.sell}>Chưa xác minh</TextFnx>}
+              
+            </View>
           </Layout>
         </>
       ) : (

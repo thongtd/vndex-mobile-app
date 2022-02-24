@@ -74,8 +74,12 @@ const Step2FA = ({componentId}) => {
       setSessionId(get(res, 'data.sessionId'));
     });
   };
+  // const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
-    handleResend();
+    if(get(UserInfo,"twoFactorService") == constant.TWO_FACTOR_TYPE.EMAIL_2FA){
+      handleResend();
+    }
+    
     return () => {};
   }, []);
   return (
