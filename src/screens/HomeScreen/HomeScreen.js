@@ -169,6 +169,7 @@ const HomeScreen = ({componentId}) => {
           switch (componentName) {
             case HOME_SCREEN:
               setIsLoading(true);
+              setActiveType("S");
               getAdvertisments(
                 ActiveType,
                 ActiveSymbol,

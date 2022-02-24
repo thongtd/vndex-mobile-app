@@ -470,10 +470,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
             } else if (isEmpty(Receive) || Receive.str2Number() == 0) {
               if (get(advertisment, 'side') === SELL) {
                 return toast(
-                  `Số lượng ${get(
-                    advertisment,
-                    'symbol',
-                  )} nhận được lớn hơn 0`,
+                  `Số lượng ${get(advertisment, 'symbol')} nhận được lớn hơn 0`,
                 );
               } else {
                 return toast(
@@ -483,35 +480,64 @@ const Step1BuySellScreen = ({componentId, item}) => {
                   )} nhận được phải lớn hơn 0`,
                 );
               }
-            }else if( get(advertisment, 'side') === SELL && Pay.str2Number() > 0 && Pay.str2Number() < get(
-              advertisment,
-              'minOrderAmount',
-            ) || Pay.str2Number() > get(
-              advertisment,
-              'maxOrderAmount',
-            )){
-              return toast(`Giới hạn lệnh từ ${formatCurrency(get(
-                advertisment,
-                'minOrderAmount',
-              ),get(advertisment,"paymentUnit"),currencyList)} đến ${formatCurrency(get(
-                advertisment,
-                'maxOrderAmount',
-              ),get(advertisment,"paymentUnit"),currencyList)} ${get(advertisment,"paymentUnit")}`)
-            }else if( get(advertisment, 'side') === BUY && Receive.str2Number() > 0 && Receive.str2Number() < get(
-              advertisment,
-              'minOrderAmount',
-            ) || Receive.str2Number() > get(
-              advertisment,
-              'maxOrderAmount',
-            )){
-              return toast(`Giới hạn lệnh từ ${formatCurrency(get(
-                advertisment,
-                'minOrderAmount',
-              ),get(advertisment,"paymentUnit"),currencyList)} đến ${formatCurrency(get(
-                advertisment,
-                'maxOrderAmount',
-              ),get(advertisment,"paymentUnit"),currencyList)} ${get(advertisment,"paymentUnit")}`)
-            }
+            } else if (
+              (get(advertisment, 'side') === SELL &&
+                Pay.str2Number() > 0 &&
+                Pay.str2Number() < get(advertisment, 'minOrderAmount')) ||
+              Pay.str2Number() > get(advertisment, 'maxOrderAmount')
+            ) {
+              return toast(
+                `Giới hạn lệnh từ ${formatCurrency(
+                  get(advertisment, 'minOrderAmount'),
+                  get(advertisment, 'paymentUnit'),
+                  currencyList,
+                )} đến ${formatCurrency(
+                  get(advertisment, 'maxOrderAmount'),
+                  get(advertisment, 'paymentUnit'),
+                  currencyList,
+                )} ${get(advertisment, 'paymentUnit')}`,
+              );
+            } else if (
+              (get(advertisment, 'side') === BUY &&
+                Receive.str2Number() > 0 &&
+                Receive.str2Number() < get(advertisment, 'minOrderAmount')) ||
+              Receive.str2Number() > get(advertisment, 'maxOrderAmount')
+            ) {
+              return toast(
+                `Giới hạn lệnh từ ${formatCurrency(
+                  get(advertisment, 'minOrderAmount'),
+                  get(advertisment, 'paymentUnit'),
+                  currencyList,
+                )} đến ${formatCurrency(
+                  get(advertisment, 'maxOrderAmount'),
+                  get(advertisment, 'paymentUnit'),
+                  currencyList,
+                )} ${get(advertisment, 'paymentUnit')}`,
+              );
+            } else if (
+              (get(advertisment, 'side') === BUY &&
+                Pay.str2Number() > get(advertisment, 'quantity')) ||
+              (get(advertisment, 'side') === SELL &&
+                Receive.str2Number() > get(advertisment, 'quantity'))
+            ) {
+              return toast(
+                'Bạn không thể đặt lệnh với khối lượng lớn hơn khối lượng của lệnh quảng cáo',
+              );
+            } else if (
+              ( get(advertisment, 'side') === SELL &&
+              Receive.str2Number() >
+                get(
+                  getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
+                  'available',
+                )) || ( get(advertisment, 'side') === BUY &&
+                Pay.str2Number() >
+                  get(
+                    getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
+                    'available',
+                  ))
+             ) {
+               return toast('Bạn không thể đặt lệnh với khối lượng lớn hơn số dư khả dụng');
+             }
             pushSingleScreenApp(componentId, STEP_2_BUY_SELL_SCREEN, {
               item,
               data: {
@@ -545,7 +571,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
           }}
           isCenter>
           <TextFnx color={colors.app.textDisabled}>
-          Chọn thời gian thanh toán tối đa {'  '}
+            Chọn thời gian thanh toán tối đa {'  '}
             <TextFnx>{get(advertisment, 'lockedInSecond') / 60} phút</TextFnx>
           </TextFnx>
         </Layout>
