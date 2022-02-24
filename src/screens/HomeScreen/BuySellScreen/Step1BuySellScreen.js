@@ -330,7 +330,10 @@ const Step1BuySellScreen = ({componentId, item}) => {
                     currencyList,
                   )
                 : formatCurrency(
-                    get(advertisment, 'quantity'),
+                  get(
+                    getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
+                    'available',
+                  ),
                     get(advertisment, 'symbol'),
                     currencyList,
                   ),
@@ -344,7 +347,10 @@ const Step1BuySellScreen = ({componentId, item}) => {
                     currencyList,
                   )
                 : formatCurrency(
-                    get(advertisment, 'quantity') * get(advertisment, 'price'),
+                  get(
+                    getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
+                    'available',
+                  ) * get(advertisment, 'price'),
                     get(advertisment, 'paymentUnit'),
                     currencyList,
                   ),
