@@ -56,4 +56,6 @@ export default {
   textMomo: '#C38E8E',
   cl3A3A3A: '#3A3A3A',
   cl353535: '#353535',
+  cl8EC393: '#8EC393',
+  cl28382E: '#28382E',
 };

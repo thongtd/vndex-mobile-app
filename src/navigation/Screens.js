@@ -1,12 +1,13 @@
 // @flow
 
-
 export const LOGIN_SCREEN = 'vndex.title.LoginScreen';
 export const HOME_SCREEN = 'vndex.title.HomeScreen';
 export const LIQUID_SWAP_SCREEN = 'vndex.title.LiquidSwapScreen';
 export const COMMAND_SCREEN = 'vndex.title.CommandScreen';
 export const STO_SCREEN = 'vndex.title.StoScreen';
 export const UPDATE_ACCOUNT_SCREEN = 'vndex.title.UpdateAccountScreen';
+export const LIST_UPDATE_ACCOUNT_SCREEN = 'vndex.title.ListUpdateAccountScreen';
+export const LIST_UPDATE_SCREEN = 'vndex.title.ListUpdateScreen';
 
 export const SEND_REG_SCREEN = 'vndex.title.SendRegScreen';
 export const STEP2KYC_SCREEN = 'vndex.title.Step2KycScreen';
@@ -49,8 +50,10 @@ export const INFO_COIN_SCREEN = 'vndex.title.InfoCoinScreen';
 export const INFO_FIAT_SCREEN = 'vndex.title.InfoFiatScreen';
 export const DEPOSIT_FIAT_SCREEN = 'vndex.title.DepositFiatScreen';
 export const DEPOSIT_COIN_SCREEN = 'vndex.title.DepositCoinScreen';
-export const HISTORY_DEPOSIT_COIN_SCREEN = 'vndex.title.HistoryDepositCoinScreen';
-export const HISTORY_DEPOSIT_FIAT_SCREEN = 'vndex.title.HistoryDepositFiatScreen';
+export const HISTORY_DEPOSIT_COIN_SCREEN =
+  'vndex.title.HistoryDepositCoinScreen';
+export const HISTORY_DEPOSIT_FIAT_SCREEN =
+  'vndex.title.HistoryDepositFiatScreen';
 export const WITHDRAW_COIN_SCREEN = 'vndex.title.WithdrawCoinScreen';
 export const WITHDRAW_FIAT_SCREEN = 'vndex.title.WithdrawFiatScreen';
 export const TRANSACTION_HISTORY = 'vndex.title.TransactionHistory';
@@ -58,7 +61,8 @@ export const STEP_1_BUY_SELL_SCREEN = 'vndex.title.Step1BuySellScreen';
 export const STEP_2_BUY_SELL_SCREEN = 'vndex.title.Step2BuySellScreen';
 export const STEP_3_BUY_SELL_SCREEN = 'vndex.title.Step3BuySellScreen';
 export const STEP_4_BUY_SELL_SCREEN = 'vndex.title.Step4BuySellScreen';
-export const ADS_HISTORY_EXCHANGE_SCREEN = 'vndex.title.AdsHistoryExchangeScreen';
+export const ADS_HISTORY_EXCHANGE_SCREEN =
+  'vndex.title.AdsHistoryExchangeScreen';
 export const ADS_ADD_NEW_SCREEN = 'vndex.title.AddNewAdvertisementScreen';
 export const ADS_MY_ADVERTISENMENT_SCREEN = 'vndex.title.AdvertisenmentScreen';
 export const STEP_5_BUY_SELL_SCREEN = 'vndex.title.Step5BuySellScreen';
@@ -69,18 +73,18 @@ export const FEEDBACK_SCREEN = 'vndex.title.FEEDBACK_SCREEN';
 export const COMPLAINING_SCREEN = 'vndex.title.ComplainingScreen';
 export const COMPLAINING_PROCESS_SCREEN = 'vndex.title.ComplaintProcessScreen';
 export const RATING_BUY_SELL_SCREEN = 'vndex.title.RatingBuySellScreen';
-export const DETAIL_ACCOUNT_P2P_SCREEN = 'vndex.title.DETAIL_ACCOUNT_P2P_SCREEN';
+export const DETAIL_ACCOUNT_P2P_SCREEN =
+  'vndex.title.DETAIL_ACCOUNT_P2P_SCREEN';
 
 // register ModalMy
 export const ALERT_NOTICE_PASSWORD = 'modal.AlertNoticePassword';
-export const PICKER_SEARCH = 'modal.PickerSearch'
-export const ALERT_ACCOUNT_ACTIVE = 'modal.AlertAccountActive'
-export const MODAL_ALERT = 'modal.Alert'
-export const MODAL_FILTER_COMMAND = 'modal.MODAL_FILTER_COMMAND'
-export const MODAL_FILTER_MY_ADS = 'modal.MODAL_FILTER_MY_ADS'
-export const MODAL_FILTER_HOME = 'modal.MODAL_FILTER_HOME'
+export const PICKER_SEARCH = 'modal.PickerSearch';
+export const ALERT_ACCOUNT_ACTIVE = 'modal.AlertAccountActive';
+export const MODAL_ALERT = 'modal.Alert';
+export const MODAL_FILTER_COMMAND = 'modal.MODAL_FILTER_COMMAND';
+export const MODAL_FILTER_MY_ADS = 'modal.MODAL_FILTER_MY_ADS';
+export const MODAL_FILTER_HOME = 'modal.MODAL_FILTER_HOME';
 
 // register Component
 export const BUTTON_ICON_RIGHT_NAV = 'nav.btnIconRight';
 export const BUTTON_ICON_LEFT_NAV = 'nav.btnIconLeft';
-

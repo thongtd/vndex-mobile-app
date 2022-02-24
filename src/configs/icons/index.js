@@ -4,6 +4,7 @@ import Email from 'assets/svg/ic_email.svg';
 import Copy from 'assets/svg/ic_copy.svg';
 import Filter from 'assets/svg/ic_filter.svg';
 import TickIc from 'assets/svg/tick.svg';
+import Ic1 from 'assets/svg/ic_!.svg';
 import IcMarketting from 'assets/svg/ic_marketting.svg';
 import IcMarkettingTrans from 'assets/svg/ic_marketting_trans.svg';
 import IcHistory from 'assets/svg/ic_history.svg';
@@ -22,7 +23,8 @@ import IcEdit2 from 'assets/svg/ic_edit_2.svg';
 import Checked from 'assets/svg/checked.svg';
 export default {
   IcTimer: <IcTimer />,
-  IcChecked:<Checked />,
+  Ic1: <Ic1 />,
+  IcChecked: <Checked />,
   IcBank2: <IcBank2 />,
   IcArrowRight: <IcArrowRight />,
   IcEdit2: <IcEdit2 />,
@@ -47,8 +49,8 @@ export default {
   bgLogin: require('assets/images/bg_login.jpeg'),
   bgSignup: require('assets/images/bg_signup.jpeg'),
   bgWallet: require('../../assets/images/bg_wallet.png'),
-  imgChecked:require("assets/images/checked.png"),
-  imgCancel:require("assets/images/Cancel.png"),
+  imgChecked: require('assets/images/checked.png'),
+  imgCancel: require('assets/images/Cancel.png'),
   copy: require('../../assets/icons/ic_copy.png'),
   ggAuthenL: require('../../assets/images/gg_authen_l.png'),
   ggAuthenL2: require('../../assets/images/gg_authen2_l.png'),
