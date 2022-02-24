@@ -13,13 +13,16 @@ import {
   ADS_ADD_NEW_SCREEN,
   ADS_HISTORY_EXCHANGE_SCREEN,
   ADS_MY_ADVERTISENMENT_SCREEN,
+  COMMAND_SCREEN,
   FEEDBACK_SCREEN,
+  HOME_SCREEN,
   LOGIN_SCREEN,
   MODAL_FILTER_HOME,
   RATING_BUY_SELL_SCREEN,
   SETTING_SCREEN,
   STEP_1_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
+  WALLET_SCREEN,
 } from '../../navigation';
 import {
   pushSingleHiddenTopBarApp,
@@ -160,13 +163,30 @@ const HomeScreen = ({componentId}) => {
           }
         },
       );
-
+    const screenEventListener =
+      Navigation.events().registerComponentDidAppearListener(
+        ({componentId, componentName}) => {
+          switch (componentName) {
+            case HOME_SCREEN:
+              setIsLoading(true);
+              getAdvertisments(
+                ActiveType,
+                ActiveSymbol,
+                pageIndex,
+                exPaymentMethodIds,
+                orderAmount,
+              );
+              break;
+          }
+        },
+      );
     return () => {
       listenerEmit.remove();
       screenPoppedListener.remove();
       listenerPushNewAds.remove();
       navigationButtonEventListener.remove();
       filerHomeEvent.remove();
+      screenEventListener.remove();
     };
   }, []);
 
@@ -338,177 +358,181 @@ const HomeScreen = ({componentId}) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-      {size(get(advertisments, 'source')) >0? (
-        (isArray(get(advertisments, 'source')) &&
-          get(advertisments, 'source')) ||
-        []
-      ).map((item, index) => (
-        <View
-          key={`data-${index}`}
-          style={{
-            paddingVertical: 20,
-            borderBottomWidth: 1,
-            borderBottomColor: colors.app.lineSetting,
-          }}>
-          <Layout isSpaceBetween>
-            <Layout>
-              <TextFnx weight="400" size={fontSize.f16} spaceRight={10}>
-                {`${get(item, 'traderInfo.emailAddress')}`}
-              </TextFnx>
-              {get(item, 'requiredKyc') && (
-                <Icon iconComponent={icons.icTick} />
-              )}
-            </Layout>
-            <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-              {get(item, 'traderInfo.totalCompleteOrder')} lệnh |{' '}
-              {get(item, 'traderInfo.completePercent')}% hoàn tất
-            </TextFnx>
-          </Layout>
-          <Layout isSpaceBetween isLineCenter>
-            <View>
-              <TextFnx color={colors.app.textDisabled} size={fontSize.f12}>
-                Giá
-              </TextFnx>
-              <TextFnx
-                weight="500"
-                color={
-                  get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
-                }
-                size={fontSize.f20}>
-                {formatCurrency(
-                  get(item, 'price'),
-                  get(item, 'paymentUnit'),
-                  currencyList,
-                )}{' '}
-                <TextFnx
-                  color={colors.app.textContentLevel3}
-                  weight="400"
-                  size={fontSize.f14}>
-                  {get(item, 'paymentUnit')}
+      {size(get(advertisments, 'source')) > 0 ? (
+        (
+          (isArray(get(advertisments, 'source')) &&
+            get(advertisments, 'source')) ||
+          []
+        ).map((item, index) => (
+          <View
+            key={`data-${index}`}
+            style={{
+              paddingVertical: 20,
+              borderBottomWidth: 1,
+              borderBottomColor: colors.app.lineSetting,
+            }}>
+            <Layout isSpaceBetween>
+              <Layout>
+                <TextFnx weight="400" size={fontSize.f16} spaceRight={10}>
+                  {`${get(item, 'traderInfo.emailAddress')}`}
                 </TextFnx>
-              </TextFnx>
-            </View>
-            <View>
-              <Button
-                spaceHorizontal={20}
-                isNormal
-                // width={175}
-                onPress={() => {
-                  if (!logged) {
-                    return pushSingleScreenApp(componentId, LOGIN_SCREEN);
-                  }
-                  if (
-                    get(item, 'traderInfo.identityUserId') ==
-                    get(UserInfo, 'id')
-                  ) {
-                    return toast('Không được đặt lệnh bạn đã tạo');
-                  }
-                  if (!get(UserInfo, 'twoFactorEnabled')) {
-                    return toast('Vui lòng bật thiết lập 2FA để tạo lệnh');
-                  }
-                  if (!get(UserInfo, 'customerMetaData.isKycUpdated')) {
-                    return toast('Vui lòng KYC tài khoản để tạo lệnh');
-                  }
-                  pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN, {
-                    item,
-                  });
-                }}
-                title={
-                  get(item, 'side') == SELL
-                    ? `Mua ${get(item, 'symbol')}`
-                    : `Bán ${get(item, 'symbol')}`
-                }
-                height={40}
-                colorTitle={
-                  get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
-                }
-                bgButtonColor={
-                  get(item, 'side') == SELL
-                    ? colors.app.bgBuy
-                    : colors.app.bgSell
-                }
-              />
-            </View>
-          </Layout>
-
-          <Layout>
-            <Layout type="column" spaceRight={10}>
-              <TextFnx
-                space={3}
-                size={fontSize.f12}
-                color={colors.app.textDisabled}>
-                Khả dụng
-              </TextFnx>
-              <TextFnx
-                space={3}
-                size={fontSize.f12}
-                color={colors.app.textDisabled}>
-                Giới hạn
+                {get(item, 'requiredKyc') && (
+                  <Icon iconComponent={icons.icTick} />
+                )}
+              </Layout>
+              <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
+                {get(item, 'traderInfo.totalCompleteOrder')} lệnh |{' '}
+                {get(item, 'traderInfo.completePercent')}% hoàn tất
               </TextFnx>
             </Layout>
-            <View
-              style={{
-                flex: 1,
-              }}>
-              <TextFnx space={3} size={fontSize.f12}>
-                {formatCurrency(
-                  get(item, 'quantity'),
-                  get(item, 'symbol'),
-                  currencyList,
-                )}{' '}
-                {get(item, 'symbol')}
-              </TextFnx>
-              <Layout isSpaceBetween>
+            <Layout isSpaceBetween isLineCenter>
+              <View>
+                <TextFnx color={colors.app.textDisabled} size={fontSize.f12}>
+                  Giá
+                </TextFnx>
+                <TextFnx
+                  weight="500"
+                  color={
+                    get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
+                  }
+                  size={fontSize.f20}>
+                  {formatCurrency(
+                    get(item, 'price'),
+                    get(item, 'paymentUnit'),
+                    currencyList,
+                  )}{' '}
+                  <TextFnx
+                    color={colors.app.textContentLevel3}
+                    weight="400"
+                    size={fontSize.f14}>
+                    {get(item, 'paymentUnit')}
+                  </TextFnx>
+                </TextFnx>
+              </View>
+              <View>
+                <Button
+                  spaceHorizontal={20}
+                  isNormal
+                  // width={175}
+                  onPress={() => {
+                    if (!logged) {
+                      return pushSingleScreenApp(componentId, LOGIN_SCREEN);
+                    }
+                    if (
+                      get(item, 'traderInfo.identityUserId') ==
+                      get(UserInfo, 'id')
+                    ) {
+                      return toast('Không được đặt lệnh bạn đã tạo');
+                    }
+                    if (!get(UserInfo, 'twoFactorEnabled')) {
+                      return toast('Vui lòng bật thiết lập 2FA để tạo lệnh');
+                    }
+                    if (!get(UserInfo, 'customerMetaData.isKycUpdated')) {
+                      return toast('Vui lòng KYC tài khoản để tạo lệnh');
+                    }
+                    pushSingleScreenApp(componentId, STEP_1_BUY_SELL_SCREEN, {
+                      item,
+                    });
+                  }}
+                  title={
+                    get(item, 'side') == SELL
+                      ? `Mua ${get(item, 'symbol')}`
+                      : `Bán ${get(item, 'symbol')}`
+                  }
+                  height={40}
+                  colorTitle={
+                    get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
+                  }
+                  bgButtonColor={
+                    get(item, 'side') == SELL
+                      ? colors.app.bgBuy
+                      : colors.app.bgSell
+                  }
+                />
+              </View>
+            </Layout>
+
+            <Layout>
+              <Layout type="column" spaceRight={10}>
+                <TextFnx
+                  space={3}
+                  size={fontSize.f12}
+                  color={colors.app.textDisabled}>
+                  Khả dụng
+                </TextFnx>
+                <TextFnx
+                  space={3}
+                  size={fontSize.f12}
+                  color={colors.app.textDisabled}>
+                  Giới hạn
+                </TextFnx>
+              </Layout>
+              <View
+                style={{
+                  flex: 1,
+                }}>
                 <TextFnx space={3} size={fontSize.f12}>
                   {formatCurrency(
-                    get(item, 'minOrderAmount'),
-                    get(item, 'paymentUnit'),
+                    get(item, 'quantity'),
+                    get(item, 'symbol'),
                     currencyList,
                   )}{' '}
-                  -{' '}
-                  {formatCurrency(
-                    get(item, 'maxOrderAmount'),
-                    get(item, 'paymentUnit'),
-                    currencyList,
-                  )}{' '}
-                  {get(item, 'paymentUnit')}
+                  {get(item, 'symbol')}
                 </TextFnx>
+                <Layout isSpaceBetween>
+                  <TextFnx space={3} size={fontSize.f12}>
+                    {formatCurrency(
+                      get(item, 'minOrderAmount'),
+                      get(item, 'paymentUnit'),
+                      currencyList,
+                    )}{' '}
+                    -{' '}
+                    {formatCurrency(
+                      get(item, 'maxOrderAmount'),
+                      get(item, 'paymentUnit'),
+                      currencyList,
+                    )}{' '}
+                    {get(item, 'paymentUnit')}
+                  </TextFnx>
 
-                <Layout>
-                  {(uniqBy(get(item, 'paymentMethods'), 'code') || []).map(
-                    (it, ind) => {
-                      if (
-                        get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO
-                      ) {
-                        return (
-                          <Image
-                            source={icons.icMomo}
-                            style={{
-                              marginLeft: 5,
-                            }}
-                          />
-                        );
-                      } else if (
-                        get(it, 'code') ==
-                        constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
-                      ) {
-                        return (
-                          <Image
-                            source={icons.icBank}
-                            style={{
-                              marginLeft: 5,
-                            }}
-                          />
-                        );
-                      }
-                    },
-                  )}
+                  <Layout>
+                    {(uniqBy(get(item, 'paymentMethods'), 'code') || []).map(
+                      (it, ind) => {
+                        if (
+                          get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO
+                        ) {
+                          return (
+                            <Image
+                              source={icons.icMomo}
+                              style={{
+                                marginLeft: 5,
+                              }}
+                            />
+                          );
+                        } else if (
+                          get(it, 'code') ==
+                          constant.CODE_PAYMENT_METHOD.BANK_TRANSFER
+                        ) {
+                          return (
+                            <Image
+                              source={icons.icBank}
+                              style={{
+                                marginLeft: 5,
+                              }}
+                            />
+                          );
+                        }
+                      },
+                    )}
+                  </Layout>
                 </Layout>
-              </Layout>
-            </View>
-          </Layout>
-        </View>
-      )):<Empty />}
+              </View>
+            </Layout>
+          </View>
+        ))
+      ) : (
+        <Empty />
+      )}
     </Container>
   );
 };

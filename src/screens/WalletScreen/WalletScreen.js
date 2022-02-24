@@ -29,6 +29,7 @@ import {
   PICKER_SEARCH,
   DEPOSIT_COIN_SCREEN,
   WITHDRAW_COIN_SCREEN,
+  WALLET_SCREEN,
 } from '../../navigation';
 import {IdNavigation, spacingApp} from '../../configs/constant';
 import {
@@ -86,9 +87,9 @@ const WalletScreen = ({componentId}) => {
   useEffect(() => {
     backHandler(() => resetScreenGlobal());
     switchLangTabbar();
-    if (isPasscode && Timer == 60) {
-      showModal(PASSCODE_AUTH_SCREEN);
-    }
+    // if (isPasscode && Timer == 60) {
+    //   showModal(PASSCODE_AUTH_SCREEN);
+    // }
   }, []);
   useEffect(() => {
     let availableZeroCrypto = cryptoWallet.filter(
@@ -149,8 +150,10 @@ const WalletScreen = ({componentId}) => {
           }
         },
       );
+     
     return () => {
       navigationButtonEventListener.remove();
+      
     };
   }, []);
   const handleActive = (item, isDeposit) => {

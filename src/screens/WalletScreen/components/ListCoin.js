@@ -8,6 +8,8 @@ import { GET_MARKET_WATCH, GET_CURRENCY_LIST, GET_CONVERSION, GET_CRYPTO_WALLET 
 import { GET_ASSET_SUMARY, GET_COIN_BY_TYPE } from '../../../redux/modules/wallet/actions';
 import Empty from '../../../components/Item/Empty';
 import TextFnx from '../../../components/Text/TextFnx';
+import { Navigation } from 'react-native-navigation';
+import { WALLET_SCREEN } from '../../../navigation';
 
 const ListCoin = ({
     data,
@@ -64,9 +66,18 @@ const ListCoin = ({
     }
     useEffect(() => {
         listenerEventEmitter("doneAssets", () => setDisabled(false))
+        const screenEventListener = Navigation.events().registerComponentDidAppearListener(({ componentId, componentName }) => {
+            switch (componentName) {
+              case WALLET_SCREEN:
+                onRefresh();
+               
+                break;
+            }
+          });
         return () => {
             removeEventEmitter("doneAssets");
             removeEventEmitter('textSearch');
+            screenEventListener.remove();
         }
     }, [])
     return (

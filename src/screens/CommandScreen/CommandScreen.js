@@ -27,6 +27,7 @@ import {
 } from '../../configs/utils';
 import {
   CHAT_SCREEN,
+  COMMAND_SCREEN,
   COMPLAINING_SCREEN,
   FEEDBACK_SCREEN,
   MODAL_FILTER_COMMAND,
@@ -35,7 +36,7 @@ import {
   STEP_4_BUY_SELL_SCREEN,
   STEP_5_BUY_SELL_SCREEN,
 } from '../../navigation';
-import { showModal } from '../../navigation/Navigation';
+import {showModal} from '../../navigation/Navigation';
 import {useActionsP2p} from '../../redux';
 import BoxCommand from './components/BoxCommand';
 import ButtonTop from './components/ButtonTop';
@@ -48,7 +49,7 @@ const CommandScreen2 = ({componentId}) => {
   const currencyList = useSelector(state => state.market.currencyList);
   const historyOrders = useSelector(state => state.p2p.historyOrders);
   const logged = useSelector(state => state.authentication.logged);
-const [isCheckComplain, setIsCheckComplain] = useState(false);
+  const [isCheckComplain, setIsCheckComplain] = useState(false);
   const onChangeActive = (menu = {}) => {
     setActiveMenu(get(menu, 'id'));
   };
@@ -65,12 +66,12 @@ const [isCheckComplain, setIsCheckComplain] = useState(false);
   //       },
   //     });
   //   }
-  
+
   //   return () => {
-      
+
   //   }
   // }, [isCheckComplain])
-  
+
   const onSelectUnit = () => {
     // alert('Lựa chọn đợn vị');
   };
@@ -254,8 +255,8 @@ const [isCheckComplain, setIsCheckComplain] = useState(false);
       !get(item, 'isPaymentCancel')
     ) {
       useActionsP2p(dispatch).handleGetComplain({
-        orderId:get(item, 'id'),
-        type:'2'
+        orderId: get(item, 'id'),
+        type: '2',
       });
       pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
         topBar: {
@@ -283,12 +284,12 @@ const [isCheckComplain, setIsCheckComplain] = useState(false);
     });
     getHistoryOrder(pageIndex, {
       side: activeMenu,
-      ...dataSubmit
+      ...dataSubmit,
     });
     return () => {
       evDone.remove();
     };
-  }, [pageIndex, activeMenu,dataSubmit]);
+  }, [pageIndex, activeMenu, dataSubmit]);
   useEffect(() => {
     if (pageIndex > 1) {
       setPageIndex(1);
@@ -296,30 +297,47 @@ const [isCheckComplain, setIsCheckComplain] = useState(false);
     return () => {};
   }, [activeMenu]);
   useEffect(() => {
-    const evGetComplain = listenerEventEmitter('doneGetComplain', ({type,data}) => {
-      if(get(data,"id")){
-        pushSingleScreenApp(componentId,COMPLAINING_SCREEN,{
-          orderId:get(data,"orderId")
-        });
-      }
-    });
-    const evSubmitFiler = listenerEventEmitter('submitSearchFilterCommand', (data) => {
-      
-      setDataSubmit(data);
-    });
-    const navigationButtonEventListener =
-    Navigation.events().registerNavigationButtonPressedListener(
-      ({buttonId}) => {
-        if (buttonId == IdNavigation.PressIn.filterCommand) {
-         showModal(MODAL_FILTER_COMMAND)
+    const evGetComplain = listenerEventEmitter(
+      'doneGetComplain',
+      ({type, data}) => {
+        if (get(data, 'id')) {
+          pushSingleScreenApp(componentId, COMPLAINING_SCREEN, {
+            orderId: get(data, 'orderId'),
+          });
         }
-
       },
     );
+    const evSubmitFiler = listenerEventEmitter(
+      'submitSearchFilterCommand',
+      data => {
+        setDataSubmit(data);
+      },
+    );
+    const navigationButtonEventListener =
+      Navigation.events().registerNavigationButtonPressedListener(
+        ({buttonId}) => {
+          if (buttonId == IdNavigation.PressIn.filterCommand) {
+            showModal(MODAL_FILTER_COMMAND);
+          }
+        },
+      );
+    const screenEventListener =
+      Navigation.events().registerComponentDidAppearListener(
+        ({componentId, componentName}) => {
+          switch (componentName) {
+            case COMMAND_SCREEN:
+              getHistoryOrder(1, {
+                side: activeMenu,
+              });
+              break;
+          }
+        },
+      );
     return () => {
       evGetComplain.remove();
       evSubmitFiler.remove();
       navigationButtonEventListener.remove();
+      screenEventListener.remove();
     };
   }, []);
 
@@ -328,9 +346,9 @@ const [isCheckComplain, setIsCheckComplain] = useState(false);
       pageIndex: pageIndex,
       pageSize: 15,
       side: get(data, 'side'),
-      symbol:get(data, 'symbol'),
-      fromDate:get(data, 'fromDate'),
-      toDate:get(data, 'toDate'),
+      symbol: get(data, 'symbol'),
+      fromDate: get(data, 'fromDate'),
+      toDate: get(data, 'toDate'),
     });
     setIsLoading(true);
   };
