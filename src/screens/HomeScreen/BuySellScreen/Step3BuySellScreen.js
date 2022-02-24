@@ -298,11 +298,11 @@ const Step3BuySellScreen = ({
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
             <TextFnx color={colors.app.textContentLevel2}>
-              {get(advertisment, 'orderNumber')}
+              {get(advertisment, 'orderSequenceNumber')}
             </TextFnx>
             <ButtonIcon
               onPress={() => {
-                Clipboard.setString(get(advertisment, 'orderNumber'));
+                Clipboard.setString(get(advertisment, 'orderSequenceNumber'));
                 toast('COPY_TO_CLIPBOARD'.t());
               }}
               style={{

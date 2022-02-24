@@ -305,7 +305,7 @@ const SettingScreen = ({componentId}) => {
         </TouchableOpacity>
         <Layout isLineCenter type="row">
           <Button
-            onTitle={()=>handleActiveLang('en-US')}
+            onTitle={()=>{}}
             weight={'bold'}
             size={fontSize.f16}
             color={Lang == "en-US"? colors.app.yellowHightlight:colors.app.textContentLevel3}

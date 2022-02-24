@@ -160,7 +160,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           isStop: isStopComplainState,
         });
         if (
-          get(offerData, 'offerSide') === BUY &&
+          get(offerData, 'isPaymentConfirm') &&
           get(offerData, 'isUnLockConfirm')
         ) {
           pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN, null);
@@ -326,11 +326,11 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
             <TextFnx color={colors.app.textContentLevel2}>
-              {get(advertisment, 'orderNumber')}
+              {get(advertisment, 'orderSequenceNumber')}
             </TextFnx>
             <ButtonIcon
               onPress={() => {
-                Clipboard.setString(get(advertisment, 'orderNumber'));
+                Clipboard.setString(get(advertisment, 'orderSequenceNumber'));
                 toast('COPY_TO_CLIPBOARD'.t());
               }}
               style={{
@@ -592,7 +592,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                 });
               } else {
                 toast(
-                  'Vui lòng chờ thời gian giao dịch bạn mới được khiếu nại',
+                  'Vui lòng chờ hết thời gian giao dịch bạn mới được khiếu nại',
                 );
               }
             }
