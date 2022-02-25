@@ -33,6 +33,7 @@ import {
   PAYMENT_METHOD_SCREEN,
   HISTORY_LOGIN_SCREEN,
   UPDATE_ACCOUNT_SCREEN,
+  LIST_UPDATE_ACCOUNT_SCREEN,
 } from '../../navigation';
 import {Navigation} from 'react-native-navigation';
 import i18n from 'react-native-i18n';
@@ -224,7 +225,8 @@ const SettingScreen = ({componentId}) => {
     pushSingleScreenApp(componentId, SUPPORT_SCREEN, hiddenTabbar());
   };
   const onUpdateAccount = () => {
-    pushSingleScreenApp(componentId, UPDATE_ACCOUNT_SCREEN);
+    // pushSingleScreenApp(componentId, UPDATE_ACCOUNT_SCREEN);
+    pushSingleScreenApp(componentId, LIST_UPDATE_ACCOUNT_SCREEN)
   };
   const onSecurity = () => {
     pushSingleScreenApp(componentId, SECURITY_SCREEN);

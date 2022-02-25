@@ -125,6 +125,8 @@ import {
   MODAL_FILTER_MY_ADS,
   MODAL_FILTER_HOME,
   DETAIL_ACCOUNT_P2P_SCREEN,
+  LIST_UPDATE_ACCOUNT_SCREEN,
+  LIST_UPDATE_SCREEN,
 } from '.';
 import Step2Kyc from '../screens/KycScreen/Step2Kyc';
 import Step3Kyc from '../screens/KycScreen/Step3Kyc';
@@ -164,6 +166,8 @@ import FilterCommand from '../screens/CommandScreen/components/FilterCommand';
 import FilterMyAdvertisenment from '../screens/Advertisement/MyAdvertisenment/FilterMyAdvertisenment';
 import FilterHomeScreen from '../screens/HomeScreen/components/FilterHomeScreen';
 import DetailAccountP2pScreen from '../screens/AccountP2P/DetailAccountP2pScreen';
+import ListUpdateAccountScreen from '../screens/UpdateAccountScreen/ListUpdateAccountScreen';
+import ListUpdateScreen from '../screens/UpdateAccountScreen/ListUpdateScreen';
 
 const WrapScreen = (ReduxScreen, store) => props =>
   (
@@ -507,6 +511,16 @@ export const registerScreens = store => {
     () => withNavigationProvider(WrapScreen(RatingBuySellScreen, store)),
     () => RatingBuySellScreen,
   );
+  Navigation.registerComponent(
+    LIST_UPDATE_ACCOUNT_SCREEN,
+    () => withNavigationProvider(WrapScreen(ListUpdateAccountScreen, store)),
+    () => ListUpdateAccountScreen,
+  );
+  Navigation.registerComponent(
+    LIST_UPDATE_SCREEN,
+    () => withNavigationProvider(WrapScreen(ListUpdateScreen, store)),
+    () => ListUpdateScreen,
+  );
   //modal screen
   Navigation.registerComponent(
     ALERT_NOTICE_PASSWORD,
@@ -543,7 +557,7 @@ export const registerScreens = store => {
     () => withNavigationProvider(WrapScreen(FilterHomeScreen, store)),
     () => FilterHomeScreen,
   );
-  
+
   //component screen
   Navigation.registerComponent(
     BUTTON_ICON_RIGHT_NAV,

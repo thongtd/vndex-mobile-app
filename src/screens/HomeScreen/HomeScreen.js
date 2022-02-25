@@ -16,6 +16,7 @@ import {
   COMMAND_SCREEN,
   FEEDBACK_SCREEN,
   HOME_SCREEN,
+  LIST_UPDATE_ACCOUNT_SCREEN,
   LOGIN_SCREEN,
   MODAL_FILTER_HOME,
   RATING_BUY_SELL_SCREEN,
@@ -23,6 +24,7 @@ import {
   STEP_1_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
   WALLET_SCREEN,
+  UPDATE_ACCOUNT_SCREEN,
 } from '../../navigation';
 import {
   pushSingleHiddenTopBarApp,
@@ -169,7 +171,7 @@ const HomeScreen = ({componentId}) => {
           switch (componentName) {
             case HOME_SCREEN:
               setIsLoading(true);
-              setActiveType("S");
+              setActiveType('S');
               getAdvertisments(
                 ActiveType,
                 ActiveSymbol,
