@@ -103,7 +103,7 @@ const Step3BuySellScreen = ({
       get(offerOrder, 'offerOrderId'),
     );
     useActionsP2p(dispatch).handleGetChatInfoP2p(get(offerOrder, 'offerOrderId'));
-
+      alert("ok");
     const ev = listenerEventEmitter('pushStep', dataConfirm => {
       setIsLoading(false);
       if (get(dataConfirm, 'isHasPayment') === false) {

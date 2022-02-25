@@ -11,6 +11,7 @@ const Banner = () => {
         height:210
     }}>
         <Swiper
+        autoplay
       dot={
         <View
           style={styles.dot}

@@ -531,7 +531,7 @@ const mapStatus = ({
     return {
       color: colors.app.sell,
       bg: colors.app.bgSell,
-      label: 'Khiếu lại',
+      label: 'Khiếu nại',
     };
   } else if (
     !isPaymentConfirm &&
