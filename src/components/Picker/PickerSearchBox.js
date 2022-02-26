@@ -25,12 +25,12 @@ const PickerSearchBox = ({
   const [source, setSource] = useState(data || []);
   var arrayholder = data || [];
   const handleClose = () => {
-    if (componentId) {
-      Navigation.dismissModal(componentId);
-    } else {
-      dismissAllModal();
-    }
-
+    // if (componentId) {
+    //   Navigation.dismissModal(componentId);
+    // } else {
+    //   dismissAllModal();
+    // }
+    dismissAllModal();
     // Navigation.dismissModal(componentId);
   };
   const searchFilterFunction = text => {

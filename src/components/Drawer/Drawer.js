@@ -61,7 +61,7 @@ const Drawer = ({componentId}) => {
         iconLeftSvg={icons.IcHistory}
         textLeft={'Lịch sử giao dịch'}
         onPress={() => {
-          pushTabBasedApp(3);
+          pushTabBasedApp(2);
         }}
       />
       <Button
