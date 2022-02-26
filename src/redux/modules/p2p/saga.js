@@ -8,6 +8,7 @@ import {
   all,
   takeEvery,
   select,
+  takeLatest,
 } from 'redux-saga/effects';
 import {
   GET_COUNTRIES,
@@ -45,6 +46,8 @@ import {
   GET_ADV_INFO,
   GET_COMMENTS_BY_USER_SUCCESS,
   GET_ADV_INFO_SUCCESS,
+  GET_FEE_TAX,
+  GET_FEE_TAX_SUCCESS,
 } from './actions';
 
 import {
@@ -747,6 +750,25 @@ export function* asyncGetAdvInfo({payload}) {
 export function* watchGetAdvInfo() {
   yield takeEvery(GET_ADV_INFO, asyncGetAdvInfo);
 }
+export function* asyncGetFeeTax({payload}) {
+  try {
+    const res = yield call(P2pService.getFeeTax,{
+      quantity:get(payload,"quantity"),
+      price:get(payload,"price"),
+    });
+    emitEventEmitter('doneApi', true);
+    if (get(res,"success")) {
+      // gọi lại danh sách rating ở đây nếu cần
+      yield put(createAction(GET_FEE_TAX_SUCCESS, get(res,"data")));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+
+export function* watchGetFeeTax() {
+  yield takeLatest(GET_FEE_TAX, asyncGetFeeTax);
+}
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
   yield all([fork(watchGetTrading)]);
@@ -776,4 +798,5 @@ export default function* () {
   yield all([fork(watchCreateCommentRating)]);
   yield all([fork(watchGetCommentsByUser)]);
   yield all([fork(watchGetAdvInfo)]);
+  yield all([fork(watchGetFeeTax)]);
 }

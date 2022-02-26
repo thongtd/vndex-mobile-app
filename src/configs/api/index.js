@@ -59,6 +59,7 @@ export const P2P_API = {
   CREATE_COMMENT_RATING: `${EXCHANGE_URL}api/v1/p2p-comment/create`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   GET_COMMENTS_BY_USER: `${EXCHANGE_URL}api/v1/p2p-comment/get-comments-by-recipients-user/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   GET_ADV_INFO: `${EXCHANGE_URL}api/v1/p2p-order/advertisment-general-info`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
+  GET_FEE_TAX:`${EXCHANGE_URL}api/v1/p2p-order/get-tax-fee`//?quantity=100000&price=1000
 };
 export const EXCHANGE_API = {
   CHECK_API: `${EXCHANGE_URL}api/health-check`,

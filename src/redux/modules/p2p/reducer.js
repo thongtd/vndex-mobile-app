@@ -18,6 +18,7 @@ import {
   GET_ADV_INFO_SUCCESS,
   GET_COMMENTS_BY_USER,
   GET_COMMENTS_BY_USER_SUCCESS,
+  GET_FEE_TAX_SUCCESS,
 } from './actions';
 import {get, set} from '../../../configs/utils';
 import i18n from 'react-native-i18n';
@@ -40,10 +41,11 @@ export const DEFAULT = {
   advertismentDetails: {},
   chatInfoP2p: {},
   chatHistory: {},
-  complainInfo:{},
-  complainProcess:{},
-  advInfo:{},
-  commentsByUser:[]
+  complainInfo: {},
+  complainProcess: {},
+  advInfo: {},
+  commentsByUser: [],
+  feeTax: {},
 };
 
 export default p2p = (state = DEFAULT, action = {}) => {
@@ -74,7 +76,7 @@ export default p2p = (state = DEFAULT, action = {}) => {
             get(payload, 'lastestPrice'),
         },
       };
-      
+
     case GET_MY_ADVERTISMENT_SUCCESS:
       if (get(payload, 'pageIndex') == 1) {
         set(state, 'myAdvertisments.source', []);
@@ -105,17 +107,22 @@ export default p2p = (state = DEFAULT, action = {}) => {
           ],
         },
       };
+    case GET_FEE_TAX_SUCCESS:
+      return {
+        ...state,
+        feeTax: payload,
+      };
     case GET_OFFER_ORDER_SUCCESS:
       return {
         ...state,
         offerOrder: payload,
       };
-      case GET_COMPLAIN_SUCCESS:
+    case GET_COMPLAIN_SUCCESS:
       return {
         ...state,
         complainInfo: payload,
       };
-      case GET_COMPLAIN_PROCESS_SUCCESS:
+    case GET_COMPLAIN_PROCESS_SUCCESS:
       return {
         ...state,
         complainProcess: payload,
@@ -134,10 +141,10 @@ export default p2p = (state = DEFAULT, action = {}) => {
           ...state,
           chatHistory: {
             ...state.chatHistory,
-            source: _.uniqBy([
-              ...get(payload, 'source'),
-              ...get(state.chatHistory, 'source'),
-            ],'id'),
+            source: _.uniqBy(
+              [...get(payload, 'source'), ...get(state.chatHistory, 'source')],
+              'id',
+            ),
           },
         };
       }
@@ -157,16 +164,16 @@ export default p2p = (state = DEFAULT, action = {}) => {
         ...state,
         offerOrderId: payload,
       };
-      case GET_ADV_INFO_SUCCESS:
-        return {
-          ...state,
-          advInfo: payload,
-        };
-        case GET_COMMENTS_BY_USER_SUCCESS:
-        return {
-          ...state,
-          commentsByUser: payload,
-        };
+    case GET_ADV_INFO_SUCCESS:
+      return {
+        ...state,
+        advInfo: payload,
+      };
+    case GET_COMMENTS_BY_USER_SUCCESS:
+      return {
+        ...state,
+        commentsByUser: payload,
+      };
     case GET_ADVERTISMENT_SUCCESS:
       return {
         ...state,

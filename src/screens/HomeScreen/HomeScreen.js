@@ -176,16 +176,15 @@ const HomeScreen = ({componentId}) => {
     const screenEventListener =
       Navigation.events().registerComponentDidAppearListener(
         ({componentId, componentName}) => {
-          jwtDecode().then(user => {
-            if (get(user, 'UserId')) {
-              dispatch(createAction(CHECK_IS_LOGIN, get(user, 'UserId')));
-            }else{
-              removeTokenAndUserInfo();
-              dispatch(createAction(CHECK_STATE_LOGIN, false));
-              dispatch(createAction(SET_USER_INFO, null));
-              // pushTabBasedApp();
-            }
-          });
+          // jwtDecode().then(user => {
+          //   if (get(user, 'UserId')) {
+          //     dispatch(createAction(CHECK_IS_LOGIN, get(user, 'UserId')));
+          //   }else{
+          //     removeTokenAndUserInfo();
+          //     dispatch(createAction(CHECK_STATE_LOGIN, false));
+          //     dispatch(createAction(SET_USER_INFO, null));
+          //   }
+          // });
 
           switch (componentName) {
             case HOME_SCREEN:

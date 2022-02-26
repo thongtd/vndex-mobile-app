@@ -2,6 +2,7 @@ import {isEmpty, isNumber} from 'lodash';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {createAction} from 'redux-actions';
 import Button from '../../../components/Button/Button';
 import Container from '../../../components/Container';
 import ItemList from '../../../components/Item/ItemList';
@@ -23,6 +24,10 @@ import {
 } from '../../../navigation';
 import {dismissAllModal, showModal} from '../../../navigation/Navigation';
 import {useActionsP2p} from '../../../redux';
+import {
+  actionsReducerP2p,
+  GET_FEE_TAX,
+} from '../../../redux/modules/p2p/actions';
 import ProgressSteps from './components/ProgressSteps';
 import Step1AddNewAds from './components/Step1AddNewAds';
 import Step2AddNewAds from './components/Step2AddNewAds';
@@ -55,7 +60,7 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
   const [activeType, SetActiveType] = useState(BUY);
   const [checked, setChecked] = useState('FIXED_PRICE');
   const marketInfo = useSelector(state => state.p2p.marketInfo);
-  console.log('marketInfoitem: ', marketInfo);
+  // console.log('marketInfoitem: ', marketInfo);
   const [price, setPrice] = useState(
     formatCurrency(
       get(marketInfo, 'lastestPrice'),
@@ -90,6 +95,31 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
   const [ActiveFiat, setActiveFiat] = useState(
     get(tradingMarket, 'paymentUnit[0]'),
   );
+  useEffect(() => {
+    if (isNumber(quantity.str2Number()) && isNumber(price.str2Number())) {
+      useActionsP2p(dispatch).handleGetFeeTax({
+        quantity: quantity.str2Number(),
+        price: price.str2Number(),
+      });
+    }
+
+    return () => {};
+  }, [price, quantity]);
+
+  useEffect(() => {
+    dispatch(
+      actionsReducerP2p.getFeeTaxSuccess({
+        feePercent: 0,
+        feeAmount: 0,
+        taxPercent: 0,
+        taxAmount: 0,
+        taxFeeByCurrency: 'SMAT',
+      }),
+    );
+
+    return () => {};
+  }, []);
+
   const [percentPrice, setPercentPrice] = useState(100);
   useEffect(() => {
     useActionsP2p(dispatch).handleGetPaymentMethodByAcc();
@@ -212,7 +242,7 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
       //step3
       setComment(String(get(_i, 'note') || ''));
       setSelectionKYC(get(_i, 'requiredKyc'));
-      setCheckedStatus(get(_i,"isOpenForTrading")?'first':'second')
+      setCheckedStatus(get(_i, 'isOpenForTrading') ? 'first' : 'second');
     }
   }, [advertismentDetails]);
   const renderLayout = ({
@@ -233,7 +263,7 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
     isSelectedRegister,
     checkedStatus,
     paymentMethodIdData,
-    componentId
+    componentId,
   }) => {
     switch (step) {
       case 0:
@@ -474,21 +504,30 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
 
   const submitNextStep = () => {
     if (step == 0) {
-      if(!get(UserInfo,"twoFactorEnabled")){
-        return toast("Vui lòng bật thiết lập 2FA để đăng quảng cáo");
+      if (!get(UserInfo, 'twoFactorEnabled')) {
+        return toast('Vui lòng bật thiết lập 2FA để đăng quảng cáo');
       }
-      if(!get(UserInfo, 'customerMetaData.isKycUpdated')){
-        return toast("Vui lòng KYC tài khoản để đăng quảng cáo");
+      if (!get(UserInfo, 'customerMetaData.isKycUpdated')) {
+        return toast('Vui lòng KYC tài khoản để đăng quảng cáo');
       }
-      
+
       if (price.str2Number() <= 0 || isEmpty(price)) {
         return toast('Vui lòng nhập giá của bạn phải lớn hơn 0');
       } else if (
         price.str2Number() > 0 &&
-        (price.str2Number() < (get(marketInfo, 'lastestPrice') * get(marketInfo,"minPrice")) / 100 ||
-          price.str2Number() > (get(marketInfo, 'lastestPrice') * get(marketInfo,"maxPrice")) / 100)
+        (price.str2Number() <
+          (get(marketInfo, 'lastestPrice') * get(marketInfo, 'minPrice')) /
+            100 ||
+          price.str2Number() >
+            (get(marketInfo, 'lastestPrice') * get(marketInfo, 'maxPrice')) /
+              100)
       ) {
-        return toast(`Giá của bạn không được vượt quá giới hạn ${get(marketInfo,"minPrice")}% đến ${get(marketInfo,"maxPrice")}%`);
+        return toast(
+          `Giá của bạn không được vượt quá giới hạn ${get(
+            marketInfo,
+            'minPrice',
+          )}% đến ${get(marketInfo, 'maxPrice')}%`,
+        );
       }
       SetStep(step + 1);
     } else if (step == 1) {
@@ -513,10 +552,8 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
         return toast(
           'Giới hạn lệnh tối đa không được nhỏ hơn hoặc bằng giới hạn tối thiểu',
         );
-      }else if(isEmpty(paymentMethodIdData)){
-        return toast(
-          'Vui lòng chọn ít nhất 1 phương thức thanh toán',
-        );
+      } else if (isEmpty(paymentMethodIdData)) {
+        return toast('Vui lòng chọn ít nhất 1 phương thức thanh toán');
       }
       SetStep(step + 1);
     } else if (step == 2) {
@@ -551,11 +588,7 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
       componentId={componentId}
       isTopBar
       isScroll
-      title={
-        isEdit
-          ? 'Chỉnh sửa quảng cáo'
-          : 'Đăng quảng cáo mới'
-      }>
+      title={isEdit ? 'Chỉnh sửa quảng cáo' : 'Đăng quảng cáo mới'}>
       <Layout spaceHorizontal={spacingApp}>
         <ProgressSteps step={step} title={title[step]} />
       </Layout>
@@ -577,7 +610,7 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
         isSelectedRegister,
         checkedStatus,
         paymentMethodIdData,
-        componentId
+        componentId,
       })}
     </Container>
   );

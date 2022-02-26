@@ -20,8 +20,12 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button/Button';
 import {pushSingleScreenApp, STEP_2_BUY_SELL_SCREEN} from '../../../navigation';
 import {useActionsP2p} from '../../../redux';
+import {
+  actionsReducerP2p,
+  GET_FEE_TAX,
+} from '../../../redux/modules/p2p/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {get, isEmpty} from 'lodash';
+import {get, isEmpty, isNumber} from 'lodash';
 import {
   formatCurrency,
   formatNumberOnChange,
@@ -35,7 +39,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
   const advertisment = useSelector(state => state.p2p.advertisment);
   const currencyList = useSelector(state => state.market.currencyList);
   const cryptoWallet = useSelector(state => state.market.cryptoWallet);
-
+  const feeTax = useSelector(state => state.p2p.feeTax);
   const [timer, setTimer] = useState(30);
   const [Pay, setPay] = useState('');
   const [Receive, setReceive] = useState('');
@@ -48,7 +52,37 @@ const Step1BuySellScreen = ({componentId, item}) => {
     // useActionsP2p(dispatch).handleResetOffer();
     return () => {};
   }, [dispatch, item]);
+  useEffect(() => {
+    if (get(item, 'side') == BUY) {
+      if (isNumber(Receive.str2Number()) && isNumber(Pay.str2Number())) {
+        
+        useActionsP2p(dispatch).handleGetFeeTax({
+          quantity:Pay.str2Number(),
+          price: get(item,"price"),
+        });
+      }
+    } else {
+      useActionsP2p(dispatch).handleGetFeeTax({
+        quantity: Receive.str2Number(),
+        price: get(item,"price"),
+      });
+    }
 
+    return () => {};
+  }, [Receive, Pay, item]);
+  useEffect(() => {
+    dispatch(
+      actionsReducerP2p.getFeeTaxSuccess({
+        feePercent: 0,
+        feeAmount: 0,
+        taxPercent: 0,
+        taxAmount: 0,
+        taxFeeByCurrency: 'SMAT',
+      }),
+    );
+
+    return () => {};
+  }, []);
   useEffect(() => {
     var intervalId;
     if (isTimer && timer) {
@@ -330,10 +364,10 @@ const Step1BuySellScreen = ({componentId, item}) => {
                     currencyList,
                   )
                 : formatCurrency(
-                  get(
-                    getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
-                    'available',
-                  ),
+                    get(
+                      getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
+                      'available',
+                    ),
                     get(advertisment, 'symbol'),
                     currencyList,
                   ),
@@ -347,10 +381,10 @@ const Step1BuySellScreen = ({componentId, item}) => {
                     currencyList,
                   )
                 : formatCurrency(
-                  get(
-                    getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
-                    'available',
-                  ) * get(advertisment, 'price'),
+                    get(
+                      getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
+                      'available',
+                    ) * get(advertisment, 'price'),
                     get(advertisment, 'paymentUnit'),
                     currencyList,
                   ),
@@ -371,28 +405,23 @@ const Step1BuySellScreen = ({componentId, item}) => {
           }
         />
         <Layout space={5} isSpaceBetween>
-          <Layout>
+          <Layout type='column'>
             <TextFnx color={colors.app.textDisabled} size={12}>
-              Phí{'  '}{' '}
-              <TextFnx size={12} color={colors.app.textContentLevel2}>
-                {formatCurrency(
-                  Pay.str2Number() * get(advertisment, 'fee'),
-                  get(advertisment, 'paymentUnit'),
-                  currencyList,
-                )}{' '}
-                {get(item, 'side') == BUY
-                  ? get(advertisment, 'symbol')
-                  : get(advertisment, 'paymentUnit')}
-              </TextFnx>
+              Phí <TextFnx  color={colors.app.textDisabled} size={11}>({get(feeTax,"feePercent") || '0'}%)</TextFnx>
+              :
             </TextFnx>
+            <TextFnx spaceTop={8} size={12} color={colors.app.textContentLevel2}>
+              {formatCurrency(get(feeTax,"feeAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) || '0'} {get(feeTax, 'taxFeeByCurrency')}
+              </TextFnx>
           </Layout>
-          <Layout>
-            <TextFnx color={colors.app.textDisabled} size={12}>
-              Thuế{'  '}{' '}
-              <TextFnx size={12} color={colors.app.textContentLevel2}>
-                0 {get(advertisment, 'symbol')}
-              </TextFnx>
+          <Layout type='column'>
+          <TextFnx color={colors.app.textDisabled} size={12}>
+              Thuế <TextFnx  color={colors.app.textDisabled} size={11}>({get(feeTax,"taxPercent") || '0'}%)</TextFnx>
+              :
             </TextFnx>
+            <TextFnx spaceTop={8} size={12} color={colors.app.textContentLevel2}>
+              {formatCurrency(get(feeTax,"taxAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) || '0'} {get(feeTax, 'taxFeeByCurrency')}
+              </TextFnx>
           </Layout>
         </Layout>
         <Layout spaceTop={10} isSpaceBetween>
@@ -530,20 +559,23 @@ const Step1BuySellScreen = ({componentId, item}) => {
                 'Bạn không thể đặt lệnh với khối lượng lớn hơn khối lượng của lệnh quảng cáo',
               );
             } else if (
-              ( get(advertisment, 'side') === SELL &&
-              Receive.str2Number() >
-                get(
-                  getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
-                  'available',
-                )) || ( get(advertisment, 'side') === BUY &&
+              (get(advertisment, 'side') === SELL &&
+                Receive.str2Number() >
+                  get(
+                    getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
+                    'available',
+                  )) ||
+              (get(advertisment, 'side') === BUY &&
                 Pay.str2Number() >
                   get(
                     getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
                     'available',
                   ))
-             ) {
-               return toast('Bạn không thể đặt lệnh với khối lượng lớn hơn số dư khả dụng');
-             }
+            ) {
+              return toast(
+                'Bạn không thể đặt lệnh với khối lượng lớn hơn số dư khả dụng',
+              );
+            }
             pushSingleScreenApp(componentId, STEP_2_BUY_SELL_SCREEN, {
               item,
               data: {

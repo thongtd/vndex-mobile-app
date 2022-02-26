@@ -185,4 +185,9 @@ export const P2pService = {
     let response = await httpService.post(url, data);
     return response.data;
   },
+  getFeeTax: async data => {
+    let url = `${P2P_API.GET_FEE_TAX}?quantity=${data.quantity}&price=${data.price}`;
+    let response = await httpService.get_without_token(url, data);
+    return response;
+  },
 };
