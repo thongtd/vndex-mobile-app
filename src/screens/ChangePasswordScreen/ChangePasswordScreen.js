@@ -9,7 +9,7 @@ import { constant } from '../../configs/constant';
 import TextFnx from '../../components/Text/TextFnx';
 import NoteImportant from '../../components/Text/NoteImportant';
 import { useDispatch, useSelector } from "react-redux"
-import { CHECK_STATE_LOGIN } from '../../redux/modules/authentication/actions';
+import { CHECK_STATE_LOGIN, SET_USER_INFO } from '../../redux/modules/authentication/actions';
 import { pushSingleScreenApp, LOGIN_SCREEN } from '../../navigation';
 import colors from '../../configs/styles/colors';
 const ChangePasswordScreen = ({
@@ -48,6 +48,7 @@ const ChangePasswordScreen = ({
                 if (get(response, "status") === 'ok') {
                     removeTokenAndUserInfo();
                     dispatcher(createAction(CHECK_STATE_LOGIN, false));
+                    dispatcher(createAction(SET_USER_INFO, null));
                     pushSingleScreenApp(componentId, LOGIN_SCREEN);
                     toast(`Your password has been changed successfully`.t())
                 } else {

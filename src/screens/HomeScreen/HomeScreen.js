@@ -29,6 +29,7 @@ import {
 import {
   pushSingleHiddenTopBarApp,
   pushSingleScreenApp,
+  pushTabBasedApp,
   showModal,
 } from '../../navigation/Navigation';
 import {useSelector} from 'react-redux';
@@ -58,20 +59,27 @@ const navbarHeight = screenHeight - windowHeight + StatusBar.currentHeight;
 import {
   createAction,
   formatCurrency,
+  jwtDecode,
   listenerEventEmitter,
   removeEventEmitter,
+  removeTokenAndUserInfo,
   resetScreenGlobal,
   toast,
 } from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
 import {useDispatch} from 'react-redux';
-import {GET_USERS_KYC} from '../../redux/modules/authentication/actions';
+import {
+  CHECK_IS_LOGIN,
+  CHECK_STATE_LOGIN,
+  GET_USERS_KYC,
+  SET_USER_INFO,
+} from '../../redux/modules/authentication/actions';
 import Empty from '../../components/Item/Empty';
 
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
   const dispatch = useDispatch();
-  const [ActiveSymbol, setActiveSymbol] = useState('AIFT');
+  const [ActiveSymbol, setActiveSymbol] = useState('DIC');
   const [isRefresh, setRefresh] = useState(false);
   const [ActiveType, setActiveType] = useState('S');
   const [isLoading, setIsLoading] = useState(true);
@@ -82,9 +90,9 @@ const HomeScreen = ({componentId}) => {
 
   const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
-    if (size(get(tradingMarket, 'assets')) > 0) {
-      setActiveSymbol(get(tradingMarket, 'assets')[0]);
-    }
+    // if (size(get(tradingMarket, 'assets')) > 0) {
+    //   setActiveSymbol(get(tradingMarket, 'assets')[0]);
+    // }
     dispatch(createAction(GET_USERS_KYC, get(UserInfo, 'id')));
     // useActionsP2p(dispatch).handleGetUserKyc(get(UserInfo, 'id'));
     return () => {};
@@ -168,6 +176,17 @@ const HomeScreen = ({componentId}) => {
     const screenEventListener =
       Navigation.events().registerComponentDidAppearListener(
         ({componentId, componentName}) => {
+          jwtDecode().then(user => {
+            if (get(user, 'UserId')) {
+              dispatch(createAction(CHECK_IS_LOGIN, get(user, 'UserId')));
+            }else{
+              removeTokenAndUserInfo();
+              dispatch(createAction(CHECK_STATE_LOGIN, false));
+              dispatch(createAction(SET_USER_INFO, null));
+              // pushTabBasedApp();
+            }
+          });
+
           switch (componentName) {
             case HOME_SCREEN:
               setIsLoading(true);

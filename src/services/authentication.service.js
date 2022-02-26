@@ -4,11 +4,11 @@ import {size} from 'lodash';
 import {storageService} from './storage.service';
 import {constant} from '../configs/constant';
 import {get} from '../configs/utils';
+import axios from 'axios';
 
 export const authService = {
   getUserInfo: async identityUserId => {
     let response = await httpService.post(EXCHANGE_API.GET_USER_INFO, {
-      
       identityUserId,
     });
     console.log('response: ', response);
@@ -200,7 +200,6 @@ export const authService = {
         ipAddress,
       };
       let data = await httpService.post_without_token(
-        
         EXCHANGE_API.LOGIN,
         login_data,
       );
@@ -313,5 +312,29 @@ export const authService = {
       );
       return response;
     } catch (error) {}
+  },
+  checkIsLogin: async userId => {
+    try {
+      let token = await storageService.getItem('auth_token');
+      let headers = new Headers({
+        Authorization: 'Bearer ' + get(token,"authToken"),
+        'Content-Type': 'application/json',
+      });
+      console.log(token, 'token check');
+      if (get(token, 'authToken')) {
+        
+        let url = `${EXCHANGE_API.KEEP_LOGIN}${userId}`;
+        console.log('url check: ', url);
+        // console.log(url, data, 'url,data autoken');
+        return axios.post(url, null, {
+          headers: headers.map,
+        });
+      }
+      return null;
+    } catch (error) {
+      console.log('error check: ', error);
+      
+    }
+   
   },
 };

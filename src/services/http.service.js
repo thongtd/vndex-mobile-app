@@ -2,6 +2,7 @@ import axios from 'axios';
 import {storageService} from './storage.service';
 import {constant} from '../configs/constant';
 import publicIP from 'react-native-public-ip';
+import { get } from 'lodash';
 // import DeviceInfo from 'react-native-device-info';
 export const httpService = {
   get: async url => {
@@ -10,11 +11,11 @@ export const httpService = {
       let token = await storageService.getItem('auth_token');
       console.log('token: ', token);
       let headers = new Headers({
-        Authorization: 'Bearer ' + token.authToken,
+        Authorization: 'Bearer ' + get(token,"authToken"),
         'Content-Type': 'application/json;charset=UTF-8',
         'FNX-IP-ADDRESS': publicIp,
       });
-      console.log(token.authToken, 'authToken');
+      console.log(get(token,"authToken"), 'authToken');
       return axios.get(url, {
         headers: headers.map,
       });
@@ -25,11 +26,11 @@ export const httpService = {
       let token = await storageService.getItem('auth_token');
       let publicIp = await publicIP();
       let headers = new Headers({
-        Authorization: 'Bearer ' + token.authToken,
+        Authorization: 'Bearer ' + get(token,"authToken"),
         'Content-Type': 'application/json',
         'FNX-IP-ADDRESS': publicIp,
       });
-      console.log(token.authToken, 'header autoken');
+      console.log(get(token,"authToken"), 'header autoken');
       console.log(url, data, 'url,data autoken');
       return axios.post(url, data, {
         headers: headers.map,
@@ -43,10 +44,10 @@ export const httpService = {
       let token = await storageService.getItem('auth_token');
       let publicIp = await publicIP();
       let headers = new Headers({
-        Authorization: 'Bearer ' + token.authToken,
+        Authorization: 'Bearer ' + get(token,"authToken"),
         'Content-Type': 'multipart/form-data'
       });
-      console.log(token.authToken, 'header autoken');
+      console.log(get(token,"authToken"), 'header autoken');
       console.log(url, formData, 'url,data autoken');
       return axios.post(url, formData, {
         headers: headers.map,

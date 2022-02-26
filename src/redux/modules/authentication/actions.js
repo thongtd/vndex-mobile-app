@@ -18,6 +18,7 @@ export const LANGUAGES = `${CONTEXT}/LANGUAGES`;
 export const CHECK_PASSCODE = `${CONTEXT}/CHECK_PASSCODE`;
 export const SET_USER_INFO = `${CONTEXT}/SET_USER_INFO`;
 export const SET_FA_CODE = `${CONTEXT}/SET_FA_CODE`;
+export const CHECK_IS_LOGIN = `${CONTEXT}/CHECK_IS_LOGIN`;
 
 
 
