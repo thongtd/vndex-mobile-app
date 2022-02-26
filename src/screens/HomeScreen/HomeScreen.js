@@ -189,7 +189,6 @@ const HomeScreen = ({componentId}) => {
           switch (componentName) {
             case HOME_SCREEN:
               setIsLoading(true);
-              setActiveType('S');
               getAdvertisments(
                 ActiveType,
                 ActiveSymbol,
@@ -209,7 +208,7 @@ const HomeScreen = ({componentId}) => {
       filerHomeEvent.remove();
       screenEventListener.remove();
     };
-  }, []);
+  }, [ActiveSymbol,ActiveType]);
 
   useEffect(() => {
     useActionsP2p(dispatch).handleGetTradingMarket();

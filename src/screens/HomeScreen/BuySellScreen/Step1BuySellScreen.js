@@ -411,7 +411,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
               :
             </TextFnx>
             <TextFnx spaceTop={8} size={12} color={colors.app.textContentLevel2}>
-              {formatCurrency(get(feeTax,"feeAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) || '0'} {get(feeTax, 'taxFeeByCurrency')}
+              {get(item,"symbol") !== 'SMAT'?formatCurrency(get(feeTax,"feeAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) : '0'} {get(feeTax, 'taxFeeByCurrency')}
               </TextFnx>
           </Layout>
           <Layout type='column'>
@@ -420,7 +420,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
               :
             </TextFnx>
             <TextFnx spaceTop={8} size={12} color={colors.app.textContentLevel2}>
-              {formatCurrency(get(feeTax,"taxAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) || '0'} {get(feeTax, 'taxFeeByCurrency')}
+              {get(item,"symbol") !== 'SMAT'?formatCurrency(get(feeTax,"taxAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) : '0'} {get(feeTax, 'taxFeeByCurrency')}
               </TextFnx>
           </Layout>
         </Layout>

@@ -180,9 +180,9 @@ const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...res
       </Layout>
 
       <Layout isSpaceBetween isLineCenter spaceTop={10}>
-        <TextFnx color={colors.description}>Phí <TextFnx  color={colors.description} size={12}>( {get(feeTax,"feePercent") || '0'}% )</TextFnx></TextFnx>
+        <TextFnx color={colors.description}>Phí <TextFnx  color={colors.description} size={12}>( {get(dataState,"symbol") !== "SMAT"?get(feeTax,"feePercent") : '0'}% )</TextFnx></TextFnx>
         <TextFnx color={colors.greyLight}>
-          {formatCurrency(get(feeTax,"feeAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) || '0'} {get(feeTax, 'taxFeeByCurrency')}
+          {get(dataState,"symbol") !== "SMAT"?formatCurrency(get(feeTax,"feeAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) : '0'} {get(feeTax, 'taxFeeByCurrency')}
         </TextFnx>
       </Layout>
       <Layout
@@ -193,9 +193,9 @@ const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...res
           borderBottomWidth: 1,
           borderColor: colors.app.lineSetting,
         }}>
-        <TextFnx color={colors.description}>Thuế <TextFnx  color={colors.description} size={12}>( {get(feeTax,"taxPercent") || '0'}% )</TextFnx></TextFnx>
+        <TextFnx color={colors.description}>Thuế <TextFnx  color={colors.description} size={12}>( {get(dataState,"symbol") !== "SMAT"?get(feeTax,"taxPercent") : '0'}% )</TextFnx></TextFnx>
         <TextFnx color={colors.greyLight}>
-          {formatCurrency(get(feeTax,"taxAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) || '0'} {get(feeTax, 'taxFeeByCurrency')}
+          {get(dataState,"symbol") !== "SMAT"?formatCurrency(get(feeTax,"taxAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) : '0'} {get(feeTax, 'taxFeeByCurrency')}
         </TextFnx>
       </Layout>
 
