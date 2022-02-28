@@ -421,6 +421,7 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
               quantity,
               paymentMethodData,
               activeTimeToLive,
+              activeType
             }}
             onRemovePaymentMethod={item => {
               let arr = paymentMethodData.filter(

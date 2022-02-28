@@ -18,7 +18,7 @@ import Input from '../../../../components/Input';
 import ItemList from '../../../../components/Item/ItemList';
 import Layout from '../../../../components/Layout/Layout';
 import TextFnx from '../../../../components/Text/TextFnx';
-import {constant, spacingApp} from '../../../../configs/constant';
+import {BUY, constant, SELL, spacingApp} from '../../../../configs/constant';
 import icons from '../../../../configs/icons';
 import colors from '../../../../configs/styles/colors';
 import {
@@ -29,11 +29,21 @@ import {
   size,
   toast,
 } from '../../../../configs/utils';
-import {PAYMENT_METHOD_SCREEN, PICKER_SEARCH, pushSingleScreenApp} from '../../../../navigation';
+import {
+  PAYMENT_METHOD_SCREEN,
+  PICKER_SEARCH,
+  pushSingleScreenApp,
+} from '../../../../navigation';
 import {dismissAllModal, showModal} from '../../../../navigation/Navigation';
 import {useActionsP2p} from '../../../../redux';
 
-const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...rest}) => {
+const Step2AddNewAds = ({
+  submitNextStep,
+  bntClose,
+  componentId,
+  dataState,
+  ...rest
+}) => {
   const actionSheetRef = useRef(null);
   const marketInfo = useSelector(state => state.p2p.marketInfo);
   const [isPushPayment, setIsPushPayment] = useState(false);
@@ -43,17 +53,57 @@ const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...res
   const onSubmitNextStep = () => {
     submitNextStep();
   };
+  const checkTax = (isPercent, stateData = dataState, tax = feeTax) => {
+    if (
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'activeType') == BUY) ||
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'activeType') == BUY &&
+        isPercent) ||
+      (get(stateData, 'symbol') !== 'SMAT' &&
+        get(stateData, 'activeType') == BUY)
+    ) {
+      return '0';
+    } else if (get(stateData, 'activeType') == SELL && isPercent) {
+      return get(tax, 'taxPercent');
+    } else if (get(stateData, 'activeType') == SELL) {
+      return formatCurrency(
+        get(tax, 'taxAmount'),
+        get(tax, 'taxFeeByCurrency'),
+        currencyList,
+      );
+    }
+  };
+  const checkFee = (isPercent, stateData = dataState, fee = feeTax) => {
+    if (
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'activeType') == BUY) ||
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'activeType') == BUY &&
+        isPercent)
+    ) {
+      return '0';
+    } else if (isPercent) {
+      return get(fee, 'feePercent');
+    } else {
+      return formatCurrency(
+        get(fee, 'feeAmount'),
+        get(fee, 'taxFeeByCurrency'),
+        currencyList,
+      );
+    }
+  };
   useEffect(() => {
-    if(isPushPayment){
-      pushSingleScreenApp(componentId,PAYMENT_METHOD_SCREEN)
+    if (isPushPayment) {
+      pushSingleScreenApp(componentId, PAYMENT_METHOD_SCREEN);
       setIsPushPayment(false);
     }
-  
+
     return () => {
       // setIsPushPayment(false);
     };
   }, []);
-  
+
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
 
   return (
@@ -66,15 +116,19 @@ const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...res
           onChangeText={txt => rest.onQuantityChange(txt)}
           value={get(dataState, 'quantity')}
           hasValue
-          onBtnRight={() => rest.onBtnAll(formatCurrency(
-            get(
-              getItemWallet(cryptoWallet, get(dataState, 'symbol')),
-              'available',
-            ),
-            get(dataState, 'symbol'),
-            currencyList,
-          ))}
-          keyboardType='decimal-pad'
+          onBtnRight={() =>
+            rest.onBtnAll(
+              formatCurrency(
+                get(
+                  getItemWallet(cryptoWallet, get(dataState, 'symbol')),
+                  'available',
+                ),
+                get(dataState, 'symbol'),
+                currencyList,
+              ),
+            )
+          }
+          keyboardType="decimal-pad"
           placeholder="1000"
           styleBorder={{height: 'auto'}}
           style={{fontSize: 16, color: colors.text}}
@@ -116,7 +170,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...res
           spaceVertical={8}
           styleBorder={{height: 'auto'}}
           hasValue
-          keyboardType='decimal-pad'
+          keyboardType="decimal-pad"
           value={get(dataState, 'minOrder')}
           onChangeText={txt => rest.onMinOrderChange(txt)}
           placeholder={`${formatCurrency(
@@ -146,7 +200,7 @@ const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...res
         />
         <Input
           spaceVertical={8}
-          keyboardType='decimal-pad'
+          keyboardType="decimal-pad"
           value={get(dataState, 'maxOrder')}
           onChangeText={txt => rest.onMaxOrderChange(txt)}
           styleBorder={{height: 'auto'}}
@@ -180,9 +234,17 @@ const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...res
       </Layout>
 
       <Layout isSpaceBetween isLineCenter spaceTop={10}>
-        <TextFnx color={colors.description}>Phí <TextFnx  color={colors.description} size={12}>( {get(dataState,"symbol") !== "SMAT"?get(feeTax,"feePercent") : '0'}% )</TextFnx></TextFnx>
+        <TextFnx color={colors.description}>
+          Phí{' '}
+          <TextFnx color={colors.description} size={12}>
+            ({' '}
+            {checkFee(true)}
+            % )
+          </TextFnx>
+        </TextFnx>
         <TextFnx color={colors.greyLight}>
-          {get(dataState,"symbol") !== "SMAT"?formatCurrency(get(feeTax,"feeAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) : '0'} {get(feeTax, 'taxFeeByCurrency')}
+          {checkFee()}{' '}
+          {get(feeTax, 'taxFeeByCurrency')}
         </TextFnx>
       </Layout>
       <Layout
@@ -193,9 +255,14 @@ const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...res
           borderBottomWidth: 1,
           borderColor: colors.app.lineSetting,
         }}>
-        <TextFnx color={colors.description}>Thuế <TextFnx  color={colors.description} size={12}>( {get(dataState,"symbol") !== "SMAT"?get(feeTax,"taxPercent") : '0'}% )</TextFnx></TextFnx>
+        <TextFnx color={colors.description}>
+          Thuế{' '}
+          <TextFnx color={colors.description} size={12}>
+            ( {checkTax(true)}% )
+          </TextFnx>
+        </TextFnx>
         <TextFnx color={colors.greyLight}>
-          {get(dataState,"symbol") !== "SMAT"?formatCurrency(get(feeTax,"taxAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) : '0'} {get(feeTax, 'taxFeeByCurrency')}
+          {checkTax()} {get(feeTax, 'taxFeeByCurrency')}
         </TextFnx>
       </Layout>
 
@@ -301,7 +368,6 @@ const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...res
           onMomentumScrollEnd={() =>
             actionSheetRef.current?.handleChildScrollEnd()
           }>
-           
           {paymentMethods &&
             size(paymentMethods) > 0 &&
             paymentMethods.map((item, index) => {
@@ -378,13 +444,16 @@ const Step2AddNewAds = ({submitNextStep, bntClose,componentId, dataState, ...res
                 </TouchableOpacity>
               );
             })}
-            <Button onPress={()=>{
-              pushSingleScreenApp(componentId,PAYMENT_METHOD_SCREEN)
+          <Button
+            onPress={() => {
+              pushSingleScreenApp(componentId, PAYMENT_METHOD_SCREEN);
               // setIsPushPayment(true)
               actionSheetRef.current?.hide();
-              }} isNormal title={"Thêm phương thức"} />
+            }}
+            isNormal
+            title={'Thêm phương thức'}
+          />
         </ScrollView>
-        
       </BottomSheet>
     </View>
   );
