@@ -66,7 +66,7 @@ import {
   resetScreenGlobal,
   toast,
 } from '../../configs/utils';
-import {useActionsP2p} from '../../redux';
+import {useActionsP2p, useActionsAuthen} from '../../redux';
 import {useDispatch} from 'react-redux';
 import {
   CHECK_IS_LOGIN,
@@ -185,7 +185,8 @@ const HomeScreen = ({componentId}) => {
           //     dispatch(createAction(SET_USER_INFO, null));
           //   }
           // });
-
+          
+          useActionsAuthen(dispatch).handleGetUserKyc(get(UserInfo, 'id'));
           switch (componentName) {
             case HOME_SCREEN:
               setIsLoading(true);
@@ -208,7 +209,7 @@ const HomeScreen = ({componentId}) => {
       filerHomeEvent.remove();
       screenEventListener.remove();
     };
-  }, [ActiveSymbol,ActiveType]);
+  }, [ActiveSymbol, ActiveType]);
 
   useEffect(() => {
     useActionsP2p(dispatch).handleGetTradingMarket();

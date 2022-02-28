@@ -1,6 +1,6 @@
 import {StyleSheet, View, FlatList} from 'react-native';
 import Container from '../../components/Container';
-import React from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import Layout from '../../components/Layout/Layout';
 import {fontSize} from '../../configs/constant';
 import Icon from '../../components/Icon';
@@ -14,15 +14,18 @@ import {
   pushSingleScreenApp,
   UPDATE_ACCOUNT_SCREEN,
 } from '../../navigation';
+import {useActionsAuthen, useActionsP2p} from '../../redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {get, size} from 'lodash';
 
 const data = [
   {
     text1: 'Nhà đầu tư chuyên nghiệp',
     text2: 'Đã duyệt',
     isReply: true,
-    date: '2021-11-07',
+    // date: '2021-11-07',
     ic: 'envelope-open',
-    isShowList: true,
+    // isShowList: true,
   },
   {
     text1: 'Nhà đầu tư chuyên nghiệp',
@@ -36,20 +39,89 @@ const data = [
   {
     text1: 'Tổ chức phát hành',
     text2: 'Chờ xét duyệt',
-    isReply: false,
-    date: '2021-11-07',
+    isReply: true,
+    // date: '2021-11-07',
     ic: 'envelope-open',
-    isShowList: true,
+    // isShowList: true,
   },
 ];
 
 const ListUpdateAccountScreen = ({componentId}) => {
+  const dispatch = useDispatch();
+  const userInfo = useSelector(state => state.authentication.userInfo);
+  const userKyc = useSelector(state => state.authentication.userKyc);
+  const allCustomerType = useSelector(state => state.p2p.allCustomerType);
+  console.log('allCustomerType: ', allCustomerType);
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetAllCustomerType();
+    useActionsAuthen(dispatch).handleGetUserKyc(get(userInfo, 'id'));
+    return () => {};
+  }, []);
+  const handleCheck = it => {
+    if (size(get(userKyc, 'identityUserCustomerTypes')) > 0) {
+      get(userKyc, 'identityUserCustomerTypes').map((item, index) => {
+        if (get(item, 'customerTypeId') == get(it, 'id')) {
+          it.approved = get(item, 'approved');
+        }
+      });
+    }
+    if (get(it, 'approved')) {
+      return (
+        <Button
+          isTitle
+          title={'Đã duyệt'}
+          spaceHorizontal={10}
+          size={fontSize.f14}
+          color={colors.cl8EC393}
+          style={{
+            backgroundColor: colors.cl28382E,
+            borderRadius: 5,
+          }}
+          onTitle={() => {}}
+        />
+      );
+    } else if (get(it, 'approved') == false) {
+      return (
+        <Button
+          isTitle
+          title={'Chờ xét duyệt'}
+          spaceHorizontal={10}
+          size={fontSize.f14}
+          color={colors.textMomo}
+          style={{
+            backgroundColor: colors.app.bg3B2B2B,
+            borderRadius: 5,
+          }}
+          onTitle={() => {}}
+        />
+      );
+    } else {
+      return (
+        <Button
+          isTitle
+          title={'Nâng cấp'}
+          spaceHorizontal={10}
+          size={fontSize.f14}
+          color={colors.black}
+          style={{
+            backgroundColor: colors.iconButton,
+            borderRadius: 5,
+          }}
+          onTitle={() => {
+            pushSingleScreenApp(componentId, UPDATE_ACCOUNT_SCREEN, {
+              item:it,
+            });
+          }}
+        />
+      );
+    }
+  };
   return (
     <Container title="Nâng cấp tài khoản" componentId={componentId}>
       <View>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
-          data={data}
+          data={allCustomerType}
           renderItem={({item}) => (
             <Layout
               isSpaceBetween
@@ -61,15 +133,15 @@ const ListUpdateAccountScreen = ({componentId}) => {
                 height: 70,
               }}>
               <Layout style={{justifyContent: 'flex-start'}}>
-                <Icon name={item.ic} color={colors.text} size={20} />
+                <Icon name={'envelope-open'} color={colors.text} size={20} />
                 <Layout type="column">
                   <Layout isLineCenter spaceBottom={5}>
                     <TextFnx spaceHorizontal={10} size={fontSize.f16}>
-                      {item.text1}
+                      {get(item, 'name')}
                     </TextFnx>
-                    <Icon iconComponent={icons.Ic1} size={16} />
+                    {/* <Icon iconComponent={icons.Ic1} size={16} /> */}
                   </Layout>
-                  {(item.isShowList && (
+                  {/* {(item.isShowList && (
                     <Button
                       isTitle
                       title="Danh sách hồ sơ"
@@ -81,13 +153,14 @@ const ListUpdateAccountScreen = ({componentId}) => {
                       }
                     />
                   )) ||
-                    null}
+                    null} */}
                 </Layout>
               </Layout>
               <Layout type="column">
-                <Button
+                {handleCheck(item)}
+                {/* <Button
                   isTitle
-                  title={item.text2}
+                  title={'Nâng cấp'}
                   spaceHorizontal={10}
                   size={fontSize.f14}
                   color={
@@ -106,15 +179,12 @@ const ListUpdateAccountScreen = ({componentId}) => {
                     borderRadius: 5,
                   }}
                   onTitle={() => {
-                    (item?.isUpdate &&
-                      pushSingleScreenApp(
-                        componentId,
-                        UPDATE_ACCOUNT_SCREEN,
-                      )) ||
-                      null;
+                    pushSingleScreenApp(componentId, UPDATE_ACCOUNT_SCREEN, {
+                      item,
+                    });
                   }}
-                />
-                {(item.isReply && (
+                /> */}
+                {/* {(item.isReply && (
                   <TextFnx
                     spaceTop={5}
                     align={'right'}
@@ -123,7 +193,7 @@ const ListUpdateAccountScreen = ({componentId}) => {
                     {item.date}
                   </TextFnx>
                 )) ||
-                  null}
+                  null} */}
               </Layout>
             </Layout>
           )}

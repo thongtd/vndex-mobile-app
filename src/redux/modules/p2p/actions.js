@@ -64,6 +64,9 @@ export const GET_ADV_INFO = `${CONTEXT}/GET_ADV_INFO`;
 export const GET_ADV_INFO_SUCCESS = `${CONTEXT}/GET_ADV_INFO_SUCCESS`;
 export const GET_FEE_TAX = `${CONTEXT}/GET_FEE_TAX`;
 export const GET_FEE_TAX_SUCCESS = `${CONTEXT}/GET_FEE_TAX_SUCCESS`;
+export const GET_ALL_CUSTOMER_TYPE = `${CONTEXT}/GET_ALL_CUSTOMER_TYPE`;
+export const GET_ALL_CUSTOMER_TYPE_SUCCESS = `${CONTEXT}/GET_ALL_CUSTOMER_TYPE_SUCCESS`;
+export const CREATE_CUSTOMER_TYPE = `${CONTEXT}/CREATE_CUSTOMER_TYPE`;
 
 export function useActionsP2p(dispatch) {
   if (!dispatch) {
@@ -71,6 +74,8 @@ export function useActionsP2p(dispatch) {
   }
   return {
     handleCreateComplain: data => dispatch(createAction(CREATE_COMPLAIN, data)),
+    handleGetAllCustomerType: () => dispatch(createAction(GET_ALL_CUSTOMER_TYPE)),
+    handleCreateCustomerType: data => dispatch(createAction(CREATE_CUSTOMER_TYPE, data)),
     handleGetFeeTax: data => dispatch(createAction(GET_FEE_TAX, data)),
     handleGetComplain: orderId => dispatch(createAction(GET_COMPLAIN, orderId)),
     handleGetAdvInfo: () => dispatch(createAction(GET_ADV_INFO)),
@@ -129,6 +134,7 @@ export function useActionsP2p(dispatch) {
 }
 export const actionsReducerP2p = {
   getMarketInfoSuccess: data => createAction(GET_MARKET_INFO_SUCCESS, data),
+  getAllCustomerTypeSuccess: data => createAction(GET_ALL_CUSTOMER_TYPE_SUCCESS, data),
   getFeeTaxSuccess: data => createAction(GET_FEE_TAX_SUCCESS, data),
   getAdvInfoSuccess: data => createAction(GET_ADV_INFO_SUCCESS, data),
   getCommentsByUserSuccess: data => createAction(GET_COMMENTS_BY_USER_SUCCESS, data),

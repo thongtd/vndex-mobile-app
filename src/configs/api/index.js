@@ -29,6 +29,8 @@ const EXCHANGE_URL =
     : 'http://13.229.182.120:8870/';
 // const EXCHANGE_URL = 'http://dev-api.financex.io/';
 export const P2P_API = {
+  GET_ALL_CUSTOMER_TYPE:`${EXCHANGE_URL}api/CustomerType/get-all`,
+  CREATE_CUSTOMER_TYPE:`${EXCHANGE_URL}api/CustomerType/create`,
   VERIFY_2FA: `${EXCHANGE_URL}api/v1/user/validate-2fa-code`,
   advertisments: `${EXCHANGE_URL}api/v1/p2p-order/advertisments`,
   GET_TRADING_MARKETS: `${EXCHANGE_URL}api/v1/trade/get-trading-markets`,

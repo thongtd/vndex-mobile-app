@@ -92,7 +92,7 @@ const SettingScreen = ({componentId}) => {
   const logged = useSelector(state => state.authentication.logged);
   const isPasscode = useSelector(state => state.authentication.isPasscode);
   const langGlobal = useSelector(state => state.authentication.lang);
-  console.log(langGlobal,"langGlobal")
+  console.log(langGlobal, 'langGlobal');
   const userInfo = useSelector(state => state.authentication.userInfo);
   const [Lang, setLang] = useState(checkLang(langGlobal));
   const [IsSwitch, setIsSwitch] = useState(false);
@@ -175,13 +175,13 @@ const SettingScreen = ({componentId}) => {
           iconLeft: <St6 />,
           iconRight: true,
           onPress: onSupport,
-        }
+        },
       ];
       return dtLogged;
     } else {
       const dataNoLogged = [
         // { textLeft: "passcode", iconLeft: icons.passCode, hasSwitch: true, onValueChange: changeSwitchData, isBorder: true },
-       
+
         {
           textLeft: 'Support',
           iconLeft: <St6 />,
@@ -226,7 +226,7 @@ const SettingScreen = ({componentId}) => {
   };
   const onUpdateAccount = () => {
     // pushSingleScreenApp(componentId, UPDATE_ACCOUNT_SCREEN);
-    pushSingleScreenApp(componentId, LIST_UPDATE_ACCOUNT_SCREEN)
+    pushSingleScreenApp(componentId, LIST_UPDATE_ACCOUNT_SCREEN);
   };
   const onSecurity = () => {
     pushSingleScreenApp(componentId, SECURITY_SCREEN);
@@ -254,6 +254,7 @@ const SettingScreen = ({componentId}) => {
 
   //   Navigation.showModal(hiddenModal(PICKER_SEARCH, propsData, false));
   // };
+  const userKyc = useSelector(state => state.authentication.userKyc);
   const handleActiveLang = langActive => {
     setLang(langActive);
     dispatcher(createAction(LANGUAGES, langActive));
@@ -299,7 +300,7 @@ const SettingScreen = ({componentId}) => {
       title={'Account'.t()}
       isScroll>
       <Layout space={10} isSpaceBetween>
-        <TouchableOpacity onPress={()=>pop(componentId)}>
+        <TouchableOpacity onPress={() => pop(componentId)}>
           <Layout type="row" isLineCenter>
             <Close />
             <TextFnx weight="bold">{'CLOSE'.t()}</TextFnx>
@@ -307,19 +308,27 @@ const SettingScreen = ({componentId}) => {
         </TouchableOpacity>
         <Layout isLineCenter type="row">
           <Button
-            onTitle={()=>{}}
+            onTitle={() => {}}
             weight={'bold'}
             size={fontSize.f16}
-            color={Lang == "en-US"? colors.app.yellowHightlight:colors.app.textContentLevel3}
+            color={
+              Lang == 'en-US'
+                ? colors.app.yellowHightlight
+                : colors.app.textContentLevel3
+            }
             isTitle
             title={'EN'}
           />
           <Button
-          onTitle={()=>handleActiveLang('vi-VN')}
+            onTitle={() => handleActiveLang('vi-VN')}
             spaceHorizontal={20}
             weight={'bold'}
             size={fontSize.f16}
-            color={Lang == "vi-VN"? colors.app.yellowHightlight:colors.app.textContentLevel3}
+            color={
+              Lang == 'vi-VN'
+                ? colors.app.yellowHightlight
+                : colors.app.textContentLevel3
+            }
             isTitle
             title={'VI'}
           />
@@ -367,21 +376,45 @@ const SettingScreen = ({componentId}) => {
                   }
                 />
               </View>
+              <View
+                style={{
+                  backgroundColor: get(
+                    userInfo,
+                    'customerMetaData.isKycUpdated',
+                  )
+                    ? '#28382E'
+                    : '#361E21',
+                  // paddingHorizontal:15,
+                  paddingVertical: 2,
+                  // marginLeft:15,
+                  borderRadius: 5,
+                  marginTop: 5,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {get(userInfo, 'customerMetaData.isKycUpdated') ? (
+                  <TextFnx color={colors.app.buy}>Đã xác minh</TextFnx>
+                ) : (
+                  <TextFnx color={colors.app.sell}>Chưa xác minh</TextFnx>
+                )}
+              </View>
             </View>
           </Layout>
-          <Layout isLineCenter>
-            <TickIc />
-            <TextFnx spaceLeft={5}>Nhà đầu tư uy tín</TextFnx>
-            <View style={{
-              backgroundColor:get(userInfo, 'customerMetaData.isKycUpdated')?'#28382E':'#361E21',
-              paddingHorizontal:15,
-              paddingVertical:2,
-              marginLeft:15,
-              borderRadius:5
-            }}>{get(userInfo, 'customerMetaData.isKycUpdated')?<TextFnx color={colors.app.buy}>Đã xác minh</TextFnx>:<TextFnx color={colors.app.sell}>Chưa xác minh</TextFnx>}
-              
-            </View>
-          </Layout>
+          {size(get(userKyc, 'identityUserCustomerTypes')) >0 && get(userKyc, 'identityUserCustomerTypes').map((item, index) => {
+            if (get(item, 'approved')) {
+              return (
+                <Layout space={4} isLineCenter>
+                  <TickIc />
+                  <TextFnx spaceLeft={5}>
+                    {get(item, 'customerType.name')}
+                  </TextFnx>
+                </Layout>
+              );
+            }
+            // if (get(item, 'customerTypeId') == get(it, 'id')) {
+            //   it.approved = get(item, 'approved');
+            // }
+          })}
         </>
       ) : (
         <View
@@ -420,9 +453,7 @@ const SettingScreen = ({componentId}) => {
         isButtonCircle={false}
       />
       <Layout isCenter>
-        <TextFnx color={colors.app.textDisabled}>
-        Version 1.1.5
-        </TextFnx>
+        <TextFnx color={colors.app.textDisabled}>Version 1.1.5</TextFnx>
       </Layout>
     </Container>
   );
@@ -432,7 +463,6 @@ const stylest = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    
   },
 });
 export default SettingScreen;

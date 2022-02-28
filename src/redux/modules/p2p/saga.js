@@ -48,6 +48,8 @@ import {
   GET_ADV_INFO_SUCCESS,
   GET_FEE_TAX,
   GET_FEE_TAX_SUCCESS,
+  GET_ALL_CUSTOMER_TYPE,
+  CREATE_CUSTOMER_TYPE,
 } from './actions';
 
 import {
@@ -752,14 +754,14 @@ export function* watchGetAdvInfo() {
 }
 export function* asyncGetFeeTax({payload}) {
   try {
-    const res = yield call(P2pService.getFeeTax,{
-      quantity:get(payload,"quantity"),
-      price:get(payload,"price"),
+    const res = yield call(P2pService.getFeeTax, {
+      quantity: get(payload, 'quantity'),
+      price: get(payload, 'price'),
     });
     emitEventEmitter('doneApi', true);
-    if (get(res,"success")) {
+    if (get(res, 'success')) {
       // gọi lại danh sách rating ở đây nếu cần
-      yield put(createAction(GET_FEE_TAX_SUCCESS, get(res,"data")));
+      yield put(createAction(GET_FEE_TAX_SUCCESS, get(res, 'data')));
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);
@@ -768,6 +770,32 @@ export function* asyncGetFeeTax({payload}) {
 
 export function* watchGetFeeTax() {
   yield takeLatest(GET_FEE_TAX, asyncGetFeeTax);
+}
+export function* asyncGetAllCustomerType({payload}) {
+  try {
+    const res = yield call(P2pService.getAllCustomerType);
+    emitEventEmitter('doneApi', true);
+    yield put(actionsReducerP2p.getAllCustomerTypeSuccess(res));
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetAllCustomerType() {
+  yield takeLatest(GET_ALL_CUSTOMER_TYPE, asyncGetAllCustomerType);
+}
+export function* asyncCreateCustomerType({payload}) {
+  try {
+    const res = yield call(P2pService.createCustomerType, payload);
+    if (get(res, 'success')) {
+      emitEventEmitter('doneApi', true);
+      return toast('Bạn đã gửi lên thành công, vui lòng chờ xác thực');
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchCreateCustomerType() {
+  yield takeLatest(CREATE_CUSTOMER_TYPE, asyncCreateCustomerType);
 }
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
@@ -799,4 +827,6 @@ export default function* () {
   yield all([fork(watchGetCommentsByUser)]);
   yield all([fork(watchGetAdvInfo)]);
   yield all([fork(watchGetFeeTax)]);
+  yield all([fork(watchGetAllCustomerType)]);
+  yield all([fork(watchCreateCustomerType)]);
 }

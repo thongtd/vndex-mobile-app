@@ -25,13 +25,26 @@ export const P2pService = {
     let response = await httpService.get_without_token(urlGetAdvertisments);
     return response;
   },
-  getAdvInfo:  async () => {
+  getAdvInfo: async () => {
     let url = `${P2P_API.GET_ADV_INFO}`;
     let response = await httpService.get(url);
     return response.data;
   },
-  getCommentByUser:  async (data) => {
-    let url = `${P2P_API.GET_COMMENTS_BY_USER}${get(data,"accountId")}?starFilter=${get(data,"starFilter")}&pageIndex=1&pageSize=100`;
+  getAllCustomerType: async () => {
+    let url = `${P2P_API.GET_ALL_CUSTOMER_TYPE}`;
+    let response = await httpService.get(url);
+    return response.data;
+  },
+  createCustomerType: async (data) => {
+    let url = `${P2P_API.CREATE_CUSTOMER_TYPE}`;
+    let response = await httpService.post(url,data);
+    return response.data;
+  },
+  getCommentByUser: async data => {
+    let url = `${P2P_API.GET_COMMENTS_BY_USER}${get(
+      data,
+      'accountId',
+    )}?starFilter=${get(data, 'starFilter')}&pageIndex=1&pageSize=100`;
     let response = await httpService.get(url);
     return response.data;
   },
