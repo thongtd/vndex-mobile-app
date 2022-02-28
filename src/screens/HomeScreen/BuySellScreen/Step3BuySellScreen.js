@@ -50,6 +50,7 @@ import {ceil, isEmpty, isNumber} from 'lodash';
 import {useSelector} from 'react-redux';
 import CountDown from 'react-native-countdown-component';
 import {Navigation} from 'react-native-navigation';
+import {actionsReducerP2p} from '../../../redux/modules/p2p/actions';
 const Step3BuySellScreen = ({
   item,
   componentId,
@@ -62,10 +63,10 @@ const Step3BuySellScreen = ({
   const advertisment = useSelector(state => state.p2p.advertisment);
   const [isLoading, setIsLoading] = useState(false);
   const UserInfo = useSelector(state => state.authentication.userInfo);
-  const [offerOrderState, setOfferOrderState] = useState(offerOrder || {});
+  const [offerOrderState, setOfferOrderState] = useState(offerOrder);
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
-  
+
   useEffect(() => {
     if (isPushChat) {
       pushSingleScreenApp(componentId, CHAT_SCREEN, {
@@ -102,8 +103,9 @@ const Step3BuySellScreen = ({
     useActionsP2p(dispatch).handleGetOfferOrder(
       get(offerOrder, 'offerOrderId'),
     );
-    useActionsP2p(dispatch).handleGetChatInfoP2p(get(offerOrder, 'offerOrderId'));
-      alert("ok");
+    useActionsP2p(dispatch).handleGetChatInfoP2p(
+      get(offerOrder, 'offerOrderId'),
+    );
     const ev = listenerEventEmitter('pushStep', dataConfirm => {
       setIsLoading(false);
       if (get(dataConfirm, 'isHasPayment') === false) {
@@ -163,7 +165,52 @@ const Step3BuySellScreen = ({
   const actionSheetRef = useRef(null);
 
   console.log('item: ', item);
+  const feeTax = useSelector(state => state.p2p.feeTax);
+  const checkTax = (isPercent, stateData = item, tax = feeTax) => {
+    if (
+      (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL &&
+        isPercent) ||
+      (get(stateData, 'symbol') !== 'SMAT' && get(stateData, 'side') == SELL)
+    ) {
+      return '0';
+    } else if (get(stateData, 'side') == BUY && isPercent) {
+      return get(tax, 'taxPercent');
+    } else if (get(stateData, 'side') == BUY) {
+      return formatCurrency(
+        get(tax, 'taxAmount'),
+        get(tax, 'taxFeeByCurrency'),
+        currencyList,
+      );
+    }
+  };
+  const checkFee = (isPercent, stateData = item, fee = feeTax) => {
+    if (
+      (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL &&
+        isPercent)
+    ) {
+      return '0';
+    } else if (isPercent) {
+      return get(fee, 'feePercent');
+    } else {
+      return formatCurrency(
+        get(fee, 'feeAmount'),
+        get(fee, 'taxFeeByCurrency'),
+        currencyList,
+      );
+    }
+  };
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetFeeTax({
+      quantity: get(offerOrderState, 'quantity'),
+      price: get(advertisment, 'price'),
+    });
 
+    return () => {};
+  }, [offerOrderState,advertisment]);
   return (
     <Container
       space={15}
@@ -231,7 +278,7 @@ const Step3BuySellScreen = ({
               : colors.app.sell
           }>
           {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${
-            get(advertisment, 'symbol') || get(item, 'symbol')
+            get(advertisment, 'symbol')
           }`}
         </TextFnx>
         <Layout
@@ -253,45 +300,43 @@ const Step3BuySellScreen = ({
             }>
             {`${formatCurrency(
               get(offerOrderState, 'price') * get(offerOrderState, 'quantity'),
-              get(advertisment, 'paymentUnit') || get(item, 'paymentUnit'),
+              get(advertisment, 'paymentUnit'),
               currencyList,
             )} `}
             <TextFnx color={colors.app.textContentLevel3}>
-              {get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')}
+              {get(advertisment, 'paymentUnit')}
             </TextFnx>
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Giá</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(advertisment, 'price') || get(item, 'price'),
-            get(advertisment, 'paymentUnit') || get(item, 'paymentUnit'),
+            get(advertisment, 'price'),
+            get(advertisment, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')}`}</TextFnx>
+          )} ${
+            get(advertisment, 'paymentUnit')
+          }`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
             get(offerOrderState, 'quantity'),
-            get(advertisment, 'paymentUnit') || get(item, 'paymentUnit'),
+            get(advertisment, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'symbol') || get(item, 'symbol')}`}</TextFnx>
+          )} ${get(advertisment, 'symbol')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(offerOrderState, 'price') *
-              (get(advertisment, 'fee') || get(item, 'fee')),
-            get(advertisment, 'paymentUnit'),
-            currencyList,
-          )} ${
-            get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')
-          }`}</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${checkFee()} ${get(
+            feeTax,
+            'taxFeeByCurrency',
+          )}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            0 {get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')}
+            {checkTax()} {get(feeTax, 'taxFeeByCurrency')}
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
@@ -471,10 +516,9 @@ const Step3BuySellScreen = ({
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
-           
           </Layout>
         )}
-         <Layout
+        <Layout
           style={{
             backgroundColor: colors.app.lineSetting,
             borderRadius: 10,
@@ -503,22 +547,29 @@ const Step3BuySellScreen = ({
                 space={8}
                 color={colors.app.lightWhite}
                 size={fontSize.f16}>
-                {get(advertisment, 'traderInfo.identityUserId') == get(infoChat,'offerIdentityUser.id')?get(infoChat,"offerIdentityUser.email"):get(infoChat,"provideIdentityUser.email")}
+                {get(advertisment, 'traderInfo.identityUserId') ==
+                get(infoChat, 'offerIdentityUser.id')
+                  ? get(infoChat, 'offerIdentityUser.email')
+                  : get(infoChat, 'provideIdentityUser.email')}
               </TextFnx>
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
-                {get(advertisment, 'traderInfo.identityUserId') == get(infoChat,'offerIdentityUser.id')?get(infoChat,"offerIdentityUser.phoneNumber"):get(infoChat,"provideIdentityUser.phoneNumber")}
+                {get(advertisment, 'traderInfo.identityUserId') ==
+                get(infoChat, 'offerIdentityUser.id')
+                  ? get(infoChat, 'offerIdentityUser.phoneNumber')
+                  : get(infoChat, 'provideIdentityUser.phoneNumber')}
               </TextFnx>
             </Layout>
           </Layout>
           {/* <ButtonIcon name="eye" color={colors.app.yellowHightlight} /> */}
         </Layout>
- 
+
         <Layout spaceBottom={10} type="column">
           <TextFnx space={10} color={colors.app.yellowHightlight}>
             Lưu ý
           </TextFnx>
           <TextFnx color={colors.app.textContentLevel3}>
-            Để giao dịch thành công, vui lòng liên hệ với đối tác trực tiếp về hình thức thanh toán, để đảm bảo thông tin thanh toán là chính xác.
+            Để giao dịch thành công, vui lòng liên hệ với đối tác trực tiếp về
+            hình thức thanh toán, để đảm bảo thông tin thanh toán là chính xác.
           </TextFnx>
         </Layout>
         <Layout

@@ -95,6 +95,46 @@ const Step1BuySellScreen = ({componentId, item}) => {
     }
     return () => BackgroundTimer.clearInterval(intervalId);
   }, [isTimer, timer, dispatch, item]);
+  const checkTax = (isPercent, stateData = item, tax = feeTax) => {
+    if (
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL) ||
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL &&
+        isPercent) ||
+      (get(stateData, 'symbol') !== 'SMAT' &&
+        get(stateData, 'side') == SELL)
+    ) {
+      return '0';
+    } else if (get(stateData, 'side') == BUY && isPercent) {
+      return get(tax, 'taxPercent');
+    } else if (get(stateData, 'side') == BUY) {
+      return formatCurrency(
+        get(tax, 'taxAmount'),
+        get(tax, 'taxFeeByCurrency'),
+        currencyList,
+      );
+    }
+  };
+  const checkFee = (isPercent, stateData = item, fee = feeTax) => {
+    if (
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL) ||
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL &&
+        isPercent)
+    ) {
+      return '0';
+    } else if (isPercent) {
+      return get(fee, 'feePercent');
+    } else {
+      return formatCurrency(
+        get(fee, 'feeAmount'),
+        get(fee, 'taxFeeByCurrency'),
+        currencyList,
+      );
+    }
+  };
   return (
     <Container
       space={15}
@@ -407,20 +447,20 @@ const Step1BuySellScreen = ({componentId, item}) => {
         <Layout space={5} isSpaceBetween>
           <Layout type='column'>
             <TextFnx color={colors.app.textDisabled} size={12}>
-              Phí <TextFnx  color={colors.app.textDisabled} size={11}>({get(feeTax,"feePercent") || '0'}%)</TextFnx>
+              Phí <TextFnx  color={colors.app.textDisabled} size={11}>({checkFee(true)}%)</TextFnx>
               :
             </TextFnx>
             <TextFnx spaceTop={8} size={12} color={colors.app.textContentLevel2}>
-              {get(item,"symbol") !== 'SMAT'?formatCurrency(get(feeTax,"feeAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) : '0'} {get(feeTax, 'taxFeeByCurrency')}
+              {checkFee()} {get(feeTax, 'taxFeeByCurrency')}
               </TextFnx>
           </Layout>
           <Layout type='column'>
           <TextFnx color={colors.app.textDisabled} size={12}>
-              Thuế <TextFnx  color={colors.app.textDisabled} size={11}>({get(feeTax,"taxPercent") || '0'}%)</TextFnx>
+              Thuế <TextFnx  color={colors.app.textDisabled} size={11}>({checkTax(true)}%)</TextFnx>
               :
             </TextFnx>
             <TextFnx spaceTop={8} size={12} color={colors.app.textContentLevel2}>
-              {get(item,"symbol") !== 'SMAT'?formatCurrency(get(feeTax,"taxAmount"),get(feeTax, 'taxFeeByCurrency'),currencyList) : '0'} {get(feeTax, 'taxFeeByCurrency')}
+              {checkTax()} {get(feeTax, 'taxFeeByCurrency')}
               </TextFnx>
           </Layout>
         </Layout>
@@ -564,13 +604,13 @@ const Step1BuySellScreen = ({componentId, item}) => {
                   get(
                     getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
                     'available',
-                  )) ||
+                  ) && get(advertisment,"symbol") !== 'SMAT') ||
               (get(advertisment, 'side') === BUY &&
                 Pay.str2Number() >
                   get(
                     getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
                     'available',
-                  ))
+                  ) && get(advertisment,"symbol") !== 'SMAT' )
             ) {
               return toast(
                 'Bạn không thể đặt lệnh với khối lượng lớn hơn số dư khả dụng',

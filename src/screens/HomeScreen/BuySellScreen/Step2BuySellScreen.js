@@ -55,7 +55,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
   const advertisment = useSelector(state => state.p2p.advertisment);
   const currencyList = useSelector(state => state.market.currencyList);
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
-
+  const feeTax = useSelector(state => state.p2p.feeTax);
   useEffect(() => {
     // const navigationButtonEventListener =
     // Navigation.events().registerNavigationButtonPressedListener(
@@ -103,6 +103,46 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
       // navigationButtonEventListener.remove();
     };
   }, [componentId]);
+  const checkTax = (isPercent, stateData = item, tax = feeTax) => {
+    if (
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL) ||
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL &&
+        isPercent) ||
+      (get(stateData, 'symbol') !== 'SMAT' &&
+        get(stateData, 'side') == SELL)
+    ) {
+      return '0';
+    } else if (get(stateData, 'side') == BUY && isPercent) {
+      return get(tax, 'taxPercent');
+    } else if (get(stateData, 'side') == BUY) {
+      return formatCurrency(
+        get(tax, 'taxAmount'),
+        get(tax, 'taxFeeByCurrency'),
+        currencyList,
+      );
+    }
+  };
+  const checkFee = (isPercent, stateData = item, fee = feeTax) => {
+    if (
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL) ||
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL &&
+        isPercent)
+    ) {
+      return '0';
+    } else if (isPercent) {
+      return get(fee, 'feePercent');
+    } else {
+      return formatCurrency(
+        get(fee, 'feeAmount'),
+        get(fee, 'taxFeeByCurrency'),
+        currencyList,
+      );
+    }
+  };
   return (
     <Container
       space={15}
@@ -191,16 +231,12 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(data, 'price') * get(advertisment, 'fee'),
-            get(advertisment, 'paymentUnit'),
-            currencyList,
-          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${checkFee()} ${get(feeTax,'taxFeeByCurrency')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            0 {get(advertisment, 'paymentUnit')}
+          {`${checkTax()} ${get(feeTax,'taxFeeByCurrency')}`}
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
@@ -394,7 +430,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
                         orderPrice: get(advertisment, 'price'),
                         p2PAccountPaymentMethodId: get(item, 'id'),
                       },
-                      paymentMethodData: item,
+                      paymentM1000ethodData: item,
                     });
                   }}>
                   <Layout

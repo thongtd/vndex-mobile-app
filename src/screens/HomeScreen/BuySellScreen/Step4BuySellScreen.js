@@ -57,7 +57,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const currencyList = useSelector(state => state.market.currencyList);
   const offerOrder = useSelector(state => state.p2p.offerOrder);
   const offerOrderId = useSelector(state => state.p2p.offerOrderId);
-  const [offerOrderState, setOfferOrderState] = useState(offerOrder || {});
+  const [offerOrderState, setOfferOrderState] = useState(offerOrder);
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
@@ -74,7 +74,14 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     }
     return () => {};
   }, [isPushChat]);
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetFeeTax({
+      quantity: get(offerOrderState, 'quantity'),
+      price: get(advertisment, 'price'),
+    });
 
+    return () => {};
+  }, [offerOrderState,advertisment]);
   useEffect(() => {
     if (
       get(UserInfo, 'id') ===
@@ -195,7 +202,44 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
       clearInterval(intervalID);
     };
   }, [offerOrderState, offerOrderId, offerOrder, isStopComplain]);
-
+  const feeTax = useSelector(state => state.p2p.feeTax);
+  const checkTax = (isPercent, stateData = item, tax = feeTax) => {
+    if (
+      (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL &&
+        isPercent) ||
+      (get(stateData, 'symbol') !== 'SMAT' && get(stateData, 'side') == SELL)
+    ) {
+      return '0';
+    } else if (get(stateData, 'side') == BUY && isPercent) {
+      return get(tax, 'taxPercent');
+    } else if (get(stateData, 'side') == BUY) {
+      return formatCurrency(
+        get(tax, 'taxAmount'),
+        get(tax, 'taxFeeByCurrency'),
+        currencyList,
+      );
+    }
+  };
+  const checkFee = (isPercent, stateData = item, fee = feeTax) => {
+    if (
+      (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
+      (get(stateData, 'symbol') == 'SMAT' &&
+        get(stateData, 'side') == SELL &&
+        isPercent)
+    ) {
+      return '0';
+    } else if (isPercent) {
+      return get(fee, 'feePercent');
+    } else {
+      return formatCurrency(
+        get(fee, 'feeAmount'),
+        get(fee, 'taxFeeByCurrency'),
+        currencyList,
+      );
+    }
+  };
   return (
     <Container
       space={15}
@@ -315,16 +359,12 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(offerOrderState, 'price') * get(advertisment, 'fee'),
-            get(advertisment, 'paymentUnit'),
-            currencyList,
-          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${checkFee()} ${get(feeTax, 'taxFeeByCurrency')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            0 {get(advertisment, 'paymentUnit')}
+          {`${checkTax()} ${get(feeTax, 'taxFeeByCurrency')}`}
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
