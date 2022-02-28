@@ -203,7 +203,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     };
   }, [offerOrderState, offerOrderId, offerOrder, isStopComplain]);
   const feeTax = useSelector(state => state.p2p.feeTax);
-  const checkTax = (isPercent, stateData = item, tax = feeTax) => {
+  const checkTax = (isPercent, stateData = advertisment, tax = feeTax) => {
     if (
       (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
       (get(stateData, 'symbol') == 'SMAT' &&
@@ -220,9 +220,11 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         get(tax, 'taxFeeByCurrency'),
         currencyList,
       );
+    }else{
+      return "0"
     }
   };
-  const checkFee = (isPercent, stateData = item, fee = feeTax) => {
+  const checkFee = (isPercent, stateData = advertisment, fee = feeTax) => {
     if (
       (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
       (get(stateData, 'symbol') == 'SMAT' &&
