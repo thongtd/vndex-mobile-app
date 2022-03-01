@@ -25,12 +25,7 @@ const Step5BuySellScreen = ({componentId}) => {
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const dispatch = useDispatch();
   const [isRating, setIsRating] = useState(false);
-  useEffect(() => {
-    useActionsP2p(dispatch).handleGetAdvertisment(
-      get(offerOrder, 'p2PTradingOrderId'),
-    );
-    return () => {};
-  }, [dispatch]);
+
   useEffect(() => {
     // alert("kkk")
     if (
@@ -45,6 +40,11 @@ const Step5BuySellScreen = ({componentId}) => {
       setOfferOrderState({
         ...offerOrder,
       });
+    }
+    if(get(offerOrder, 'p2PTradingOrderId')){
+      useActionsP2p(dispatch).handleGetAdvertisment(
+        get(offerOrder, 'p2PTradingOrderId'),
+      );
     }
     return () => {};
   }, [offerOrder, UserInfo]);

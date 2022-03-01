@@ -108,6 +108,12 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         ...offerOrder,
       });
     }
+    if(get(offerOrder, 'p2PTradingOrderId')){
+      useActionsP2p(dispatch).handleGetAdvertisment(
+        get(offerOrder, 'p2PTradingOrderId'),
+      );
+    }
+    
     return () => {};
   }, [offerOrder, UserInfo]);
   useEffect(() => {
@@ -133,9 +139,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         }
       },
     );
-    useActionsP2p(dispatch).handleGetAdvertisment(
-      get(offerOrder, 'p2PTradingOrderId'),
-    );
+   
     useActionsP2p(dispatch).handleGetChatInfoP2p(offerOrderId);
     useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
     return () => {
