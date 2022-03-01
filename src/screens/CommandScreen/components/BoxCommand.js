@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Image from '../../../components/Image/Image';
 import Layout from '../../../components/Layout/Layout';
 import TextFnx from '../../../components/Text/TextFnx';
@@ -18,6 +18,7 @@ const BoxCommand = ({
   contentCenter,
   contentBottom,
   onSeeDetailCommand,
+  statusLabel=""
 }) => {
   return (
     <Layout space={10} style={styles.containerLayout} type="column">
@@ -38,13 +39,21 @@ const BoxCommand = ({
             )) ||
               null}
           </Layout>
-          <Image
-            source={icons.icArrowRight}
-            style={{
-              width: 14,
-              height: 14,
-            }}
-          />
+          <Layout isLineCenter>
+            <View style={{
+              backgroundColor:colors.app.backgroundButton,
+              borderRadius:5
+            }}>
+            <TextFnx weight='600' color={colors.app.textContentLevel3} spaceHorizontal={10}>{statusLabel}</TextFnx>
+            </View>
+            <Image
+              source={icons.icArrowRight}
+              style={{
+                width: 14,
+                height: 14,
+              }}
+            />
+          </Layout>
         </Layout>
 
         <Layout isSpaceBetween isLineCenter spaceBottom={10}>

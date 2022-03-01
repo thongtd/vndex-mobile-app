@@ -26,29 +26,36 @@ import {
   MODAL_FILTER_MY_ADS,
   pushSingleScreenApp,
 } from '../../../navigation';
-import { showModal } from '../../../navigation/Navigation';
+import {showModal} from '../../../navigation/Navigation';
 import {useActionsP2p} from '../../../redux';
 import BoxCommand from '../../CommandScreen/components/BoxCommand';
 import ButtonAddNew from './ButtonAddNew';
 
-const ActionBottom = [
-  {
-    name: 'Chỉnh sửa',
-    type: 'EDIT',
-  },
-  {
-    name: 'Offline',
-    type: 'OFFLINE',
-  },
-  {
-    name: 'Chia sẻ quảng cáo',
-    type: 'SHARE',
-  },
-  {
-    name: 'Huỷ quảng cáo',
-    type: 'CLOSE',
-  },
-];
+const ActionBottom = (isDelete=true)=>{
+  return [
+    {
+      name: 'Chỉnh sửa',
+      type: 'EDIT',
+    },
+    {
+      name: 'Offline',
+      type: 'OFFLINE',
+    },
+    {
+      name: 'Chia sẻ quảng cáo',
+      type: 'SHARE',
+    },
+    {
+      name: 'Huỷ quảng cáo',
+      type: 'CLOSE',
+    },
+  ].filter(s => {
+    if(!isDelete){
+      return s.type !== 'CLOSE'
+    }
+    return s
+  });
+}
 const MyAdvertisenmentScreen = ({componentId}) => {
   const dispatch = useDispatch();
   const [isEnabled, setIsEnabled] = useState({});
@@ -62,7 +69,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
   const currencyList = useSelector(state => state.market.currencyList);
   const myAdvertisments = useSelector(state => state.p2p.myAdvertisments);
   const UserInfo = useSelector(state => state.authentication.userInfo);
-  
+
   useEffect(() => {
     const evFilter = listenerEventEmitter('submitSearchFilterMyAdv', data => {
       setDataSubmit(data);
@@ -85,13 +92,13 @@ const MyAdvertisenmentScreen = ({componentId}) => {
     const evDone = listenerEventEmitter('doneApi', isDone => {
       setIsLoading(false);
     });
-    getMyAdvertisments(pageIndex,dataSubmit);
+    getMyAdvertisments(pageIndex, dataSubmit);
 
     return () => {
       evDone.remove();
     };
-  }, [pageIndex,dataSubmit]);
-  const getMyAdvertisments = (pageIndex,dataSubmit) => {
+  }, [pageIndex, dataSubmit]);
+  const getMyAdvertisments = (pageIndex, dataSubmit) => {
     console.log('pageIndex: ', pageIndex);
     setIsEnabled({});
     useActionsP2p(dispatch).handleGetMyAdvertisments({
@@ -99,7 +106,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
       pageSize: 15,
       side: '',
       coinSymbol: ActiveSymbol,
-      ...dataSubmit
+      ...dataSubmit,
     });
     setIsLoading(true);
   };
@@ -159,8 +166,8 @@ const MyAdvertisenmentScreen = ({componentId}) => {
     }
   };
   const onRefresh = () => {
-    getMyAdvertisments(pageIndex,dataSubmit);
-  }
+    getMyAdvertisments(pageIndex, dataSubmit);
+  };
   return (
     <Container
       componentId={componentId}
@@ -207,6 +214,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         renderItem={({item, index}) => (
           <View key={`item-${index}`} style={{paddingHorizontal: 20}}>
             <BoxCommand
+              statusLabel={get(item, 'statusLable')}
               onSeeDetailCommand={onSeeDetailCommand}
               type={get(item, 'side') == 'B' ? 'Mua' : 'Bán'}
               isSell={get(item, 'side') !== 'B'}
@@ -217,7 +225,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
               )}
               unit={get(item, 'paymentUnit') || ''}
               nameCoin={get(item, 'symbol') || ''}
-              //   dateTime="2021-11-07 09:25:49"
+              dateTime={get(item, 'createdDateVnTime')}
               contentCenter={
                 <>
                   <Layout isSpaceBetween isLineCenter spaceBottom={10}>
@@ -279,7 +287,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
 
                   <Layout isLineCenter>
                     <TextFnx color={colors.btnClose} size={12} spaceRight={10}>
-                      {get(item, 'status') > 0 ? 'Đang bật' : 'Đang tắt'}
+                      {get(item, 'isOpenForTrading') ? 'Đang bật' : 'Đang tắt'}
                     </TextFnx>
                     <Switch
                       trackColor={{false: '#767577', true: colors.iconButton}}
@@ -324,7 +332,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         )}
       />
       <BottomSheet actionRef={refAction} title="Thêm hành động">
-        {ActionBottom.map((item, index) => (
+        {ActionBottom(get(refAction.current,"item.isDelete")).map((item, index) => (
           <Button
             key={`dt-${index}`}
             onInput={() => onActionClick(item)}

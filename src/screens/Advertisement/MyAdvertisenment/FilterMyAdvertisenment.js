@@ -44,7 +44,13 @@ export default function FilterMyAdvertisenment({
     {label: 'Mua', value: 'B'},
     {label: 'Bán', value: 'S'},
   ]);
-  const [itemsStatus, setItemsStatus] = useState([]);
+  const [itemsStatus, setItemsStatus] = useState([
+    {label: 'Tất cả', value: ''},
+    {label: 'Mở', value: 1},
+    {label: 'Đóng', value: 2},
+    {label: 'Đã hoàn thành', value: 3},
+    {label: 'Đã bị huỷ', value: 4},
+  ]);
   return (
     <LayoutMofalFilter title="Bộ Lọc" isTitle>
       <Layout
@@ -172,57 +178,7 @@ export default function FilterMyAdvertisenment({
           }}
           marginTop={10}
         />
-        {/*         
-        <ItemFilter
-          LabelSecond={'Token'}
-          isColumn
-          hiddenFirst
-          valueFirst={get(WalletTypeActive, 'name')}
-          valueSecond={get(SelectCoinActive, 'symbol')}
-          onPressSecond={onSelectCoin}
-          onPressFirst={onWalletType}
-          iconFirst={'caret-down'}
-          iconSecond={'caret-down'}
-          placeholderSecond={'Token'}
-          placeholderFirst={'Select Wallet Type'.t()}
-        />
-        <ItemFilter
-          LabelSecond={'Hình thức'}
-          isColumn
-          hiddenFirst
-          valueFirst={get(WalletTypeActive, 'name')}
-          valueSecond={get(SelectCoinActive, 'symbol')}
-          onPressSecond={onSelectCoin}
-          onPressFirst={onWalletType}
-          iconFirst={'caret-down'}
-          iconSecond={'caret-down'}
-          placeholderSecond={'Hình thức'}
-          placeholderFirst={'Select Wallet Type'.t()}
-        />
-        <ItemFilter
-          LabelFirst={'Status'.t()}
-          valueFirst={get(StatusActive, 'name')}
-          onPressFirst={onStatus}
-          iconFirst={'caret-down'}
-          placeholderFirst={'Status'.t()}
-          buttonRight
-          isColumn
-          onPressSecond={() =>
-            onSubmitSearch({
-              status: get(StatusActive, 'value'),
-              symbol: get(SelectCoinActive, 'symbol'),
-              startDate: StartDateData,
-              endDate: EndDateData,
-            })
-          }
-        />*/}
       </Layout>
-      {/* <CalendarScreen
-        isModalCalendar={isModalCalendar}
-        date={ActiveDate}
-        currentDate={currentDate}
-        setModalCalendar={() => setModalCalendar(!isModalCalendar)}
-      /> */}
     </LayoutMofalFilter>
   );
 }
