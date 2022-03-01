@@ -63,6 +63,7 @@ const Input = ({
   restInput,
   prefix,
   isRequired,
+  titleLeft,
   ...rest
 }) => {
   const [valueInput, setValue] = useState(value);
@@ -144,7 +145,12 @@ const Input = ({
             size={13}
           />
         )}
-
+  {titleLeft && (
+          <TextFnx color={colors.app.textContentLevel3} spaceRight={spacingApp}>
+            {titleLeft}
+          </TextFnx>
+          
+        )}
         {(isInputTop && (
           <View style={{flex: 1, marginRight: 20}}>
             <TextFnx
@@ -214,6 +220,7 @@ const Input = ({
           <TextFnx color={colors.app.textContentLevel3} spaceRight={spacingApp}>
             {titleRight}
           </TextFnx>
+          
         )}
         {titleBtnRight && (
           <TouchableOpacity

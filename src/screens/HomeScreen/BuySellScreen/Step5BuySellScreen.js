@@ -79,19 +79,19 @@ const Step5BuySellScreen = ({componentId}) => {
           {get(offerOrderState, 'isPaymentCancel')
             ? 'Đã huỷ lệnh'
             : `${
-                get(offerOrderState, 'offerSide') == SELL
+                get(offerOrderState, 'offerSide') == BUY
                   ? formatCurrency(
                       get(offerOrderState, 'quantity'),
                       get(advertisment, 'symbol'),
                       currencyList,
                     )
                   : formatCurrency(
-                      get(offerOrderState, 'price'),
-                      get(advertisment, 'paymentUnit'),
+                      get(offerOrderState, 'quantity'),
+                      get(advertisment, 'symbol'),
                       currencyList,
                     )
               } ${
-                get(offerOrderState, 'offerSide') == SELL
+                get(offerOrderState, 'offerSide') == BUY
                   ? get(advertisment, 'symbol')
                   : get(advertisment, 'paymentUnit')
               }`}

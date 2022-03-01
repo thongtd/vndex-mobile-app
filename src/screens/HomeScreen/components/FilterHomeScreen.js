@@ -119,11 +119,11 @@ export default function FilterHomeScreen() {
           style={{
             fontSize: 12,
           }}
-          value="Chỉ hiển thị quảng cáo của thương nhân"
+          value="Nhà đầu tư chuyên nghiệp"
           hasValue
           editable={true}
           spacingApp={0}
-          titleRight={
+          titleLeft={
             <Switch
               trackColor={{false: '#767577', true: colors.iconButton}}
               thumbColor={colors.greyLight}
