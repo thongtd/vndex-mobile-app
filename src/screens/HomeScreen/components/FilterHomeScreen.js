@@ -81,7 +81,7 @@ export default function FilterHomeScreen() {
               orderAmountEv:isEmpty(qtty)?"empty": parseFloat(qtty)
             });
           }}
-          keyboardType={'decimal-pad'}
+          keyboardType={'numeric'}
           // handleChange={}
         />
 

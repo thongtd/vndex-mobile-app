@@ -108,7 +108,7 @@ const Step2AddNewAds = ({
 
   return (
     <View style={styles.conatainer}>
-      {console.log('get(dataStateitem, ): ', get(dataState, 'quantity'))}
+      {/* {console.log('get(dataStateitem, ): ', get(dataState, 'quantity'))} */}
       <>
         <Input
           spaceVertical={8}
@@ -128,7 +128,7 @@ const Step2AddNewAds = ({
               ),
             )
           }
-          keyboardType="decimal-pad"
+          keyboardType="numeric"
           placeholder="1000"
           styleBorder={{height: 'auto'}}
           style={{fontSize: 16, color: colors.text}}
@@ -170,7 +170,7 @@ const Step2AddNewAds = ({
           spaceVertical={8}
           styleBorder={{height: 'auto'}}
           hasValue
-          keyboardType="decimal-pad"
+          keyboardType="numeric"
           value={get(dataState, 'minOrder')}
           onChangeText={txt => rest.onMinOrderChange(txt)}
           placeholder={`${formatCurrency(
@@ -200,7 +200,7 @@ const Step2AddNewAds = ({
         />
         <Input
           spaceVertical={8}
-          keyboardType="decimal-pad"
+          keyboardType="numeric"
           value={get(dataState, 'maxOrder')}
           onChangeText={txt => rest.onMaxOrderChange(txt)}
           styleBorder={{height: 'auto'}}

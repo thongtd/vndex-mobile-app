@@ -72,7 +72,7 @@ const BlockSwap = ({
             isMax
             onMax={onMax}
             styleView={stylest.blockRight}
-            keyboardType={'decimal-pad'}
+            keyboardType={'numeric'}
             style={stylest.textInput}
             value={value}
             onChangeText={onChangeText}

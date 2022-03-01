@@ -75,6 +75,7 @@ const Input = ({
   }, [rest.isSecurity]);
 
   const handleChange = text => {
+    
     if (hasValue) {
       onChangeText(text);
     } else {
@@ -116,10 +117,13 @@ const Input = ({
   };
   return (
     <>
-      {rest.isLabel && <TextFnx style={stylest.label}>
-        {label} {isRequired && <TextFnx color={colors.app.sell} value={'*'} />}
-        </TextFnx>}
-      
+      {rest.isLabel && (
+        <TextFnx style={stylest.label}>
+          {label}{' '}
+          {isRequired && <TextFnx color={colors.app.sell} value={'*'} />}
+        </TextFnx>
+      )}
+
       <View
         style={[
           rest.isCircle ? stylest.inputCircle : [styleView, styleBorder],

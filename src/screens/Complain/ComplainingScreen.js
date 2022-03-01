@@ -450,7 +450,7 @@ const ComplainingScreen = ({componentId, orderId}) => {
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
             <TextFnx color={colors.app.textContentLevel2}>
-              {get(advertisment, 'orderNumber')}
+              {get(advertisment, 'orderSequenceNumber')}
             </TextFnx>
             <ButtonIcon
               onPress={() => {

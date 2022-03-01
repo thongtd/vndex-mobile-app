@@ -82,6 +82,7 @@ import FilterHistorySwapScreen from '../../SwapScreen/childrensScreens/FilterHis
 import DepsitSvg from 'assets/svg/deposit.svg';
 import WithdrawSvg from 'assets/svg/withdraw.svg';
 import {Navigation} from 'react-native-navigation';
+
 var flagBtnId = true;
 const LayoutInfoWallet = ({
   componentId,
@@ -556,7 +557,7 @@ const LayoutInfoWallet = ({
                   {get(item, 'symbol')}
                 </TextFnx>
                 <TextFnx space={10} weight="700" color={colors.buy} size={21}>
-                  {`${get(item, 'available') + get(item, 'pending')}`}
+                  {`${formatCurrency(get(item, 'available') + get(item, 'pending'),get(item, 'symbol'),currencyList)}`}
                 </TextFnx>
               </View>
             </Layout>
@@ -565,13 +566,13 @@ const LayoutInfoWallet = ({
                 <TextFnx space={3} color={colors.app.textContentLevel3}>
                   Khả dụng
                 </TextFnx>
-                <TextFnx>{`${get(item, 'available')}`}</TextFnx>
+                <TextFnx>{`${formatCurrency(get(item, 'available'),get(item, 'symbol'),currencyList)}`}</TextFnx>
               </Layout>
               <Layout isSpaceBetween>
                 <TextFnx color={colors.app.textContentLevel3} space={3}>
                   Đang đặt lệnh
                 </TextFnx>
-                <TextFnx>{`${get(item, 'pending')}`}</TextFnx>
+                <TextFnx>{`${formatCurrency(get(item, 'pending'),get(item, 'symbol'),currencyList)}`}</TextFnx>
               </Layout>
             </View>
           </View>
@@ -659,7 +660,7 @@ const LayoutInfoWallet = ({
                     )}
                     valueCenter={get(data, 'item.statusLable')}
                     titleEnd={get(data, 'item.currency')}
-                    valueEnd={get(data, 'item.amount')}
+                    valueEnd={formatCurrency(get(data, 'item.amount'),get(data, 'item.currency'),currencyList)}
                     style={{
                       backgroundColor: colors.navigation,
                       paddingHorizontal: 15,
@@ -698,7 +699,7 @@ const LayoutInfoWallet = ({
           ListFooterComponent={isHistoryTransaction ? renderFooter : null}
           onEndReachedThreshold={0.4}
           onEndReached={() => {
-            console.log('cuoi roi');
+            // console.log('cuoi roi');
             if (isHistoryTransaction) {
               handleLoadMore();
             }

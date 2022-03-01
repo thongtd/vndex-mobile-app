@@ -175,7 +175,7 @@ const Step1AddNewAds = ({bntClose, onSubmitNextStep, dataState, ...rest}) => {
                   : `${get(dataState, 'percentPrice')}`
               }`}
               hasValue
-              keyboardType='decimal-pad'
+              keyboardType='numeric'
               styleView={{flex: 1}}
               onChangeText={value => rest.onChangePrice(value)}
               style={{

@@ -357,7 +357,9 @@ const Step1BuySellScreen = ({componentId, item}) => {
           spaceVertical={8}
           hasValue
           keyboardType="decimal-pad"
+          autoCapitalize="none"
           onChangeText={text => {
+            
             setPay(
               get(item, 'side') == SELL
                 ? formatCurrency(
@@ -502,6 +504,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
           hasValue
           value={Receive}
           spaceVertical={8}
+          keyboardType="numeric"
           titleRight={
             get(item, 'side') == SELL
               ? get(advertisment, 'symbol')
