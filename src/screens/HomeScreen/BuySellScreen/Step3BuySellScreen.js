@@ -97,15 +97,6 @@ const Step3BuySellScreen = ({
   }, [offerOrderGlobal, UserInfo]);
 
   useEffect(() => {
-    useActionsP2p(dispatch).handleGetAdvertisment(
-      get(offerOrder, 'p2PTradingOrderId'),
-    );
-    useActionsP2p(dispatch).handleGetOfferOrder(
-      get(offerOrder, 'offerOrderId'),
-    );
-    useActionsP2p(dispatch).handleGetChatInfoP2p(
-      get(offerOrder, 'offerOrderId'),
-    );
     const ev = listenerEventEmitter('pushStep', dataConfirm => {
       setIsLoading(false);
       if (get(dataConfirm, 'isHasPayment') === false) {
@@ -156,6 +147,16 @@ const Step3BuySellScreen = ({
       ev.remove();
     };
   }, []);
+  useEffect(() => {
+    
+    if (get(item, 'id')) {
+      useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'id'));
+    }
+
+    useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
+    useActionsP2p(dispatch).handleGetChatInfoP2p(offerOrderId);
+    return () => {};
+  }, [offerOrderId, item]);
 
   const hanldeCopy = url => {
     Clipboard.setString(url);
@@ -210,7 +211,7 @@ const Step3BuySellScreen = ({
     });
 
     return () => {};
-  }, [offerOrderState,advertisment]);
+  }, [offerOrderState, advertisment]);
   return (
     <Container
       space={15}
@@ -277,9 +278,10 @@ const Step3BuySellScreen = ({
               ? colors.app.buy
               : colors.app.sell
           }>
-          {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${
-            get(advertisment, 'symbol')
-          }`}
+          {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
+            advertisment,
+            'symbol',
+          )}`}
         </TextFnx>
         <Layout
           isLineCenter
@@ -314,9 +316,7 @@ const Step3BuySellScreen = ({
             get(advertisment, 'price'),
             get(advertisment, 'paymentUnit'),
             currencyList,
-          )} ${
-            get(advertisment, 'paymentUnit')
-          }`}</TextFnx>
+          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
