@@ -40,12 +40,13 @@ const BoxCommand = ({
               null}
           </Layout>
           <Layout isLineCenter>
-            <View style={{
+            {statusLabel ?( <View style={{
               backgroundColor:colors.app.backgroundButton,
-              borderRadius:5
+              borderRadius:5,
+              marginRight:10
             }}>
             <TextFnx weight='600' color={colors.app.textContentLevel3} spaceHorizontal={10}>{statusLabel}</TextFnx>
-            </View>
+            </View>):null}
             <Image
               source={icons.icArrowRight}
               style={{

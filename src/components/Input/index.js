@@ -7,6 +7,7 @@ import {
   Clipboard,
   TouchableOpacity,
   Keyboard,
+  Platform,
 } from 'react-native';
 import Icon from '../Icon';
 import ButtonWithTitle from '../Button/ButtonWithTitle';
@@ -75,7 +76,11 @@ const Input = ({
   }, [rest.isSecurity]);
 
   const handleChange = text => {
-    
+    if (Platform.OS == "ios" && keyboardType == 'decimal-pad' || keyboardType == 'numeric') {
+      if (text.slice(-1) == ',') {
+        text = text.replace(/.$/, '.');
+      }
+    }
     if (hasValue) {
       onChangeText(text);
     } else {
