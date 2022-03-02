@@ -537,22 +537,22 @@ const Step3BuySellScreen = ({
             </View>
             <Layout type="column">
               <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-                Người {get(advertisment, 'side') == SELL ? 'bán' : 'mua'}
+                Người {get(offerOrderState, 'offerSide') == BUY ? 'bán' : 'mua'}
               </TextFnx>
               <TextFnx
                 space={8}
                 color={colors.app.lightWhite}
                 size={fontSize.f16}>
-                {get(advertisment, 'traderInfo.identityUserId') ==
+                {get(UserInfo, 'id') ==
                 get(infoChat, 'offerIdentityUser.id')
-                  ? get(infoChat, 'offerIdentityUser.email')
-                  : get(infoChat, 'provideIdentityUser.email')}
+                  ? get(infoChat, 'provideIdentityUser.email')
+                  : get(infoChat, 'offerIdentityUser.email')}
               </TextFnx>
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
-                {get(advertisment, 'traderInfo.identityUserId') ==
+                {get(UserInfo, 'id') ==
                 get(infoChat, 'offerIdentityUser.id')
-                  ? get(infoChat, 'offerIdentityUser.phoneNumber')
-                  : get(infoChat, 'provideIdentityUser.phoneNumber')}
+                  ? get(infoChat, 'provideIdentityUser.phoneNumber')
+                  : get(infoChat, 'offerIdentityUser.phoneNumber')}
               </TextFnx>
             </Layout>
           </Layout>

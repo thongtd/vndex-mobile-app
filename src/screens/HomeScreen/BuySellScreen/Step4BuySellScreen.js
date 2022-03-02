@@ -588,7 +588,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             </View>
             <Layout type="column">
               <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-                Người {get(offerOrderState, 'side') == BUY ? 'bán' : 'mua'}
+                Người {get(offerOrderState, 'offerSide') == BUY ? 'bán' : 'mua'}
               </TextFnx>
               <TextFnx
                 space={8}

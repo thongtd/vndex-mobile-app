@@ -454,7 +454,7 @@ const CommandScreen2 = ({componentId}) => {
                     });
                   }}
                   iconComponent={icons.IcChat}
-                  title={get(item, 'p2PTradingOrder.identityUser.userName')}
+                  title={get(UserInfo, 'id') == get(item, 'offerIdentityUser.id')?get(item, 'partnerIdentityUser.email'):get(item, 'offerIdentityUser.email')}
                   style={{
                     width: 'auto',
                     backgroundColor: colors.background,
