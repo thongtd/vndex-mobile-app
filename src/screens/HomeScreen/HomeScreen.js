@@ -25,6 +25,7 @@ import {
   STEP_4_BUY_SELL_SCREEN,
   WALLET_SCREEN,
   UPDATE_ACCOUNT_SCREEN,
+  ACCOUNTP2P_SCREEN,
 } from '../../navigation';
 import {
   pushSingleHiddenTopBarApp,
@@ -404,6 +405,9 @@ const HomeScreen = ({componentId}) => {
               borderBottomColor: colors.app.lineSetting,
             }}>
             <Layout isSpaceBetween>
+              <TouchableOpacity onPress={()=>{
+                pushSingleScreenApp(componentId,ACCOUNTP2P_SCREEN,{userId:get(item, 'traderInfo.identityUserId')})
+              }}>
               <Layout>
                 <TextFnx weight="400" size={fontSize.f16} spaceRight={10}>
                   {`${get(item, 'traderInfo.emailAddress')}`}
@@ -412,6 +416,7 @@ const HomeScreen = ({componentId}) => {
                   <Icon iconComponent={icons.icTick} />
                 )}
               </Layout>
+              </TouchableOpacity>
               <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
                 {get(item, 'traderInfo.totalCompleteOrder')} lệnh |{' '}
                 {get(item, 'traderInfo.completePercent')}% hoàn tất

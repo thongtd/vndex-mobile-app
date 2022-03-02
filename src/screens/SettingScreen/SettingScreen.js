@@ -215,7 +215,7 @@ const SettingScreen = ({componentId}) => {
     pushSingleScreenApp(componentId, KYC_SCREEN);
   };
   const onAccP2p = () => {
-    pushSingleScreenApp(componentId, ACCOUNTP2P_SCREEN);
+    pushSingleScreenApp(componentId, ACCOUNTP2P_SCREEN,{userId:get(userInfo,"id")});
   };
   const onPaymentMethod = () => {
     pushSingleScreenApp(componentId, PAYMENT_METHOD_SCREEN);
@@ -262,6 +262,15 @@ const SettingScreen = ({componentId}) => {
     switchLangTabbar();
     // dismissAllModal();
   };
+  useEffect(() => {
+    const ev = setInterval(() => {
+      useActionsAuthen(dispatcher).handleGetUserKyc(get(userInfo, 'id'));
+    }, 5000);
+    return () => {
+      clearInterval(ev);
+    };
+  }, []);
+
   const onCurrency = () => {
     let propsData = {
       data: [
@@ -291,7 +300,7 @@ const SettingScreen = ({componentId}) => {
 
   //   }
   // }, [])
-  useActionsAuthen().handleGetUserKyc(get(userInfo, 'id'));
+
   return (
     <Container
       space={5}
@@ -400,21 +409,22 @@ const SettingScreen = ({componentId}) => {
               </View>
             </View>
           </Layout>
-          {size(get(userKyc, 'identityUserCustomerTypes')) >0 && get(userKyc, 'identityUserCustomerTypes').map((item, index) => {
-            if (get(item, 'approved')) {
-              return (
-                <Layout space={4} isLineCenter>
-                  <TickIc />
-                  <TextFnx spaceLeft={5}>
-                    {get(item, 'customerType.name')}
-                  </TextFnx>
-                </Layout>
-              );
-            }
-            // if (get(item, 'customerTypeId') == get(it, 'id')) {
-            //   it.approved = get(item, 'approved');
-            // }
-          })}
+          {size(get(userKyc, 'identityUserCustomerTypes')) > 0 &&
+            get(userKyc, 'identityUserCustomerTypes').map((item, index) => {
+              if (get(item, 'approved')) {
+                return (
+                  <Layout space={4} isLineCenter>
+                    <TickIc />
+                    <TextFnx spaceLeft={5}>
+                      {get(item, 'customerType.name')}
+                    </TextFnx>
+                  </Layout>
+                );
+              }
+              // if (get(item, 'customerTypeId') == get(it, 'id')) {
+              //   it.approved = get(item, 'approved');
+              // }
+            })}
         </>
       ) : (
         <View

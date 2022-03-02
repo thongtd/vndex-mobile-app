@@ -78,7 +78,7 @@ export function useActionsP2p(dispatch) {
     handleCreateCustomerType: data => dispatch(createAction(CREATE_CUSTOMER_TYPE, data)),
     handleGetFeeTax: data => dispatch(createAction(GET_FEE_TAX, data)),
     handleGetComplain: orderId => dispatch(createAction(GET_COMPLAIN, orderId)),
-    handleGetAdvInfo: () => dispatch(createAction(GET_ADV_INFO)),
+    handleGetAdvInfo: (data) => dispatch(createAction(GET_ADV_INFO,data)),
     handleGetCommentsByUser: userId => dispatch(createAction(GET_COMMENTS_BY_USER, userId)),
     handleGetComplainProcess: complainId =>
       dispatch(createAction(GET_COMPLAIN_PROCESS, complainId)),
