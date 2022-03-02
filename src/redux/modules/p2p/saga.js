@@ -690,19 +690,16 @@ export function* watchCreateComplain() {
 
 export function* asyncCreateCommentRating({payload}) {
   try {
-    const res = yield call(P2pService.getAdvertisments, {
-      accountId: get(payload, 'accountId') || 1,
-      content: get(payload, 'content') || '',
-      ratingStar: get(payload, 'side') || 0,
+    const res = yield call(P2pService.createRatingComment, {
+      accountId: get(payload, 'accountId'),
+      content: get(payload, 'content'),
+      ratingStar: get(payload, 'ratingStar'),
     });
     emitEventEmitter('doneApi', true);
-
-    if (res) {
-      toast('Đánh giá thành công');
+    console.log('res kaka: ', res);
+    if (get(res, 'success')) {
+      toast(get(res, 'message'));
       emitEventEmitter('successCreateCommentRating', true);
-
-      // gọi lại danh sách rating ở đây nếu cần
-      // yield put(createAction());
     } else {
       toast('Đã xảy ra lỗi xin vui lòng thử lại sau!');
     }

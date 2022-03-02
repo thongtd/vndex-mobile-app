@@ -201,46 +201,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
       clearInterval(intervalID);
     };
   }, [offerOrderState, offerOrderId, offerOrder, isStopComplain]);
-  // const feeTax = useSelector(state => state.p2p.feeTax);
-  // const checkTax = (isPercent, stateData = advertisment, tax = feeTax) => {
-  //   if (
-  //     (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == BUY) ||
-  //     (get(stateData, 'symbol') == 'SMAT' &&
-  //       get(stateData, 'side') == BUY &&
-  //       isPercent) ||
-  //     (get(stateData, 'symbol') !== 'SMAT' && get(stateData, 'side') == BUY)
-  //   ) {
-  //     return '0';
-  //   } else if (get(stateData, 'side') == SELL && isPercent) {
-  //     return get(tax, 'taxPercent');
-  //   } else if (get(stateData, 'side') == SELL) {
-  //     return formatCurrency(
-  //       get(tax, 'taxAmount'),
-  //       get(tax, 'taxFeeByCurrency'),
-  //       currencyList,
-  //     );
-  //   } else {
-  //     return '0';
-  //   }
-  // };
-  // const checkFee = (isPercent, stateData = advertisment, fee = feeTax) => {
-  //   if (
-  //     (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
-  //     (get(stateData, 'symbol') == 'SMAT' &&
-  //       get(stateData, 'side') == SELL &&
-  //       isPercent)
-  //   ) {
-  //     return '0';
-  //   } else if (isPercent) {
-  //     return get(fee, 'feePercent');
-  //   } else {
-  //     return formatCurrency(
-  //       get(fee, 'feeAmount'),
-  //       get(fee, 'taxFeeByCurrency'),
-  //       currencyList,
-  //     );
-  //   }
-  // };
+
   return (
     <Container
       space={15}
@@ -376,7 +337,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
             {`${
-              (get(offerOrderState, 'offerSide') == SELL)
+              get(offerOrderState, 'offerSide') == SELL
                 ? formatCurrency(
                     get(offerOrderState, 'tax'),
                     get(offerOrderState, 'feeTaxBy'),
@@ -594,14 +555,12 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                 space={8}
                 color={colors.app.lightWhite}
                 size={fontSize.f16}>
-                {get(UserInfo, 'id') ==
-                get(infoChat, 'offerIdentityUser.id')
+                {get(UserInfo, 'id') == get(infoChat, 'offerIdentityUser.id')
                   ? get(infoChat, 'provideIdentityUser.email')
                   : get(infoChat, 'offerIdentityUser.email')}
               </TextFnx>
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
-                {get(UserInfo, 'id') ==
-                get(infoChat, 'offerIdentityUser.id')
+                {get(UserInfo, 'id') == get(infoChat, 'offerIdentityUser.id')
                   ? get(infoChat, 'provideIdentityUser.phoneNumber')
                   : get(infoChat, 'offerIdentityUser.phoneNumber')}
               </TextFnx>

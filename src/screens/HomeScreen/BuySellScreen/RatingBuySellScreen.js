@@ -23,7 +23,7 @@ const RatingBuySellScreen = ({componentId, onCancel=()=>{}}) => {
   const offerOrder = useSelector(state => state.p2p.offerOrder);
   useEffect(() => {
     const ev = listenerEventEmitter('successCreateCommentRating', () => {
-      console.log("kkakkaka");
+      // console.log("kkakkaka");
       // pushSingleHiddenTopBarApp(componentId, HOME_SCREEN);
       pushTabBasedApp();
       
@@ -32,16 +32,16 @@ const RatingBuySellScreen = ({componentId, onCancel=()=>{}}) => {
       ev.remove();
     };
   }, [componentId]);
-
+  const UserInfo = useSelector(state => state.authentication.userInfo);
   const onRatingComment = useCallback(() => {
     dispatcher(
       createAction(CREATE_RATING_COMMENT, {
         content: content,
         ratingStar: ratingStar,
-        accountId: get(offerOrder,"ownerIdentityUser.identityUserId"),
+        accountId: get(UserInfo,"id") == get(offerOrder,"ownerIdentityUser.identityUserId")? get(offerOrder,"offerIdentityUser.identityUserId"): get(offerOrder,"ownerIdentityUser.identityUserId"),
       }),
     );
-  },[offerOrder])
+  },[offerOrder,content,ratingStar])
 
   return (
     <Container
