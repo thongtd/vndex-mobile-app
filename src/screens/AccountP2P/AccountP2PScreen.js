@@ -18,7 +18,7 @@ import { DETAIL_ACCOUNT_P2P_SCREEN, pushSingleScreenApp, STEP_1_BUY_SELL_SCREEN 
 import Close from 'assets/svg/close.svg';
 import Checked from 'assets/svg/checked.svg';
 import { useActionsP2p } from '../../redux';
-const AccountP2PScreen = ({componentId}) => {
+const AccountP2PScreen = ({componentId,userId=''}) => {
     const [ActiveType, setActiveType] = useState('S');
     const advertisments = useSelector(state => state.p2p.advertisments);
     const currencyList = useSelector(state => state.market.currencyList);
@@ -27,11 +27,14 @@ const AccountP2PScreen = ({componentId}) => {
     const advInfo = useSelector(state => state.p2p.advInfo);
     const dispatch = useDispatch()
     useEffect(() => {
-      useActionsP2p(dispatch).handleGetAdvInfo();
+      useActionsP2p(dispatch).handleGetAdvInfo({
+        userId:userId
+      });
       useActionsP2p(dispatch).handleGetAdvertisments({
         pageIndex:1,
         pageSize: 20,
         side: ActiveType == BUY ? SELL : BUY,
+        coinSymbol:''
       });
     
       return () => {

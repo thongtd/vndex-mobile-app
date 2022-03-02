@@ -51,7 +51,7 @@ import ButtonIcon from '../../components/Button/ButtonIcon';
 import icons from '../../configs/icons';
 import Icon from '../../components/Icon';
 import {useRef} from 'react';
-import {get, isArray, size, uniqBy} from 'lodash';
+import {get, isArray, isBoolean, size, uniqBy} from 'lodash';
 import {Dimensions, StatusBar} from 'react-native';
 const screenHeight = Dimensions.get('screen').height;
 const windowHeight = Dimensions.get('window').height;
@@ -87,6 +87,7 @@ const HomeScreen = ({componentId}) => {
   const [pageIndex, setPageIndex] = useState(1);
   const [exPaymentMethodIds, setExPaymentMethodIds] = useState([]);
   const [orderAmount, setOrderAmount] = useState('');
+  const [isProfessional, setIsProfessional] = useState(false);
 
   const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
@@ -119,7 +120,7 @@ const HomeScreen = ({componentId}) => {
     });
     const filerHomeEvent = listenerEventEmitter(
       'filerHomeEvent',
-      ({exPaymentMethodIdsEv, orderAmountEv}) => {
+      ({exPaymentMethodIdsEv, orderAmountEv, isProfessional}) => {
         if (exPaymentMethodIdsEv) {
           setExPaymentMethodIds(exPaymentMethodIdsEv);
         }
@@ -127,6 +128,10 @@ const HomeScreen = ({componentId}) => {
         if (orderAmountEv) {
           setOrderAmount(orderAmountEv == 'empty' ? '' : orderAmountEv);
         }
+        if(isBoolean(isProfessional)){
+          setIsProfessional(isProfessional)
+        }
+        
       },
     );
     const listenerPushNewAds = listenerEventEmitter('pushNewAds', () => {
@@ -196,6 +201,7 @@ const HomeScreen = ({componentId}) => {
                 pageIndex,
                 exPaymentMethodIds,
                 orderAmount,
+                isProfessional
               );
               break;
           }
@@ -224,6 +230,7 @@ const HomeScreen = ({componentId}) => {
         pageIndex,
         exPaymentMethodIds,
         orderAmount,
+        isProfessional
       );
       setIsLoading(true);
       setPageIndex(1);
@@ -239,6 +246,7 @@ const HomeScreen = ({componentId}) => {
     exPaymentMethodIds,
     orderAmount,
     isRefresh,
+    isProfessional
   ]);
   useEffect(() => {
     getAdvertisments(
@@ -247,6 +255,7 @@ const HomeScreen = ({componentId}) => {
       pageIndex,
       exPaymentMethodIds,
       orderAmount,
+      isProfessional
     );
     setIsLoading(true);
 
@@ -259,6 +268,7 @@ const HomeScreen = ({componentId}) => {
     pageIndex,
     exPaymentMethodIds = [],
     orderAmount,
+    isProfessional
   ) => {
     useActionsP2p(dispatch).handleGetAdvertisments({
       pageIndex: pageIndex || 1,
@@ -268,6 +278,7 @@ const HomeScreen = ({componentId}) => {
       exPaymentMethodIds:
         size(exPaymentMethodIds) > 0 ? exPaymentMethodIds[0] : '',
       orderAmount,
+      isProfessional
     });
   };
   const logged = useSelector(state => state.authentication.logged);

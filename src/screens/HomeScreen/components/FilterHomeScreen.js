@@ -29,7 +29,7 @@ import {constant} from '../../../configs/constant';
 
 export default function FilterHomeScreen() {
   const [qtty, setQtty] = useState(0);
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(false);
   const exchangePaymentMethod = useSelector(
     state => state.p2p.exchangePaymentMethod,
   );
@@ -129,7 +129,13 @@ export default function FilterHomeScreen() {
               thumbColor={colors.greyLight}
               ios_backgroundColor="#3e3e3e"
               value={checked}
-              onValueChange={() => setChecked(!checked)}
+              onValueChange={(data) => {
+                emitEventEmitter('filerHomeEvent', {
+                  isProfessional:data
+                });
+                setChecked(!checked)
+
+              }}
             />
           }
         />

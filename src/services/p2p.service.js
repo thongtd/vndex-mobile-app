@@ -25,8 +25,8 @@ export const P2pService = {
     let response = await httpService.get_without_token(urlGetAdvertisments);
     return response;
   },
-  getAdvInfo: async () => {
-    let url = `${P2P_API.GET_ADV_INFO}`;
+  getAdvInfo: async (data) => {
+    let url = `${P2P_API.GET_ADV_INFO}?userId=${get(data,"userId")}`;
     let response = await httpService.get(url);
     return response.data;
   },
@@ -100,7 +100,7 @@ export const P2pService = {
   },
   getMyAdvertisments: async data => {
     let dataRemoved = removeEmptyUrl(
-      `side=${data.side}&coinSymbol=${data.coinSymbol}&paymentUnit=${data.paymentUnit}&priceType=${data.priceType}&orderAmount=${data.orderAmount}&exPaymentMethodIds=${data.exPaymentMethodIds}&requiredKyc=${data.requiredKyc}&requiredAgeInday=${data.requiredAgeInday}&createdFrom=${data.createdFrom}&createdTo=${data.createdTo}&status=${data.status}&pageIndex=${data.pageIndex}&pageSize=${data.pageSize}`,
+      `side=${data.side}&coinSymbol=${data.coinSymbol}&paymentUnit=${data.paymentUnit}&priceType=${data.priceType}&orderAmount=${data.orderAmount}&exPaymentMethodIds=${data.exPaymentMethodIds}&requiredKyc=${data.requiredKyc}&requiredAgeInday=${data.requiredAgeInday}&createdFrom=${data.createdFrom}&createdTo=${data.createdTo}&status=${data.status}&pageIndex=${data.pageIndex}&pageSize=${data.pageSize}&isProfessional=${isProfessional}`,
     );
     let urlGetAdvertisments = `${P2P_API.GET_MY_ADVERTISEMENT}?${dataRemoved}`;
 

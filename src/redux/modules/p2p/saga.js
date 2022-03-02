@@ -77,6 +77,7 @@ export function* asyncGetAdvertisments({payload}) {
       createdFrom: get(payload, 'createdFrom') || '',
       createdTo: get(payload, 'createdTo') || '',
       status: get(payload, 'status') || '',
+      isProfessional: get(payload, 'isProfessional') || false
     });
     emitEventEmitter('doneApi', true);
 
@@ -733,7 +734,7 @@ export function* watchGetCommentsByUser() {
 
 export function* asyncGetAdvInfo({payload}) {
   try {
-    const res = yield call(P2pService.getAdvInfo);
+    const res = yield call(P2pService.getAdvInfo,payload);
     emitEventEmitter('doneApi', true);
 
     if (res) {
