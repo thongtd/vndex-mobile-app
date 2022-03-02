@@ -149,14 +149,14 @@ const Step3BuySellScreen = ({
   }, []);
   useEffect(() => {
     
-    if (get(item, 'id')) {
-      useActionsP2p(dispatch).handleGetAdvertisment(get(item, 'id'));
+    if (get(offerOrder, 'p2PTradingOrderId')) {
+      useActionsP2p(dispatch).handleGetAdvertisment(get(offerOrder, 'p2PTradingOrderId'));
     }
 
     useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
     useActionsP2p(dispatch).handleGetChatInfoP2p(offerOrderId);
     return () => {};
-  }, [offerOrderId, item]);
+  }, [offerOrderId, offerOrder]);
 
   const hanldeCopy = url => {
     Clipboard.setString(url);
@@ -166,44 +166,44 @@ const Step3BuySellScreen = ({
   const actionSheetRef = useRef(null);
 
   console.log('item: ', item);
-  const feeTax = useSelector(state => state.p2p.feeTax);
-  const checkTax = (isPercent, stateData = advertisment, tax = feeTax) => {
-    if (
-      (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
-      (get(stateData, 'symbol') == 'SMAT' &&
-        get(stateData, 'side') == SELL &&
-        isPercent) ||
-      (get(stateData, 'symbol') !== 'SMAT' && get(stateData, 'side') == SELL)
-    ) {
-      return '0';
-    } else if (get(stateData, 'side') == BUY && isPercent) {
-      return get(tax, 'taxPercent');
-    } else if (get(stateData, 'side') == BUY) {
-      return formatCurrency(
-        get(tax, 'taxAmount'),
-        get(tax, 'taxFeeByCurrency'),
-        currencyList,
-      );
-    }
-  };
-  const checkFee = (isPercent, stateData = advertisment, fee = feeTax) => {
-    if (
-      (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
-      (get(stateData, 'symbol') == 'SMAT' &&
-        get(stateData, 'side') == SELL &&
-        isPercent)
-    ) {
-      return '0';
-    } else if (isPercent) {
-      return get(fee, 'feePercent');
-    } else {
-      return formatCurrency(
-        get(fee, 'feeAmount'),
-        get(fee, 'taxFeeByCurrency'),
-        currencyList,
-      );
-    }
-  };
+  // const feeTax = useSelector(state => state.p2p.feeTax);
+  // const checkTax = (isPercent, stateData = advertisment, tax = feeTax) => {
+  //   if (
+  //     (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == BUY) ||
+  //     (get(stateData, 'symbol') == 'SMAT' &&
+  //       get(stateData, 'side') == BUY &&
+  //       isPercent) ||
+  //     (get(stateData, 'symbol') !== 'SMAT' && get(stateData, 'side') == BUY)
+  //   ) {
+  //     return '0';
+  //   } else if (get(stateData, 'side') == SELL && isPercent) {
+  //     return get(tax, 'taxPercent');
+  //   } else if (get(stateData, 'side') == SELL) {
+  //     return formatCurrency(
+  //       get(tax, 'taxAmount'),
+  //       get(tax, 'taxFeeByCurrency'),
+  //       currencyList,
+  //     );
+  //   }
+  // };
+  // const checkFee = (isPercent, stateData = advertisment, fee = feeTax) => {
+  //   if (
+  //     (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
+  //     (get(stateData, 'symbol') == 'SMAT' &&
+  //       get(stateData, 'side') == SELL &&
+  //       isPercent)
+  //   ) {
+  //     return '0';
+  //   } else if (isPercent) {
+  //     return get(fee, 'feePercent');
+  //   } else {
+  //     return formatCurrency(
+  //       get(fee, 'feeAmount'),
+  //       get(fee, 'taxFeeByCurrency'),
+  //       currencyList,
+  //     );
+  //   }
+  // };
   useEffect(() => {
     useActionsP2p(dispatch).handleGetFeeTax({
       quantity: get(offerOrderState, 'quantity'),
@@ -328,35 +328,31 @@ const Step3BuySellScreen = ({
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>{`${checkFee()} ${get(
-            feeTax,
-            'taxFeeByCurrency',
-          )}`}</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${
+            get(advertisment, 'symbol') !== 'SMAT' ||
+            (get(offerOrderState, 'offerSide') == SELL &&
+              get(advertisment, 'symbol') == 'SMAT')
+              ? formatCurrency(
+                  get(offerOrderState, 'fee'),
+                  get(offerOrderState, 'feeTaxBy'),
+                  currencyList,
+                )
+              : '0'
+          } ${get(offerOrderState, 'feeTaxBy')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            {checkTax()} {get(feeTax, 'taxFeeByCurrency')}
+            {`${
+              (get(offerOrderState, 'offerSide') == SELL)
+                ? formatCurrency(
+                    get(offerOrderState, 'tax'),
+                    get(offerOrderState, 'feeTaxBy'),
+                    currencyList,
+                  )
+                : '0'
+            } ${get(offerOrderState, 'feeTaxBy')}`}
           </TextFnx>
-        </Layout>
-        <Layout isSpaceBetween space={8}>
-          <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
-          <Layout isLineCenter>
-            <TextFnx color={colors.app.textContentLevel2}>
-              {get(advertisment, 'orderSequenceNumber')}
-            </TextFnx>
-            <ButtonIcon
-              onPress={() => {
-                Clipboard.setString(get(advertisment, 'orderSequenceNumber'));
-                toast('COPY_TO_CLIPBOARD'.t());
-              }}
-              style={{
-                height: 25,
-                width: 30,
-              }}
-              iconComponent={<Copy height={20} width={20} />}
-            />
-          </Layout>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>

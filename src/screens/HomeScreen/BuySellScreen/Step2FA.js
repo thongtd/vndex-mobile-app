@@ -25,7 +25,7 @@ import {P2pService} from '../../../services/p2p.service';
 const Step2FA = ({componentId}) => {
   const [otp, setOtp] = useState('');
   const dispatcher = useDispatch();
-  const [disabled, setDisabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(sessionId);
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const twoFactorySerice = get(UserInfo, 'twoFactorService');
@@ -42,17 +42,20 @@ const Step2FA = ({componentId}) => {
   }, [componentId]);
 
   const handleSubmit = () => {
+    setIsLoading(true);
     let dataConfirm = {
       verifyCode: otp,
       email: get(UserInfo, 'email'),
       sessionId: sessionId,
-      ipAddress:""
+      ipAddress: '',
     };
     if (size(otp) === 0) {
       toast('Please enter 2FA code'.t());
     } else {
       P2pService.verify2Fa(dataConfirm)
         .then(res => {
+          console.log('res 2fa: ', res);
+          setIsLoading(false);
           if (get(res, 'succeeded')) {
             dispatcher(
               createAction(UNLOCK_OFFER_ADVERTISMENT, {
@@ -61,10 +64,11 @@ const Step2FA = ({componentId}) => {
               }),
             );
           } else {
-            toast(get(res, 'message'));
+            toast('Mã 2FA không đúng');
           }
         })
         .catch(err => {
+          setIsLoading(false);
           toast('Lỗi kết nối');
         });
     }
@@ -76,15 +80,17 @@ const Step2FA = ({componentId}) => {
   };
   // const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
-    if(get(UserInfo,"twoFactorService") == constant.TWO_FACTOR_TYPE.EMAIL_2FA){
+    if (
+      get(UserInfo, 'twoFactorService') == constant.TWO_FACTOR_TYPE.EMAIL_2FA
+    ) {
       handleResend();
     }
-    
+
     return () => {};
   }, []);
   return (
     <Container
-      //   isLoadding={disabled}
+      isLoadding={isLoading}
       componentId={componentId}
       isTopBar={true}
       title={'security verification'.t()}>

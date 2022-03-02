@@ -29,7 +29,11 @@ import icons from '../../configs/icons';
 import CountDown from 'react-native-countdown-component';
 import {get, isEmpty, isNumber} from 'lodash';
 import {useSelector, useDispatch} from 'react-redux';
-import {formatCurrency, listenerEventEmitter, to_UTCDate} from '../../configs/utils';
+import {
+  formatCurrency,
+  listenerEventEmitter,
+  to_UTCDate,
+} from '../../configs/utils';
 import Copy from 'assets/svg/ic_copy.svg';
 import {Navigation} from 'react-native-navigation';
 import {useActionsP2p} from '../../redux';
@@ -42,38 +46,55 @@ const ComplainingScreen = ({componentId, orderId}) => {
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const [isCheckFalse, setIsCheckFalse] = useState(false);
   const dispatch = useDispatch();
- 
+  const [offerOrderState, setOfferOrderState] = useState(offerOrder);
+
   useEffect(() => {
-    useActionsP2p(dispatch).handleGetComplainProcess(
-      get(complainInfo, 'id'),
+    useActionsP2p(dispatch).handleGetComplainProcess(get(complainInfo, 'id'));
+
+    const evGetComplain = listenerEventEmitter(
+      'doneGetComplain',
+      ({type, data}) => {
+        if (!get(data, 'id') && type == '3') {
+          pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+            topBar: {
+              rightButtons: [
+                {
+                  id: IdNavigation.PressIn.chat,
+                  icon: require('assets/icons/ic_chat.png'),
+                },
+              ],
+            },
+          });
+        }
+      },
     );
 
-    const evGetComplain = listenerEventEmitter('doneGetComplain', ({type,data}) => {
-      if(!get(data,"id") && type == '3'){
-        pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
-          topBar: {
-            rightButtons: [
-              {
-                id: IdNavigation.PressIn.chat,
-                icon: require('assets/icons/ic_chat.png'),
-              },
-            ],
-          },
-        });
-      }
-    });
-    
     return () => {
       evGetComplain.remove();
     };
   }, [complainInfo]);
   useEffect(() => {
-    useActionsP2p(dispatch).handleGetComplainProcess(
-      get(complainInfo, 'id'),
-    );
+    if (
+      get(UserInfo, 'id') ===
+      get(offerOrder, 'ownerIdentityUser.identityUserId')
+    ) {
+      setOfferOrderState({
+        ...offerOrder,
+        offerSide: get(offerOrder, 'offerSide') === BUY ? SELL : BUY,
+      });
+    } else {
+      setOfferOrderState({
+        ...offerOrder,
+      });
+    }
+
+    return () => {};
+  }, [offerOrder, UserInfo]);
+  useEffect(() => {
+    useActionsP2p(dispatch).handleGetComplainProcess(get(complainInfo, 'id'));
     useActionsP2p(dispatch).handleGetComplain({
       orderId,
-      type:'2'
+      type: '2',
     });
     const navigationButtonEventListener =
       Navigation.events().registerNavigationButtonPressedListener(
@@ -86,32 +107,32 @@ const ComplainingScreen = ({componentId, orderId}) => {
           }
         },
       );
-      const ev = listenerEventEmitter('doneApi', () => {
-        setIsLoading(false);
+    const ev = listenerEventEmitter('doneApi', () => {
+      setIsLoading(false);
+    });
+    const evCancel = listenerEventEmitter('cancelSuccess', () => {
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.chat,
+              icon: require('assets/icons/ic_chat.png'),
+            },
+          ],
+        },
       });
-      const evCancel = listenerEventEmitter('cancelSuccess', () => {
-        pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
-          topBar: {
-            rightButtons: [
-              {
-                id: IdNavigation.PressIn.chat,
-                icon: require('assets/icons/ic_chat.png'),
-              },
-            ],
-          },
-        });
-      });
-      
+    });
+
     return () => {
       navigationButtonEventListener.remove();
       ev.remove();
       evCancel.remove();
-    }
-  }, [])
+    };
+  }, []);
   const [isLoading, setIsLoading] = useState(false);
   return (
     <Container
-    isLoadding={isLoading} 
+      isLoadding={isLoading}
       // spaceHorizontal={20}
       space={15}
       spaceHorizontal={0}
@@ -121,8 +142,8 @@ const ComplainingScreen = ({componentId, orderId}) => {
       customsNavigation={() => {
         Navigation.mergeOptions(componentId, {
           topBar: {
-            title:{
-              text:"Đang khiếu nại"
+            title: {
+              text: 'Đang khiếu nại',
             },
             rightButtons: [
               {
@@ -143,10 +164,17 @@ const ComplainingScreen = ({componentId, orderId}) => {
         }}>
         {get(UserInfo, 'id') == get(complainInfo, 'accId') ? (
           <TextFnx spaceBottom={5} size={14} align="center">
-          Hãy chờ người bị khiếu nại xử lý
-        </TextFnx>): isCheckFalse?(<TextFnx spaceBottom={5} size={14} align="center">Hãy chờ bộ phận hỗ trợ khách hàng của VNDEX</TextFnx>): (<TextFnx spaceBottom={5} size={14} align="center">
-        Hãy trả lời khiếu nại
-      </TextFnx>)}
+            Hãy chờ người bị khiếu nại xử lý
+          </TextFnx>
+        ) : isCheckFalse ? (
+          <TextFnx spaceBottom={5} size={14} align="center">
+            Hãy chờ bộ phận hỗ trợ khách hàng của VNDEX
+          </TextFnx>
+        ) : (
+          <TextFnx spaceBottom={5} size={14} align="center">
+            Hãy trả lời khiếu nại
+          </TextFnx>
+        )}
         <Layout
           isLineCenter
           style={{
@@ -186,56 +214,60 @@ const ComplainingScreen = ({componentId, orderId}) => {
             }}
           />
         </Layout>
-        {(get(UserInfo, 'id') == get(complainInfo, 'accId') || isCheckFalse) ?(
+        {get(UserInfo, 'id') == get(complainInfo, 'accId') || isCheckFalse ? (
           <Layout type="column" spaceHorizontal={10}>
-          <TextFnx spaceBottom={5} size={14}>
-            1. Nếu cả hai đã được thỏa thuận, bạn có thể HỦY KHIẾU NẠI và tiến
-            hành hoàn tất giao dịch
-          </TextFnx>
-          <TextFnx spaceBottom={5} size={14}>
-            2. Nếu người khiếu nại không phản hồi kịp thời, hỗ trợ khách hàng sẽ
-            can thiệp và tiến hành phân xử.
-          </TextFnx>
-          <TextFnx spaceBottom={5} size={14}>
-            3. Hãy{' '}
-            <TextFnx color={colors.highlight} style={{marginBottom: -3}}>
-              Cung cấp thêm thông tin
+            <TextFnx spaceBottom={5} size={14}>
+              1. Nếu cả hai đã được thỏa thuận, bạn có thể HỦY KHIẾU NẠI và tiến
+              hành hoàn tất giao dịch
             </TextFnx>
-            . Thông tin cung cấp bởi người dùng và hỗ trợ khách hàng có thể tìm
-            thấy ở "Tiến trình khiếu nại
-          </TextFnx>
-          <TextFnx color={colors.highlight}></TextFnx>
-        </Layout>
-        ):(
+            <TextFnx spaceBottom={5} size={14}>
+              2. Nếu người khiếu nại không phản hồi kịp thời, hỗ trợ khách hàng
+              sẽ can thiệp và tiến hành phân xử.
+            </TextFnx>
+            <TextFnx spaceBottom={5} size={14}>
+              3. Hãy{' '}
+              <TextFnx color={colors.highlight} style={{marginBottom: -3}}>
+                Cung cấp thêm thông tin
+              </TextFnx>
+              . Thông tin cung cấp bởi người dùng và hỗ trợ khách hàng có thể
+              tìm thấy ở "Tiến trình khiếu nại
+            </TextFnx>
+            <TextFnx color={colors.highlight}></TextFnx>
+          </Layout>
+        ) : (
           <Layout type="column" spaceHorizontal={10}>
-          <TextFnx spaceBottom={5} size={14}>
-          1. Nếu bạn đã đạt được thỏa thuận với đối tác, hãy nhấn ĐẠT THỎA THUẬN và đợi xác nhận. Khi được đối tác xác nhận thỏa thuận, khiếu nại sẽ bị hủy. Nếu đối tác không xác nhận thỏa thuận, bộ phận hỗ trợ khách hàng sẽ can thiệp và tiến hành phân xử.
-          </TextFnx>
-          <TextFnx spaceBottom={5} size={14}>
-          2. Nếu bạn không thể đạt được thỏa thuận với đối tác, hãy nhấn ĐÀM PHÁN THẤT BẠI. Bộ phận hỗ trợ khách hàng sẽ can thiệp và tiến hành phân xử.
-          </TextFnx>
-          <TextFnx spaceBottom={5} size={14}>
-            3. Nếu người khiếu nại không phản hồi kịp thời, hỗ trợ khách hàng sẽ
-            can thiệp và tiến hành phân xử.
-          </TextFnx>
-          <TextFnx spaceBottom={5} size={14}>
-            4. Hãy{' '}
-            <TextFnx color={colors.highlight} style={{marginBottom: -3}}>
-              Cung cấp thêm thông tin
+            <TextFnx spaceBottom={5} size={14}>
+              1. Nếu bạn đã đạt được thỏa thuận với đối tác, hãy nhấn ĐẠT THỎA
+              THUẬN và đợi xác nhận. Khi được đối tác xác nhận thỏa thuận, khiếu
+              nại sẽ bị hủy. Nếu đối tác không xác nhận thỏa thuận, bộ phận hỗ
+              trợ khách hàng sẽ can thiệp và tiến hành phân xử.
             </TextFnx>
-            . Thông tin cung cấp bởi người dùng và hỗ trợ khách hàng có thể tìm
-            thấy ở "Tiến trình khiếu nại
-          </TextFnx>
-          <TextFnx color={colors.highlight}></TextFnx>
-        </Layout>
+            <TextFnx spaceBottom={5} size={14}>
+              2. Nếu bạn không thể đạt được thỏa thuận với đối tác, hãy nhấn ĐÀM
+              PHÁN THẤT BẠI. Bộ phận hỗ trợ khách hàng sẽ can thiệp và tiến hành
+              phân xử.
+            </TextFnx>
+            <TextFnx spaceBottom={5} size={14}>
+              3. Nếu người khiếu nại không phản hồi kịp thời, hỗ trợ khách hàng
+              sẽ can thiệp và tiến hành phân xử.
+            </TextFnx>
+            <TextFnx spaceBottom={5} size={14}>
+              4. Hãy{' '}
+              <TextFnx color={colors.highlight} style={{marginBottom: -3}}>
+                Cung cấp thêm thông tin
+              </TextFnx>
+              . Thông tin cung cấp bởi người dùng và hỗ trợ khách hàng có thể
+              tìm thấy ở "Tiến trình khiếu nại
+            </TextFnx>
+            <TextFnx color={colors.highlight}></TextFnx>
+          </Layout>
         )}
-        
       </Layout>
 
       <TouchableOpacity
         onPress={() => {
-          pushSingleScreenApp(componentId, COMPLAINING_PROCESS_SCREEN,{
-            orderId:orderId
+          pushSingleScreenApp(componentId, COMPLAINING_PROCESS_SCREEN, {
+            orderId: orderId,
           });
         }}
         style={{
@@ -246,8 +278,8 @@ const ComplainingScreen = ({componentId, orderId}) => {
         <ButtonIcon
           name=""
           onPress={() => {
-            pushSingleScreenApp(componentId, COMPLAINING_PROCESS_SCREEN,{
-              orderId:orderId
+            pushSingleScreenApp(componentId, COMPLAINING_PROCESS_SCREEN, {
+              orderId: orderId,
             });
           }}
           style={{
@@ -380,11 +412,11 @@ const ComplainingScreen = ({componentId, orderId}) => {
         <TextFnx
           weight="700"
           color={
-            get(offerOrder, 'offerSide') == BUY
+            get(offerOrderState, 'offerSide') == BUY
               ? colors.app.buy
               : colors.app.sell
           }>
-          {`${get(offerOrder, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
+          {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
             advertisment,
             'symbol',
           )}`}
@@ -402,12 +434,12 @@ const ComplainingScreen = ({componentId, orderId}) => {
             size={16}
             weight="700"
             color={
-              get(offerOrder, 'offerSide') == BUY
+              get(offerOrderState, 'offerSide') == BUY
                 ? colors.app.buy
                 : colors.app.sell
             }>
             {`${formatCurrency(
-              get(offerOrder, 'price') * get(offerOrder, 'quantity'),
+              get(offerOrderState, 'price') * get(offerOrderState, 'quantity'),
               get(advertisment, 'paymentUnit'),
               currencyList,
             )} `}
@@ -427,7 +459,7 @@ const ComplainingScreen = ({componentId, orderId}) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(offerOrder, 'quantity'),
+            get(offerOrderState, 'quantity'),
             get(advertisment, 'paymentUnit'),
             currencyList,
           )} ${get(advertisment, 'symbol')}`}</TextFnx>
@@ -435,15 +467,19 @@ const ComplainingScreen = ({componentId, orderId}) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(offerOrder, 'price') * get(advertisment, 'fee'),
-            get(advertisment, 'paymentUnit'),
+            get(offerOrderState, 'fee'),
+            get(offerOrderState, 'feeTaxBy'),
             currencyList,
-          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
+          )} ${get(offerOrderState, 'feeTaxBy')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            0 {get(advertisment, 'paymentUnit')}
+            {`${formatCurrency(
+              get(offerOrderState, 'tax'),
+              get(offerOrderState, 'feeTaxBy'),
+              currencyList,
+            )} ${get(offerOrderState, 'feeTaxBy')}`}
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
@@ -478,7 +514,7 @@ const ComplainingScreen = ({componentId, orderId}) => {
           <TextFnx color={colors.app.textContentLevel3}>
             Phương thức thanh toán
           </TextFnx>
-          {get(offerOrder, 'exPaymentMethodCode') ==
+          {get(offerOrderState, 'exPaymentMethodCode') ==
           constant.CODE_PAYMENT_METHOD.MOMO ? (
             <Layout isLineCenter>
               <View
@@ -527,95 +563,95 @@ const ComplainingScreen = ({componentId, orderId}) => {
             </Layout>
           )}
         </Layout>
-        {!isEmpty(get(offerOrder, 'backAccountNo')) && (
+        {!isEmpty(get(offerOrderState, 'backAccountNo')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>Số tài khoản</TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrder, 'backAccountNo')}
+                {get(offerOrderState, 'backAccountNo')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
-                onPress={() => hanldeCopy(get(offerOrder, 'bankAccountNo'))}
+                onPress={() => hanldeCopy(get(offerOrderState, 'bankAccountNo'))}
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
           </Layout>
         )}
-        {!isEmpty(get(offerOrder, 'bankName')) && (
+        {!isEmpty(get(offerOrderState, 'bankName')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>
               Tên ngân hàng
             </TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrder, 'bankName')}
+                {get(offerOrderState, 'bankName')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
-                onPress={() => hanldeCopy(get(offerOrder, 'bankName'))}
+                onPress={() => hanldeCopy(get(offerOrderState, 'bankName'))}
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
           </Layout>
         )}
-        {!isEmpty(get(offerOrder, 'bankBranchName')) && (
+        {!isEmpty(get(offerOrderState, 'bankBranchName')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>Chi nhánh</TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrder, 'bankBranchName')}
+                {get(offerOrderState, 'bankBranchName')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
-                onPress={() => hanldeCopy(get(offerOrder, 'bankBranchName'))}
+                onPress={() => hanldeCopy(get(offerOrderState, 'bankBranchName'))}
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
           </Layout>
         )}
-        {!isEmpty(get(offerOrder, 'fullName')) && (
+        {!isEmpty(get(offerOrderState, 'fullName')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>Tên</TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrder, 'fullName')}
+                {get(offerOrderState, 'fullName')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
-                onPress={() => hanldeCopy(get(offerOrder, 'fullName'))}
+                onPress={() => hanldeCopy(get(offerOrderState, 'fullName'))}
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
           </Layout>
         )}
-        {!isEmpty(get(offerOrder, 'phoneNumber')) && (
+        {!isEmpty(get(offerOrderState, 'phoneNumber')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>
               Số điện thoại
             </TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrder, 'phoneNumber')}
+                {get(offerOrderState, 'phoneNumber')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
-                onPress={() => hanldeCopy(get(offerOrder, 'phoneNumber'))}
+                onPress={() => hanldeCopy(get(offerOrderState, 'phoneNumber'))}
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
@@ -681,51 +717,50 @@ const ComplainingScreen = ({componentId, orderId}) => {
             mở khóa”.
           </TextFnx>
         </Layout>
-        {!isCheckFalse && <>
-          {get(UserInfo, 'id') == get(complainInfo, 'accId') ? (
-          <Button
-            textClose={'Hủy khiếu nại'}
-            isClose
-            onClose={() => {
-              setIsLoading(true);
-              useActionsP2p(dispatch).handleCancelComplain(
-                get(complainInfo, 'id'),
-              );
-            }}
-          />
-        ) : (
-          <Button
-            spaceVertical={20}
-            isSubmit
-            // bgButtonColorSubmit={
-            //   disabledSubmit ? '#715611' : colors.app.yellowHightlight
-            // }
-            // bgButtonColorClose={disabledSubmit ? '#2C2B28' : colors.btnClose}
-            // disabledClose={disabledSubmit}
-            // disabledSubmit={disabledSubmit}
-            isClose
-            onSubmit={() => {
-              setIsLoading(true);
-              useActionsP2p(dispatch).handleGetComplain(
-                {
-                  orderId,
-                  type:'3'
-                }
-              );
-            }}
-            onClose={() => {
-              setIsCheckFalse(true)
-            }}
-            colorTitle={colors.text}
-            weightTitle={'700'}
-            textClose="Đàm phán thất bại"
-            textSubmit="Đạt thỏa thuận"
-            colorTitleClose={colors.description}
-            //   te={'MUA USDT'}
-          />
+        {!isCheckFalse && (
+          <>
+            {get(UserInfo, 'id') == get(complainInfo, 'accId') ? (
+              <Button
+                textClose={'Hủy khiếu nại'}
+                isClose
+                onClose={() => {
+                  setIsLoading(true);
+                  useActionsP2p(dispatch).handleCancelComplain(
+                    get(complainInfo, 'id'),
+                  );
+                }}
+              />
+            ) : (
+              <Button
+                spaceVertical={20}
+                isSubmit
+                // bgButtonColorSubmit={
+                //   disabledSubmit ? '#715611' : colors.app.yellowHightlight
+                // }
+                // bgButtonColorClose={disabledSubmit ? '#2C2B28' : colors.btnClose}
+                // disabledClose={disabledSubmit}
+                // disabledSubmit={disabledSubmit}
+                isClose
+                onSubmit={() => {
+                  setIsLoading(true);
+                  useActionsP2p(dispatch).handleGetComplain({
+                    orderId,
+                    type: '3',
+                  });
+                }}
+                onClose={() => {
+                  setIsCheckFalse(true);
+                }}
+                colorTitle={colors.text}
+                weightTitle={'700'}
+                textClose="Đàm phán thất bại"
+                textSubmit="Đạt thỏa thuận"
+                colorTitleClose={colors.description}
+                //   te={'MUA USDT'}
+              />
+            )}
+          </>
         )}
-        </>}
-       
       </View>
     </Container>
   );

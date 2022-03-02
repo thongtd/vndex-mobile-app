@@ -93,7 +93,7 @@ const Step5BuySellScreen = ({componentId}) => {
               } ${
                 get(offerOrderState, 'offerSide') == BUY
                   ? get(advertisment, 'symbol')
-                  : get(advertisment, 'paymentUnit')
+                  : get(advertisment, 'symbol')
               }`}
         </TextFnx>
         {!get(offerOrderState, 'isPaymentCancel') && (

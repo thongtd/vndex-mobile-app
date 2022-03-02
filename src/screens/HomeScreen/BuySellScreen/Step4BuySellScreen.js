@@ -81,7 +81,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     });
 
     return () => {};
-  }, [offerOrderState,advertisment]);
+  }, [offerOrderState, advertisment]);
   useEffect(() => {
     if (
       get(UserInfo, 'id') ===
@@ -108,12 +108,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         ...offerOrder,
       });
     }
-    if(get(offerOrder, 'p2PTradingOrderId')){
-      useActionsP2p(dispatch).handleGetAdvertisment(
-        get(offerOrder, 'p2PTradingOrderId'),
-      );
-    }
-    
+
     return () => {};
   }, [offerOrder, UserInfo]);
   useEffect(() => {
@@ -139,7 +134,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         }
       },
     );
-   
+
     useActionsP2p(dispatch).handleGetChatInfoP2p(offerOrderId);
     useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
     return () => {
@@ -206,46 +201,46 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
       clearInterval(intervalID);
     };
   }, [offerOrderState, offerOrderId, offerOrder, isStopComplain]);
-  const feeTax = useSelector(state => state.p2p.feeTax);
-  const checkTax = (isPercent, stateData = advertisment, tax = feeTax) => {
-    if (
-      (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
-      (get(stateData, 'symbol') == 'SMAT' &&
-        get(stateData, 'side') == SELL &&
-        isPercent) ||
-      (get(stateData, 'symbol') !== 'SMAT' && get(stateData, 'side') == SELL)
-    ) {
-      return '0';
-    } else if (get(stateData, 'side') == BUY && isPercent) {
-      return get(tax, 'taxPercent');
-    } else if (get(stateData, 'side') == BUY) {
-      return formatCurrency(
-        get(tax, 'taxAmount'),
-        get(tax, 'taxFeeByCurrency'),
-        currencyList,
-      );
-    }else{
-      return "0"
-    }
-  };
-  const checkFee = (isPercent, stateData = advertisment, fee = feeTax) => {
-    if (
-      (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
-      (get(stateData, 'symbol') == 'SMAT' &&
-        get(stateData, 'side') == SELL &&
-        isPercent)
-    ) {
-      return '0';
-    } else if (isPercent) {
-      return get(fee, 'feePercent');
-    } else {
-      return formatCurrency(
-        get(fee, 'feeAmount'),
-        get(fee, 'taxFeeByCurrency'),
-        currencyList,
-      );
-    }
-  };
+  // const feeTax = useSelector(state => state.p2p.feeTax);
+  // const checkTax = (isPercent, stateData = advertisment, tax = feeTax) => {
+  //   if (
+  //     (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == BUY) ||
+  //     (get(stateData, 'symbol') == 'SMAT' &&
+  //       get(stateData, 'side') == BUY &&
+  //       isPercent) ||
+  //     (get(stateData, 'symbol') !== 'SMAT' && get(stateData, 'side') == BUY)
+  //   ) {
+  //     return '0';
+  //   } else if (get(stateData, 'side') == SELL && isPercent) {
+  //     return get(tax, 'taxPercent');
+  //   } else if (get(stateData, 'side') == SELL) {
+  //     return formatCurrency(
+  //       get(tax, 'taxAmount'),
+  //       get(tax, 'taxFeeByCurrency'),
+  //       currencyList,
+  //     );
+  //   } else {
+  //     return '0';
+  //   }
+  // };
+  // const checkFee = (isPercent, stateData = advertisment, fee = feeTax) => {
+  //   if (
+  //     (get(stateData, 'symbol') == 'SMAT' && get(stateData, 'side') == SELL) ||
+  //     (get(stateData, 'symbol') == 'SMAT' &&
+  //       get(stateData, 'side') == SELL &&
+  //       isPercent)
+  //   ) {
+  //     return '0';
+  //   } else if (isPercent) {
+  //     return get(fee, 'feePercent');
+  //   } else {
+  //     return formatCurrency(
+  //       get(fee, 'feeAmount'),
+  //       get(fee, 'taxFeeByCurrency'),
+  //       currencyList,
+  //     );
+  //   }
+  // };
   return (
     <Container
       space={15}
@@ -365,12 +360,30 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>{`${checkFee()} ${get(feeTax, 'taxFeeByCurrency')}`}</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{`${
+            get(advertisment, 'symbol') !== 'SMAT' ||
+            (get(offerOrderState, 'offerSide') == SELL &&
+              get(advertisment, 'symbol') == 'SMAT')
+              ? formatCurrency(
+                  get(offerOrderState, 'fee'),
+                  get(offerOrderState, 'feeTaxBy'),
+                  currencyList,
+                )
+              : '0'
+          } ${get(offerOrderState, 'feeTaxBy')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-          {`${checkTax()} ${get(feeTax, 'taxFeeByCurrency')}`}
+            {`${
+              (get(offerOrderState, 'offerSide') == SELL)
+                ? formatCurrency(
+                    get(offerOrderState, 'tax'),
+                    get(offerOrderState, 'feeTaxBy'),
+                    currencyList,
+                  )
+                : '0'
+            } ${get(offerOrderState, 'feeTaxBy')}`}
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
@@ -575,22 +588,22 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             </View>
             <Layout type="column">
               <TextFnx size={fontSize.f12} color={colors.app.textDisabled}>
-                Người {get(advertisment, 'side') == SELL ? 'bán' : 'mua'}
+                Người {get(offerOrderState, 'side') == BUY ? 'bán' : 'mua'}
               </TextFnx>
               <TextFnx
                 space={8}
                 color={colors.app.lightWhite}
                 size={fontSize.f16}>
-                {get(advertisment, 'traderInfo.identityUserId') ==
+                {get(UserInfo, 'id') ==
                 get(infoChat, 'offerIdentityUser.id')
-                  ? get(infoChat, 'offerIdentityUser.email')
-                  : get(infoChat, 'provideIdentityUser.email')}
+                  ? get(infoChat, 'provideIdentityUser.email')
+                  : get(infoChat, 'offerIdentityUser.email')}
               </TextFnx>
               <TextFnx color={colors.app.lightWhite} size={fontSize.f16}>
-                {get(advertisment, 'traderInfo.identityUserId') ==
+                {get(UserInfo, 'id') ==
                 get(infoChat, 'offerIdentityUser.id')
-                  ? get(infoChat, 'offerIdentityUser.phoneNumber')
-                  : get(infoChat, 'provideIdentityUser.phoneNumber')}
+                  ? get(infoChat, 'provideIdentityUser.phoneNumber')
+                  : get(infoChat, 'offerIdentityUser.phoneNumber')}
               </TextFnx>
             </Layout>
           </Layout>
