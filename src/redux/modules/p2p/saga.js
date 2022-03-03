@@ -236,6 +236,7 @@ export function* watchRemovePaymentMethod() {
 export function* asyncGetMyAdvertisment({payload}) {
   try {
     const res = yield call(P2pService.getMyAdvertisments, {
+      
       pageIndex: get(payload, 'pageIndex') || 1,
       pageSize: get(payload, 'pageSize') || 15,
       side: get(payload, 'side') || '',
@@ -250,6 +251,7 @@ export function* asyncGetMyAdvertisment({payload}) {
       createdTo: get(payload, 'createdTo') || '',
       status: get(payload, 'status') || '',
     });
+    console.log('res my adv: ', res);
     if (res?.status == 200) {
       if (isArray(get(res.data, 'source'))) {
         yield put(
@@ -267,6 +269,7 @@ export function* asyncGetMyAdvertisment({payload}) {
       emitEventEmitter('doneApi', false);
     }
   } catch (e) {
+    console.log('e my adv: ', e);
     emitEventEmitter('doneApi', false);
   }
 }

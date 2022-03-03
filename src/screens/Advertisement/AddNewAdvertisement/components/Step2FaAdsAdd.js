@@ -31,6 +31,7 @@ export default function Step2FaAdsAdd({componentId, data}) {
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const twoFactorySerice = get(UserInfo, 'twoFactorService');
   const twoFactorEnable = get(UserInfo, 'twoFactorEnabled');
+  const [isLoading, setIsLoading] = useState(false);
   const dispatcher = useDispatch();
   useEffect(() => {
     const ev = listenerEventEmitter('successCreateAds', () => {
@@ -49,7 +50,7 @@ export default function Step2FaAdsAdd({componentId, data}) {
     if (size(otp) === 0) {
       toast('Please enter 2FA code'.t());
     } else {
- 
+      setIsLoading(true)
       P2pService.verify2Fa({
         verifyCode: otp,
         email: get(UserInfo, 'email'),
@@ -57,6 +58,7 @@ export default function Step2FaAdsAdd({componentId, data}) {
         ipAddress:""
       })
         .then(res => {
+          setIsLoading(false);
           console.log('res: ', res);
           if (get(res, 'succeeded')) {
             dispatcher(
@@ -90,10 +92,11 @@ export default function Step2FaAdsAdd({componentId, data}) {
             );
           } else {
             // toast(get())
-            toast(get(res, 'message'));
+            toast('Mã 2FA không đúng');
           }
         })
         .catch(err => {
+          setIsLoading(false);
           toast('Lỗi kết nối');
         });
     }
@@ -111,7 +114,9 @@ export default function Step2FaAdsAdd({componentId, data}) {
     <Container
       isTopBar={true}
       title={'security verification'.t()}
-      componentId={componentId}>
+      componentId={componentId}
+      isLoadding={isLoading}
+      >
       <Input
         onSubmitEditing={handleSubmit}
         handleResend={handleResend}

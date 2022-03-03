@@ -31,7 +31,8 @@ import {useActionsP2p} from '../../../redux';
 import BoxCommand from '../../CommandScreen/components/BoxCommand';
 import ButtonAddNew from './ButtonAddNew';
 
-const ActionBottom = (isDelete=true)=>{
+const ActionBottom = (status)=>{
+  console.log('status: ', status);
   return [
     {
       name: 'Chỉnh sửa',
@@ -50,7 +51,7 @@ const ActionBottom = (isDelete=true)=>{
       type: 'CLOSE',
     },
   ].filter(s => {
-    if(!isDelete){
+    if(status == 3 || status == 4){
       return s.type !== 'CLOSE'
     }
     return s
@@ -59,6 +60,7 @@ const ActionBottom = (isDelete=true)=>{
 const MyAdvertisenmentScreen = ({componentId}) => {
   const dispatch = useDispatch();
   const [isEnabled, setIsEnabled] = useState({});
+  const [itemData, setItem] = useState({});
   const refAction = useRef(null);
   // const [callIndexFail, setCallIndexFail] = useState(0);
   const [pageIndex, setPageIndex] = useState(1);
@@ -320,6 +322,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
                       size={14}
                       name="ellipsis-v"
                       onPress={() => {
+                        setItem(item);
                         refAction.current.item = {...item};
                         refAction.current?.setModalVisible();
                       }}
@@ -332,7 +335,7 @@ const MyAdvertisenmentScreen = ({componentId}) => {
         )}
       />
       <BottomSheet actionRef={refAction} title="Thêm hành động">
-        {ActionBottom(get(refAction.current,"item.isDelete")).map((item, index) => (
+        {ActionBottom(get(itemData,"status") ).map((item, index) => (
           <Button
             key={`dt-${index}`}
             onInput={() => onActionClick(item)}

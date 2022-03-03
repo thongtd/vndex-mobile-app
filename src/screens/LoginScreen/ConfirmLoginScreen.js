@@ -134,6 +134,7 @@ const ConfirmLoginScreen = ({
         onChangeText={text => setOtp(text)}
         isPaste
         spaceVertical={10}
+        keyboardType="number-pad"
         isResend={twoFactorType === constant.TWO_FACTOR_TYPE.EMAIL_2FA}
         placeholder={'2FA_CODE'.t()}
       />
