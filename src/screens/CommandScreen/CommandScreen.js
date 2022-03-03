@@ -328,6 +328,7 @@ const CommandScreen2 = ({componentId}) => {
             case COMMAND_SCREEN:
               getHistoryOrder(1, {
                 side: activeMenu,
+                ...dataSubmit,
               });
               break;
           }
@@ -355,6 +356,7 @@ const CommandScreen2 = ({componentId}) => {
   const onRefresh = activeMenu => {
     getHistoryOrder(1, {
       side: activeMenu,
+      ...dataSubmit,
     });
   };
   return (
