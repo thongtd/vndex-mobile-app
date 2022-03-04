@@ -25,8 +25,8 @@ export const P2pService = {
     let response = await httpService.get_without_token(urlGetAdvertisments);
     return response;
   },
-  getAdvInfo: async (data) => {
-    let url = `${P2P_API.GET_ADV_INFO}?userId=${get(data,"userId")}`;
+  getAdvInfo: async data => {
+    let url = `${P2P_API.GET_ADV_INFO}?userId=${get(data, 'userId')}`;
     let response = await httpService.get(url);
     return response.data;
   },
@@ -35,9 +35,9 @@ export const P2pService = {
     let response = await httpService.get(url);
     return response.data;
   },
-  createCustomerType: async (data) => {
+  createCustomerType: async data => {
     let url = `${P2P_API.CREATE_CUSTOMER_TYPE}`;
-    let response = await httpService.post(url,data);
+    let response = await httpService.post(url, data);
     return response.data;
   },
   getCommentByUser: async data => {
@@ -100,10 +100,9 @@ export const P2pService = {
   },
   getMyAdvertisments: async data => {
     let dataRemoved = removeEmptyUrl(
-      `side=${data.side}&coinSymbol=${data.coinSymbol}&paymentUnit=${data.paymentUnit}&priceType=${data.priceType}&orderAmount=${data.orderAmount}&exPaymentMethodIds=${data.exPaymentMethodIds}&requiredKyc=${data.requiredKyc}&requiredAgeInday=${data.requiredAgeInday}&createdFrom=${data.createdFrom}&createdTo=${data.createdTo}&status=${data.status}&pageIndex=${data.pageIndex}&pageSize=${data.pageSize}`,
+      `side=${data.side}&coinSymbol=${data.coinSymbol}&paymentUnit=${data.paymentUnit}&priceType=${data.priceType}&orderAmount=${data.orderAmount}&exPaymentMethodIds=${data.exPaymentMethodIds}&requiredKyc=${data.requiredKyc}&requiredAgeInday=${data.requiredAgeInday}&createdFrom=${data.createdFrom}&createdTo=${data.createdTo}&status=${data.status}&pageIndex=${data.pageIndex}&pageSize=${data.pageSize}&userId=${data.userId}`,
     );
     let urlGetAdvertisments = `${P2P_API.GET_MY_ADVERTISEMENT}?${dataRemoved}`;
-
     let response = await httpService.get(urlGetAdvertisments);
 
     return response;

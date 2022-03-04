@@ -20,7 +20,7 @@ import Checked from 'assets/svg/checked.svg';
 import { useActionsAuthen, useActionsP2p } from '../../redux';
 const AccountP2PScreen = ({componentId,userId=''}) => {
     const [ActiveType, setActiveType] = useState('S');
-    const advertisments = useSelector(state => state.p2p.advertisments);
+    const advertisments = useSelector(state => state.p2p.myAdvertisments);
     const currencyList = useSelector(state => state.market.currencyList);
     const logged = useSelector(state => state.authentication.logged);
     const UserInfo = useSelector(state => state.authentication.userInfo);
@@ -30,11 +30,17 @@ const AccountP2PScreen = ({componentId,userId=''}) => {
       useActionsP2p(dispatch).handleGetAdvInfo({
         userId:userId
       });
-      useActionsP2p(dispatch).handleGetAdvertisments({
-        pageIndex:1,
-        pageSize: 20,
+      // useActionsP2p(dispatch).handleGetAdvertisments({
+      //   pageIndex:1,
+      //   pageSize: 20,
+      //   side: ActiveType == BUY ? SELL : BUY,
+      //   coinSymbol:''
+      // });
+      useActionsP2p(dispatch).handleGetMyAdvertisments({
+        pageIndex: 1,
+        pageSize: 25,
         side: ActiveType == BUY ? SELL : BUY,
-        coinSymbol:''
+        userId:userId
       });
       useActionsAuthen(dispatch).handleGetUserKyc(userId);
       return () => {

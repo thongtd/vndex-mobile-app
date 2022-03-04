@@ -250,6 +250,7 @@ export function* asyncGetMyAdvertisment({payload}) {
       createdFrom: get(payload, 'createdFrom') || '',
       createdTo: get(payload, 'createdTo') || '',
       status: get(payload, 'status') || '',
+      userId: get(payload, 'userId') || ''
     });
     console.log('res my adv: ', res);
     if (res?.status == 200) {
