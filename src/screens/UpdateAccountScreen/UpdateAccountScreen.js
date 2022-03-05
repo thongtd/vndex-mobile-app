@@ -10,11 +10,11 @@ import colors from '../../configs/styles/colors';
 import Button from '../../components/Button/Button';
 import ButtonIcon from '../../components/Button/ButtonIcon';
 import DocumentPicker from 'react-native-document-picker';
-import {get} from 'lodash';
+import {get, size} from 'lodash';
 import {listenerEventEmitter, toast} from '../../configs/utils';
 import {useDispatch, useSelector} from 'react-redux';
 import {useActionsP2p} from '../../redux';
-import { pop } from '../../navigation/Navigation';
+import {pop} from '../../navigation/Navigation';
 
 const data = [
   {
@@ -39,9 +39,10 @@ const dataPolicy = [
 const UpdateAccountScreen = ({componentId, item}) => {
   // const [singleFile, setSingleFile] = useState(null);
   const [files, setFiles] = useState([]);
+  const [filesFromServer, setFilesFromServer] = useState([]);
   const dispatcher = useDispatch();
   const UserInfo = useSelector(state => state.authentication.userInfo);
-  
+  const detailCustomertype = useSelector(state => state.p2p.detailCustomertype);
   const onChooseFile = async () => {
     try {
       const res = await DocumentPicker.pickMultiple({
@@ -88,15 +89,30 @@ const UpdateAccountScreen = ({componentId, item}) => {
     }
   };
   useEffect(() => {
-    const ev = listenerEventEmitter('doneApi', () => {
+    if (get(item, 'idDetail')) {
+      useActionsP2p(dispatcher).handleGetDetailCustomerType(
+        get(item, 'idDetail'),
+      );
+    }
+
+    const ev = listenerEventEmitter('updateCreateCustomerType', () => {
       pop(componentId);
     });
 
     return () => {
-        ev.remove();
+      ev.remove();
     };
-  }, []);
-  
+  }, [get(item, 'idDetail')]);
+  useEffect(() => {
+    if (size(get(detailCustomertype, 'identityUserCustomerTypeFiles')) > 0) {
+      setFilesFromServer(
+        get(detailCustomertype, 'identityUserCustomerTypeFiles'),
+      );
+    }
+
+    return () => {};
+  }, [detailCustomertype]);
+
   const HeaderComponent = (
     <Layout type="column" style={[styles.borderLayout]} spaceBottom={10}>
       <TouchableOpacity style={styles.bntHeader} onPress={onChooseFile}>
@@ -126,12 +142,13 @@ const UpdateAccountScreen = ({componentId, item}) => {
       </Layout>
     </Layout>
   );
+  var dataCus = [...files, ...filesFromServer];
   return (
     <Container title={`Hồ sơ ${get(item, 'name')}`} componentId={componentId}>
       <FlatList
         ListHeaderComponent={HeaderComponent}
         keyExtractor={(item, index) => index.toString()}
-        data={files}
+        data={dataCus}
         renderItem={({item}) => (
           <Layout
             isSpaceBetween
@@ -146,7 +163,7 @@ const UpdateAccountScreen = ({componentId, item}) => {
             <Layout type="column">
               <Layout isLineCenter spaceBottom={5}>
                 <TextFnx spaceHorizontal={5} size={fontSize.f16}>
-                  {get(item, 'name')}
+                  {get(item, 'name') || get(item,"fileName")}
                 </TextFnx>
                 {/* <Icon name={'eye'} size={16} color={colors.iconButton} /> */}
               </Layout>
@@ -162,7 +179,12 @@ const UpdateAccountScreen = ({componentId, item}) => {
               color={colors.iconButton}
               size={fontSize.f16}
               onPress={() => {
-                setFiles(files.filter(s => s.name != get(item, 'name')));
+                if(get(item,"fileName")){
+                  setFilesFromServer(filesFromServer.filter(s => s.fileName != get(item, 'fileName')));
+                }else{
+                  setFiles(files.filter(s => s.name != get(item, 'name')));
+                }
+                
               }}
             />
           </Layout>
@@ -172,20 +194,41 @@ const UpdateAccountScreen = ({componentId, item}) => {
             spaceVertical={20}
             isSubmit
             onSubmit={() => {
-              var formdataReal = new FormData();
-              formdataReal.append('CustomerTypeId', get(item, 'id'));
-              formdataReal.append('CustomerId', get(UserInfo, 'id'));
-              formdataReal.append('Approved', true);
-              for (let i = 0; i < files.length; i++) {
-                const eleImage = files[i];
-                // messages[0].image = [{link: get(eleImage, 'uri')}];
-                formdataReal.append('Files', {
-                  uri: get(eleImage, 'uri'),
-                  type: get(eleImage, 'type'),
-                  name: get(eleImage, 'name'),
+              if(get(item, 'idDetail')){
+                let formdataUpdate = new FormData();
+                for (let i = 0; i < files.length; i++) {
+                  const eleImage = files[i];
+                  formdataUpdate.append('Files', {
+                    uri: get(eleImage, 'uri'),
+                    type: get(eleImage, 'type'),
+                    name: get(eleImage, 'name'),
+                  });
+                }
+                for (let i = 0; i < filesFromServer.length; i++) {
+                  const eleFile = filesFromServer[i];
+                  formdataUpdate.append('OldFileIds', get(eleFile,"id"));
+                }
+                useActionsP2p(dispatcher).handleUpdateCustomerType({
+                  data:formdataUpdate,
+                  idDetail: get(item, 'idDetail')
                 });
+              }else{
+                let formdataReal = new FormData();
+                formdataReal.append('CustomerTypeId', get(item, 'id'));
+                formdataReal.append('CustomerId', get(UserInfo, 'id'));
+                formdataReal.append('Approved', true);
+                for (let i = 0; i < files.length; i++) {
+                  const eleImage = files[i];
+                  // messages[0].image = [{link: get(eleImage, 'uri')}];
+                  formdataReal.append('Files', {
+                    uri: get(eleImage, 'uri'),
+                    type: get(eleImage, 'type'),
+                    name: get(eleImage, 'name'),
+                  });
+                }
+                useActionsP2p(dispatcher).handleCreateCustomerType(formdataReal);
               }
-              useActionsP2p(dispatcher).handleCreateCustomerType(formdataReal);
+              
             }}
             colorTitle={colors.text}
             weightTitle={'700'}

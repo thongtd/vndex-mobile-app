@@ -67,19 +67,28 @@ export const GET_FEE_TAX_SUCCESS = `${CONTEXT}/GET_FEE_TAX_SUCCESS`;
 export const GET_ALL_CUSTOMER_TYPE = `${CONTEXT}/GET_ALL_CUSTOMER_TYPE`;
 export const GET_ALL_CUSTOMER_TYPE_SUCCESS = `${CONTEXT}/GET_ALL_CUSTOMER_TYPE_SUCCESS`;
 export const CREATE_CUSTOMER_TYPE = `${CONTEXT}/CREATE_CUSTOMER_TYPE`;
-
+export const GET_DETAIL_CUSTOMER_TYPE = `${CONTEXT}/GET_DETAIL_CUSTOMER_TYPE`;
+export const GET_DETAIL_CUSTOMER_TYPE_SUCCESS = `${CONTEXT}/GET_DETAIL_CUSTOMER_TYPE_SUCCESS`;
+export const UPDATE_CUSTOMER_TYPE = `${CONTEXT}/UPDATE_CUSTOMER_TYPE`;
 export function useActionsP2p(dispatch) {
   if (!dispatch) {
     dispatch = useDispatch();
   }
   return {
     handleCreateComplain: data => dispatch(createAction(CREATE_COMPLAIN, data)),
-    handleGetAllCustomerType: () => dispatch(createAction(GET_ALL_CUSTOMER_TYPE)),
-    handleCreateCustomerType: data => dispatch(createAction(CREATE_CUSTOMER_TYPE, data)),
+    handleGetAllCustomerType: () =>
+      dispatch(createAction(GET_ALL_CUSTOMER_TYPE)),
+    handleGetDetailCustomerType: id =>
+      dispatch(createAction(GET_DETAIL_CUSTOMER_TYPE, id)),
+    handleUpdateCustomerType: data =>
+      dispatch(createAction(UPDATE_CUSTOMER_TYPE, data)),
+    handleCreateCustomerType: data =>
+      dispatch(createAction(CREATE_CUSTOMER_TYPE, data)),
     handleGetFeeTax: data => dispatch(createAction(GET_FEE_TAX, data)),
     handleGetComplain: orderId => dispatch(createAction(GET_COMPLAIN, orderId)),
-    handleGetAdvInfo: (data) => dispatch(createAction(GET_ADV_INFO,data)),
-    handleGetCommentsByUser: userId => dispatch(createAction(GET_COMMENTS_BY_USER, userId)),
+    handleGetAdvInfo: data => dispatch(createAction(GET_ADV_INFO, data)),
+    handleGetCommentsByUser: userId =>
+      dispatch(createAction(GET_COMMENTS_BY_USER, userId)),
     handleGetComplainProcess: complainId =>
       dispatch(createAction(GET_COMPLAIN_PROCESS, complainId)),
     handleCancelComplain: complainId =>
@@ -134,10 +143,13 @@ export function useActionsP2p(dispatch) {
 }
 export const actionsReducerP2p = {
   getMarketInfoSuccess: data => createAction(GET_MARKET_INFO_SUCCESS, data),
-  getAllCustomerTypeSuccess: data => createAction(GET_ALL_CUSTOMER_TYPE_SUCCESS, data),
+  getDetailCustomerTypeSuccess: data => createAction(GET_DETAIL_CUSTOMER_TYPE_SUCCESS, data),
+  getAllCustomerTypeSuccess: data =>
+    createAction(GET_ALL_CUSTOMER_TYPE_SUCCESS, data),
   getFeeTaxSuccess: data => createAction(GET_FEE_TAX_SUCCESS, data),
   getAdvInfoSuccess: data => createAction(GET_ADV_INFO_SUCCESS, data),
-  getCommentsByUserSuccess: data => createAction(GET_COMMENTS_BY_USER_SUCCESS, data),
+  getCommentsByUserSuccess: data =>
+    createAction(GET_COMMENTS_BY_USER_SUCCESS, data),
   getComplainSuccess: data => createAction(GET_COMPLAIN_SUCCESS, data),
   getComplainProcessSuccess: data =>
     createAction(GET_COMPLAIN_PROCESS_SUCCESS, data),

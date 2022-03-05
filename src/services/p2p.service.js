@@ -35,9 +35,22 @@ export const P2pService = {
     let response = await httpService.get(url);
     return response.data;
   },
+  
   createCustomerType: async data => {
     let url = `${P2P_API.CREATE_CUSTOMER_TYPE}`;
     let response = await httpService.post(url, data);
+    return response.data;
+  },
+  getDetailCustomerType: async (id) => {
+    let url = `${P2P_API.GET_DETAIL_CUSTOMER_TYPE}${id}`;
+    let response = await httpService.get(url);
+    return response.data;
+  },
+  updateCustomerType: async data => {
+    let url = `${P2P_API.UPDATE_CUSTOMER_TYPE}${data.idDetail}`;
+    console.log('url: ', url);
+    let response = await httpService.post(url, get(data,"data"));
+    console.log('response: ', response);
     return response.data;
   },
   getCommentByUser: async data => {

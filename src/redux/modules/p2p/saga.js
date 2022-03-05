@@ -50,6 +50,8 @@ import {
   GET_FEE_TAX_SUCCESS,
   GET_ALL_CUSTOMER_TYPE,
   CREATE_CUSTOMER_TYPE,
+  GET_DETAIL_CUSTOMER_TYPE,
+  UPDATE_CUSTOMER_TYPE,
 } from './actions';
 
 import {
@@ -789,7 +791,7 @@ export function* asyncCreateCustomerType({payload}) {
   try {
     const res = yield call(P2pService.createCustomerType, payload);
     if (get(res, 'success')) {
-      emitEventEmitter('doneApi', true);
+      emitEventEmitter('updateCreateCustomerType', true);
       return toast('Bạn đã gửi lên thành công, vui lòng chờ xác thực');
     }
   } catch (e) {
@@ -798,6 +800,40 @@ export function* asyncCreateCustomerType({payload}) {
 }
 export function* watchCreateCustomerType() {
   yield takeLatest(CREATE_CUSTOMER_TYPE, asyncCreateCustomerType);
+}
+export function* asyncGetDetailCustomerType({payload}) {
+  try {
+    const res = yield call(P2pService.getDetailCustomerType, payload);
+    if (get(res, 'success')) {
+      emitEventEmitter('doneApi', true);
+      yield put(actionsReducerP2p.getDetailCustomerTypeSuccess(get(res,"data")));
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetDetailCustomerType() {
+  yield takeLatest(GET_DETAIL_CUSTOMER_TYPE, asyncGetDetailCustomerType);
+}
+export function* asyncUpdateCustomerType({payload}) {
+  try {
+    const res = yield call(P2pService.updateCustomerType, {
+      
+      idDetail:get(payload,"idDetail"),
+      data: get(payload,"data")
+    });
+    console.log('res: ', res);
+    if (get(res, 'success')) {
+      emitEventEmitter('updateCreateCustomerType', true);
+      
+      return toast('Bạn đã cập nhật thành công, vui lòng chờ duyệt');
+    }
+  } catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchUpdateCustomerType() {
+  yield takeLatest(UPDATE_CUSTOMER_TYPE, asyncUpdateCustomerType);
 }
 export default function* () {
   yield all([fork(watchGetAdvertisments)]);
@@ -831,4 +867,6 @@ export default function* () {
   yield all([fork(watchGetFeeTax)]);
   yield all([fork(watchGetAllCustomerType)]);
   yield all([fork(watchCreateCustomerType)]);
+  yield all([fork(watchGetDetailCustomerType)]);
+  yield all([fork(watchUpdateCustomerType)]);
 }

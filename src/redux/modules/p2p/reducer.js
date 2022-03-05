@@ -20,6 +20,7 @@ import {
   GET_COMMENTS_BY_USER_SUCCESS,
   GET_FEE_TAX_SUCCESS,
   GET_ALL_CUSTOMER_TYPE_SUCCESS,
+  GET_DETAIL_CUSTOMER_TYPE_SUCCESS,
 } from './actions';
 import {get, set} from '../../../configs/utils';
 import i18n from 'react-native-i18n';
@@ -48,6 +49,7 @@ export const DEFAULT = {
   commentsByUser: [],
   feeTax: {},
   allCustomerType: [],
+  detailCustomertype: {},
 };
 
 export default p2p = (state = DEFAULT, action = {}) => {
@@ -113,6 +115,11 @@ export default p2p = (state = DEFAULT, action = {}) => {
       return {
         ...state,
         feeTax: payload,
+      };
+    case GET_DETAIL_CUSTOMER_TYPE_SUCCESS:
+      return {
+        ...state,
+        detailCustomertype: payload,
       };
     case GET_ALL_CUSTOMER_TYPE_SUCCESS:
       return {

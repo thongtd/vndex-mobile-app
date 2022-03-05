@@ -62,6 +62,7 @@ const ListUpdateAccountScreen = ({componentId}) => {
       get(userKyc, 'identityUserCustomerTypes').map((item, index) => {
         if (get(item, 'customerTypeId') == get(it, 'id')) {
           it.approved = get(item, 'approved');
+          it.idDetail = get(item, 'id');
         }
       });
     }
@@ -95,6 +96,23 @@ const ListUpdateAccountScreen = ({componentId}) => {
           onTitle={() => {}}
         />
       );
+    } else if (get(it, 'rejected') === true) {
+      <Button
+        isTitle
+        title={'Đã từ chối'}
+        spaceHorizontal={10}
+        size={fontSize.f14}
+        color={colors.app.sell}
+        style={{
+          backgroundColor: colors.app.bg3B2B2B,
+          borderRadius: 5,
+        }}
+        onTitle={() => {
+          pushSingleScreenApp(componentId, UPDATE_ACCOUNT_SCREEN, {
+            item: it,
+          });
+        }}
+      />;
     } else {
       return (
         <Button
@@ -109,7 +127,7 @@ const ListUpdateAccountScreen = ({componentId}) => {
           }}
           onTitle={() => {
             pushSingleScreenApp(componentId, UPDATE_ACCOUNT_SCREEN, {
-              item:it,
+              item: it,
             });
           }}
         />
@@ -139,62 +157,10 @@ const ListUpdateAccountScreen = ({componentId}) => {
                     <TextFnx spaceHorizontal={10} size={fontSize.f16}>
                       {get(item, 'name')}
                     </TextFnx>
-                    {/* <Icon iconComponent={icons.Ic1} size={16} /> */}
                   </Layout>
-                  {/* {(item.isShowList && (
-                    <Button
-                      isTitle
-                      title="Danh sách hồ sơ"
-                      spaceHorizontal={10}
-                      size={fontSize.f14}
-                      color={colors.iconButton}
-                      onTitle={() =>
-                        pushSingleScreenApp(componentId, LIST_UPDATE_SCREEN)
-                      }
-                    />
-                  )) ||
-                    null} */}
                 </Layout>
               </Layout>
-              <Layout type="column">
-                {handleCheck(item)}
-                {/* <Button
-                  isTitle
-                  title={'Nâng cấp'}
-                  spaceHorizontal={10}
-                  size={fontSize.f14}
-                  color={
-                    item.isReply
-                      ? colors.cl8EC393
-                      : item.isShowList
-                      ? colors.textMomo
-                      : colors.black
-                  }
-                  style={{
-                    backgroundColor: item.isReply
-                      ? colors.cl28382E
-                      : item.isShowList
-                      ? colors.app.bg3B2B2B
-                      : colors.iconButton,
-                    borderRadius: 5,
-                  }}
-                  onTitle={() => {
-                    pushSingleScreenApp(componentId, UPDATE_ACCOUNT_SCREEN, {
-                      item,
-                    });
-                  }}
-                /> */}
-                {/* {(item.isReply && (
-                  <TextFnx
-                    spaceTop={5}
-                    align={'right'}
-                    size={fontSize.f12}
-                    color={colors.description}>
-                    {item.date}
-                  </TextFnx>
-                )) ||
-                  null} */}
-              </Layout>
+              <Layout type="column">{handleCheck(item)}</Layout>
             </Layout>
           )}
         />
