@@ -163,7 +163,7 @@ const UpdateAccountScreen = ({componentId, item}) => {
             <Layout type="column">
               <Layout isLineCenter spaceBottom={5}>
                 <TextFnx spaceHorizontal={5} size={fontSize.f16}>
-                  {get(item, 'name') || get(item,"fileName")}
+                  {get(item, 'name') || get(item, 'fileName')}
                 </TextFnx>
                 {/* <Icon name={'eye'} size={16} color={colors.iconButton} /> */}
               </Layout>
@@ -179,12 +179,15 @@ const UpdateAccountScreen = ({componentId, item}) => {
               color={colors.iconButton}
               size={fontSize.f16}
               onPress={() => {
-                if(get(item,"fileName")){
-                  setFilesFromServer(filesFromServer.filter(s => s.fileName != get(item, 'fileName')));
-                }else{
+                if (get(item, 'fileName')) {
+                  setFilesFromServer(
+                    filesFromServer.filter(
+                      s => s.fileName != get(item, 'fileName'),
+                    ),
+                  );
+                } else {
                   setFiles(files.filter(s => s.name != get(item, 'name')));
                 }
-                
               }}
             />
           </Layout>
@@ -194,7 +197,7 @@ const UpdateAccountScreen = ({componentId, item}) => {
             spaceVertical={20}
             isSubmit
             onSubmit={() => {
-              if(get(item, 'idDetail')){
+              if (get(item, 'idDetail')) {
                 let formdataUpdate = new FormData();
                 for (let i = 0; i < files.length; i++) {
                   const eleImage = files[i];
@@ -206,29 +209,34 @@ const UpdateAccountScreen = ({componentId, item}) => {
                 }
                 for (let i = 0; i < filesFromServer.length; i++) {
                   const eleFile = filesFromServer[i];
-                  formdataUpdate.append('OldFileIds', get(eleFile,"id"));
+                  formdataUpdate.append('OldFileIds', get(eleFile, 'id'));
                 }
                 useActionsP2p(dispatcher).handleUpdateCustomerType({
-                  data:formdataUpdate,
-                  idDetail: get(item, 'idDetail')
+                  data: formdataUpdate,
+                  idDetail: get(item, 'idDetail'),
                 });
-              }else{
-                let formdataReal = new FormData();
-                formdataReal.append('CustomerTypeId', get(item, 'id'));
-                formdataReal.append('CustomerId', get(UserInfo, 'id'));
-                formdataReal.append('Approved', true);
-                for (let i = 0; i < files.length; i++) {
-                  const eleImage = files[i];
-                  // messages[0].image = [{link: get(eleImage, 'uri')}];
-                  formdataReal.append('Files', {
-                    uri: get(eleImage, 'uri'),
-                    type: get(eleImage, 'type'),
-                    name: get(eleImage, 'name'),
-                  });
+              } else {
+                if (size(files) > 0) {
+                  let formdataReal = new FormData();
+                  formdataReal.append('CustomerTypeId', get(item, 'id'));
+                  formdataReal.append('CustomerId', get(UserInfo, 'id'));
+                  formdataReal.append('Approved', true);
+                  for (let i = 0; i < files.length; i++) {
+                    const eleImage = files[i];
+                    // messages[0].image = [{link: get(eleImage, 'uri')}];
+                    formdataReal.append('Files', {
+                      uri: get(eleImage, 'uri'),
+                      type: get(eleImage, 'type'),
+                      name: get(eleImage, 'name'),
+                    });
+                  }
+                  useActionsP2p(dispatcher).handleCreateCustomerType(
+                    formdataReal,
+                  );
+                } else {
+                  return toast('Tài liệu tải lên không được để trống');
                 }
-                useActionsP2p(dispatcher).handleCreateCustomerType(formdataReal);
               }
-              
             }}
             colorTitle={colors.text}
             weightTitle={'700'}

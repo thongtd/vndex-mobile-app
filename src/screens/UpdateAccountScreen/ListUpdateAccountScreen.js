@@ -93,7 +93,11 @@ const ListUpdateAccountScreen = ({componentId}) => {
             backgroundColor: colors.app.bg3B2B2B,
             borderRadius: 5,
           }}
-          onTitle={() => {}}
+          onTitle={() => {
+            pushSingleScreenApp(componentId, UPDATE_ACCOUNT_SCREEN, {
+              item: it,
+            });
+          }}
         />
       );
     } else if (get(it, 'rejected') === true) {
