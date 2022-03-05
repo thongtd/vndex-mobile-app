@@ -63,6 +63,7 @@ const ListUpdateAccountScreen = ({componentId}) => {
         if (get(item, 'customerTypeId') == get(it, 'id')) {
           it.approved = get(item, 'approved');
           it.idDetail = get(item, 'id');
+          it.rejected = get(item, 'rejected');
         }
       });
     }
@@ -81,23 +82,8 @@ const ListUpdateAccountScreen = ({componentId}) => {
           onTitle={() => {}}
         />
       );
-    } else if (get(it, 'approved') == false) {
-      return (
-        <Button
-          isTitle
-          title={'Chờ xét duyệt'}
-          spaceHorizontal={10}
-          size={fontSize.f14}
-          color={colors.textMomo}
-          style={{
-            backgroundColor: colors.app.bg3B2B2B,
-            borderRadius: 5,
-          }}
-          onTitle={() => {}}
-        />
-      );
-    } else if (get(it, 'rejected') === true) {
-      <Button
+    }else if (get(it, 'rejected') == true) {
+      return (<Button
         isTitle
         title={'Đã từ chối'}
         spaceHorizontal={10}
@@ -112,8 +98,23 @@ const ListUpdateAccountScreen = ({componentId}) => {
             item: it,
           });
         }}
-      />;
-    } else {
+      />);
+    } else if (get(it, 'approved') == false ) {
+      return (
+        <Button
+          isTitle
+          title={'Chờ xét duyệt'}
+          spaceHorizontal={10}
+          size={fontSize.f14}
+          color={colors.textMomo}
+          style={{
+            backgroundColor: colors.app.bg3B2B2B,
+            borderRadius: 5,
+          }}
+          onTitle={() => {}}
+        />
+      );
+    }  else {
       return (
         <Button
           isTitle

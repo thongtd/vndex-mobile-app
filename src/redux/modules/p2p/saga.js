@@ -79,7 +79,7 @@ export function* asyncGetAdvertisments({payload}) {
       createdFrom: get(payload, 'createdFrom') || '',
       createdTo: get(payload, 'createdTo') || '',
       status: get(payload, 'status') || '',
-      isProfessional: get(payload, 'isProfessional') || false
+      isProfessional: get(payload, 'isProfessional') || false,
     });
     emitEventEmitter('doneApi', true);
 
@@ -238,7 +238,6 @@ export function* watchRemovePaymentMethod() {
 export function* asyncGetMyAdvertisment({payload}) {
   try {
     const res = yield call(P2pService.getMyAdvertisments, {
-      
       pageIndex: get(payload, 'pageIndex') || 1,
       pageSize: get(payload, 'pageSize') || 15,
       side: get(payload, 'side') || '',
@@ -252,7 +251,7 @@ export function* asyncGetMyAdvertisment({payload}) {
       createdFrom: get(payload, 'createdFrom') || '',
       createdTo: get(payload, 'createdTo') || '',
       status: get(payload, 'status') || '',
-      userId: get(payload, 'userId') || ''
+      userId: get(payload, 'userId') || '',
     });
     console.log('res my adv: ', res);
     if (res?.status == 200) {
@@ -701,6 +700,7 @@ export function* asyncCreateCommentRating({payload}) {
       accountId: get(payload, 'accountId'),
       content: get(payload, 'content'),
       ratingStar: get(payload, 'ratingStar'),
+      P2PTradingOrderPlusId: get(payload, 'P2PTradingOrderPlusId'),
     });
     emitEventEmitter('doneApi', true);
     console.log('res kaka: ', res);
@@ -740,7 +740,7 @@ export function* watchGetCommentsByUser() {
 
 export function* asyncGetAdvInfo({payload}) {
   try {
-    const res = yield call(P2pService.getAdvInfo,payload);
+    const res = yield call(P2pService.getAdvInfo, payload);
     emitEventEmitter('doneApi', true);
 
     if (res) {
@@ -806,7 +806,9 @@ export function* asyncGetDetailCustomerType({payload}) {
     const res = yield call(P2pService.getDetailCustomerType, payload);
     if (get(res, 'success')) {
       emitEventEmitter('doneApi', true);
-      yield put(actionsReducerP2p.getDetailCustomerTypeSuccess(get(res,"data")));
+      yield put(
+        actionsReducerP2p.getDetailCustomerTypeSuccess(get(res, 'data')),
+      );
     }
   } catch (e) {
     emitEventEmitter('doneApi', true);
@@ -818,14 +820,13 @@ export function* watchGetDetailCustomerType() {
 export function* asyncUpdateCustomerType({payload}) {
   try {
     const res = yield call(P2pService.updateCustomerType, {
-      
-      idDetail:get(payload,"idDetail"),
-      data: get(payload,"data")
+      idDetail: get(payload, 'idDetail'),
+      data: get(payload, 'data'),
     });
     console.log('res: ', res);
     if (get(res, 'success')) {
       emitEventEmitter('updateCreateCustomerType', true);
-      
+
       return toast('Bạn đã cập nhật thành công, vui lòng chờ duyệt');
     }
   } catch (e) {

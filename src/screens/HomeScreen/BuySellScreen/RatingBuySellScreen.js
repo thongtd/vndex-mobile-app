@@ -37,6 +37,7 @@ const RatingBuySellScreen = ({componentId, onCancel=()=>{}}) => {
     dispatcher(
       createAction(CREATE_RATING_COMMENT, {
         content: content,
+        P2PTradingOrderPlusId: get(offerOrder,"id"),
         ratingStar: ratingStar,
         accountId: get(UserInfo,"id") == get(offerOrder,"ownerIdentityUser.identityUserId")? get(offerOrder,"offerIdentityUser.identityUserId"): get(offerOrder,"ownerIdentityUser.identityUserId"),
       }),
