@@ -25,7 +25,7 @@ const RatingBuySellScreen = ({componentId, onCancel=()=>{}}) => {
     const ev = listenerEventEmitter('successCreateCommentRating', () => {
       // console.log("kkakkaka");
       // pushSingleHiddenTopBarApp(componentId, HOME_SCREEN);
-      pushTabBasedApp();
+      pushTabBasedApp(2);
       
     });
     return () => {

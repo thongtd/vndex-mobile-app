@@ -708,7 +708,7 @@ export function* asyncCreateCommentRating({payload}) {
       toast(get(res, 'message'));
       emitEventEmitter('successCreateCommentRating', true);
     } else {
-      toast('Đã xảy ra lỗi xin vui lòng thử lại sau!');
+      toast(get(res, 'message'));
     }
     emitEventEmitter('doneApi', true);
   } catch (e) {
