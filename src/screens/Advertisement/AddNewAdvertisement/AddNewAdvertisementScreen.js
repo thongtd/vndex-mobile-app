@@ -9,6 +9,7 @@ import ItemList from '../../../components/Item/ItemList';
 import Layout from '../../../components/Layout/Layout';
 import {BUY, SELL, spacingApp} from '../../../configs/constant';
 import colors from '../../../configs/styles/colors';
+import { ItemCoin} from './components/ItemCoin';
 
 import {
   formatCurrency,
@@ -183,20 +184,25 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
   }, [marketInfo]);
 
   const onGetAsset = () => {
+    let symbols = get( tradingMarket, 'symbols' );
+    let assets = get( tradingMarket, 'assets' );
     let propsData = {
-      data: get(tradingMarket, 'assets'),
+      data: symbols,
+      keywords:assets,
       renderItem: ({item, key}) => {
         return (
           <ItemList
-            onPress={() => handleActiveAsset(item)}
-            value={item}
-            checked={item === ActiveAsset}
+            customView={<ItemCoin  item={ item} />}
+            onPress={() => handleActiveAsset(get(item,'symbol'))}
+            value={get(item,'symbol')}
+            checked={get(item,'symbol') === ActiveAsset}
           />
         );
       },
     };
     showModal(PICKER_SEARCH, propsData, false);
   };
+
   const handleActiveAsset = item => {
     setActiveAsset(item);
     dismissAllModal();

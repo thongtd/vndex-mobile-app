@@ -670,6 +670,11 @@ export const getPropsData = (
                   weight={'500'}
                   value={`  ${get(item, value)}`}
                 />
+                {get(item, 'name')&& (<TextFnx
+                  isDart
+                  weight={'500'}
+                  value={`  ${get(item, value)}`}
+                />)}
               </Layout>
             ) : (
               false

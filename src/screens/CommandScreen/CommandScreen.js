@@ -30,6 +30,7 @@ import {
   COMMAND_SCREEN,
   COMPLAINING_SCREEN,
   FEEDBACK_SCREEN,
+  ADS_ADD_NEW_SCREEN,
   MODAL_FILTER_COMMAND,
   pushSingleScreenApp,
   STEP_3_BUY_SELL_SCREEN,
@@ -321,6 +322,23 @@ const CommandScreen2 = ({componentId}) => {
           }
         },
       );
+    const navigationBuySellButtonEventListener =
+      Navigation.events().registerNavigationButtonPressedListener(
+        ({buttonId}) => {
+          if (buttonId == IdNavigation.PressIn.adsAddNew) {
+            pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.filterMyAdvertisement,
+                icon: require('assets/icons/Filter.png'),
+              },
+            ],
+          },
+        });
+          }
+        },
+      );
     const screenEventListener =
       Navigation.events().registerComponentDidAppearListener(
         ({componentId, componentName}) => {
@@ -337,6 +355,7 @@ const CommandScreen2 = ({componentId}) => {
     return () => {
       evGetComplain.remove();
       evSubmitFiler.remove();
+      navigationBuySellButtonEventListener.remove();
       navigationButtonEventListener.remove();
       screenEventListener.remove();
     };
@@ -364,6 +383,14 @@ const CommandScreen2 = ({componentId}) => {
       customsNavigation={() => {
         Navigation.mergeOptions(componentId, {
           topBar: {
+            leftButtons: [
+              {
+                id: IdNavigation.PressIn.adsAddNew,
+                icon: require( 'assets/icons/ic_marketting_trans.png' ),
+                width: 24,
+                height:24
+              },
+            ],
             rightButtons: [
               {
                 id: IdNavigation.PressIn.filterCommand,

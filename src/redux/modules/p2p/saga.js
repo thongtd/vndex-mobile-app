@@ -132,6 +132,7 @@ export function* asyncGetTrading({payload}) {
     let resData = {
       assets: symbolArrFiltered,
       paymentUnit: currencyArrFiltered,
+      symbols:get(res[0], 'tradingCoins')
     };
 
     yield put(actionsReducerP2p.getTradingSuccess(resData));

@@ -26,7 +26,6 @@ import {
   WALLET_SCREEN,
   UPDATE_ACCOUNT_SCREEN,
   ACCOUNTP2P_SCREEN,
-  SYMBOLS_SCREEN
 } from '../../navigation';
 import {
   pushSingleHiddenTopBarApp,
@@ -79,9 +78,9 @@ import {
 import Empty from '../../components/Item/Empty';
 
 var flagMenu = true;
-const HomeScreen = ({componentId}) => {
+const SymbolScreen = ({componentId,symbol}) => {
   const dispatch = useDispatch();
-  const [ActiveSymbol, setActiveSymbol] = useState('SMAT');
+  const [ActiveSymbol, setActiveSymbol] = useState(symbol);
   const [isRefresh, setRefresh] = useState(false);
   const [ActiveType, setActiveType] = useState('B');
   const [isLoading, setIsLoading] = useState(true);
@@ -119,13 +118,6 @@ const HomeScreen = ({componentId}) => {
       } else {
         pushSingleScreenApp(componentId, LOGIN_SCREEN);
       }
-    } );
-    const listenerSymbosEmit = listenerEventEmitter('pushSymbos', () => {
-      
-        pushSingleScreenApp(componentId, SYMBOLS_SCREEN, null, {
-         
-        });
-     
     });
     const filerHomeEvent = listenerEventEmitter(
       'filerHomeEvent',
@@ -218,7 +210,6 @@ const HomeScreen = ({componentId}) => {
       );
     return () => {
       listenerEmit.remove();
-      listenerSymbosEmit.remove();
       screenPoppedListener.remove();
       listenerPushNewAds.remove();
       navigationButtonEventListener.remove();
@@ -313,18 +304,17 @@ const HomeScreen = ({componentId}) => {
       isTopBar
       onRefresh={() => setRefresh(!isRefresh)}
       isFooter
-      title="Giao dịch P2P"
+      title={ ActiveSymbol}
       resAwareScrollView={{
         scrollEventThrottle: 50,
         onScroll: e => _onScroll(e),
       }}>
-      <Banner />
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginTop: -20,
+          marginTop: 20,
         }}>
         <View
           style={{
@@ -361,7 +351,7 @@ const HomeScreen = ({componentId}) => {
         </TouchableOpacity>
       </View>
 
-      <View>
+      {/* <View>
         <FlatList
           style={{
             borderBottomColor: colors.app.lineSetting,
@@ -399,7 +389,7 @@ const HomeScreen = ({componentId}) => {
           )}
           keyExtractor={(item, index) => index.toString()}
         />
-      </View>
+      </View> */}
       {size(get(advertisments, 'source')) > 0 ? (
         (
           (isArray(get(advertisments, 'source')) &&
@@ -583,7 +573,7 @@ const HomeScreen = ({componentId}) => {
   );
 };
 
-export default HomeScreen;
+export default SymbolScreen;
 
 const styles = StyleSheet.create({});
 

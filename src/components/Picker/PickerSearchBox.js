@@ -9,7 +9,7 @@ import colors from '../../configs/styles/colors';
 import {Navigation} from 'react-native-navigation';
 import DeviceInfo from 'react-native-device-info';
 import _ from 'lodash';
-import {isAndroid} from '../../configs/utils';
+import {isAndroid,get} from '../../configs/utils';
 import Empty from '../Item/Empty';
 import {dismissAllModal} from '../../navigation/Navigation';
 import Layout from '../Layout/Layout';
@@ -34,16 +34,13 @@ const PickerSearchBox = ({
     // Navigation.dismissModal(componentId);
   };
   const searchFilterFunction = text => {
-    const newData = arrayholder.filter(item => {
-      let keyMaped = '';
-      keywords.map((key, i) => {
-        let getKey = _.get(item, key);
-        keyMaped += ` ${getKey}`;
-      });
-      const itemData = `${keyMaped.toUpperCase()}`;
+    const newData = arrayholder.filter( item => {
+            const itemData = get(item, "symbol").toUpperCase();
       const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
+      const result = itemData.indexOf( textData ) > -1;
+
+      return result;
+    } );
     setSource(newData);
   };
   return (

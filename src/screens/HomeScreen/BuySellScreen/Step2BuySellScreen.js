@@ -66,7 +66,9 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
     //   },
     // );
     const ev = listenerEventEmitter('pushOfferOrder', data => {
-      if (get(data, 'offerOrder.offerSide') === BUY) {
+      if ( get( data, 'offerOrder.offerSide' ) === BUY ) {
+        // debugger
+        
         pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN, {
           paymentMethodData: get(data, 'paymentMethodData'),
           offerOrder: get(data, 'offerOrder'),
@@ -423,6 +425,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
                   onPress={() => {
                     actionSheetRef.current?.hide();
                     // useActionsP2p(dispatch).handleResetOffer();
+                    // debugger;
                     useActionsP2p(dispatch).handleCreateOfferOrder({
                       data: {
                         orderId: get(advertisment, 'orderId'),
@@ -430,7 +433,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
                         orderPrice: get(advertisment, 'price'),
                         p2PAccountPaymentMethodId: get(item, 'id'),
                       },
-                      paymentM1000ethodData: item,
+                      paymentMethodData: item,
                     });
                   }}>
                   <Layout

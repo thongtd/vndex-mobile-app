@@ -257,7 +257,7 @@ export function pushTabBasedApp(currenIndex = 0) {
                 'P2P',
                 IdNavigation.Home.menu,
               ),
-           
+              
               Tabbar(
                 LIQUID_SWAP_SCREEN,
                 require('assets/icons/swap.png'),

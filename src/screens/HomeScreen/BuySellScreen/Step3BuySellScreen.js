@@ -63,7 +63,7 @@ const Step3BuySellScreen = ({
   const advertisment = useSelector(state => state.p2p.advertisment);
   const [isLoading, setIsLoading] = useState(false);
   const UserInfo = useSelector(state => state.authentication.userInfo);
-  const [offerOrderState, setOfferOrderState] = useState(offerOrder);
+  const [offerOrderState, setOfferOrderState] = useState(paymentMethodData);
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
 
@@ -87,10 +87,12 @@ const Step3BuySellScreen = ({
       setOfferOrderState({
         ...offerOrderGlobal,
         offerSide: get(offerOrderGlobal, 'offerSide') === BUY ? SELL : BUY,
+        ...paymentMethodData,
       });
     } else {
-      setOfferOrderState({
+      setOfferOrderState( {
         ...offerOrderGlobal,
+        ...paymentMethodData,
       });
     }
     return () => {};
@@ -146,7 +148,8 @@ const Step3BuySellScreen = ({
       navigationButtonEventListener.remove();
       ev.remove();
     };
-  }, []);
+  }, [] );
+  // debugger;
   useEffect(() => {
     
     if (get(offerOrder, 'p2PTradingOrderId')) {
@@ -164,7 +167,6 @@ const Step3BuySellScreen = ({
   };
   const currencyList = useSelector(state => state.market.currencyList);
   const actionSheetRef = useRef(null);
-
   console.log('item: ', item);
   // const feeTax = useSelector(state => state.p2p.feeTax);
   // const checkTax = (isPercent, stateData = advertisment, tax = feeTax) => {
@@ -204,6 +206,7 @@ const Step3BuySellScreen = ({
   //     );
   //   }
   // };
+  // debugger
   useEffect(() => {
     useActionsP2p(dispatch).handleGetFeeTax({
       quantity: get(offerOrderState, 'quantity'),
@@ -367,7 +370,7 @@ const Step3BuySellScreen = ({
           <TextFnx color={colors.app.textContentLevel3}>
             Phương thức thanh toán
           </TextFnx>
-          {get(offerOrderState, 'exPaymentMethodCode') ==
+          {get(offerOrderState, 'code') ==
           constant.CODE_PAYMENT_METHOD.MOMO ? (
             <Layout isLineCenter>
               <View
