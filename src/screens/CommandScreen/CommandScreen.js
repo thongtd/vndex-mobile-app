@@ -1,4 +1,4 @@
-import {get} from 'lodash';
+import {get,isEmpty} from 'lodash';
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
@@ -20,6 +20,7 @@ import TextFnx from '../../components/Text/TextFnx';
 import {BUY, IdNavigation, SELL} from '../../configs/constant';
 import icons from '../../configs/icons';
 import colors from '../../configs/styles/colors';
+import Button from '../../components/Button/Button';
 import {
   formatCurrency,
   listenerEventEmitter,
@@ -378,6 +379,8 @@ const CommandScreen2 = ({componentId}) => {
       ...dataSubmit,
     });
   };
+  let source = get( historyOrders, 'source' );
+  let isShowButtonBuySell =  source.length < 2 && source.length >0;
   return (
     <Container
       customsNavigation={() => {
@@ -411,15 +414,43 @@ const CommandScreen2 = ({componentId}) => {
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
-            onRefresh={() => onRefresh(activeMenu)}
+            onRefresh={() => onRefresh( activeMenu )}
           />
         }
-        ListEmptyComponent={<Empty />}
-        data={get(historyOrders, 'source')}
+        ListEmptyComponent={
+          <View>
+            <Empty />
+            <Button
+              marginTop={40}
+              isNormal
+              onPress={() => {
+                pushSingleScreenApp( componentId, ADS_ADD_NEW_SCREEN, null, {
+                  topBar: {
+                    rightButtons: [
+                      {
+                        id: IdNavigation.PressIn.filterMyAdvertisement,
+                        icon: require( 'assets/icons/Filter.png' ),
+                      },
+                    ],
+                  },
+                } );
+              }}
+              title={'Chào MUA/BÁN'}
+              iconLeftSubmit={icons.IcMarkettingTrans}
+            />
+          
+            </View>
+        }
+        data={get( historyOrders, 'source' )}
         scrollEnabled
         ListFooterComponent={
-          (isLoading && <ActivityIndicator style={{color: colors.text}} />) ||
+          
+             (isLoading && <ActivityIndicator style={{color: colors.text}} />) ||
           null
+          
+        
+          
+         
         }
         onEndReachedThreshold={0.4}
         onEndReached={() => {
@@ -505,6 +536,25 @@ const CommandScreen2 = ({componentId}) => {
           />
         )}
       />
+      
+      {isShowButtonBuySell && <Button
+        marginBottom={60}
+        isNormal
+        onPress={() => {
+          pushSingleScreenApp( componentId, ADS_ADD_NEW_SCREEN, null, {
+            topBar: {
+              rightButtons: [
+                {
+                  id: IdNavigation.PressIn.filterMyAdvertisement,
+                  icon: require( 'assets/icons/Filter.png' ),
+                },
+              ],
+            },
+          } );
+        }}
+        title={'Chào MUA/BÁN'}
+        iconLeftSubmit={icons.IcMarkettingTrans}
+      />}
     </Container>
   );
 };
