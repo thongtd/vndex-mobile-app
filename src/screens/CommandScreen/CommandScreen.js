@@ -386,9 +386,8 @@ const CommandScreen2 = ({componentId}) => {
             leftButtons: [
               {
                 id: IdNavigation.PressIn.adsAddNew,
-                icon: require( 'assets/icons/ic_marketting_trans.png' ),
-                width: 24,
-                height:24
+                icon: require('assets/icons/ic_marketting_trans.png'),
+                color: colors.app.yellowHightlight,
               },
             ],
             rightButtons: [

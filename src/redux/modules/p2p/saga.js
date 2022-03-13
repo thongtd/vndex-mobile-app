@@ -762,6 +762,7 @@ export function* asyncGetFeeTax({payload}) {
     const res = yield call(P2pService.getFeeTax, {
       quantity: get(payload, 'quantity'),
       price: get(payload, 'price'),
+      side: get(payload, 'side'),
     });
     emitEventEmitter('doneApi', true);
     if (get(res, 'success')) {

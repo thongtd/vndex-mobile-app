@@ -58,13 +58,15 @@ const Step1BuySellScreen = ({componentId, item}) => {
         
         useActionsP2p(dispatch).handleGetFeeTax({
           quantity:Pay.str2Number(),
-          price: get(item,"price"),
+          price: get( item, "price" ),
+          side:'B'
         });
       }
     } else {
       useActionsP2p(dispatch).handleGetFeeTax({
         quantity: Receive.str2Number(),
-        price: get(item,"price"),
+        price: get( item, "price" ),
+        side:'S'
       });
     }
 
@@ -398,39 +400,44 @@ const Step1BuySellScreen = ({componentId, item}) => {
           value={`${Pay}`}
           titleBtnRight="Tất cả"
           onBtnRight={() => {
-            setPay(
-              get(item, 'side') == SELL
-                ? formatCurrency(
-                    get(advertisment, 'maxOrderAmount'),
-                    get(advertisment, 'paymentUnit'),
-                    currencyList,
-                  )
-                : formatCurrency(
-                    get(
+              let available = get(
                       getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
                       'available',
-                    ),
-                    get(advertisment, 'symbol'),
-                    currencyList,
-                  ),
-            );
-            setReceive(
-              get(item, 'side') == SELL
-                ? formatCurrency(
-                    get(advertisment, 'maxOrderAmount') /
-                      get(advertisment, 'price'),
-                    get(advertisment, 'symbol'),
-                    currencyList,
-                  )
-                : formatCurrency(
-                    get(
-                      getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
-                      'available',
-                    ) * get(advertisment, 'price'),
-                    get(advertisment, 'paymentUnit'),
-                    currencyList,
-                  ),
-            );
+                    );
+        let maxOrderAmmout = get( advertisment, 'maxOrderAmount' );
+        
+        let amount = available;
+        if ( get( item, 'side' ) == SELL ) {
+          amount= maxOrderAmmout;
+              setPay( formatCurrency(
+                maxOrderAmmout,
+                get( advertisment, 'paymentUnit' ),
+                currencyList,
+              ) );
+              setReceive( formatCurrency(
+                maxOrderAmmout /
+                get( advertisment, 'price' ),
+                get( advertisment, 'symbol' ),
+                currencyList,
+              ) );
+            }
+            else {
+let quantity = get( advertisment, 'quantity' );
+            if(quantity<available)
+              amount  =quantity;
+              
+              setPay( formatCurrency(
+                amount,
+                get( advertisment, 'symbol' ),
+                currencyList,
+              ) );
+              setReceive( formatCurrency(
+                amount * get( advertisment, 'price' ),
+                get( advertisment, 'paymentUnit' ),
+                currencyList,
+              ) );
+            }
+            
           }}
           placeholder={
             get(item, 'side') == SELL
