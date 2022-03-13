@@ -84,7 +84,7 @@ const CommandScreen2 = ({componentId}) => {
     // alert(JSON.stringify(UserInfo))
     useActionsP2p(dispatch).handleGetOfferOrder(get(item, 'id'));
     useActionsP2p(dispatch).handleGetAdvertisment(
-      get(item, 'p2PTradingOrder.id'),
+      get(item, 'p2PTradingOrderId'),
     );
     // if(get(UserInfo, 'id') ===
     // get(item, 'p2PTradingOrder.accId')){
@@ -143,7 +143,7 @@ const CommandScreen2 = ({componentId}) => {
           offerOrder: {
             ...item,
             offerOrderId: get(item, 'id'),
-            p2PTradingOrderId: get(item, 'p2PTradingOrder.id'),
+            p2PTradingOrderId: get(item, 'p2PTradingOrderId'),
           },
         },
         {
@@ -220,7 +220,7 @@ const CommandScreen2 = ({componentId}) => {
           offerOrder: {
             ...item,
             offerOrderId: get(item, 'id'),
-            p2PTradingOrderId: get(item, 'p2PTradingOrder.id'),
+            p2PTradingOrderId: get(item, 'p2PTradingOrderId'),
           },
         },
         {
@@ -380,7 +380,7 @@ const CommandScreen2 = ({componentId}) => {
     });
   };
   let source = get( historyOrders, 'source' );
-  let isShowButtonBuySell =  source.length < 2 && source.length >0;
+  let isShowButtonBuySell = source.length < 2 && source.length > 0;
   return (
     <Container
       customsNavigation={() => {
@@ -466,11 +466,11 @@ const CommandScreen2 = ({componentId}) => {
             isSell={get(item, 'offerSide') !== 'B'}
             price={formatCurrency(
               get(item, 'price') * get(item, 'quantity') || 0,
-              get(item, 'p2PTradingOrder.paymentUnit') || '',
+              get(item, 'paymentUnit') || '',
               currencyList,
             )}
-            unit={get(item, 'p2PTradingOrder.paymentUnit') || ''}
-            nameCoin={get(item, 'p2PTradingOrder.symbol') || ''}
+            unit={get(item, 'paymentUnit') || ''}
+            nameCoin={get(item, 'symbol') || ''}
             dateTime={to_UTCDate(
               get(item, 'createdDate'),
               'DD/MM/YYYY hh:mm:ss',
@@ -484,9 +484,9 @@ const CommandScreen2 = ({componentId}) => {
                   <TextFnx color={colors.greyLight} size={12}>
                     {`${formatCurrency(
                       get(item, 'price') || 0,
-                      get(item, 'p2PTradingOrder.paymentUnit') || '',
+                      get(item, 'paymentUnit') || '',
                       currencyList,
-                    )} ${get(item, 'p2PTradingOrder.paymentUnit')}`}
+                    )} ${get(item, 'paymentUnit')}`}
                   </TextFnx>
                 </Layout>
                 <Layout isSpaceBetween isLineCenter spaceBottom={10}>
@@ -496,9 +496,9 @@ const CommandScreen2 = ({componentId}) => {
                   <TextFnx color={colors.greyLight} size={12}>
                     {`${formatCurrency(
                       get(item, 'quantity') || 0,
-                      get(item, 'p2PTradingOrder.symbol') || '',
+                      get(item, 'symbol') || '',
                       currencyList,
-                    )} ${get(item, 'p2PTradingOrder.symbol')}`}
+                    )} ${get(item, 'symbol')}`}
                   </TextFnx>
                 </Layout>
               </>
@@ -509,7 +509,7 @@ const CommandScreen2 = ({componentId}) => {
                   onPress={() => {
                     pushSingleScreenApp(componentId, CHAT_SCREEN, {
                       orderId: get(item, 'id'),
-                      email: get(item, 'p2PTradingOrder.identityUser.userName'),
+                      email: get(item, 'identityUser.userName'),
                     });
                   }}
                   iconComponent={icons.IcChat}

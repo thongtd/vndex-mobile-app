@@ -65,6 +65,7 @@ const Step5BuySellScreen = ({componentId}) => {
       />
     );
   }
+  debugger
   return (
     <Container
       isTopBar
@@ -111,9 +112,7 @@ const Step5BuySellScreen = ({componentId}) => {
                       currencyList,
                     )
               } ${
-                get(offerOrderState, 'offerSide') == BUY
-                  ? get(advertisment, 'symbol')
-                  : get(advertisment, 'symbol')
+                get(offerOrder, 'symbol')
               }`}
         </TextFnx>
         {!get(offerOrderState, 'isPaymentCancel') && (

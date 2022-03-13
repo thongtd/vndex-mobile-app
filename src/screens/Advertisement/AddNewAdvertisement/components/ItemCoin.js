@@ -36,8 +36,8 @@ const stylest = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         height: 60,
-        borderBottomColor: colors.app.lineSetting,
-        borderBottomWidth: 0.5
+        // borderBottomColor: colors.app.lineSetting,
+        // borderBottomWidth: 0.5
     },
     itemLeft: {
         flexDirection: 'row',
