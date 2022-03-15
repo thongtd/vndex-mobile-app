@@ -457,14 +457,14 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
               setMaxOrder(formatNumberOnChange(currencyList, txt, ActiveFiat));
             }}
             onMinOrderChange={txt => {
-              
               setMinOrder( formatNumberOnChange( currencyList, txt, ActiveFiat ) );
-              const maxOrder = txt.str2Number() * quantity.str2Number();
-              setMaxOrder(formatNumberOnChange(currencyList,maxOrder.toString() , ActiveFiat))
+              
             }
             }
             onQuantityChange={txt => {
-              setQuantity(formatNumberOnChange(currencyList, txt, ActiveAsset));
+              setQuantity( formatNumberOnChange( currencyList, txt, ActiveAsset ) );
+              const maxOrder = txt.str2Number() * price.str2Number();
+              setMaxOrder(formatNumberOnChange(currencyList,maxOrder.toString() , ActiveFiat))
             }}
             componentId={componentId}
             bntClose={bntClose}
