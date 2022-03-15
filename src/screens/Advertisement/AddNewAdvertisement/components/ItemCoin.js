@@ -14,20 +14,16 @@ export const ItemCoin = ({
     item
 } ) => {
     return (
-             <View style={stylest.container}>
                 <View style={stylest.itemLeft}>
                     <Image source={{ uri: get(item,"image") }} style={stylest.imgCoin} />
                     <View style={stylest.spacing}>
                         <TextFnx style={stylest.spacingCenter} weight="bold" color={colors.text}>
                         {get( item, 'symbol' )} 
                         </TextFnx>
-                        <View style={stylest.lanscape}>
                             <TextFnx size={12} value={get( item, 'name' )} color={colors.text} />
-                        </View>
                     </View>
                 </View>
                 
-            </View>
     );
 }
 const stylest = StyleSheet.create({

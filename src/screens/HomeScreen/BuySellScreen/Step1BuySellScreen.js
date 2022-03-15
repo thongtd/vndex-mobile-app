@@ -629,7 +629,11 @@ let quantity = get( advertisment, 'quantity' );
               );
             }
             pushSingleScreenApp(componentId, STEP_2_BUY_SELL_SCREEN, {
-              item,
+              item: {
+                ...item,
+                side: get( item, 'side' ) === SELL ? BUY : SELL,
+                offerSide: get( item, 'side' ) === SELL ? BUY : SELL
+              },
               data: {
                 price:
                   get(item, 'side') === SELL

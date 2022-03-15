@@ -99,7 +99,7 @@ const Step3BuySellScreen = ({
   }, [offerOrderGlobal, UserInfo]);
 
   useEffect(() => {
-    const ev = listenerEventEmitter('pushStep', dataConfirm => {
+    const ev = listenerEventEmitter( 'pushStep', dataConfirm => {
       setIsLoading(false);
       if (get(dataConfirm, 'isHasPayment') === false) {
         pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN, null, {
@@ -114,7 +114,7 @@ const Step3BuySellScreen = ({
         });
       } else if (
         get(dataConfirm, 'isHasPayment') &&
-        get(item, 'side') == SELL
+        get(item, 'offerSide') == BUY 
       ) {
         pushSingleScreenApp(
           componentId,
@@ -166,7 +166,8 @@ const Step3BuySellScreen = ({
     toast('COPY_TO_CLIPBOARD'.t());
   };
   const currencyList = useSelector(state => state.market.currencyList);
-  const actionSheetRef = useRef(null);
+  const actionSheetRef = useRef( null );
+  
   console.log('item: ', item);
   // const feeTax = useSelector(state => state.p2p.feeTax);
   // const checkTax = (isPercent, stateData = advertisment, tax = feeTax) => {

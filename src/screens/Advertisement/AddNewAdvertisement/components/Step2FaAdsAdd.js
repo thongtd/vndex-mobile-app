@@ -57,7 +57,7 @@ export default function Step2FaAdsAdd({componentId, data}) {
         sessionId: sessionId || '',
         ipAddress:""
       })
-        .then(res => {
+        .then( res => {
           setIsLoading(false);
           console.log('res: ', res);
           if (get(res, 'succeeded')) {

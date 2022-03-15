@@ -15,6 +15,7 @@ import {
   formatCurrency,
   formatNumberOnChange,
   get,
+  str2Number,
   size,
   toast,
 } from '../../../configs/utils';
@@ -455,8 +456,12 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
             onMaxOrderChange={txt => {
               setMaxOrder(formatNumberOnChange(currencyList, txt, ActiveFiat));
             }}
-            onMinOrderChange={txt =>
-              setMinOrder(formatNumberOnChange(currencyList, txt, ActiveFiat))
+            onMinOrderChange={txt => {
+              
+              setMinOrder( formatNumberOnChange( currencyList, txt, ActiveFiat ) );
+              const maxOrder = txt.str2Number() * quantity.str2Number();
+              setMaxOrder(formatNumberOnChange(currencyList,maxOrder.toString() , ActiveFiat))
+            }
             }
             onQuantityChange={txt => {
               setQuantity(formatNumberOnChange(currencyList, txt, ActiveAsset));

@@ -105,7 +105,6 @@ const Step2AddNewAds = ({
   }, []);
 
   const paymentMethods = useSelector(state => state.p2p.paymentMethods);
-
   return (
     <View style={styles.conatainer}>
       {/* {console.log('get(dataStateitem, ): ', get(dataState, 'quantity'))} */}

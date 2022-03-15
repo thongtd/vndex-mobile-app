@@ -65,7 +65,6 @@ const Step5BuySellScreen = ({componentId}) => {
       />
     );
   }
-  debugger
   return (
     <Container
       isTopBar
