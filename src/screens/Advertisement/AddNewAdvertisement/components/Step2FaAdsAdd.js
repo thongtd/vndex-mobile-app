@@ -60,12 +60,11 @@ export default function Step2FaAdsAdd({componentId, data}) {
         .then( res => {
           setIsLoading(false);
           console.log('res: ', res);
-          if (get(res, 'succeeded')) {
+          if ( get( res, 'succeeded' ) ) {
+            debugger;
             dispatcher(
               createAction(
-                get(data, 'isUpdate')
-                  ? UPDATE_ADVERTISMENT
-                  : CREATE_ADVERTISMENT,
+                 CREATE_ADVERTISMENT,
                 {
                   side: get(data, 'activeType'),
                   coinSymbol: get(data, 'ActiveAsset'),

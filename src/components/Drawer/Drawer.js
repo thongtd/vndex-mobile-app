@@ -69,7 +69,7 @@ const Drawer = ({componentId}) => {
       <ItemSetting
         iconRight={false}
         iconLeftSvg={icons.IcHistory}
-        textLeft={'Danh sách mã'}
+        textLeft={'Danh sách token'}
         onPress={() => {
           setTimeout(() => {
             Navigation.mergeOptions(componentId, {

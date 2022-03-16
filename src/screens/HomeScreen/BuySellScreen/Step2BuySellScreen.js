@@ -31,6 +31,7 @@ import {
   pushSingleScreenApp,
   STEP_2_BUY_SELL_SCREEN,
   STEP_3_BUY_SELL_SCREEN,
+  STEP_2FA_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
 } from '../../../navigation';
 import ButtonIcon from '../../../components/Button/ButtonIcon';
@@ -107,7 +108,6 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
     };
   }, [componentId]);
   const checkTax = ( isPercent, stateData = item, tax = feeTax ) => {
-    
      if ( isPercent) {
       return get(stateData, 'taxPercent');
     } else 
@@ -190,7 +190,7 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
               get(item, 'offerSide') == BUY ? colors.app.buy : colors.app.sell
             }>
             {`${formatCurrency(
-              get(item, 'price'),
+              (get( item, 'price' ) * get( data, 'quantity' )),
               get(advertisment, 'paymentUnit'),
               currencyList,
             )} `}
@@ -202,7 +202,7 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Giá</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(advertisment, 'price'),
+             get( item, 'price' ),
             get(advertisment, 'paymentUnit'),
             currencyList,
           )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
@@ -210,7 +210,7 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(item, 'quantity'),
+            get(data, 'quantity'),
             get(advertisment, 'paymentUnit'),
             currencyList,
           )} ${get(advertisment, 'symbol')}`}</TextFnx>
@@ -409,18 +409,23 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
                 <TouchableOpacity
                   key={`ite-${index}`}
                   onPress={() => {
-                    actionSheetRef.current?.hide();
-                    // useActionsP2p(dispatch).handleResetOffer();
-                    // debugger;
-                    useActionsP2p(dispatch).handleCreateOfferOrder({
-                      data: {
-                        orderId: get(advertisment, 'orderId'),
-                        orderQtty: get(data, 'quantity'),
-                        orderPrice: get(advertisment, 'price'),
-                        p2PAccountPaymentMethodId: get(item, 'id'),
-                      },
-                      paymentMethodData: item,
-                    });
+                    pushSingleScreenApp( componentId, STEP_2FA_BUY_SELL_SCREEN, {
+                      onSubmitSuccess: ()=>{
+                        actionSheetRef.current?.hide();
+                    
+                        // useActionsP2p(dispatch).handleResetOffer();
+                        // debugger;
+                        useActionsP2p( dispatch ).handleCreateOfferOrder( {
+                          data: {
+                            orderId: get( advertisment, 'orderId' ),
+                            orderQtty: get( data, 'quantity' ),
+                            orderPrice: get( advertisment, 'price' ),
+                            p2PAccountPaymentMethodId: get( item, 'id' ),
+                          },
+                          paymentMethodData: item,
+                        } );
+                      }
+                    } );
                   }}>
                   <Layout
                     style={{

@@ -402,45 +402,90 @@ const Step1BuySellScreen = ({componentId, item}) => {
           value={`${Pay}`}
           titleBtnRight="Tất cả"
           onBtnRight={() => {
+            let quantity = get( advertisment, 'quantity' );
+            
               let available = get(
                       getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
                       'available',
                     );
-        let maxOrderAmmout = get( advertisment, 'maxOrderAmount' );
+        // let maxOrderAmmout = get( advertisment, 'maxOrderAmount' );
         
-        let amount = available;
-        if ( get( item, 'side' ) == SELL ) {
-          amount= maxOrderAmmout;
-              setPay( formatCurrency(
-                maxOrderAmmout,
-                get( advertisment, 'paymentUnit' ),
-                currencyList,
-              ) );
-              setReceive( formatCurrency(
-                maxOrderAmmout /
-                get( advertisment, 'price' ),
-                get( advertisment, 'symbol' ),
-                currencyList,
-              ) );
-            }
-            else {
-let quantity = get( advertisment, 'quantity' );
-            if(quantity<available)
-              amount  =quantity;
+        // let amount = available;
+        // if ( get( item, 'side' ) == SELL ) {
+        //   amount= maxOrderAmmout;
+        //       setPay( formatCurrency(
+        //         maxOrderAmmout,
+        //         get( advertisment, 'paymentUnit' ),
+        //         currencyList,
+        //       ) );
+        //       setReceive( formatCurrency(
+        //         maxOrderAmmout /
+        //         get( advertisment, 'price' ),
+        //         get( advertisment, 'symbol' ),
+        //         currencyList,
+        //       ) );
+        //     }
+        //     else {
+        //   let amount = get( advertisment, 'quantity' );
+          // if ( quatity * get( item, 'price' ) < maxOrderAmmout ) {
+          //   setPay( formatCurrency(
+          //       quatity * get( item, 'price' ),
+          //       get( advertisment, 'symbol' ),
+          //       currencyList,
+          //     ) );
+          // }
+          // else if ( quatity * get( item, 'price' ) < ) { }
+          // else{
+            // if(quantity<available)
+            //   amount  =quantity;
+            if ( get( item, 'side' ) == SELL ) {
+              
               
               setPay( formatCurrency(
-                amount,
+                quantity * get( advertisment, 'price' ),
                 get( advertisment, 'symbol' ),
                 currencyList,
               ) );
               setReceive( formatCurrency(
-                amount * get( advertisment, 'price' ),
+                quantity,
                 get( advertisment, 'paymentUnit' ),
                 currencyList,
               ) );
-            }
+              
+           
             
-          }}
+            } else {
+              if ( available <= quantity ) {
+                setPay( formatCurrency(
+                  available ,
+                  get( advertisment, 'symbol' ),
+                  currencyList,
+                ) );
+                setReceive( formatCurrency(
+                  available * get( advertisment, 'price' ),
+                  get( advertisment, 'paymentUnit' ),
+                  currencyList,
+                ) );
+              }
+              else {
+          
+      
+                setPay( formatCurrency(
+                  quantity,
+                  get( advertisment, 'symbol' ),
+                  currencyList,
+                ) );
+                setReceive( formatCurrency(
+                  quantity * get( advertisment, 'price' ),
+                  get( advertisment, 'paymentUnit' ),
+                  currencyList,
+                ) );
+              }
+            }
+          }
+            // }
+          // }
+        }
           placeholder={
             get(item, 'side') == SELL
               ? `${formatCurrency(
@@ -538,6 +583,7 @@ let quantity = get( advertisment, 'quantity' );
         <Button
           isNormal
           onPress={() => {
+            
             if (isEmpty(Pay) || Pay.str2Number() == 0) {
               if (get(advertisment, 'side') === BUY) {
                 return toast(

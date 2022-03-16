@@ -117,8 +117,7 @@ const CommandScreen2 = ({componentId}) => {
       get( item, 'orderSide' ) == BUY &&
       get( UserInfo, 'id' ) === get( item, 'ownerIdentityUser.identityUserId' )
     ) {
-      
-      pushSingleScreenApp( componentId, STEP_2_BUY_SELL_SCREEN, {
+      pushSingleScreenApp( componentId, STEP_3_BUY_SELL_SCREEN, {
         item: item,
       }, {
         topBar: {
@@ -135,11 +134,12 @@ const CommandScreen2 = ({componentId}) => {
       get(item, 'orderSide') == SELL &&
       get(UserInfo, 'id') === get(item, 'ownerIdentityUser.identityUserId')
     ) {
+      
       pushSingleScreenApp(
         componentId,
-        STEP_3_BUY_SELL_SCREEN,
+        STEP_4_BUY_SELL_SCREEN,
         {
-          item: {...item, side: get(item, 'orderSide') == BUY ? SELL : BUY},
+          item: {...item, side: get(item, 'orderSide') == BUY ? BUY : SELL},
           offerOrder: {
             ...item,
             offerOrderId: get(item, 'id'),
@@ -206,15 +206,10 @@ const CommandScreen2 = ({componentId}) => {
     ) {
       pushSingleScreenApp(
         componentId,
-        STEP_2_BUY_SELL_SCREEN,
+        STEP_3_BUY_SELL_SCREEN,
         {
           item: {...item},
-          data: {
-                price:
-                  get(item, 'price') ,
-                quantity:
-                  get(item, 'quantity')
-              },
+          
         },
         {
           topBar: {
@@ -247,8 +242,9 @@ const CommandScreen2 = ({componentId}) => {
       useActionsP2p(dispatch).handleGetComplain({
         orderId: get(item, 'id'),
         type: '2',
-      });
-      pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
+      } );
+      debugger;
+      pushSingleScreenApp( componentId, STEP_3_BUY_SELL_SCREEN, {item:item}, {
         topBar: {
           rightButtons: [
             {

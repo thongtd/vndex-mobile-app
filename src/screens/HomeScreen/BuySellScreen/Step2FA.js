@@ -22,7 +22,8 @@ import {pushSingleScreenApp, STEP_5_BUY_SELL_SCREEN} from '../../../navigation';
 import Layout from '../../../components/Layout/Layout';
 import TimelineBuySell from './TimelineBuySell';
 import {P2pService} from '../../../services/p2p.service';
-const Step2FA = ({componentId}) => {
+import { Navigation } from 'react-native-navigation';
+const Step2FA = ({componentId,onSubmitSuccess}) => {
   const [otp, setOtp] = useState('');
   const dispatcher = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -53,20 +54,26 @@ const Step2FA = ({componentId}) => {
       toast('Please enter 2FA code'.t());
     } else {
       P2pService.verify2Fa(dataConfirm)
-        .then(res => {
-          console.log('res 2fa: ', res);
-          setIsLoading(false);
-          if (get(res, 'succeeded')) {
-            dispatcher(
-              createAction(UNLOCK_OFFER_ADVERTISMENT, {
-                data: dataConfirm,
-                offerOrderId,
-              }),
-            );
-          } else {
-            toast('Mã 2FA không đúng');
+        .then( res =>  {
+          console.log( 'res 2fa: ', res );
+          if ( onSubmitSuccess ) {
+             Navigation.pop( componentId );
+            onSubmitSuccess();
           }
-        })
+          else {
+            setIsLoading( false );
+            if ( get( res, 'succeeded' ) ) {
+              dispatcher(
+                createAction( UNLOCK_OFFER_ADVERTISMENT, {
+                  data: dataConfirm,
+                  offerOrderId,
+                } ),
+              );
+            } else {
+              toast( 'Mã 2FA không đúng' );
+            }
+          }
+        } )
         .catch(err => {
           setIsLoading(false);
           toast('Lỗi kết nối');

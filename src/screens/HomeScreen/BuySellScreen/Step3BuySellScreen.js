@@ -63,7 +63,7 @@ const Step3BuySellScreen = ({
   const advertisment = useSelector(state => state.p2p.advertisment);
   const [isLoading, setIsLoading] = useState(false);
   const UserInfo = useSelector(state => state.authentication.userInfo);
-  const [offerOrderState, setOfferOrderState] = useState(paymentMethodData);
+  const [offerOrderState, setOfferOrderState] = useState(item);
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
 
@@ -215,7 +215,7 @@ const Step3BuySellScreen = ({
     });
 
     return () => {};
-  }, [offerOrderState, advertisment]);
+  }, [ offerOrderState, advertisment ] );
   return (
     <Container
       space={15}
@@ -333,28 +333,23 @@ const Step3BuySellScreen = ({
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${
-            get(advertisment, 'symbol') !== 'SMAT' ||
-            (get(offerOrderState, 'offerSide') == SELL &&
-              get(advertisment, 'symbol') == 'SMAT')
-              ? formatCurrency(
+             formatCurrency(
                   get(offerOrderState, 'fee'),
                   get(offerOrderState, 'feeTaxBy'),
                   currencyList,
                 )
-              : '0'
           } ${get(offerOrderState, 'feeTaxBy')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
             {`${
-              (get(offerOrderState, 'offerSide') == SELL)
-                ? formatCurrency(
+              formatCurrency(
                     get(offerOrderState, 'tax'),
                     get(offerOrderState, 'feeTaxBy'),
                     currencyList,
                   )
-                : '0'
+                
             } ${get(offerOrderState, 'feeTaxBy')}`}
           </TextFnx>
         </Layout>
@@ -367,12 +362,16 @@ const Step3BuySellScreen = ({
             )}
           </TextFnx>
         </Layout>
+        {get( offerOrderState, 'paymentMethods' ).map( paymentMethod =>
+          <View>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>
             Phương thức thanh toán
           </TextFnx>
-          {get(offerOrderState, 'code') ==
-          constant.CODE_PAYMENT_METHOD.MOMO ? (
+          
+          {get(paymentMethod,'code') == 
+            constant.CODE_PAYMENT_METHOD.MOMO ? (
+              
             <Layout isLineCenter>
               <View
                 style={{
@@ -394,7 +393,7 @@ const Step3BuySellScreen = ({
                 />
                 <TextFnx spaceLeft={5}>Momo</TextFnx>
               </View>
-            </Layout>
+              </Layout>
           ) : (
             <Layout isLineCenter>
               <View
@@ -419,105 +418,109 @@ const Step3BuySellScreen = ({
               </View>
             </Layout>
           )}
-        </Layout>
-        {!isEmpty(get(offerOrderState, 'backAccountNo')) && (
-          <Layout isSpaceBetween space={8}>
-            <TextFnx color={colors.app.textContentLevel3}>Số tài khoản</TextFnx>
-            <Layout isLineCenter>
-              <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrderState, 'backAccountNo')}
-              </TextFnx>
-              <ButtonIcon
-                style={{
-                  height: 25,
-                  width: 30,
-                }}
-                onPress={() =>
-                  hanldeCopy(get(offerOrderState, 'bankAccountNo'))
-                }
-                iconComponent={<Copy height={20} width={20} />}
-              />
-            </Layout>
-          </Layout>
-        )}
-        {!isEmpty(get(offerOrderState, 'bankName')) && (
-          <Layout isSpaceBetween space={8}>
-            <TextFnx color={colors.app.textContentLevel3}>
-              Tên ngân hàng
-            </TextFnx>
-            <Layout isLineCenter>
-              <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrderState, 'bankName')}
-              </TextFnx>
-              <ButtonIcon
-                style={{
-                  height: 25,
-                  width: 30,
-                }}
-                onPress={() => hanldeCopy(get(offerOrderState, 'bankName'))}
-                iconComponent={<Copy height={20} width={20} />}
-              />
-            </Layout>
-          </Layout>
-        )}
-        {!isEmpty(get(offerOrderState, 'bankBranchName')) && (
-          <Layout isSpaceBetween space={8}>
-            <TextFnx color={colors.app.textContentLevel3}>Chi nhánh</TextFnx>
-            <Layout isLineCenter>
-              <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrderState, 'bankBranchName')}
-              </TextFnx>
-              <ButtonIcon
-                style={{
-                  height: 25,
-                  width: 30,
-                }}
-                onPress={() =>
-                  hanldeCopy(get(offerOrderState, 'bankBranchName'))
-                }
-                iconComponent={<Copy height={20} width={20} />}
-              />
-            </Layout>
-          </Layout>
-        )}
-        {!isEmpty(get(offerOrderState, 'fullName')) && (
-          <Layout isSpaceBetween space={8}>
-            <TextFnx color={colors.app.textContentLevel3}>Tên</TextFnx>
-            <Layout isLineCenter>
-              <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrderState, 'fullName')}
-              </TextFnx>
-              <ButtonIcon
-                style={{
-                  height: 25,
-                  width: 30,
-                }}
-                onPress={() => hanldeCopy(get(offerOrderState, 'fullName'))}
-                iconComponent={<Copy height={20} width={20} />}
-              />
-            </Layout>
-          </Layout>
-        )}
-        {!isEmpty(get(offerOrderState, 'phoneNumber')) && (
+              </Layout>
+               {!isEmpty(get(paymentMethod, 'phoneNumber')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>
               Số điện thoại
             </TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrderState, 'phoneNumber')}
+                {get(paymentMethod, 'phoneNumber')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
-                onPress={() => hanldeCopy(get(offerOrderState, 'phoneNumber'))}
+                onPress={() => hanldeCopy(get(paymentMethod, 'phoneNumber'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+            )}
+            {!isEmpty(get(paymentMethod, 'backAccountNo')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Số tài khoản</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(paymentMethod, 'backAccountNo')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() =>
+                  hanldeCopy(get(paymentMethod, 'bankAccountNo'))
+                }
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
           </Layout>
         )}
+        {!isEmpty(get(paymentMethod, 'bankName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>
+              Tên ngân hàng
+            </TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(paymentMethod, 'bankName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(paymentMethod, 'bankName'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(paymentMethod, 'bankBranchName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Chi nhánh</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(paymentMethod, 'bankBranchName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() =>
+                  hanldeCopy(get(paymentMethod, 'bankBranchName'))
+                }
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(paymentMethod, 'fullName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Tên</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(paymentMethod, 'fullName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(paymentMethod, 'fullName'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+              </View>)}
+              
+        
+       
         <Layout
           style={{
             backgroundColor: colors.app.lineSetting,

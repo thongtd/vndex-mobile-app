@@ -35,14 +35,7 @@ const ActionBottom = (status)=>{
   console.log('status: ', status);
   return [
     
-    {
-      name: 'Offline',
-      type: 'OFFLINE',
-    },
-    {
-      name: 'Chia sẻ quảng cáo',
-      type: 'SHARE',
-    },
+    
     {
       name: 'Huỷ quảng cáo',
       type: 'CLOSE',
