@@ -122,6 +122,8 @@ export default function Step2FaAdsAdd({componentId, data}) {
         value={otp}
         onChangeText={text => setOtp(text)}
         isPaste
+        autoFocus={true}
+        keyboardType='numeric'
         spaceVertical={10}
         isResend={twoFactorySerice === constant.TWO_FACTOR_TYPE.EMAIL_2FA}
         placeholder={'2FA_CODE'.t()}

@@ -99,10 +99,9 @@ const CommandScreen2 = ({componentId}) => {
       pushSingleScreenApp( componentId, STEP_5_BUY_SELL_SCREEN );
     } else if (
       get( item, 'status' ) == 7 &&
-      get( item, 'orderSide' ) == SELL &&
-      get( UserInfo, 'id' ) === get( item, 'ownerIdentityUser.identityUserId' )
+      get( item, 'orderSide' ) == SELL 
     ) {
-      pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, null, {
+      pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
         topBar: {
           rightButtons: [
             {
@@ -160,7 +159,7 @@ const CommandScreen2 = ({componentId}) => {
     } else if (
       get(item, 'status') == 7 &&
       get(item, 'orderSide') == BUY &&
-      get(UserInfo, 'id') === get(item, 'ownerIdentityUser.identityUserId')
+      get(UserInfo, 'id') === get(item, 'offerIdentityUser.identityUserId')
     ) {
       pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
         topBar: {
@@ -387,7 +386,7 @@ const CommandScreen2 = ({componentId}) => {
         });
       }}
       componentId={componentId}
-      title="Lịch sử giao dịch">
+      title="Giao dịch của tôi">
       <ButtonTop
         onChangeActive={onChangeActive}
         activeMenu={activeMenu}

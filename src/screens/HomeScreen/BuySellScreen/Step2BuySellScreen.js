@@ -191,11 +191,11 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
             }>
             {`${formatCurrency(
               (get( item, 'price' ) * get( data, 'quantity' )),
-              get(advertisment, 'paymentUnit'),
+              get(item, 'paymentUnit'),
               currencyList,
             )} `}
             <TextFnx color={colors.app.textContentLevel3}>
-              {get(advertisment, 'paymentUnit')}
+              {get(item, 'paymentUnit')}
             </TextFnx>
           </TextFnx>
         </Layout>
@@ -203,17 +203,17 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
           <TextFnx color={colors.app.textContentLevel3}>Giá</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
              get( item, 'price' ),
-            get(advertisment, 'paymentUnit'),
+            get(item, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
+          )} ${get(item, 'paymentUnit')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
             get(data, 'quantity'),
-            get(advertisment, 'paymentUnit'),
+            get(item, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'symbol')}`}</TextFnx>
+          )} ${get(item, 'symbol')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
@@ -247,10 +247,10 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            {to_UTCDate(
+            {get(advertisment, 'createdDate') ?to_UTCDate(
               get(advertisment, 'createdDate'),
               'DD-MM-YYYY hh:mm:ss',
-            )}
+            ): null}
           </TextFnx>
         </Layout>
         <Layout
@@ -374,7 +374,32 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
         <Button
           spaceVertical={20}
           isSubmit
-          onSubmit={() => actionSheetRef?.current?.show()}
+          onSubmit={() => { 
+            if (get(item, 'side') == SELL) {
+              
+              actionSheetRef?.current?.show()
+            }
+            else {
+              pushSingleScreenApp( componentId, STEP_2FA_BUY_SELL_SCREEN, {
+                      onSubmitSuccess: ()=>{
+                        actionSheetRef.current?.hide();
+                    
+                        // useActionsP2p(dispatch).handleResetOffer();
+                        // debugger;
+                        useActionsP2p( dispatch ).handleCreateOfferOrder( {
+                          data: {
+                            orderId: get( advertisment, 'orderId' ),
+                            orderQtty: get( data, 'quantity' ),
+                            orderPrice: get( advertisment, 'price' ),
+                            p2PAccountPaymentMethodId: get( item, 'id' ),
+                          },
+                          paymentMethodData: item,
+                        } );
+                      }
+                    } );
+            }
+          } 
+        }
           colorTitle={colors.text}
           weightTitle={'700'}
           colorTitleClose={colors.app.sell}

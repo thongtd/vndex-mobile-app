@@ -215,7 +215,7 @@ const Step3BuySellScreen = ({
     });
 
     return () => {};
-  }, [ offerOrderState, advertisment ] );
+  }, [offerOrderState, advertisment]);
   return (
     <Container
       space={15}
@@ -306,7 +306,7 @@ const Step3BuySellScreen = ({
             }>
             {`${formatCurrency(
               get(offerOrderState, 'price') * get(offerOrderState, 'quantity'),
-              get(advertisment, 'paymentUnit'),
+              get(offerOrderState, 'paymentUnit'),
               currencyList,
             )} `}
             <TextFnx color={colors.app.textContentLevel3}>
@@ -317,18 +317,18 @@ const Step3BuySellScreen = ({
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Giá</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(advertisment, 'price'),
-            get(advertisment, 'paymentUnit'),
+            get(offerOrderState, 'price'),
+            get(offerOrderState, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
+          )} ${get(offerOrderState, 'paymentUnit')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
             get(offerOrderState, 'quantity'),
-            get(advertisment, 'paymentUnit'),
+            get(offerOrderState, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'symbol')}`}</TextFnx>
+          )} ${get(offerOrderState, 'symbol')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
@@ -357,7 +357,7 @@ const Step3BuySellScreen = ({
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
             {to_UTCDate(
-              get(advertisment, 'createdDate'),
+              get(offerOrderState, 'createdDate'),
               'DD-MM-YYYY hh:mm:ss',
             )}
           </TextFnx>

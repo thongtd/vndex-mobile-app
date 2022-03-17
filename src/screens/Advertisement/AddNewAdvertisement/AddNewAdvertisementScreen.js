@@ -36,16 +36,16 @@ import Step2AddNewAds from './components/Step2AddNewAds';
 import Step3AddNewAds from './components/Step3AddNewAds';
 const timeToLive = [
   {
-    second: 600,
-    name: '10 phút',
-  },
-  {
     second: 900,
     name: '15 phút',
   },
   {
-    second: 1200,
-    name: '20 phút',
+    second: 1800,
+    name: '30 phút',
+  },
+  {
+    second: 3600,
+    name: '1 tiếng',
   },
 ];
 const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
@@ -418,7 +418,11 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
       case 1:
         return (
           <Step2AddNewAds
-            onBtnAll={value => setQuantity(value)}
+            onBtnAll={value => {
+              setQuantity( formatNumberOnChange( currencyList, value, ActiveAsset ) );
+              const maxOrder = value.str2Number() * price.str2Number();
+              setMaxOrder(formatNumberOnChange(currencyList,maxOrder.toString() , ActiveFiat))
+            }}
             onGetTimer={onGetTimer}
             dataState={{
               paymentUnit: ActiveFiat,

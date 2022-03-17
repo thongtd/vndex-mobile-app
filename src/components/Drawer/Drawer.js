@@ -61,7 +61,7 @@ const Drawer = ({componentId}) => {
       <ItemSetting
         iconRight={false}
         iconLeftSvg={icons.IcHistory}
-        textLeft={'Lịch sử giao dịch'}
+        textLeft={'Giao dịch của tôi'}
         onPress={() => {
           pushTabBasedApp(2);
         }}
@@ -69,7 +69,7 @@ const Drawer = ({componentId}) => {
       <ItemSetting
         iconRight={false}
         iconLeftSvg={icons.IcHistory}
-        textLeft={'Danh sách token'}
+        textLeft={'Tìm kiếm mã CK'}
         onPress={() => {
           setTimeout(() => {
             Navigation.mergeOptions(componentId, {

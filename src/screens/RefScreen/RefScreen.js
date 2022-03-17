@@ -57,7 +57,7 @@ const RefScreen = ({componentId}) => {
       // { textLeft: "passcode", iconLeft: icons.passCode, hasSwitch: true, onValueChange: changeSwitchData, isBorder: true },
       {
         textLeft: 'Your total commission'.t(),
-        textRight: totalCommission || '0' + ' AIFT',
+        textRight: totalCommission || '0' + ' SMAT',
         iconRight: true,
         onPress: () => {
           // pushSingleScreenApp(componentId, TOTAL_COMMISSION_SCREEN)

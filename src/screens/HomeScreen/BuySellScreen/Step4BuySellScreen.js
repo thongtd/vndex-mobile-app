@@ -152,7 +152,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   //   useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
   //   return () => {};
   // }, []);
-  const [disabledSubmit, setDisabledSubmit] = useState(false);
+  const [disabledSubmit, setDisabledSubmit] = useState(true);
 
   useEffect(() => {
     var intervalID = setInterval(
@@ -236,6 +236,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             flexDirection: 'row',
           }}
           onFinish={() => {
+            setDisabledSubmit(false);
             useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
           }}
           digitStyle={{height: 15, width: 20}}
@@ -273,7 +274,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
               : colors.app.sell
           }>
           {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
-            advertisment,
+            item,
             'symbol',
           )}`}
         </TextFnx>
@@ -315,7 +316,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(item, 'quantity'),
+            get(offerOrderState, 'quantity'),
             get(item, 'paymentUnit'),
             currencyList,
           )} ${get(item, 'symbol')}`}</TextFnx>
@@ -367,10 +368,10 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            {to_UTCDate(
+            {get(advertisment, 'createdDate') ?  to_UTCDate(
               get(advertisment, 'createdDate'),
               'DD-MM-YYYY hh:mm:ss',
-            )}
+            ) : null}
           </TextFnx>
         </Layout>
         {get( offerOrderState, 'paymentMethods' ).map( paymentMethod =>
@@ -599,8 +600,8 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           bgButtonColorSubmit={
             disabledSubmit ? '#715611' : colors.app.yellowHightlight
           }
-          bgButtonColorClose={disabledSubmit ? '#2C2B28' : colors.btnClose}
-          disabledClose={disabledSubmit}
+          bgButtonColorClose={false ? '#2C2B28' : colors.btnClose}
+          disabledClose={false}
           disabledSubmit={disabledSubmit}
           isClose
           onSubmit={() => {
@@ -655,7 +656,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
               : 'Xác nhận mở khóa'
           }
           colorTitleClose={
-            disabledSubmit ? colors.description : colors.textBtnClose
+            colors.textBtnClose
           }
           //   te={'MUA USDT'}
         />
