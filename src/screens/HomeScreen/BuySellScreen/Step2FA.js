@@ -57,7 +57,8 @@ const Step2FA = ({componentId,onSubmitSuccess}) => {
         .then( res =>  {
           console.log( 'res 2fa: ', res );
           if ( onSubmitSuccess ) {
-             Navigation.pop( componentId );
+            setIsLoading( false );
+            Navigation.pop( componentId );
             onSubmitSuccess();
           }
           else {
@@ -74,8 +75,9 @@ const Step2FA = ({componentId,onSubmitSuccess}) => {
             }
           }
         } )
-        .catch(err => {
+        .catch( err => {
           setIsLoading(false);
+          Navigation.pop( componentId );
           toast('Lỗi kết nối');
         });
     }

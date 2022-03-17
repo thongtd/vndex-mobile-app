@@ -362,7 +362,7 @@ const Step3BuySellScreen = ({
             )}
           </TextFnx>
         </Layout>
-        {get( offerOrderState, 'paymentMethods' ).map( paymentMethod =>
+        {get( offerOrderState, 'paymentMethods' ) ? get( offerOrderState, 'paymentMethods' ).map( paymentMethod =>
           <View>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>
@@ -517,7 +517,7 @@ const Step3BuySellScreen = ({
             </Layout>
           </Layout>
         )}
-              </View>)}
+              </View>) : null}
               
         
        
