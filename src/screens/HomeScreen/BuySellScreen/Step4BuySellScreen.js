@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native';
 import {isEmpty} from 'lodash';
 import Container from '../../../components/Container';
@@ -53,6 +54,7 @@ import {Navigation} from 'react-native-navigation';
 const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const actionSheetRef = useRef(null);
   const dispatch = useDispatch();
+
   const advertisment = useSelector(state => state.p2p.advertisment);
   const currencyList = useSelector(state => state.market.currencyList);
   const offerOrder = useSelector(state => state.p2p.offerOrder);
@@ -61,7 +63,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isStopComplain, setIsStopComplain] = useState(false);
   const complainInfo = useSelector( state => state.p2p.complainInfo );
   useEffect(() => {
@@ -132,6 +134,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           setIsStopComplain(true);
           pushSingleScreenApp(componentId, COMPLAINING_SCREEN, {
             orderId: get(data, 'orderId'),
+            item : item
           });
         }
       },
@@ -153,6 +156,31 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   //   return () => {};
   // }, []);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
+  const showConfirmDialog = () => {
+    return Alert.alert(
+      "Huỷ lệnh",
+      "Bạn chắc chắn muốn huỷ lệnh chứ",
+      [
+        // The "Yes" button
+        {
+          text: "Đồng ý",
+          onPress: () => {
+            setIsLoading(true);
+              useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
+                offerOrderId: offerOrderId,
+                isHasPayment: false,
+                pofPayment: '',
+                pofPaymentComment: '',
+                cancellationReason: '',
+              });
+          },
+        },
+        {
+          text: "Không",
+        },
+      ]
+    );
+  };
 
   useEffect(() => {
     var intervalID = setInterval(
@@ -276,7 +304,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
             item,
             'symbol',
-          )}`}
+          ) || get(offerOrderState,'symbol')}`}
         </TextFnx>
         <Layout
           isLineCenter
@@ -301,7 +329,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
               currencyList,
             )} `}
             <TextFnx color={colors.app.textContentLevel3}>
-              {get(item, 'paymentUnit')}
+              {get(item, 'paymentUnit')||get(item, 'paymentUnit')}
             </TextFnx>
           </TextFnx>
         </Layout>
@@ -311,7 +339,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             get(item, 'price'),
             get(item, 'paymentUnit'),
             currencyList,
-          )} ${get(item, 'paymentUnit')}`}</TextFnx>
+          )} ${get(item, 'paymentUnit') ||get(item, 'paymentUnit')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
@@ -350,11 +378,11 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
             <TextFnx color={colors.app.textContentLevel2}>
-              {get(advertisment, 'orderSequenceNumber')}
+              {get(offerOrderState, 'orderSequenceNumber')}
             </TextFnx>
             <ButtonIcon
               onPress={() => {
-                Clipboard.setString(get(advertisment, 'orderSequenceNumber'));
+                Clipboard.setString(get(offerOrderState, 'orderSequenceNumber'));
                 toast('COPY_TO_CLIPBOARD'.t());
               }}
               style={{
@@ -368,10 +396,9 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            {get(advertisment, 'createdDate') ?  to_UTCDate(
-              get(advertisment, 'createdDate'),
-              'DD-MM-YYYY hh:mm:ss',
-            ) : null}
+            {get(offerOrderState, 'offerDateVnTime') ?  
+              get(offerOrderState, 'offerDateVnTime')
+            : ''}
           </TextFnx>
         </Layout>
         {get( offerOrderState, 'paymentMethods' ).map( paymentMethod =>
@@ -628,13 +655,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           onClose={() => {
             if (get(offerOrderState, 'offerSide') === BUY) {
               setIsLoading(true);
-              useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
-                offerOrderId: offerOrderId,
-                isHasPayment: false,
-                pofPayment: '',
-                pofPaymentComment: '',
-                cancellationReason: '',
-              });
+              showConfirmDialog();
             } else {
               if (get(offerOrderState, 'timeToLiveInSecond') <= 0) {
                 pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
@@ -667,4 +688,11 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
 
 export default Step4BuySellScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  box: {
+    width: 300,
+    height: 300,
+    backgroundColor: "red",
+    marginBottom: 30,
+  },
+});

@@ -657,12 +657,12 @@ const Step1BuySellScreen = ({componentId, item}) => {
                 'Bạn không thể đặt lệnh với khối lượng lớn hơn khối lượng của lệnh quảng cáo',
               );
             } else if (
-              (get(advertisment, 'side') === SELL &&
-                Receive.str2Number() >
-                  get(
-                    getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
-                    'available',
-                  ) && get(advertisment,"symbol") !== 'SMAT') ||
+              // (get(advertisment, 'side') === SELL &&
+              //   Receive.str2Number() >
+              //     get(
+              //       getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
+              //       'available',
+              //     ) && get(advertisment,"symbol") !== 'SMAT') ||
               (get(advertisment, 'side') === BUY &&
                 Pay.str2Number() >
                   get(
@@ -680,6 +680,8 @@ const Step1BuySellScreen = ({componentId, item}) => {
                 side: get( item, 'side' ) === SELL ? BUY : SELL,
                 offerSide: get( item, 'side' ) === SELL ? BUY : SELL
               },
+              fee: checkFee(),
+              tax: checkTax(),
               data: {
                 price:
                   get(item, 'side') === SELL

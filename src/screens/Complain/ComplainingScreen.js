@@ -37,10 +37,10 @@ import {
 import Copy from 'assets/svg/ic_copy.svg';
 import {Navigation} from 'react-native-navigation';
 import {useActionsP2p} from '../../redux';
-const ComplainingScreen = ({componentId, orderId}) => {
+const ComplainingScreen = ({componentId, orderId,item}) => {
   const currencyList = useSelector(state => state.market.currencyList);
   const offerOrder = useSelector(state => state.p2p.offerOrder);
-  const complainInfo = useSelector(state => state.p2p.complainInfo);
+  const complainInfo = useSelector(state => state.p2p.complain);
   const advertisment = useSelector(state => state.p2p.advertisment);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
   const UserInfo = useSelector(state => state.authentication.userInfo);
@@ -91,7 +91,7 @@ const ComplainingScreen = ({componentId, orderId}) => {
     return () => {};
   }, [offerOrder, UserInfo]);
   useEffect(() => {
-    useActionsP2p(dispatch).handleGetComplainProcess(get(complainInfo, 'id'));
+    // useActionsP2p(dispatch).handleGetComplainProcess(get(complainInfo, 'id'));
     useActionsP2p(dispatch).handleGetComplain({
       orderId,
       type: '2',
@@ -286,18 +286,16 @@ const ComplainingScreen = ({componentId, orderId}) => {
             borderBottomWidth: 1,
             borderColor: colors.app.lineSetting,
             paddingVertical: 5,
+              width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
           title={'Tiến trình khiếu nại'}
           size={0}
           iconRight={
             <Icon name="chevron-right" size={14} color={colors.text} />
           }
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
         />
       </TouchableOpacity>
 
@@ -444,7 +442,7 @@ const ComplainingScreen = ({componentId, orderId}) => {
               currencyList,
             )} `}
             <TextFnx color={colors.app.textContentLevel3}>
-              {get(advertisment, 'paymentUnit')}
+              {get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')}
             </TextFnx>
           </TextFnx>
         </Layout>
@@ -454,15 +452,15 @@ const ComplainingScreen = ({componentId, orderId}) => {
             get(advertisment, 'price'),
             get(advertisment, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
+          )} ${get(advertisment, 'paymentUnit') || get(item, 'paymentUnit')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
             get(offerOrderState, 'quantity'),
-            get(advertisment, 'paymentUnit'),
+            get(advertisment, 'paymentUnit') || get(item, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'symbol')}`}</TextFnx>
+          )} ${get(advertisment, 'symbol') || get(item, 'symbol')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
@@ -486,11 +484,11 @@ const ComplainingScreen = ({componentId, orderId}) => {
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
             <TextFnx color={colors.app.textContentLevel2}>
-              {get(advertisment, 'orderSequenceNumber')}
+              {get(advertisment, 'orderSequenceNumber') || get(item, 'orderSequenceNumber')}
             </TextFnx>
             <ButtonIcon
               onPress={() => {
-                Clipboard.setString(get(advertisment, 'orderNumber'));
+                Clipboard.setString(get(advertisment, 'orderNumber') ?? get(item, 'orderNumber'));
                 toast('COPY_TO_CLIPBOARD'.t());
               }}
               style={{
@@ -505,7 +503,7 @@ const ComplainingScreen = ({componentId, orderId}) => {
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
             {to_UTCDate(
-              get(advertisment, 'createdDate'),
+              get(item,'createdDate'),
               'DD-MM-YYYY hh:mm:ss',
             )}
           </TextFnx>

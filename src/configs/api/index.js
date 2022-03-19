@@ -56,7 +56,7 @@ export const P2P_API = {
   CHAT_HISTORY: `${EXCHANGE_URL}api/v1/p2p-conversation/history/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
   CHAT_SEND_MESSAGE: `${EXCHANGE_URL}api/v1/p2p-conversation/send-message/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
   CHAT_INFO_P2P: `${EXCHANGE_URL}api/v1/p2p-conversation/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
-  CREATE_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/create-complain`,
+  CREATE_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/create-complain-v1`,
   GET_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/get-complain/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   CANCEL_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/cancel-complain/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   GET_COMPLAIN_PROCESS: `${EXCHANGE_URL}api/v1/p2p-order/get-complain-process/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6

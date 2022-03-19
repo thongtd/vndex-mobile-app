@@ -26,7 +26,7 @@ import {useDispatch,useSelector} from 'react-redux';
 import { CHAT_SCREEN, COMPLAINING_SCREEN } from '../../navigation';
 
 const ComplainProvide = ({componentId, orderId}) => {
-  const [ReasonComplain, setReasonComplain] = useState('1');
+  const [ReasonComplain, setReasonComplain] = useState('');
   const [description, setDescription] = useState('');
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -74,12 +74,12 @@ const ComplainProvide = ({componentId, orderId}) => {
     if (size(images) > 0) {
       for (let i = 0; i < images.length; i++) {
         const eleImage = images[i];
-        if (get(eleImage, 'fileSize') > 5000000) {
-          return toast('FILE_SIZE'.t());
-        } else {
+        // if (get(eleImage, 'fileSize') > 5000000) {
+        //   return toast('FILE_SIZE'.t());
+        // } else {
           fileBytes.push(get(eleImage, 'base64'));
           fileNames.push(get(eleImage, 'fileName'));
-        }
+        // }
       }
     }
     if (size(images) == 0) {
@@ -90,16 +90,16 @@ const ComplainProvide = ({componentId, orderId}) => {
       return toast('Vui lòng chọn lý do khiếu nại');
     }
     setIsLoading(true);
-    useActionsP2p(dispatcher).handleCreateComplain({
-      orderId: orderId,
-      reason: ReasonComplain,
-      description: description,
-      fullName: fullName,
-      phoneNumber: phoneNumber,
-      imageBytes: fileBytes,
-      fileNames: fileNames,
-      lockedInSecond: 900,
-    });
+    var bodyFormData = new FormData();
+    bodyFormData.append('orderId',orderId);
+    bodyFormData.append('reason',ReasonComplain);
+    bodyFormData.append('description',description);
+    bodyFormData.append('fullName',fullName);
+    bodyFormData.append('phoneNumber',phoneNumber);
+    bodyFormData.append('imageBytes',fileBytes);
+    bodyFormData.append('fileNames',fileNames);
+    bodyFormData.append('lockedInSecond',900);
+    useActionsP2p(dispatcher).handleCreateComplain(bodyFormData);
   }, [images, orderId,description, ReasonComplain, fullName, phoneNumber]);
   const [isLoading, setIsLoading] = useState(false);
   return (

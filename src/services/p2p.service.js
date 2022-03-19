@@ -78,7 +78,7 @@ export const P2pService = {
   },
   createlComplain: async data => {
     let urlCreateComplain = `${P2P_API.CREATE_COMPLAIN}`;
-    let response = await httpService.post(urlCreateComplain, data);
+    let response = await httpService.postFormData(urlCreateComplain, data);
     return response.data;
   },
   getAdvertisment: async orderId => {

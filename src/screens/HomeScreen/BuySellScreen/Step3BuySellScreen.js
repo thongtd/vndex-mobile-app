@@ -67,6 +67,8 @@ const Step3BuySellScreen = ({
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
 
+
+ 
   useEffect(() => {
     if (isPushChat) {
       pushSingleScreenApp(componentId, CHAT_SCREEN, {
@@ -207,7 +209,31 @@ const Step3BuySellScreen = ({
   //     );
   //   }
   // };
-  // debugger
+  const showConfirmDialog = () => {
+    return Alert.alert(
+      "Huỷ lệnh",
+      "Bạn chắc chắn muốn huỷ lệnh chứ",
+      [
+        // The "Yes" button
+        {
+          text: "Đồng ý",
+          onPress: () => {
+            setIsLoading(true);
+              useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
+                offerOrderId: offerOrderId,
+                isHasPayment: false,
+                pofPayment: '',
+                pofPaymentComment: '',
+                cancellationReason: '',
+              });
+          },
+        },
+        {
+          text: "Không",
+        },
+      ]
+    );
+  };
   useEffect(() => {
     useActionsP2p(dispatch).handleGetFeeTax({
       quantity: get(offerOrderState, 'quantity'),
@@ -283,7 +309,7 @@ const Step3BuySellScreen = ({
               : colors.app.sell
           }>
           {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
-            advertisment,
+            item,
             'symbol',
           )}`}
         </TextFnx>
@@ -351,6 +377,14 @@ const Step3BuySellScreen = ({
                   )
                 
             } ${get(offerOrderState, 'feeTaxBy')}`}
+          </TextFnx>
+        </Layout>
+        <Layout isSpaceBetween space={8}>
+          <TextFnx color={colors.app.textContentLevel3}>Số lệnh</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>
+            
+                   { get(offerOrderState, 'orderSequenceNumber')}
+                 
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
@@ -602,6 +636,24 @@ const Step3BuySellScreen = ({
                 pofPaymentComment: '',
                 cancellationReason: '',
               });
+              pushSingleScreenApp(
+          componentId,
+          STEP_4_BUY_SELL_SCREEN,
+          {
+            paymentMethodData,
+            item,
+          },
+          {
+            topBar: {
+              rightButtons: [
+                {
+                  id: IdNavigation.PressIn.chat,
+                  icon: require('assets/icons/ic_chat.png'),
+                },
+              ],
+            },
+          },
+        );
             }
             // pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN)
           }
@@ -609,14 +661,7 @@ const Step3BuySellScreen = ({
           weightTitle={'700'}
           textClose={'Huỷ lệnh'}
           onClose={() => {
-            setIsLoading(true);
-            useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
-              offerOrderId: offerOrderId,
-              isHasPayment: false,
-              pofPayment: '',
-              pofPaymentComment: '',
-              cancellationReason: '',
-            });
+            showConfirmDialog();
           }}
           textSubmit={'Xác nhận đã chuyển tiền'}
           colorTitleClose={colors.app.sell}

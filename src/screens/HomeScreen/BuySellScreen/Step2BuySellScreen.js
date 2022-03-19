@@ -50,7 +50,7 @@ import {useDispatch} from 'react-redux';
 import {isEmpty} from 'lodash';
 import {useActionsP2p} from '../../../redux';
 import { Navigation } from 'react-native-navigation';
-const Step2BuySellScreen = ( { componentId, item, data } ) => {
+const Step2BuySellScreen = ( { componentId, item, data,fee,tax } ) => {
   
   const actionSheetRef = useRef(null);
   const dispatch = useDispatch();
@@ -217,15 +217,15 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>{`${checkFee()} ${get(feeTax,'taxFeeByCurrency')}`}</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{fee}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-          {`${checkTax()} ${get(feeTax,'taxFeeByCurrency')}`}
+          {tax}
           </TextFnx>
         </Layout>
-        <Layout isSpaceBetween space={8}>
+        {/* <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
             <TextFnx color={colors.app.textContentLevel2}>
@@ -243,14 +243,14 @@ const Step2BuySellScreen = ( { componentId, item, data } ) => {
               iconComponent={<Copy height={20} width={20} />}
             />
           </Layout>
-        </Layout>
+        </Layout> */}
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            {get(advertisment, 'createdDate') ?to_UTCDate(
-              get(advertisment, 'createdDate'),
+            {to_UTCDate(
+              Date.now(),
               'DD-MM-YYYY hh:mm:ss',
-            ): null}
+            )}
           </TextFnx>
         </Layout>
         <Layout

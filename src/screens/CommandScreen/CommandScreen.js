@@ -33,6 +33,7 @@ import {
   COMPLAINING_SCREEN,
   FEEDBACK_SCREEN,
   ADS_ADD_NEW_SCREEN,
+  COMPLAINING_PROCESS_SCREEN,
   MODAL_FILTER_COMMAND,
   pushSingleScreenApp,
   STEP_2_BUY_SELL_SCREEN,
@@ -136,7 +137,7 @@ const CommandScreen2 = ({componentId}) => {
       
       pushSingleScreenApp(
         componentId,
-        STEP_4_BUY_SELL_SCREEN,
+      STEP_4_BUY_SELL_SCREEN,
         {
           item: {...item, side: get(item, 'orderSide') == BUY ? BUY : SELL},
           offerOrder: {
@@ -242,8 +243,9 @@ const CommandScreen2 = ({componentId}) => {
         orderId: get(item, 'id'),
         type: '2',
       } );
-      debugger;
-      pushSingleScreenApp( componentId, STEP_3_BUY_SELL_SCREEN, {item:item}, {
+      // debugger;
+      
+      pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
         topBar: {
           rightButtons: [
             {
@@ -253,6 +255,12 @@ const CommandScreen2 = ({componentId}) => {
           ],
         },
       });
+    } else if (get(item, 'status') == 6) {
+      pushSingleScreenApp(componentId, COMPLAINING_SCREEN,{
+        orderId: get(item, 'id'),
+        item : item
+          });
+    
     } else {
       pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
     }
@@ -582,7 +590,7 @@ const mapStatus = ({
       label: 'Chờ mở khóa',
     };
   } else if (
-    status == 6
+    status == 6 
   ) {
     return {
       color: colors.app.sell,
@@ -595,7 +603,7 @@ const mapStatus = ({
     return {
       color: colors.app.buy,
       bg: colors.app.bgBuy,
-      label: 'Mới',
+      label: 'Chờ khớp',
     };
   }
   else{
