@@ -376,13 +376,13 @@ const Step2BuySellScreen = ( { componentId, item, data,fee,tax } ) => {
           isSubmit
           onSubmit={() => { 
             if (get(item, 'side') == SELL) {
-              
               actionSheetRef?.current?.show()
             }
             else {
+              actionSheetRef.current?.hide();
               pushSingleScreenApp( componentId, STEP_2FA_BUY_SELL_SCREEN, {
                       onSubmitSuccess: ()=>{
-                        actionSheetRef.current?.hide();
+                        
                     
                         // useActionsP2p(dispatch).handleResetOffer();
                         // debugger;
@@ -434,21 +434,18 @@ const Step2BuySellScreen = ( { componentId, item, data,fee,tax } ) => {
                 <TouchableOpacity
                   key={`ite-${index}`}
                   onPress={() => {
+                    actionSheetRef.current?.hide();
                     pushSingleScreenApp( componentId, STEP_2FA_BUY_SELL_SCREEN, {
                       onSubmitSuccess: ()=>{
-                        actionSheetRef.current?.hide();
-                    
-                        // useActionsP2p(dispatch).handleResetOffer();
-                        // debugger;
-                        useActionsP2p( dispatch ).handleCreateOfferOrder( {
+                        useActionsP2p(dispatch).handleCreateOfferOrder({
                           data: {
-                            orderId: get( advertisment, 'orderId' ),
-                            orderQtty: get( data, 'quantity' ),
-                            orderPrice: get( advertisment, 'price' ),
-                            p2PAccountPaymentMethodId: get( item, 'id' ),
+                            orderId: get(advertisment, 'orderId'),
+                            orderQtty: get(data, 'quantity'),
+                            orderPrice: get(advertisment, 'price'),
+                            p2PAccountPaymentMethodId: get(item, 'id'),
                           },
                           paymentMethodData: item,
-                        } );
+                        });
                       }
                     } );
                   }}>

@@ -57,9 +57,14 @@ const Step2FA = ({componentId,onSubmitSuccess}) => {
         .then( res =>  {
           console.log( 'res 2fa: ', res );
           if ( onSubmitSuccess ) {
-            setIsLoading( false );
+            setIsLoading(false);
+            if ( get( res, 'succeeded' ) ) {
             Navigation.pop( componentId );
-            onSubmitSuccess();
+              onSubmitSuccess();
+            }
+            else {
+              toast( 'Mã 2FA không đúng' );
+            }
           }
           else {
             setIsLoading( false );
@@ -75,7 +80,8 @@ const Step2FA = ({componentId,onSubmitSuccess}) => {
             }
           }
         } )
-        .catch( err => {
+        .catch(err => {
+          
           setIsLoading(false);
           Navigation.pop( componentId );
           toast('Lỗi kết nối');

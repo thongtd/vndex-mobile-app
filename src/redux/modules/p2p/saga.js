@@ -129,10 +129,13 @@ export function* asyncGetTrading({payload}) {
     let currencyArrFiltered = currencyArr.filter(
       (v, i, a) => a.findIndex(t => t === v) === i,
     );
+    const symbols = get(res[0], 'tradingCoins').sort(function(a, b) {
+   return a.symbol.localeCompare(b.symbol);
+});
     let resData = {
-      assets: symbolArrFiltered,
+      assets: symbolArrFiltered.slice(0,5),
       paymentUnit: currencyArrFiltered,
-      symbols:get(res[0], 'tradingCoins')
+      symbols:symbols
     };
 
     yield put(actionsReducerP2p.getTradingSuccess(resData));

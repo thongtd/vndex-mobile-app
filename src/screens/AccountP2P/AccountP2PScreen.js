@@ -47,7 +47,6 @@ const AccountP2PScreen = ({componentId,userId=''}) => {
         
       }
     }, [dispatch,ActiveType])
-    
     return (
     <Container
       componentId={componentId}

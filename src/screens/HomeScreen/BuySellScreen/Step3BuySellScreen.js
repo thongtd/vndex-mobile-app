@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
   Clipboard,
 } from 'react-native';
 import Container from '../../../components/Container';
