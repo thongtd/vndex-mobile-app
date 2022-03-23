@@ -401,7 +401,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             : ''}
           </TextFnx>
         </Layout>
-        {get( offerOrderState, 'paymentMethods' ).map( paymentMethod =>
+        { get( offerOrderState, 'paymentMethods') ? get( offerOrderState, 'paymentMethods').map( paymentMethod =>
           <View>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>
@@ -555,7 +555,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             </Layout>
           </Layout>
         )}
-              </View>)}
+              </View>):<View/>}
         <Layout
           style={{
             backgroundColor: colors.app.lineSetting,

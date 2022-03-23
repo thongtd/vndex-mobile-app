@@ -50,7 +50,7 @@ import {useDispatch} from 'react-redux';
 import {isEmpty} from 'lodash';
 import {useActionsP2p} from '../../../redux';
 import { Navigation } from 'react-native-navigation';
-const Step2BuySellScreen = ( { componentId, item, data,fee,tax } ) => {
+const Step2BuySellScreen = ( { componentId, item, data,taxFeeByCurrency,fee,tax } ) => {
   
   const actionSheetRef = useRef(null);
   const dispatch = useDispatch();
@@ -67,14 +67,19 @@ const Step2BuySellScreen = ( { componentId, item, data,fee,tax } ) => {
     //     }
     //   },
     // );
-    const ev = listenerEventEmitter('pushOfferOrder', data => {
-      if ( get( data, 'offerOrder.offerSide' ) === BUY ) {
+    const ev = listenerEventEmitter('pushOfferOrder', args => {
+      if ( get( args, 'offerOrder.offerSide' ) === BUY ) {
         // debugger
-        
+        // debugger;
         pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN, {
-          paymentMethodData: get(data, 'paymentMethodData'),
-          offerOrder: get(data, 'offerOrder'),
-          item,
+          paymentMethodData: get(args, 'paymentMethodData'),
+          offerOrder: get(args, 'offerOrder'),
+          item: {
+            ...item,
+            fee: fee,
+            tax: tax,
+            quantity:get( data, 'quantity' ),
+          taxFeeByCurrency:taxFeeByCurrency},
         },{
           topBar: {
             rightButtons: [
@@ -87,8 +92,14 @@ const Step2BuySellScreen = ( { componentId, item, data,fee,tax } ) => {
         });
       } else {
         pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, {
-          paymentMethodData: get(data, 'paymentMethodData'),
-          item,
+          paymentMethodData: get(args, 'paymentMethodData'),
+          item :{
+            ...item,
+            fee: fee,
+            tax: tax,
+            quantity:get( data, 'quantity' ),
+          taxFeeByCurrency:taxFeeByCurrency},
+        
         },{
           topBar: {
             rightButtons: [
@@ -217,12 +228,12 @@ const Step2BuySellScreen = ( { componentId, item, data,fee,tax } ) => {
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>{fee}</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{fee} {taxFeeByCurrency}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
-          <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
+          <TextFnx color={colors.app.textContentLevel3}>Thuế </TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-          {tax}
+          {tax} {taxFeeByCurrency}
           </TextFnx>
         </Layout>
         {/* <Layout isSpaceBetween space={8}>
