@@ -65,11 +65,11 @@ export default function Step2Kyc({
       mediaType: 'photo',
       includeBase64: true,
     }).then(res => {
-      if (get(res, 'assets[0].fileSize') > 5000000) {
-        return toast('FILE_SIZE'.t());
-      } else {
+      // if (get(res, 'assets[0].fileSize') > 5000000) {
+      //   return toast('FILE_SIZE'.t());
+      // } else {
         setAssetBackSide(res.assets[0]);
-      }
+      // }
     });
   };
   const handleNext = (assetBackSide, assetFrontSide) => {

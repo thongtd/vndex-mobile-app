@@ -680,6 +680,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
                 side: get( item, 'side' ) === SELL ? BUY : SELL,
                 offerSide: get( item, 'side' ) === SELL ? BUY : SELL
               },
+              taxFeeByCurrency:get(feeTax, 'taxFeeByCurrency'),
               fee: checkFee(),
               tax: checkTax(),
               data: {
