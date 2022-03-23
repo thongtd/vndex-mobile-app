@@ -51,6 +51,7 @@
     "react-native-masked-text": "^1.13.0",
     "react-native-navigation": "^7.24.1",
     "react-native-navigation-hooks": "^6.3.0",
+    "react-native-onesignal": "^4.3.7",
     "react-native-paper": "^4.11.1",
     "react-native-public-ip": "^1.0.2",
     "react-native-qrcode-scanner": "^1.5.4",

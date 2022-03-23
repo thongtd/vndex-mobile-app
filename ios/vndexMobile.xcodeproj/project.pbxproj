@@ -11,8 +11,11 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		18D9D96D27EB4B65008A547F /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D9D96C27EB4B65008A547F /* NotificationService.swift */; };
+		18D9D97127EB4B65008A547F /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 18D9D96A27EB4B64008A547F /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4BE274857051D04720988720 /* libPods-vndexMobile-vndexMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B30A18B2AF64292E6998E9E5 /* libPods-vndexMobile-vndexMobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A8C22DB6E77ACFE43628EEC1 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1642454E65236A1DA7397A7C /* libPods-OneSignalNotificationServiceExtension.a */; };
 		B4F7311B27DD3AA2D236638C /* libPods-vndexMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A42822E8BC487D9FAE4F0B /* libPods-vndexMobile.a */; };
 /* End PBXBuildFile section */
 
@@ -24,7 +27,28 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = vndexMobile;
 		};
+		18D9D96F27EB4B65008A547F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 18D9D96927EB4B64008A547F;
+			remoteInfo = OneSignalNotificationServiceExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		18D9D97527EB4B65008A547F /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				18D9D97127EB4B65008A547F /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* vndexMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vndexMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,6 +60,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = vndexMobile/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = vndexMobile/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = vndexMobile/main.m; sourceTree = "<group>"; };
+		1642454E65236A1DA7397A7C /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		179760DB2768DFC100884E47 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		179760DC2768DFC100884E47 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		179760DD2768DFC100884E47 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -52,9 +77,16 @@
 		179760E82768DFC100884E47 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		179760E92768DFC100884E47 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		179760EA2768DFC100884E47 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		18D9D96527EB4A25008A547F /* vndexMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = vndexMobile.entitlements; path = vndexMobile/vndexMobile.entitlements; sourceTree = "<group>"; };
+		18D9D96A27EB4B64008A547F /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		18D9D96C27EB4B65008A547F /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		18D9D96E27EB4B65008A547F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18D9D97627EB4E95008A547F /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		2E80D94841EC6C1EAA1B1496 /* Pods-vndexMobile-vndexMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vndexMobile-vndexMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-vndexMobile-vndexMobileTests/Pods-vndexMobile-vndexMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		33F538282451303EB633DDCD /* Pods-vndexMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vndexMobile.release.xcconfig"; path = "Target Support Files/Pods-vndexMobile/Pods-vndexMobile.release.xcconfig"; sourceTree = "<group>"; };
+		68DD53503C7F8A3A51DC78F5 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = vndexMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8C48CA70A47720260AA0C5E1 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		A22616365BD9FEA13E246D48 /* Pods-vndexMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vndexMobile.debug.xcconfig"; path = "Target Support Files/Pods-vndexMobile/Pods-vndexMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		B30A18B2AF64292E6998E9E5 /* libPods-vndexMobile-vndexMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-vndexMobile-vndexMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA9846969A886B45898A8EB7 /* Pods-vndexMobile-vndexMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vndexMobile-vndexMobileTests.release.xcconfig"; path = "Target Support Files/Pods-vndexMobile-vndexMobileTests/Pods-vndexMobile-vndexMobileTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -76,6 +108,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4F7311B27DD3AA2D236638C /* libPods-vndexMobile.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		18D9D96727EB4B64008A547F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A8C22DB6E77ACFE43628EEC1 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +142,7 @@
 		13B07FAE1A68108700A75B9A /* vndexMobile */ = {
 			isa = PBXGroup;
 			children = (
+				18D9D96527EB4A25008A547F /* vndexMobile.entitlements */,
 				179760DA2768DFC100884E47 /* Fonts */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -137,6 +178,16 @@
 			path = "../node_modules/react-native-vector-icons/Fonts";
 			sourceTree = "<group>";
 		};
+		18D9D96B27EB4B65008A547F /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXGroup;
+			children = (
+				18D9D97627EB4E95008A547F /* OneSignalNotificationServiceExtension.entitlements */,
+				18D9D96C27EB4B65008A547F /* NotificationService.swift */,
+				18D9D96E27EB4B65008A547F /* Info.plist */,
+			);
+			path = OneSignalNotificationServiceExtension;
+			sourceTree = "<group>";
+		};
 		290E3458B7DC81FA078374F1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +195,8 @@
 				33F538282451303EB633DDCD /* Pods-vndexMobile.release.xcconfig */,
 				2E80D94841EC6C1EAA1B1496 /* Pods-vndexMobile-vndexMobileTests.debug.xcconfig */,
 				DA9846969A886B45898A8EB7 /* Pods-vndexMobile-vndexMobileTests.release.xcconfig */,
+				68DD53503C7F8A3A51DC78F5 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				8C48CA70A47720260AA0C5E1 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -154,6 +207,7 @@
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				E6A42822E8BC487D9FAE4F0B /* libPods-vndexMobile.a */,
 				B30A18B2AF64292E6998E9E5 /* libPods-vndexMobile-vndexMobileTests.a */,
+				1642454E65236A1DA7397A7C /* libPods-OneSignalNotificationServiceExtension.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -171,6 +225,7 @@
 				13B07FAE1A68108700A75B9A /* vndexMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* vndexMobileTests */,
+				18D9D96B27EB4B65008A547F /* OneSignalNotificationServiceExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				290E3458B7DC81FA078374F1 /* Pods */,
@@ -185,6 +240,7 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* vndexMobile.app */,
 				00E356EE1AD99517003FC87E /* vndexMobileTests.xctest */,
+				18D9D96A27EB4B64008A547F /* OneSignalNotificationServiceExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -225,15 +281,35 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				DE3243C843BE9B0B6CAB5073 /* [CP] Embed Pods Frameworks */,
 				3209F30E9BB631B79D93D0F2 /* [CP] Copy Pods Resources */,
+				18D9D97527EB4B65008A547F /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				18D9D97027EB4B65008A547F /* PBXTargetDependency */,
 			);
 			name = vndexMobile;
 			productName = vndexMobile;
 			productReference = 13B07F961A680F5B00A75B9A /* vndexMobile.app */;
 			productType = "com.apple.product-type.application";
+		};
+		18D9D96927EB4B64008A547F /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18D9D97227EB4B65008A547F /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
+			buildPhases = (
+				E527D80191DCF1D101797D9B /* [CP] Check Pods Manifest.lock */,
+				18D9D96627EB4B64008A547F /* Sources */,
+				18D9D96727EB4B64008A547F /* Frameworks */,
+				18D9D96827EB4B64008A547F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneSignalNotificationServiceExtension;
+			productName = OneSignalNotificationServiceExtension;
+			productReference = 18D9D96A27EB4B64008A547F /* OneSignalNotificationServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -241,6 +317,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -249,6 +326,9 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1120;
+					};
+					18D9D96927EB4B64008A547F = {
+						CreatedOnToolsVersion = 13.3;
 					};
 				};
 			};
@@ -267,6 +347,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* vndexMobile */,
 				00E356ED1AD99517003FC87E /* vndexMobileTests */,
+				18D9D96927EB4B64008A547F /* OneSignalNotificationServiceExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -285,6 +366,13 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		18D9D96827EB4B64008A547F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +488,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-vndexMobile/Pods-vndexMobile-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E527D80191DCF1D101797D9B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OneSignalNotificationServiceExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F02C538DB6E0170F58FD796C /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -456,6 +566,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		18D9D96627EB4B64008A547F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18D9D96D27EB4B65008A547F /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -463,6 +581,11 @@
 			isa = PBXTargetDependency;
 			target = 13B07F861A680F5B00A75B9A /* vndexMobile */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+		18D9D97027EB4B65008A547F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 18D9D96927EB4B64008A547F /* OneSignalNotificationServiceExtension */;
+			targetProxy = 18D9D96F27EB4B65008A547F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -524,9 +647,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A22616365BD9FEA13E246D48 /* Pods-vndexMobile.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = vndexMobile/vndexMobile.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 17;
@@ -556,9 +681,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 33F538282451303EB633DDCD /* Pods-vndexMobile.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = vndexMobile/vndexMobile.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 17;
@@ -579,6 +706,88 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		18D9D97327EB4B65008A547F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 68DD53503C7F8A3A51DC78F5 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = YJTFJ27B3Q;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OneSignalNotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vndex.vndexMobile.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		18D9D97427EB4B65008A547F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C48CA70A47720260AA0C5E1 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YJTFJ27B3Q;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OneSignalNotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vndex.vndexMobile.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -724,6 +933,15 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		18D9D97227EB4B65008A547F /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18D9D97327EB4B65008A547F /* Debug */,
+				18D9D97427EB4B65008A547F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -63,6 +63,7 @@ export function* asyncCheckLogin({payload}) {
         get(payload, 'password'),
         get(payload, 'ipAddress'),
       );
+      
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, get(res, 'data'));
       return;
     }
@@ -73,6 +74,7 @@ export function* asyncCheckLogin({payload}) {
       get(payload, 'ipAddress'),
     );
     if (get(res, 'result') === 'ok') {
+      OneSignal.setExternalUserId(get(data.identityUser.id));
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, true);
       if (get(res, 'data.succeeded') === false) {
         if (get(res, 'data.requiresTwoFactor')) {
@@ -133,8 +135,10 @@ export function* asyncConfirm2fa({payload}) {
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, true);
       setTokenAndUserInfo(res);
       pushTabBasedApp();
+      OneSignal.setExternalUserId(get(data.identityUser.id));
       yield put(
         actionsReducerAuthen.setUserInfo(get(res, 'data.identityUser')),
+        
       );
       yield put(actionsReducerAuthen.checkStateLogin(true));
     } else {

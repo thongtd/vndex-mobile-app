@@ -25,6 +25,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { initOnsignal as initOnesignal} from './onesignal';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -53,6 +54,7 @@ const Section = ({children, title}): Node => {
 };
 
 const App: () => Node = () => {
+  initOnesignal();
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
