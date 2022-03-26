@@ -40,7 +40,7 @@ import {
 } from '../../../navigation';
 import {IdNavigation, constant} from '../../../configs/constant';
 import {showModal, pushTabBasedApp} from '../../../navigation/Navigation';
-
+import OneSignal from 'react-native-onesignal';
 import {marketService} from '../../../services/market.service';
 import { storageService } from '../../../services/storage.service';
 export function* asyncGetCountries() {
@@ -74,7 +74,7 @@ export function* asyncCheckLogin({payload}) {
       get(payload, 'ipAddress'),
     );
     if (get(res, 'result') === 'ok') {
-      OneSignal.setExternalUserId(get(data.identityUser.id));
+      OneSignal.setExternalUserId(get(res,'data.identityUser.id'));
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, true);
       if (get(res, 'data.succeeded') === false) {
         if (get(res, 'data.requiresTwoFactor')) {
@@ -135,12 +135,12 @@ export function* asyncConfirm2fa({payload}) {
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, true);
       setTokenAndUserInfo(res);
       pushTabBasedApp();
-      OneSignal.setExternalUserId(get(data.identityUser.id));
       yield put(
         actionsReducerAuthen.setUserInfo(get(res, 'data.identityUser')),
         
       );
       yield put(actionsReducerAuthen.checkStateLogin(true));
+      OneSignal.setExternalUserId(get(data.identityUser.id));
     } else {
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, true);
       toast('2FA code invalid'.t());

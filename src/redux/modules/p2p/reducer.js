@@ -21,6 +21,7 @@ import {
   GET_FEE_TAX_SUCCESS,
   GET_ALL_CUSTOMER_TYPE_SUCCESS,
   GET_DETAIL_CUSTOMER_TYPE_SUCCESS,
+  GET_COMPLAIN_REASON_SUCCESS
 } from './actions';
 import {get, set} from '../../../configs/utils';
 import i18n from 'react-native-i18n';
@@ -130,6 +131,11 @@ export default p2p = (state = DEFAULT, action = {}) => {
       return {
         ...state,
         offerOrder: payload,
+      };
+    case GET_COMPLAIN_REASON_SUCCESS:
+      return {
+        ...state,
+        complainReason: payload,
       };
     case GET_COMPLAIN_SUCCESS:
       return {

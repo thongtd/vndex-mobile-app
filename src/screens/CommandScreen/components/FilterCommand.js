@@ -39,11 +39,11 @@ export default function FilterCommand({
   const [EndDate, setEndDate] = useState(endDate.show);
   const [currentDate, setCurrentDate] = useState('');
   const [open, setOpen] = useState(false);
-  const [openStatus, setOpenStatus] = useState(false);
   const [StartDateData, setStartDateData] = useState(startDate.api);
   const [EndDateData, setEndDateData] = useState(endDate.api);
   const coinsWalletType = useSelector(state => state.market.cryptoWallet);
   const [items, setItems] = useState(coinsWalletType);
+  const [openStatus, setOpenStatus] = useState(false);
   const [itemsStatus, setItemsStatus] = useState([]);
   const [value, setValue] = useState(null);
 

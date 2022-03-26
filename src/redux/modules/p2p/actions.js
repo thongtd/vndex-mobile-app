@@ -47,6 +47,8 @@ export const CANCEL_COMPLAIN_SUCCESS = `${CONTEXT}/CANCEL_COMPLAIN_SUCCESS`;
 export const GET_COMPLAIN_PROCESS = `${CONTEXT}/GET_COMPLAIN_PROCESS`;
 export const GET_COMPLAIN_PROCESS_SUCCESS = `${CONTEXT}/GET_COMPLAIN_PROCESS_SUCCESS`;
 export const CREATE_COMPLAIN = `${CONTEXT}/CREATE_COMPLAIN`;
+export const GET_COMPLAIN_REASON = `${CONTEXT}/GET_COMPLAIN_REASON`;
+export const GET_COMPLAIN_REASON_SUCCESS = `${CONTEXT}/GET_COMPLAIN_REASON_SUCCESS`;
 
 export const CREATE_OFFER_ADVERTISMENT = `${CONTEXT}/CREATE_OFFER_ADVERTISMENT`;
 export const GET_DETIAL_ADVERTISMENT = `${CONTEXT}/GET_DETIAL_ADVERTISMENT`;
@@ -101,6 +103,8 @@ export function useActionsP2p(dispatch) {
       dispatch(createAction(GET_CHAT_INFO_P2P, data)),
     handleSendChatMessage: data =>
       dispatch(createAction(SEND_CHAT_MESSAGE, data)),
+    handleGetComplainReasons: data =>
+      dispatch(createAction(GET_COMPLAIN_REASON, data)),
 
     handleUpdateStatusAdv: data =>
       dispatch(createAction(UPDATE_STATUS_ADV, data)),
@@ -154,7 +158,8 @@ export const actionsReducerP2p = {
   getComplainProcessSuccess: data =>
     createAction(GET_COMPLAIN_PROCESS_SUCCESS, data),
   cancelComplainSuccess: data => createAction(CANCEL_COMPLAIN_SUCCESS, data),
-
+  getGetComplainReasonsSuccess: data =>
+      createAction(GET_COMPLAIN_REASON_SUCCESS, data),
   getAdvertismentsSuccess: advertisment =>
     createAction(GET_ADVERTISMENTS_SUCCESS, advertisment),
   getDetailItemAdvertismentsSuccess: advertisment =>

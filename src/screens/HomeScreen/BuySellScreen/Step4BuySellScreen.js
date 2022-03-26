@@ -155,6 +155,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   //   useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
   //   return () => {};
   // }, []);
+  const [disabledClose, setDisabledClose] = useState(true);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
   const showConfirmDialog = () => {
     return Alert.alert(
@@ -231,6 +232,20 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
       clearInterval(intervalID);
     };
   }, [offerOrderState, offerOrderId, offerOrder, isStopComplain]);
+
+  const getTextClose= () => {
+    if (get(offerOrderState, 'offerSide') === BUY) 
+      return 'Huỷ lệnh';
+     else { 
+      if (get(offerOrderState, 'status') === 1 && !isStopComplain) {
+        return 'Huỷ lệnh';
+      }
+      else {
+        return 'Khiếu nại';
+      }
+    }
+  };
+  
   return (
     <Container
       space={15}
@@ -653,11 +668,16 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           colorTitle={colors.text}
           weightTitle={'700'}
           onClose={() => {
-            if (get(offerOrderState, 'offerSide') === BUY) {
+            if (get(offerOrderState, 'offerSide') === BUY || get(offerOrderState, 'status') === 1 && !isStopComplain) {
               setIsLoading(true);
               showConfirmDialog();
             } else {
-              if (get(offerOrderState, 'timeToLiveInSecond') <= 0) {
+              if (get(offerOrderState, 'status')=== 7) {
+                 pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
+                  orderId: offerOrderId,
+                });
+              }
+              else if (get(offerOrderState, 'timeToLiveInSecond') <= 0 ) {
                 pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
                   orderId: offerOrderId,
                 });
@@ -668,9 +688,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
               }
             }
           }}
-          textClose={
-            get(offerOrderState, 'offerSide') === BUY ? 'Huỷ lệnh' : 'Khiếu nại'
-          }
+          textClose={getTextClose()}
           textSubmit={
             get(offerOrderState, 'offerSide') === BUY
               ? 'Khiếu nại'

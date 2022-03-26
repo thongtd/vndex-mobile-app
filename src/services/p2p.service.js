@@ -61,6 +61,11 @@ export const P2pService = {
     let response = await httpService.get(url);
     return response.data;
   },
+  getComplainReason: async () => {
+    let urlGetComplain = `${P2P_API.GET_COMPLAIN_REASON}`;
+    let response = await httpService.get(urlGetComplain);
+    return response;
+  },
   getComplain: async orderId => {
     let urlGetComplain = `${P2P_API.GET_COMPLAIN}${orderId}`;
     let response = await httpService.get(urlGetComplain);

@@ -4,8 +4,10 @@ import {
   Text,
   TouchableOpacity,
   View,
+  
 } from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
+import DropDownPicker from 'react-native-dropdown-picker';
 import Container from '../../components/Container';
 import {Navigation} from 'react-native-navigation';
 import {IdNavigation} from '../../configs/constant';
@@ -32,7 +34,11 @@ const ComplainProvide = ({componentId, orderId}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [images, setImages] = useState([]);
   const dispatcher = useDispatch();
+  const [open, setOpen] = useState(false);
   const advertisment = useSelector(state => state.p2p.advertisment);
+  const complainReason = useSelector(state => state.p2p.complainReason);
+  const [items, setItems] = useState(complainReason);
+  const [value, setValue] = useState(null);
   const handleSelfieSide = () => {
     launchImageLibrary({
       mediaType: 'photo',
@@ -44,6 +50,7 @@ const ComplainProvide = ({componentId, orderId}) => {
     });
   };
   useEffect(() => {
+    
     const navigationButtonEventListener =
       Navigation.events().registerNavigationButtonPressedListener(
         ({buttonId}) => {
@@ -86,7 +93,7 @@ const ComplainProvide = ({componentId, orderId}) => {
        return toast('Bằng chứng tải lên không được để trống');
     }else if(isEmpty(description)){
       return toast('Mô tả không được để trống');
-    }else if(isEmpty(ReasonComplain)){
+    }else if(isEmpty(value)){
       return toast('Vui lòng chọn lý do khiếu nại');
     }
     setIsLoading(true);
@@ -98,9 +105,11 @@ const ComplainProvide = ({componentId, orderId}) => {
     bodyFormData.append('phoneNumber',phoneNumber);
     bodyFormData.append('imageBytes',fileBytes);
     bodyFormData.append('fileNames',fileNames);
-    bodyFormData.append('lockedInSecond',900);
+    bodyFormData.append('lockedInSecond', 900);
+    bodyFormData.append('ComplainReasonId',value);
     useActionsP2p(dispatcher).handleCreateComplain(bodyFormData);
-  }, [images, orderId,description, ReasonComplain, fullName, phoneNumber]);
+  },
+    [images, orderId, description, ReasonComplain, fullName, phoneNumber]);
   const [isLoading, setIsLoading] = useState(false);
   return (
     <Container
@@ -123,7 +132,50 @@ const ComplainProvide = ({componentId, orderId}) => {
           },
         });
       }}>
-      <Input
+      <Layout
+        type={'column'}
+        spaceHorizontal={0}
+        style={[styles.layoutHistory]}>
+      <TextFnx space={16} color={colors.subText}>
+          Lý do khiếu nại
+        </TextFnx>
+        <DropDownPicker
+          schema={{
+            label: 'content',
+            value: 'id',
+          }}
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          style={{
+            backgroundColor: colors.app.backgroundLevel1,
+            borderColor: colors.line,
+          }}
+          textStyle={{
+            color: colors.text,
+            fontWeight: '500',
+          }}
+          dropDownContainerStyle={{
+            backgroundColor: colors.app.backgroundLevel2,
+          }}
+          zIndexInverse={7000}
+          zIndex={7000}
+          ArrowDownIconComponent={({style}) => (
+            <Icon
+              name={'caret-down'}
+              size={16}
+              color={colors.app.textContentLevel3}
+            />
+          )}
+          placeholderStyle={{
+            color: colors.description,
+          }}
+          placeholder="Lý do khiếu nại"
+        />
+      {/* <Input
         hasValue
         value={ReasonComplain}
         onChangeText={text => setReasonComplain(text)}
@@ -131,7 +183,7 @@ const ComplainProvide = ({componentId, orderId}) => {
         isLabel
         isRequired
         label="Lý do khiếu nại"
-      />
+      /> */}
 
       <Input
         isLabel
@@ -266,7 +318,8 @@ const ComplainProvide = ({componentId, orderId}) => {
         onClose={() => {
           pop(componentId);
         }}
-        isSubmit></Button>
+          isSubmit></Button>
+        </Layout>
     </Container>
   );
 };
@@ -280,4 +333,5 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     // fontSize: 16,
   },
+  layoutHistory: {},
 });

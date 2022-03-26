@@ -61,7 +61,6 @@ export default function Step2FaAdsAdd({componentId, data}) {
           setIsLoading(false);
           console.log('res: ', res);
           if ( get( res, 'succeeded' ) ) {
-            // debugger;
             dispatcher(
               createAction(
                  CREATE_ADVERTISMENT,

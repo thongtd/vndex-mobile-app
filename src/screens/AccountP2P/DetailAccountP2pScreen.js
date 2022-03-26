@@ -15,7 +15,7 @@ import {ceil, get, isArray, size} from 'lodash';
 import Empty from '../../components/Item/Empty';
 import {listenerEventEmitter, to_UTCDate} from '../../configs/utils';
 
-export default function DetailAccountP2pScreen({componentId}) {
+export default function DetailAccountP2pScreen({componentId,userId}) {
   const [star, setStar] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
   const UserInfo = useSelector(state => state.authentication.userInfo);
@@ -24,10 +24,10 @@ export default function DetailAccountP2pScreen({componentId}) {
   const dispatch = useDispatch();
   useEffect(() => {
     setIsLoading(true);
-    useActionsP2p(dispatch).handleGetAdvInfo();
+    useActionsP2p(dispatch).handleGetAdvInfo({userId});
     useActionsP2p(dispatch).handleGetCommentsByUser({
       starFilter: star,
-      accountId: get(UserInfo, 'id'),
+      accountId: userId,
     });
 
     return () => {};

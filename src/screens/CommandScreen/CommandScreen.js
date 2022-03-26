@@ -243,7 +243,6 @@ const CommandScreen2 = ({componentId}) => {
         orderId: get(item, 'id'),
         type: '2',
       } );
-      // debugger;
       
       pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
         topBar: {

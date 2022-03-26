@@ -40,14 +40,13 @@ import {useActionsP2p} from '../../redux';
 const ComplainingScreen = ({componentId, orderId,item}) => {
   const currencyList = useSelector(state => state.market.currencyList);
   const offerOrder = useSelector(state => state.p2p.offerOrder);
-  const complainInfo = useSelector(state => state.p2p.complain);
+  const complainInfo = useSelector(state => state.p2p.complainInfo);
   const advertisment = useSelector(state => state.p2p.advertisment);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const [isCheckFalse, setIsCheckFalse] = useState(false);
   const dispatch = useDispatch();
   const [offerOrderState, setOfferOrderState] = useState(offerOrder);
-
   useEffect(() => {
     useActionsP2p(dispatch).handleGetComplainProcess(get(complainInfo, 'id'));
 
@@ -130,6 +129,7 @@ const ComplainingScreen = ({componentId, orderId,item}) => {
     };
   }, []);
   const [isLoading, setIsLoading] = useState(false);
+  
   return (
     <Container
       isLoadding={isLoading}
@@ -264,7 +264,7 @@ const ComplainingScreen = ({componentId, orderId,item}) => {
         )}
       </Layout>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           pushSingleScreenApp(componentId, COMPLAINING_PROCESS_SCREEN, {
             orderId: orderId,
@@ -297,7 +297,7 @@ const ComplainingScreen = ({componentId, orderId,item}) => {
             <Icon name="chevron-right" size={14} color={colors.text} />
           }
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* info create order */}
       {/* <Layout
@@ -484,7 +484,7 @@ const ComplainingScreen = ({componentId, orderId,item}) => {
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
             <TextFnx color={colors.app.textContentLevel2}>
-              {get(advertisment, 'orderSequenceNumber') || get(item, 'orderSequenceNumber')}
+              { get(item, 'orderSequenceNumber')}
             </TextFnx>
             <ButtonIcon
               onPress={() => {
@@ -715,7 +715,7 @@ const ComplainingScreen = ({componentId, orderId,item}) => {
             mở khóa”.
           </TextFnx>
         </Layout>
-        {!isCheckFalse && (
+        {/* {!isCheckFalse && (
           <>
             {get(UserInfo, 'id') == get(complainInfo, 'accId') ? (
               <Button
@@ -758,7 +758,7 @@ const ComplainingScreen = ({componentId, orderId,item}) => {
               />
             )}
           </>
-        )}
+        )} */}
       </View>
     </Container>
   );

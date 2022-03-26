@@ -69,8 +69,7 @@ const Step2BuySellScreen = ( { componentId, item, data,taxFeeByCurrency,fee,tax 
     // );
     const ev = listenerEventEmitter('pushOfferOrder', args => {
       if ( get( args, 'offerOrder.offerSide' ) === BUY ) {
-        // debugger
-        // debugger;
+        
         pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN, {
           paymentMethodData: get(args, 'paymentMethodData'),
           offerOrder: get(args, 'offerOrder'),
@@ -396,7 +395,6 @@ const Step2BuySellScreen = ( { componentId, item, data,taxFeeByCurrency,fee,tax 
                         
                     
                         // useActionsP2p(dispatch).handleResetOffer();
-                        // debugger;
                         useActionsP2p( dispatch ).handleCreateOfferOrder( {
                           data: {
                             orderId: get( advertisment, 'orderId' ),

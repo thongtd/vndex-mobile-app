@@ -68,7 +68,6 @@ const Step3BuySellScreen = ({
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
 
-
   useEffect(() => {
     if (isPushChat) {
       pushSingleScreenApp(componentId, CHAT_SCREEN, {
@@ -159,7 +158,6 @@ const Step3BuySellScreen = ({
       ev.remove();
     };
   }, [] );
-  // debugger;
   useEffect(() => {
     
     if (get(offerOrder, 'p2PTradingOrderId')) {
@@ -391,7 +389,7 @@ const Step3BuySellScreen = ({
           <TextFnx color={colors.app.textContentLevel3}>Số lệnh</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
             
-                   { get(offerOrderState, 'orderSequenceNumber')}
+                   { get(offerOrderGlobal, 'orderSequenceNumber')}
                  
           </TextFnx>
         </Layout>

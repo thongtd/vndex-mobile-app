@@ -46,7 +46,8 @@ const AccountP2PScreen = ({componentId,userId=''}) => {
       return () => {
         
       }
-    }, [dispatch,ActiveType])
+    }, [dispatch, ActiveType])
+  
     return (
     <Container
       componentId={componentId}
@@ -70,8 +71,9 @@ const AccountP2PScreen = ({componentId,userId=''}) => {
         textLeft={'Thông tin'}
         isBorder
         iconRight
-        onPress={() => {
-          pushSingleScreenApp(componentId,DETAIL_ACCOUNT_P2P_SCREEN)
+          onPress={() => {
+          
+          pushSingleScreenApp(componentId, DETAIL_ACCOUNT_P2P_SCREEN, {userId})
         }}
       />
       <Layout space={8}>
