@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "89946370949",
+    "project_id": "vndex-app-659ad",
+    "storage_bucket": "vndex-app-659ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89946370949:android:15d90b2e707bcbbb860aec",
+        "android_client_info": {
+          "package_name": "com.vndexmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89946370949-npicprqgefbd5v40pb3co94nb5tg6egu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo4jHYh6sV8O2Rdd0VGLAqQRbQvu2rXqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89946370949-npicprqgefbd5v40pb3co94nb5tg6egu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "89946370949-fdtv35l9b2ghbev6u39oanphofg6e90e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vndex.vndexMobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

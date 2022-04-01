@@ -3,7 +3,7 @@ import {storageService} from './storage.service';
 import {constant} from '../configs/constant';
 import publicIP from 'react-native-public-ip';
 import { get } from 'lodash';
-// import DeviceInfo from 'react-native-device-info';
+import DeviceInfo from 'react-native-device-info';
 export const httpService = {
   get: async url => {
     try {
@@ -73,9 +73,11 @@ export const httpService = {
   },
   post_without_token: async (url, data) => {
     let publicIp = await publicIP();
+    let deviceId =  DeviceInfo.getUniqueId();
     let headers = {
       'Content-Type': 'application/json',
       'FNX-IP-ADDRESS': publicIp,
+      deviceId
     };
     try {
       let response = await axios.post(url, data, {

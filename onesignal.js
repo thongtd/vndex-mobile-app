@@ -1,9 +1,8 @@
 import OneSignal from 'react-native-onesignal';
 
-export const initOnsignal = () => { 
+export default initOneSignal = () => { 
       //OneSignal Init Code
-OneSignal.setLogLevel(6, 0);
-OneSignal.setAppId("52463e7e-73b1-4f49-ae47-a2dcdfa2c5e3");
+
 //END OneSignal Init Code
 
 //Prompt for push on iOS

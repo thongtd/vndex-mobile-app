@@ -110,6 +110,7 @@ export function* asyncCheckLogin({payload}) {
         yield put(
           actionsReducerAuthen.setUserInfo(get(res, 'data.identityUser')),
         );
+        OneSignal.setExternalUserId(get(data.identityUser.id));
         pushTabBasedApp();
         yield put(actionsReducerAuthen.checkStateLogin(true));
       }
