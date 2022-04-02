@@ -79,7 +79,7 @@ import ButtonIcon from '../../components/Button/ButtonIcon';
 import Layout from '../../components/Layout/Layout';
 import FastImage from 'react-native-fast-image';
 import Image from '../../components/Image/Image';
-
+import OneSignal from 'react-native-onesignal';
 const checkLanguage = lang => {
   if (lang === 'vi-VN') {
     return {name: 'Tiếng Việt', value: 'vi-VN'};
@@ -99,7 +99,7 @@ const SettingScreen = ({componentId}) => {
   const handleLogout = () => {
     dispatcher(createAction(GET_FIAT_WALLET_SUCCESS, []));
     dispatcher(createAction(GET_CRYPTO_WALLET_SUCCESS, []));
-
+    OneSignal.removeExternalUserId();
     removeTokenAndUserInfo();
     dispatcher(createAction(CHECK_STATE_LOGIN, false));
     dispatcher(createAction(SET_USER_INFO, null));
@@ -463,7 +463,7 @@ const SettingScreen = ({componentId}) => {
         isButtonCircle={false}
       />
       <Layout isCenter>
-        <TextFnx color={colors.app.textDisabled}>Version 1.1.5</TextFnx>
+        <TextFnx color={colors.app.textDisabled}>Version 1.0.4</TextFnx>
       </Layout>
     </Container>
   );

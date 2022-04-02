@@ -73,11 +73,9 @@ export const httpService = {
   },
   post_without_token: async (url, data) => {
     let publicIp = await publicIP();
-    let deviceId =  DeviceInfo.getUniqueId();
     let headers = {
       'Content-Type': 'application/json',
       'FNX-IP-ADDRESS': publicIp,
-      deviceId
     };
     try {
       let response = await axios.post(url, data, {

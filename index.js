@@ -6,13 +6,14 @@ import {registerScreens} from './src/navigation/registerScreens'
 import setup from "./src/redux/store/setup";
 import codePush from "react-native-code-push";
 import OneSignal from 'react-native-onesignal';
+
 Navigation.events().registerAppLaunchedListener(async () => start());
 
  async function checkCodePushUpdate () {
       return  codePush.sync({
         checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
         installMode: codePush.InstallMode.IMMEDIATE,
-        deploymentKey: Platform.OS === 'ios'  ? "6bcb9bf4-0404-4a7d-96d3-1d152e6af8ab" : "88adc323-786c-41ac-9423-504fcd9a2e76",
+        deploymentKey: Platform.OS === 'ios'  ? "xUWVjiVw_NcQnPJ67IbIDW_ySoG6TpK5IJeAp" : "rJlYb4And7mJkkRAcBebcTiUTgv96NbQjaH10",
       })
  }
     function start () {

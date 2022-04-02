@@ -74,7 +74,7 @@ export function* asyncCheckLogin({payload}) {
       get(payload, 'ipAddress'),
     );
     if (get(res, 'result') === 'ok') {
-      OneSignal.setExternalUserId(get(res,'data.identityUser.id'));
+      
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, true);
       if (get(res, 'data.succeeded') === false) {
         if (get(res, 'data.requiresTwoFactor')) {
@@ -110,7 +110,7 @@ export function* asyncCheckLogin({payload}) {
         yield put(
           actionsReducerAuthen.setUserInfo(get(res, 'data.identityUser')),
         );
-        OneSignal.setExternalUserId(get(data.identityUser.id));
+        OneSignal.setExternalUserId(get(get(res,'data.identityUser'),'id'));
         pushTabBasedApp();
         yield put(actionsReducerAuthen.checkStateLogin(true));
       }
@@ -141,7 +141,7 @@ export function* asyncConfirm2fa({payload}) {
         
       );
       yield put(actionsReducerAuthen.checkStateLogin(true));
-      OneSignal.setExternalUserId(get(data.identityUser.id));
+      OneSignal.setExternalUserId(get(get(res,'data.identityUser'),'id'));
     } else {
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, true);
       toast('2FA code invalid'.t());
