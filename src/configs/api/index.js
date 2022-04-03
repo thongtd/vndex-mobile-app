@@ -3,15 +3,15 @@ const env = 'dev';
 
 const MARKET_WATCH_URL =
   env === 'uat'
-    ? 'http://54.169.221.223:8870/'
+    ? 'https://pro-api.vndex.io/'
     : env == 'dev'
-    ? 'http://54.169.221.223:6870/'
-    : 'http://13.229.182.120:8870/';
+    ? 'https://pro-api.vndex.io/'
+    : 'https://pro-api.vndex.io/';
 export const CALLBACK_REG =
   env === 'uat'
-    ? 'http://54.169.221.223:8868/confirm-email'
+    ? 'https://pro-api.vndex.io/confirm-email'
     : env == 'dev'
-    ? 'http://54.169.221.223:6868/confirm-email'
+    ? 'https://pro-api.vndex.io/confirm-email'
     : 'https://vndex.io/confirm-email';
 
 export const MARKET_API = {
@@ -23,10 +23,10 @@ export const MARKET_API = {
 //Exchange
 const EXCHANGE_URL =
   env === 'uat'
-    ? 'http://54.169.221.223:8870/'
+    ? 'https://pro-api.vndex.io/'
     : env == 'dev'
-    ? 'http://54.169.221.223:6870/'
-    : 'http://13.229.182.120:8870/';
+    ? 'https://pro-api.vndex.io/'
+    : 'https://pro-api.vndex.io/';
 // const EXCHANGE_URL = 'http://dev-api.financex.io/';
 export const P2P_API = {
   GET_DETAIL_CUSTOMER_TYPE:`${EXCHANGE_URL}api/CustomerType/detail/`,//id
@@ -177,8 +177,8 @@ export const XWALLET_API = {
 //Socket API
 export const SOCKET_URL =
   env === 'dev'
-    ? 'http://54.169.221.223:6870/chat-hub/negotiate?userId='
-    : 'http://13.229.182.120:8870/chat-hub/negotiate?userId='; //uid is user id response when user login
+    ? 'https://pro-api.vndex.io/chat-hub/negotiate?userId='
+    : 'https://pro-api.vndex.io/chat-hub/negotiate?userId='; //uid is user id response when user login
 // export const SOCKET_URL = 'http://dev-market-watch.financex.io/signalrHub?uid=' //uid is user id response when user login
 export const SOCKET_EVENT = {
   timeServiceNotifyListener: 'timeServiceNotifyListener',

@@ -59,7 +59,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
         useActionsP2p(dispatch).handleGetFeeTax({
           quantity:Pay.str2Number(),
           price: get( item, "price" ),
-          side: 'B',
+          side: 'S',
           symbol: get(item,'symbol')
         });
       }
@@ -67,7 +67,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
       useActionsP2p(dispatch).handleGetFeeTax({
         quantity: Receive.str2Number(),
         price: get( item, "price" ),
-        side: 'S',
+        side: 'B',
         symbol: get(item,'symbol')
       });
     }

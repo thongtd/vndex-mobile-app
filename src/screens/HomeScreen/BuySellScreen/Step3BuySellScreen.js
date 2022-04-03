@@ -89,16 +89,12 @@ const Step3BuySellScreen = ({
         ...offerOrderGlobal,
         offerSide: get(offerOrderGlobal, 'offerSide') === BUY ? SELL : BUY,
         ...paymentMethodData,
-        fee:get(offerOrderState,'fee'),
-        tax: get(offerOrderState, 'tax'),
         quantity: get(offerOrderState, 'quantity'),
       });
     } else {
       setOfferOrderState( {
         ...offerOrderGlobal,
         ...paymentMethodData,
-        fee:get(offerOrderState,'fee'),
-        tax: get(offerOrderState, 'tax'),
         quantity: get(offerOrderState, 'quantity'),
         
 

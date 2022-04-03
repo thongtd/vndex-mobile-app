@@ -216,7 +216,7 @@ export const P2pService = {
     return response.data;
   },
   getFeeTax: async data => {
-    let url = `${P2P_API.GET_FEE_TAX}?quantity=${data.quantity}&price=${data.price}&side=${data.side}&symbol=${data.symbol}`;
+    let url = `${P2P_API.GET_FEE_TAX}?quantity=${data.quantity}&price=${data.price}&side=${data.side}&coinSymbol=${data.symbol}`;
     let response = await httpService.get_without_token(url, data);
     return response;
   },

@@ -187,6 +187,13 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     var intervalID = setInterval(
       (offerData, offerOrderIdData, isStopComplainState = false) => {
         // console.log(offerData,"offerData");
+        if (get(offerData, 'offerSide') === BUY) {
+          setDisabledClose(false);
+        } else {
+          if (isStopComplain) {
+            setDisabledClose(false);
+          }
+        }
         useActionsP2p(dispatch).handleGetAdvertisment(
           get(offerData, 'p2PTradingOrderId'),
         );
@@ -642,8 +649,8 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           bgButtonColorSubmit={
             disabledSubmit ? '#715611' : colors.app.yellowHightlight
           }
-          bgButtonColorClose={false ? '#2C2B28' : colors.btnClose}
-          disabledClose={false}
+          bgButtonColorClose={disabledClose ? '#2C2B28' : colors.btnClose}
+          disabledClose={disabledClose}
           disabledSubmit={disabledSubmit}
           isClose
           onSubmit={() => {
@@ -695,7 +702,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
               : 'Xác nhận mở khóa'
           }
           colorTitleClose={
-            colors.textBtnClose
+           disabledClose ? colors.text : colors.textBtnClose
           }
           //   te={'MUA USDT'}
         />
