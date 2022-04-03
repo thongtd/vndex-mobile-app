@@ -86,18 +86,16 @@ const Step3BuySellScreen = ({
       get(offerOrderGlobal, 'ownerIdentityUser.identityUserId')
     ) {
       setOfferOrderState({
+        ...paymentMethodData,
         ...offerOrderGlobal,
         offerSide: get(offerOrderGlobal, 'offerSide') === BUY ? SELL : BUY,
-        ...paymentMethodData,
         quantity: get(offerOrderState, 'quantity'),
       });
     } else {
       setOfferOrderState( {
-        ...offerOrderGlobal,
         ...paymentMethodData,
+        ...offerOrderGlobal,
         quantity: get(offerOrderState, 'quantity'),
-        
-
       });
     }
     return () => {};

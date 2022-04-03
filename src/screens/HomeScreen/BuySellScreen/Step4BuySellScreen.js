@@ -240,17 +240,23 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     };
   }, [offerOrderState, offerOrderId, offerOrder, isStopComplain]);
 
-  const getTextClose= () => {
-    if (get(offerOrderState, 'offerSide') === BUY) 
-      return 'Huỷ lệnh';
-     else { 
-      if (get(offerOrderState, 'status') === 1 && !isStopComplain) {
-        return 'Huỷ lệnh';
-      }
-      else {
+  const getTextClose = () => {
+    if(get(offerOrderState, 'status')  ==7) {
         return 'Khiếu nại';
-      }
     }
+    return 'Huỷ lệnh';
+    // if (get(offerOrderState, 'offerSide') === BUY) 
+    //   return 'Huỷ lệnh';
+    //  else { 
+    //   if (get(offerOrderState, 'status') === 1 && !isStopComplain) {
+    //     return 'Huỷ lệnh';
+    //   }
+    //   else if(get(offerOrderState, 'status')  ==7) {
+    //     return 'Khiếu nại';
+    //   } else {
+    //     return 'Huỷ lệnh';
+    //   }
+    // }
   };
   
   return (
@@ -286,6 +292,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             flexDirection: 'row',
           }}
           onFinish={() => {
+            setDisabledClose(false);
             setDisabledSubmit(false);
             useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
           }}
@@ -684,10 +691,8 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                   orderId: offerOrderId,
                 });
               }
-              else if (get(offerOrderState, 'timeToLiveInSecond') <= 0 ) {
-                pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
-                  orderId: offerOrderId,
-                });
+              else if (!isStopComplain) {
+                showConfirmDialog();
               } else {
                 toast(
                   'Vui lòng chờ hết thời gian giao dịch bạn mới được gửi khiếu nại',
