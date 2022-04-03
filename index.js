@@ -7,57 +7,46 @@ import setup from "./src/redux/store/setup";
 import codePush from "react-native-code-push";
 import OneSignal from 'react-native-onesignal';
 
-Navigation.events().registerAppLaunchedListener(async () => start());
+Navigation.events().registerAppLaunchedListener(() => { 
+  initOneSignal();
+  const store = setup();
+  registerScreens(store);
+  pushTutorialScreen();
+  checkCodePushUpdate();
+});
 
  async function checkCodePushUpdate () {
-      return  codePush.sync({
+        codePush.sync({
         checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
         installMode: codePush.InstallMode.IMMEDIATE,
         deploymentKey: Platform.OS === 'ios'  ? "xUWVjiVw_NcQnPJ67IbIDW_ySoG6TpK5IJeAp" : "rJlYb4And7mJkkRAcBebcTiUTgv96NbQjaH10",
       })
  }
-    function start () {
-      checkCodePushUpdate ()
-        .then(async syncStatus => {
-          console.log('Start: codePush.sync completed with status: ', syncStatus)
-          // wait for the initial code sync to complete else we get flicker
-          // in the app when it updates after it has started up and is
-          // on the Home screen
-          startApp()
-        })
-        .catch(() => {
-          // this could happen if the app doesn't have connectivity
-          // just go ahead and start up as normal
-          startApp()
-        })
-    }
 
-async function startApp() {
-       OneSignal.setLogLevel(6, 0);
-OneSignal.setAppId("52463e7e-73b1-4f49-ae47-a2dcdfa2c5e3");
+    
+function initOneSignal() {
+  OneSignal.setLogLevel(6, 0);
+  OneSignal.setAppId("52463e7e-73b1-4f49-ae47-a2dcdfa2c5e3");
 
 
   //Prompt for push on iOS
-OneSignal.promptForPushNotificationsWithUserResponse(response => {
+  OneSignal.promptForPushNotificationsWithUserResponse(response => {
   console.log("Prompt response:", response);
 });
 
 //Method for handling notifications received while app in foreground
-OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
-  console.log("OneSignal: notification will show in foreground:", notificationReceivedEvent);
-  let notification = notificationReceivedEvent.getNotification();
-  console.log("notification: ", notification);
-  const data = notification.additionalData
-  console.log("additionalData: ", data);
-  // Complete with null means don't show a notification.
-  notificationReceivedEvent.complete(notification);
-});
+  OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
+    console.log("OneSignal: notification will show in foreground:", notificationReceivedEvent);
+    let notification = notificationReceivedEvent.getNotification();
+    console.log("notification: ", notification);
+    const data = notification.additionalData
+    console.log("additionalData: ", data);
+    // Complete with null means don't show a notification.
+    notificationReceivedEvent.complete(notification);
+  });
 
-//Method for handling notifications opened
-OneSignal.setNotificationOpenedHandler(notification => {
-  console.log("OneSignal: notification opened:", notification);
-});
-      const store = setup();
-    registerScreens(store);
-    pushTutorialScreen()
-    }
+  //Method for handling notifications opened
+  OneSignal.setNotificationOpenedHandler(notification => {
+    console.log("OneSignal: notification opened:", notification);
+  });
+}
