@@ -18,8 +18,11 @@ Navigation.events().registerAppLaunchedListener(() => {
  async function checkCodePushUpdate () {
         codePush.sync({
         checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
-        installMode: codePush.InstallMode.IMMEDIATE,
-        deploymentKey: Platform.OS === 'ios'  ? "xUWVjiVw_NcQnPJ67IbIDW_ySoG6TpK5IJeAp" : "rJlYb4And7mJkkRAcBebcTiUTgv96NbQjaH10",
+          installMode: codePush.InstallMode.IMMEDIATE,
+        //production
+        // deploymentKey: Platform.OS === 'ios'  ? "xUWVjiVw_NcQnPJ67IbIDW_ySoG6TpK5IJeAp" : "rJlYb4And7mJkkRAcBebcTiUTgv96NbQjaH10",
+          //dev
+        deploymentKey: Platform.OS === 'ios'  ? "oDjyvkfClbBm4y0M7wo53O6F0iVwBVYOHkyqj" : "1A9wnbp2GeGOuasRj-nrc1PxCjF8kATXj8tsJ",
       })
  }
 
