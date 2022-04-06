@@ -9,11 +9,13 @@ import ItemList from '../../../components/Item/ItemList';
 import Layout from '../../../components/Layout/Layout';
 import {BUY, SELL, spacingApp} from '../../../configs/constant';
 import colors from '../../../configs/styles/colors';
+import { ItemCoin} from './components/ItemCoin';
 
 import {
   formatCurrency,
   formatNumberOnChange,
   get,
+  str2Number,
   size,
   toast,
 } from '../../../configs/utils';
@@ -34,16 +36,16 @@ import Step2AddNewAds from './components/Step2AddNewAds';
 import Step3AddNewAds from './components/Step3AddNewAds';
 const timeToLive = [
   {
-    second: 600,
-    name: '10 phút',
-  },
-  {
     second: 900,
     name: '15 phút',
   },
   {
-    second: 1200,
-    name: '20 phút',
+    second: 1800,
+    name: '30 phút',
+  },
+  {
+    second: 3600,
+    name: '1 tiếng',
   },
 ];
 const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
@@ -183,20 +185,25 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
   }, [marketInfo]);
 
   const onGetAsset = () => {
+    let symbols = get( tradingMarket, 'symbols' );
+    let assets = get( tradingMarket, 'assets' );
     let propsData = {
-      data: get(tradingMarket, 'assets'),
+      data: symbols,
+      keywords:assets,
       renderItem: ({item, key}) => {
         return (
           <ItemList
-            onPress={() => handleActiveAsset(item)}
-            value={item}
-            checked={item === ActiveAsset}
+            customView={<ItemCoin  item={ item} />}
+            onPress={() => handleActiveAsset(get(item,'symbol'))}
+            value={get(item,'symbol')}
+            checked={get(item,'symbol') === ActiveAsset}
           />
         );
       },
     };
     showModal(PICKER_SEARCH, propsData, false);
   };
+
   const handleActiveAsset = item => {
     setActiveAsset(item);
     dismissAllModal();
@@ -411,7 +418,11 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
       case 1:
         return (
           <Step2AddNewAds
-            onBtnAll={value => setQuantity(value)}
+            onBtnAll={value => {
+              setQuantity( formatNumberOnChange( currencyList, value, ActiveAsset ) );
+              const maxOrder = value.str2Number() * price.str2Number();
+              setMaxOrder(formatNumberOnChange(currencyList,maxOrder.toString() , ActiveFiat))
+            }}
             onGetTimer={onGetTimer}
             dataState={{
               paymentUnit: ActiveFiat,
@@ -449,11 +460,15 @@ const AddNewAdvertisementScreen = ({componentId, isEdit}) => {
             onMaxOrderChange={txt => {
               setMaxOrder(formatNumberOnChange(currencyList, txt, ActiveFiat));
             }}
-            onMinOrderChange={txt =>
-              setMinOrder(formatNumberOnChange(currencyList, txt, ActiveFiat))
+            onMinOrderChange={txt => {
+              setMinOrder( formatNumberOnChange( currencyList, txt, ActiveFiat ) );
+              
+            }
             }
             onQuantityChange={txt => {
-              setQuantity(formatNumberOnChange(currencyList, txt, ActiveAsset));
+              setQuantity( formatNumberOnChange( currencyList, txt, ActiveAsset ) );
+              const maxOrder = txt.str2Number() * price.str2Number();
+              setMaxOrder(formatNumberOnChange(currencyList,maxOrder.toString() , ActiveFiat))
             }}
             componentId={componentId}
             bntClose={bntClose}

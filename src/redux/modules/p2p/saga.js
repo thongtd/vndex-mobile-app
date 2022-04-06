@@ -52,6 +52,7 @@ import {
   CREATE_CUSTOMER_TYPE,
   GET_DETAIL_CUSTOMER_TYPE,
   UPDATE_CUSTOMER_TYPE,
+  GET_COMPLAIN_REASON
 } from './actions';
 
 import {
@@ -129,9 +130,13 @@ export function* asyncGetTrading({payload}) {
     let currencyArrFiltered = currencyArr.filter(
       (v, i, a) => a.findIndex(t => t === v) === i,
     );
+    const symbols = get(res[0], 'tradingCoins').sort(function(a, b) {
+   return a.symbol.localeCompare(b.symbol);
+});
     let resData = {
-      assets: symbolArrFiltered,
+      assets: symbolArrFiltered.slice(0,5),
       paymentUnit: currencyArrFiltered,
+      symbols:symbols
     };
 
     yield put(actionsReducerP2p.getTradingSuccess(resData));
@@ -636,6 +641,19 @@ export function* asyncGetComplain({payload}) {
     emitEventEmitter('doneApi', true);
   }
 }
+
+export function* asyncGetComplainReason() { 
+  try {
+    const res = yield call(P2pService.getComplainReason);
+    yield put(actionsReducerP2p.getGetComplainReasonsSuccess(res.data));
+  }
+  catch (e) {
+    emitEventEmitter('doneApi', true);
+  }
+}
+export function* watchGetComplainReason() {
+  yield takeEvery(GET_COMPLAIN_REASON, asyncGetComplainReason);
+}
 export function* watchGetComplain() {
   yield takeEvery(GET_COMPLAIN, asyncGetComplain);
 }
@@ -740,7 +758,7 @@ export function* watchGetCommentsByUser() {
 
 export function* asyncGetAdvInfo({payload}) {
   try {
-    const res = yield call(P2pService.getAdvInfo, payload);
+    const res = yield call(P2pService.getAdvInfo,payload);
     emitEventEmitter('doneApi', true);
 
     if (res) {
@@ -761,6 +779,8 @@ export function* asyncGetFeeTax({payload}) {
     const res = yield call(P2pService.getFeeTax, {
       quantity: get(payload, 'quantity'),
       price: get(payload, 'price'),
+      side: get( payload, 'side' ),
+      symbol: get( payload, 'symbol')
     });
     emitEventEmitter('doneApi', true);
     if (get(res, 'success')) {
@@ -859,6 +879,7 @@ export default function* () {
   yield all([fork(watchGetChatInfoP2p)]);
   yield all([fork(watchSendMessage)]);
   yield all([fork(watchGetComplain)]);
+  yield all([fork(watchGetComplainReason)]);
   yield all([fork(watchGetComplainProcess)]);
   yield all([fork(watchCancelComplain)]);
   yield all([fork(watchCreateComplain)]);

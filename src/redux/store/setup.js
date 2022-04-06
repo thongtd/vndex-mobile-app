@@ -1,4 +1,5 @@
-import {applyMiddleware, createStore, combineReducers, compose} from 'redux';
+import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
+import { composeWithDevTools } from 'remote-redux-devtools';
 import thunk from 'redux-thunk';
 // import SplashScreen from 'react-native-splash-screen';
 import rootReducer from './reducers';
@@ -44,8 +45,7 @@ export default function setup() {
   const reducer = combineReducers(rootReducer);
 
   const persistedReducer = persistReducer(persistConfig, reducer);
-
-  const store = createStore(persistedReducer, {}, compose(...middleware));
+  const store = createStore(persistedReducer, {}, compose(...middleware),);
   sagaMiddleware.run(sagas);
   persistStore(store, null, () => {
     console.log('newstore', store.getState());

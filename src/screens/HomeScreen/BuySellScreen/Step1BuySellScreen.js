@@ -58,13 +58,17 @@ const Step1BuySellScreen = ({componentId, item}) => {
         
         useActionsP2p(dispatch).handleGetFeeTax({
           quantity:Pay.str2Number(),
-          price: get(item,"price"),
+          price: get( item, "price" ),
+          side: 'S',
+          symbol: get(item,'symbol')
         });
       }
     } else {
       useActionsP2p(dispatch).handleGetFeeTax({
         quantity: Receive.str2Number(),
-        price: get(item,"price"),
+        price: get( item, "price" ),
+        side: 'B',
+        symbol: get(item,'symbol')
       });
     }
 
@@ -398,40 +402,90 @@ const Step1BuySellScreen = ({componentId, item}) => {
           value={`${Pay}`}
           titleBtnRight="Tất cả"
           onBtnRight={() => {
-            setPay(
-              get(item, 'side') == SELL
-                ? formatCurrency(
-                    get(advertisment, 'maxOrderAmount'),
-                    get(advertisment, 'paymentUnit'),
-                    currencyList,
-                  )
-                : formatCurrency(
-                    get(
+            let quantity = get( advertisment, 'quantity' );
+            
+              let available = get(
                       getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
                       'available',
-                    ),
-                    get(advertisment, 'symbol'),
-                    currencyList,
-                  ),
-            );
-            setReceive(
-              get(item, 'side') == SELL
-                ? formatCurrency(
-                    get(advertisment, 'maxOrderAmount') /
-                      get(advertisment, 'price'),
-                    get(advertisment, 'symbol'),
-                    currencyList,
-                  )
-                : formatCurrency(
-                    get(
-                      getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
-                      'available',
-                    ) * get(advertisment, 'price'),
-                    get(advertisment, 'paymentUnit'),
-                    currencyList,
-                  ),
-            );
-          }}
+                    );
+        // let maxOrderAmmout = get( advertisment, 'maxOrderAmount' );
+        
+        // let amount = available;
+        // if ( get( item, 'side' ) == SELL ) {
+        //   amount= maxOrderAmmout;
+        //       setPay( formatCurrency(
+        //         maxOrderAmmout,
+        //         get( advertisment, 'paymentUnit' ),
+        //         currencyList,
+        //       ) );
+        //       setReceive( formatCurrency(
+        //         maxOrderAmmout /
+        //         get( advertisment, 'price' ),
+        //         get( advertisment, 'symbol' ),
+        //         currencyList,
+        //       ) );
+        //     }
+        //     else {
+        //   let amount = get( advertisment, 'quantity' );
+          // if ( quatity * get( item, 'price' ) < maxOrderAmmout ) {
+          //   setPay( formatCurrency(
+          //       quatity * get( item, 'price' ),
+          //       get( advertisment, 'symbol' ),
+          //       currencyList,
+          //     ) );
+          // }
+          // else if ( quatity * get( item, 'price' ) < ) { }
+          // else{
+            // if(quantity<available)
+            //   amount  =quantity;
+            if ( get( item, 'side' ) == SELL ) {
+              
+              
+              setPay( formatCurrency(
+                quantity * get( advertisment, 'price' ),
+                get( advertisment, 'symbol' ),
+                currencyList,
+              ) );
+              setReceive( formatCurrency(
+                quantity,
+                get( advertisment, 'paymentUnit' ),
+                currencyList,
+              ) );
+              
+           
+            
+            } else {
+              if ( available <= quantity ) {
+                setPay( formatCurrency(
+                  available ,
+                  get( advertisment, 'symbol' ),
+                  currencyList,
+                ) );
+                setReceive( formatCurrency(
+                  available * get( advertisment, 'price' ),
+                  get( advertisment, 'paymentUnit' ),
+                  currencyList,
+                ) );
+              }
+              else {
+          
+      
+                setPay( formatCurrency(
+                  quantity,
+                  get( advertisment, 'symbol' ),
+                  currencyList,
+                ) );
+                setReceive( formatCurrency(
+                  quantity * get( advertisment, 'price' ),
+                  get( advertisment, 'paymentUnit' ),
+                  currencyList,
+                ) );
+              }
+            }
+          }
+            // }
+          // }
+        }
           placeholder={
             get(item, 'side') == SELL
               ? `${formatCurrency(
@@ -529,6 +583,7 @@ const Step1BuySellScreen = ({componentId, item}) => {
         <Button
           isNormal
           onPress={() => {
+            
             if (isEmpty(Pay) || Pay.str2Number() == 0) {
               if (get(advertisment, 'side') === BUY) {
                 return toast(
@@ -602,12 +657,12 @@ const Step1BuySellScreen = ({componentId, item}) => {
                 'Bạn không thể đặt lệnh với khối lượng lớn hơn khối lượng của lệnh quảng cáo',
               );
             } else if (
-              (get(advertisment, 'side') === SELL &&
-                Receive.str2Number() >
-                  get(
-                    getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
-                    'available',
-                  ) && get(advertisment,"symbol") !== 'SMAT') ||
+              // (get(advertisment, 'side') === SELL &&
+              //   Receive.str2Number() >
+              //     get(
+              //       getItemWallet(cryptoWallet, get(advertisment, 'symbol')),
+              //       'available',
+              //     ) && get(advertisment,"symbol") !== 'SMAT') ||
               (get(advertisment, 'side') === BUY &&
                 Pay.str2Number() >
                   get(
@@ -620,7 +675,14 @@ const Step1BuySellScreen = ({componentId, item}) => {
               );
             }
             pushSingleScreenApp(componentId, STEP_2_BUY_SELL_SCREEN, {
-              item,
+              item: {
+                ...item,
+                side: get( item, 'side' ) === SELL ? BUY : SELL,
+                offerSide: get( item, 'side' ) === SELL ? BUY : SELL
+              },
+              taxFeeByCurrency:get(feeTax, 'taxFeeByCurrency'),
+              fee: checkFee(),
+              tax: checkTax(),
               data: {
                 price:
                   get(item, 'side') === SELL

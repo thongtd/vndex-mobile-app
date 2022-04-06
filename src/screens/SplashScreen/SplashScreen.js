@@ -61,6 +61,7 @@ const SplashScreen = ({componentId}) => {
 
   // });
   useActionsP2p().handleGetTradingMarket();
+  useActionsP2p().handleGetComplainReasons();
   useActionsP2p().handleGetExchangePaymentMethod();
   // dispatcher(createAction(GET_SWAP_ORDERS_BOOK,{
   //     UserId,

@@ -629,7 +629,7 @@ const LayoutInfoWallet = ({
                     }]}
                 />} */}
         </Layout>
-        <SwipeListView
+        {/* <SwipeListView
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={Disabled} onRefresh={onRefresh} />
@@ -639,7 +639,8 @@ const LayoutInfoWallet = ({
           //     flex: 1
           // }}
           ListEmptyComponent={<Empty />}
-          data={eval(checkDataShowLoadMore(isCoin, IsActive))}
+          // data={eval(checkDataShowLoadMore(isCoin, IsActive)) }
+          data={eval(checkDataShowLoadMore(isCoin, IsActive)) }
           renderItem={(data, rowMap) => {
             return (
               <View
@@ -704,7 +705,7 @@ const LayoutInfoWallet = ({
               handleLoadMore();
             }
           }}
-        />
+        /> */}
       </View>
     </Container>
   );

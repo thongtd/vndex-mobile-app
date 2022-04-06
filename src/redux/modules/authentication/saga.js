@@ -40,7 +40,7 @@ import {
 } from '../../../navigation';
 import {IdNavigation, constant} from '../../../configs/constant';
 import {showModal, pushTabBasedApp} from '../../../navigation/Navigation';
-
+import OneSignal from 'react-native-onesignal';
 import {marketService} from '../../../services/market.service';
 import { storageService } from '../../../services/storage.service';
 export function* asyncGetCountries() {
@@ -63,6 +63,7 @@ export function* asyncCheckLogin({payload}) {
         get(payload, 'password'),
         get(payload, 'ipAddress'),
       );
+      
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, get(res, 'data'));
       return;
     }
@@ -73,6 +74,7 @@ export function* asyncCheckLogin({payload}) {
       get(payload, 'ipAddress'),
     );
     if (get(res, 'result') === 'ok') {
+      
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, true);
       if (get(res, 'data.succeeded') === false) {
         if (get(res, 'data.requiresTwoFactor')) {
@@ -108,6 +110,7 @@ export function* asyncCheckLogin({payload}) {
         yield put(
           actionsReducerAuthen.setUserInfo(get(res, 'data.identityUser')),
         );
+        OneSignal.setExternalUserId(get(get(res,'data.identityUser'),'id'));
         pushTabBasedApp();
         yield put(actionsReducerAuthen.checkStateLogin(true));
       }
@@ -135,8 +138,10 @@ export function* asyncConfirm2fa({payload}) {
       pushTabBasedApp();
       yield put(
         actionsReducerAuthen.setUserInfo(get(res, 'data.identityUser')),
+        
       );
       yield put(actionsReducerAuthen.checkStateLogin(true));
+      OneSignal.setExternalUserId(get(get(res,'data.identityUser'),'id'));
     } else {
       emitEventEmitter(constant.EVENTS_DEVICE.onAPI, true);
       toast('2FA code invalid'.t());

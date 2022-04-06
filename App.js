@@ -7,17 +7,8 @@
  */
  import Icon from 'react-native-vector-icons/FontAwesome';
 import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
+import * as reactNative from 'react-native';
+import codePush from "react-native-code-push";
 import {
   Colors,
   DebugInstructions,
@@ -26,11 +17,13 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+
+
+const Section = ({children, title}) => {
+  const isDarkMode = reactNative.useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
-      <Text
+    <reactNative.View style={styles.sectionContainer}>``
+      <reactNative.Text
         style={[
           styles.sectionTitle,
           {
@@ -38,8 +31,8 @@ const Section = ({children, title}): Node => {
           },
         ]}>
         {title}
-      </Text>
-      <Text
+      </reactNative.Text>
+      <reactNative.Text
         style={[
           styles.sectionDescription,
           {
@@ -47,32 +40,28 @@ const Section = ({children, title}): Node => {
           },
         ]}>
         {children}
-      </Text>
-    </View>
+      </reactNative.Text>
+    </reactNative.View>
   );
 };
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+const App = () => {
+ 
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <reactNative.SafeAreaView style={backgroundStyle}>
       {/* <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} /> */}
-      <ScrollView
+      <reactNative.ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <Header />
         <Icon name="rocket" size={30} color="#900" />
-        <View
+        <reactNative.View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
+            Edit <reactNative.Text style={styles.highlight}>App.js</reactNative.Text> to change this
             screen and then come back to see your edits.
           </Section>
           <Section title="See Your Changes">
@@ -85,13 +74,13 @@ const App: () => Node = () => {
             Read the docs to discover what to do next:
           </Section>
           <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </reactNative.View>
+      </reactNative.ScrollView>
+    </reactNative.SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = reactNative.StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
@@ -109,5 +98,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-
-export default App;
+const MyApp = codePush(App);
+export default MyApp;

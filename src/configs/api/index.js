@@ -3,15 +3,15 @@ const env = 'dev';
 
 const MARKET_WATCH_URL =
   env === 'uat'
-    ? 'http://54.169.221.223:8870/'
+    ? 'https://uat-api.vndex.io/'
     : env == 'dev'
-    ? 'http://54.169.221.223:6870/'
-    : 'http://13.229.182.120:8870/';
+    ? 'https://uat-api.vndex.io/'
+    : 'https://uat-api.vndex.io/';
 export const CALLBACK_REG =
   env === 'uat'
-    ? 'http://54.169.221.223:8868/confirm-email'
+    ? 'https://uat-api.vndex.io/confirm-email'
     : env == 'dev'
-    ? 'http://54.169.221.223:6868/confirm-email'
+    ? 'https://uat-api.vndex.io/confirm-email'
     : 'https://vndex.io/confirm-email';
 
 export const MARKET_API = {
@@ -23,10 +23,10 @@ export const MARKET_API = {
 //Exchange
 const EXCHANGE_URL =
   env === 'uat'
-    ? 'http://54.169.221.223:8870/'
+    ? 'https://uat-api.vndex.io/'
     : env == 'dev'
-    ? 'http://54.169.221.223:6870/'
-    : 'http://13.229.182.120:8870/';
+    ? 'https://uat-api.vndex.io/'
+    : 'https://uat-api.vndex.io/';
 // const EXCHANGE_URL = 'http://dev-api.financex.io/';
 export const P2P_API = {
   GET_DETAIL_CUSTOMER_TYPE:`${EXCHANGE_URL}api/CustomerType/detail/`,//id
@@ -56,8 +56,9 @@ export const P2P_API = {
   CHAT_HISTORY: `${EXCHANGE_URL}api/v1/p2p-conversation/history/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
   CHAT_SEND_MESSAGE: `${EXCHANGE_URL}api/v1/p2p-conversation/send-message/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
   CHAT_INFO_P2P: `${EXCHANGE_URL}api/v1/p2p-conversation/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6,
-  CREATE_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/create-complain`,
+  CREATE_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/create-complain-v1`,
   GET_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/get-complain/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
+  GET_COMPLAIN_REASON: `${EXCHANGE_URL}api/v1/complain-reason/get-all`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   CANCEL_COMPLAIN: `${EXCHANGE_URL}api/v1/p2p-order/cancel-complain/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   GET_COMPLAIN_PROCESS: `${EXCHANGE_URL}api/v1/p2p-order/get-complain-process/`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
   CREATE_COMMENT_RATING: `${EXCHANGE_URL}api/v1/p2p-comment/create`, //3fa85f64-5717-4562-b3fc-2c963f66afa6
@@ -176,8 +177,8 @@ export const XWALLET_API = {
 //Socket API
 export const SOCKET_URL =
   env === 'dev'
-    ? 'http://54.169.221.223:6870/chat-hub/negotiate?userId='
-    : 'http://13.229.182.120:8870/chat-hub/negotiate?userId='; //uid is user id response when user login
+    ? 'https://uat-api.vndex.io/chat-hub/negotiate?userId='
+    : 'https://uat-api.vndex.io/chat-hub/negotiate?userId='; //uid is user id response when user login
 // export const SOCKET_URL = 'http://dev-market-watch.financex.io/signalrHub?uid=' //uid is user id response when user login
 export const SOCKET_EVENT = {
   timeServiceNotifyListener: 'timeServiceNotifyListener',

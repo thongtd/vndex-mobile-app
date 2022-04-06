@@ -3,4 +3,5 @@ export {
   pushTutorialScreen,
   pushSingleScreenApp,
   pushTabBasedApp,
+  pushSingleHiddenTopBarApp
 } from './Navigation';

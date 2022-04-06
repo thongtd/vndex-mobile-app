@@ -3,7 +3,7 @@ import {storageService} from './storage.service';
 import {constant} from '../configs/constant';
 import publicIP from 'react-native-public-ip';
 import { get } from 'lodash';
-// import DeviceInfo from 'react-native-device-info';
+import DeviceInfo from 'react-native-device-info';
 export const httpService = {
   get: async url => {
     try {

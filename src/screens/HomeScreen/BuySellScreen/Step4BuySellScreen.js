@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native';
 import {isEmpty} from 'lodash';
 import Container from '../../../components/Container';
@@ -53,6 +54,7 @@ import {Navigation} from 'react-native-navigation';
 const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const actionSheetRef = useRef(null);
   const dispatch = useDispatch();
+
   const advertisment = useSelector(state => state.p2p.advertisment);
   const currencyList = useSelector(state => state.market.currencyList);
   const offerOrder = useSelector(state => state.p2p.offerOrder);
@@ -61,9 +63,9 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   const UserInfo = useSelector(state => state.authentication.userInfo);
   const [isPushChat, setIsPushChat] = useState(false);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isStopComplain, setIsStopComplain] = useState(false);
-  const complainInfo = useSelector(state => state.p2p.complainInfo);
+  const complainInfo = useSelector( state => state.p2p.complainInfo );
   useEffect(() => {
     if (isPushChat) {
       pushSingleScreenApp(componentId, CHAT_SCREEN, {
@@ -77,7 +79,9 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   useEffect(() => {
     useActionsP2p(dispatch).handleGetFeeTax({
       quantity: get(offerOrderState, 'quantity'),
-      price: get(advertisment, 'price'),
+      price: get( advertisment, 'price' ),
+      side: get( item, 'side' ),
+      symbol: get(item,'symbol')
     });
 
     return () => {};
@@ -130,6 +134,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           setIsStopComplain(true);
           pushSingleScreenApp(componentId, COMPLAINING_SCREEN, {
             orderId: get(data, 'orderId'),
+            item : item
           });
         }
       },
@@ -150,12 +155,45 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
   //   useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
   //   return () => {};
   // }, []);
-  const [disabledSubmit, setDisabledSubmit] = useState(false);
+  const [disabledClose, setDisabledClose] = useState(true);
+  const [disabledSubmit, setDisabledSubmit] = useState(true);
+  const showConfirmDialog = () => {
+    return Alert.alert(
+      "Huỷ lệnh",
+      "Bạn chắc chắn muốn huỷ lệnh chứ",
+      [
+        // The "Yes" button
+        {
+          text: "Đồng ý",
+          onPress: () => {
+            setIsLoading(true);
+              useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
+                offerOrderId: offerOrderId,
+                isHasPayment: false,
+                pofPayment: '',
+                pofPaymentComment: '',
+                cancellationReason: '',
+              });
+          },
+        },
+        {
+          text: "Không",
+        },
+      ]
+    );
+  };
 
   useEffect(() => {
     var intervalID = setInterval(
       (offerData, offerOrderIdData, isStopComplainState = false) => {
         // console.log(offerData,"offerData");
+        if (get(offerData, 'offerSide') === BUY) {
+          setDisabledClose(false);
+        } else {
+          if (isStopComplain) {
+            setDisabledClose(false);
+          }
+        }
         useActionsP2p(dispatch).handleGetAdvertisment(
           get(offerData, 'p2PTradingOrderId'),
         );
@@ -202,6 +240,25 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
     };
   }, [offerOrderState, offerOrderId, offerOrder, isStopComplain]);
 
+  const getTextClose = () => {
+    if(get(offerOrderState, 'status')  ==7) {
+        return 'Khiếu nại';
+    }
+    return 'Huỷ lệnh';
+    // if (get(offerOrderState, 'offerSide') === BUY) 
+    //   return 'Huỷ lệnh';
+    //  else { 
+    //   if (get(offerOrderState, 'status') === 1 && !isStopComplain) {
+    //     return 'Huỷ lệnh';
+    //   }
+    //   else if(get(offerOrderState, 'status')  ==7) {
+    //     return 'Khiếu nại';
+    //   } else {
+    //     return 'Huỷ lệnh';
+    //   }
+    // }
+  };
+  
   return (
     <Container
       space={15}
@@ -235,6 +292,8 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
             flexDirection: 'row',
           }}
           onFinish={() => {
+            setDisabledClose(false);
+            setDisabledSubmit(false);
             useActionsP2p(dispatch).handleGetOfferOrder(offerOrderId);
           }}
           digitStyle={{height: 15, width: 20}}
@@ -272,9 +331,9 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
               : colors.app.sell
           }>
           {`${get(offerOrderState, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
-            advertisment,
+            item,
             'symbol',
-          )}`}
+          ) || get(offerOrderState,'symbol')}`}
         </TextFnx>
         <Layout
           isLineCenter
@@ -299,38 +358,35 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
               currencyList,
             )} `}
             <TextFnx color={colors.app.textContentLevel3}>
-              {get(advertisment, 'paymentUnit')}
+              {get(item, 'paymentUnit')||get(item, 'paymentUnit')}
             </TextFnx>
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Giá</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(advertisment, 'price'),
-            get(advertisment, 'paymentUnit'),
+            get(item, 'price'),
+            get(item, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
+          )} ${get(item, 'paymentUnit') ||get(item, 'paymentUnit')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
             get(offerOrderState, 'quantity'),
-            get(advertisment, 'paymentUnit'),
+            get(item, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'symbol')}`}</TextFnx>
+          )} ${get(item, 'symbol')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${
-            get(advertisment, 'symbol') !== 'SMAT' ||
-            (get(offerOrderState, 'offerSide') == SELL &&
-              get(advertisment, 'symbol') == 'SMAT')
-              ? formatCurrency(
+            formatCurrency(
                   get(offerOrderState, 'fee'),
                   get(offerOrderState, 'feeTaxBy'),
                   currencyList,
                 )
-              : '0'
+              
           } ${get(offerOrderState, 'feeTaxBy')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
@@ -351,11 +407,11 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
             <TextFnx color={colors.app.textContentLevel2}>
-              {get(advertisment, 'orderSequenceNumber')}
+              {get(offerOrderState, 'orderSequenceNumber')}
             </TextFnx>
             <ButtonIcon
               onPress={() => {
-                Clipboard.setString(get(advertisment, 'orderSequenceNumber'));
+                Clipboard.setString(get(offerOrderState, 'orderSequenceNumber'));
                 toast('COPY_TO_CLIPBOARD'.t());
               }}
               style={{
@@ -369,18 +425,20 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-            {to_UTCDate(
-              get(advertisment, 'createdDate'),
-              'DD-MM-YYYY hh:mm:ss',
-            )}
+            {get(offerOrderState, 'offerDateVnTime') ?  
+              get(offerOrderState, 'offerDateVnTime')
+            : ''}
           </TextFnx>
         </Layout>
+        { get( offerOrderState, 'paymentMethods') ? get( offerOrderState, 'paymentMethods').map( paymentMethod =>
+          <View>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>
             Phương thức thanh toán
           </TextFnx>
-          {get(paymentMethodData, 'code') ==
-          constant.CODE_PAYMENT_METHOD.MOMO ? (
+          
+          {get(paymentMethod,'code') == 
+            constant.CODE_PAYMENT_METHOD.MOMO ? (
             <Layout isLineCenter>
               <View
                 style={{
@@ -402,7 +460,7 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
                 />
                 <TextFnx spaceLeft={5}>Momo</TextFnx>
               </View>
-            </Layout>
+              </Layout>
           ) : (
             <Layout isLineCenter>
               <View
@@ -427,105 +485,106 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
               </View>
             </Layout>
           )}
-        </Layout>
-        {!isEmpty(get(offerOrderState, 'backAccountNo')) && (
-          <Layout isSpaceBetween space={8}>
-            <TextFnx color={colors.app.textContentLevel3}>Số tài khoản</TextFnx>
-            <Layout isLineCenter>
-              <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrderState, 'backAccountNo')}
-              </TextFnx>
-              <ButtonIcon
-                style={{
-                  height: 25,
-                  width: 30,
-                }}
-                onPress={() =>
-                  hanldeCopy(get(offerOrderState, 'bankAccountNo'))
-                }
-                iconComponent={<Copy height={20} width={20} />}
-              />
-            </Layout>
-          </Layout>
-        )}
-        {!isEmpty(get(offerOrderState, 'bankName')) && (
-          <Layout isSpaceBetween space={8}>
-            <TextFnx color={colors.app.textContentLevel3}>
-              Tên ngân hàng
-            </TextFnx>
-            <Layout isLineCenter>
-              <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrderState, 'bankName')}
-              </TextFnx>
-              <ButtonIcon
-                style={{
-                  height: 25,
-                  width: 30,
-                }}
-                onPress={() => hanldeCopy(get(offerOrderState, 'bankName'))}
-                iconComponent={<Copy height={20} width={20} />}
-              />
-            </Layout>
-          </Layout>
-        )}
-        {!isEmpty(get(offerOrderState, 'bankBranchName')) && (
-          <Layout isSpaceBetween space={8}>
-            <TextFnx color={colors.app.textContentLevel3}>Chi nhánh</TextFnx>
-            <Layout isLineCenter>
-              <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrderState, 'bankBranchName')}
-              </TextFnx>
-              <ButtonIcon
-                style={{
-                  height: 25,
-                  width: 30,
-                }}
-                onPress={() =>
-                  hanldeCopy(get(offerOrderState, 'bankBranchName'))
-                }
-                iconComponent={<Copy height={20} width={20} />}
-              />
-            </Layout>
-          </Layout>
-        )}
-        {!isEmpty(get(offerOrderState, 'fullName')) && (
-          <Layout isSpaceBetween space={8}>
-            <TextFnx color={colors.app.textContentLevel3}>Tên</TextFnx>
-            <Layout isLineCenter>
-              <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrderState, 'fullName')}
-              </TextFnx>
-              <ButtonIcon
-                style={{
-                  height: 25,
-                  width: 30,
-                }}
-                onPress={() => hanldeCopy(get(offerOrderState, 'fullName'))}
-                iconComponent={<Copy height={20} width={20} />}
-              />
-            </Layout>
-          </Layout>
-        )}
-        {!isEmpty(get(offerOrderState, 'phoneNumber')) && (
+              </Layout>
+               {!isEmpty(get(paymentMethod, 'phoneNumber')) && (
           <Layout isSpaceBetween space={8}>
             <TextFnx color={colors.app.textContentLevel3}>
               Số điện thoại
             </TextFnx>
             <Layout isLineCenter>
               <TextFnx color={colors.app.textContentLevel2}>
-                {get(offerOrderState, 'phoneNumber')}
+                {get(paymentMethod, 'phoneNumber')}
               </TextFnx>
               <ButtonIcon
                 style={{
                   height: 25,
                   width: 30,
                 }}
-                onPress={() => hanldeCopy(get(offerOrderState, 'phoneNumber'))}
+                onPress={() => hanldeCopy(get(paymentMethod, 'phoneNumber'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+            )}
+            {!isEmpty(get(paymentMethod, 'backAccountNo')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Số tài khoản</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(paymentMethod, 'backAccountNo')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() =>
+                  hanldeCopy(get(paymentMethod, 'bankAccountNo'))
+                }
                 iconComponent={<Copy height={20} width={20} />}
               />
             </Layout>
           </Layout>
         )}
+        {!isEmpty(get(paymentMethod, 'bankName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>
+              Tên ngân hàng
+            </TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(paymentMethod, 'bankName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(paymentMethod, 'bankName'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(paymentMethod, 'bankBranchName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Chi nhánh</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(paymentMethod, 'bankBranchName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() =>
+                  hanldeCopy(get(paymentMethod, 'bankBranchName'))
+                }
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+        {!isEmpty(get(paymentMethod, 'fullName')) && (
+          <Layout isSpaceBetween space={8}>
+            <TextFnx color={colors.app.textContentLevel3}>Tên</TextFnx>
+            <Layout isLineCenter>
+              <TextFnx color={colors.app.textContentLevel2}>
+                {get(paymentMethod, 'fullName')}
+              </TextFnx>
+              <ButtonIcon
+                style={{
+                  height: 25,
+                  width: 30,
+                }}
+                onPress={() => hanldeCopy(get(paymentMethod, 'fullName'))}
+                iconComponent={<Copy height={20} width={20} />}
+              />
+            </Layout>
+          </Layout>
+        )}
+              </View>):<View/>}
         <Layout
           style={{
             backgroundColor: colors.app.lineSetting,
@@ -597,8 +656,8 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           bgButtonColorSubmit={
             disabledSubmit ? '#715611' : colors.app.yellowHightlight
           }
-          bgButtonColorClose={disabledSubmit ? '#2C2B28' : colors.btnClose}
-          disabledClose={disabledSubmit}
+          bgButtonColorClose={disabledClose ? '#2C2B28' : colors.btnClose}
+          disabledClose={disabledClose}
           disabledSubmit={disabledSubmit}
           isClose
           onSubmit={() => {
@@ -623,20 +682,17 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
           colorTitle={colors.text}
           weightTitle={'700'}
           onClose={() => {
-            if (get(offerOrderState, 'offerSide') === BUY) {
+            if (get(offerOrderState, 'offerSide') === BUY || get(offerOrderState, 'status') === 1 && !isStopComplain) {
               setIsLoading(true);
-              useActionsP2p(dispatch).handleConfirmPaymentAdvertisment({
-                offerOrderId: offerOrderId,
-                isHasPayment: false,
-                pofPayment: '',
-                pofPaymentComment: '',
-                cancellationReason: '',
-              });
+              showConfirmDialog();
             } else {
-              if (get(offerOrderState, 'timeToLiveInSecond') <= 0) {
-                pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
+              if (get(offerOrderState, 'status')=== 7) {
+                 pushSingleScreenApp(componentId, FEEDBACK_SCREEN, {
                   orderId: offerOrderId,
                 });
+              }
+              else if (!isStopComplain) {
+                showConfirmDialog();
               } else {
                 toast(
                   'Vui lòng chờ hết thời gian giao dịch bạn mới được gửi khiếu nại',
@@ -644,16 +700,14 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
               }
             }
           }}
-          textClose={
-            get(offerOrderState, 'offerSide') === BUY ? 'Huỷ lệnh' : 'Khiếu nại'
-          }
+          textClose={getTextClose()}
           textSubmit={
             get(offerOrderState, 'offerSide') === BUY
               ? 'Khiếu nại'
               : 'Xác nhận mở khóa'
           }
           colorTitleClose={
-            disabledSubmit ? colors.description : colors.textBtnClose
+           disabledClose ? colors.text : colors.textBtnClose
           }
           //   te={'MUA USDT'}
         />
@@ -664,4 +718,11 @@ const Step4BuySellScreen = ({componentId, item, paymentMethodData}) => {
 
 export default Step4BuySellScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  box: {
+    width: 300,
+    height: 300,
+    backgroundColor: "red",
+    marginBottom: 30,
+  },
+});

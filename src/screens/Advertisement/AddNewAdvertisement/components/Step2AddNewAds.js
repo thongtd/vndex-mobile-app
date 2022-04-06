@@ -104,41 +104,43 @@ const Step2AddNewAds = ({
     };
   }, []);
 
-  const paymentMethods = useSelector(state => state.p2p.paymentMethods);
-
+  const paymentMethods = useSelector( state => state.p2p.paymentMethods );
   return (
     <View style={styles.conatainer}>
       {/* {console.log('get(dataStateitem, ): ', get(dataState, 'quantity'))} */}
       <>
-        <Input
-          spaceVertical={8}
-          titleBtnRight="Tất cả"
-          onChangeText={txt => rest.onQuantityChange(txt)}
-          value={get(dataState, 'quantity')}
-          hasValue
-          onBtnRight={() =>
-            rest.onBtnAll(
-              formatCurrency(
-                get(
-                  getItemWallet(cryptoWallet, get(dataState, 'symbol')),
-                  'available',
+        
+          <Input
+            spaceVertical={8}
+          titleBtnRight={get( dataState, 'activeType' ) == SELL ? "Tất cả" : null}
+          // isButtonRight={ }
+            onChangeText={txt => rest.onQuantityChange( txt )}
+            value={get( dataState, 'quantity' )}
+            hasValue
+            onBtnRight={ () =>
+              rest.onBtnAll(
+                formatCurrency(
+                  get(
+                    getItemWallet( cryptoWallet, get( dataState, 'symbol' ) ),
+                    'available',
+                  ),
+                  get( dataState, 'symbol' ),
+                  currencyList,
                 ),
-                get(dataState, 'symbol'),
-                currencyList,
-              ),
-            )
-          }
-          keyboardType="numeric"
-          placeholder="1000"
-          styleBorder={{height: 'auto'}}
-          style={{fontSize: 16, color: colors.text}}
-          isInputTopUnit={
-            <TextFnx color={colors.description} style={{marginRight: 20}}>
-              {get(dataState, 'symbol')}
-            </TextFnx>
-          }
-          isInputTop={'Khối lượng'}
-        />
+              )
+            }
+            keyboardType="numeric"
+            placeholder="1000"
+            styleBorder={{ height: 'auto' }}
+            style={{ fontSize: 16, color: colors.text }}
+            isInputTopUnit={
+              <TextFnx color={colors.description} style={{ marginRight: 20 }}>
+                {get( dataState, 'symbol' )}
+              </TextFnx>
+            }
+            isInputTop={'Khối lượng'}
+          />
+        {/* } */}
         <Layout space={5} isSpaceBetween>
           <TextFnx color={colors.app.textDisabled} size={12}>
             {`Khả dụng   `}
@@ -151,19 +153,20 @@ const Step2AddNewAds = ({
                 get(dataState, 'symbol'),
                 currencyList,
               )}
-              {` ${get(dataState, 'symbol')}`} ≈{' '}
-              {`${formatCurrency(
+              {` ${ get( dataState, 'symbol' ) }`} 
+              
+              {/* {`${formatCurrency(
                 get(
                   getItemWallet(cryptoWallet, get(dataState, 'symbol')),
                   'available',
                 ) * get(marketInfo, 'lastestPrice'),
                 get(dataState, 'paymentUnit'),
                 currencyList,
-              )} ${get(dataState, 'paymentUnit')}`}
+              )} ${get(dataState, 'paymentUnit')}`} */}
             </TextFnx>
           </TextFnx>
         </Layout>
-      </>
+          </>
       <Layout type="column" spaceTop={10}>
         <TextFnx color={colors.description}>Giá trị giao dịch cho phép</TextFnx>
         <Input
@@ -201,7 +204,8 @@ const Step2AddNewAds = ({
         <Input
           spaceVertical={8}
           keyboardType="numeric"
-          value={get(dataState, 'maxOrder')}
+          value={get( dataState, 'maxOrder' )}
+          editable={false}
           onChangeText={txt => rest.onMaxOrderChange(txt)}
           styleBorder={{height: 'auto'}}
           //   onBtnRight={() => alert('ok')}

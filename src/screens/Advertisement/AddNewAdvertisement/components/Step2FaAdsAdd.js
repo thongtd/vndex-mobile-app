@@ -57,15 +57,13 @@ export default function Step2FaAdsAdd({componentId, data}) {
         sessionId: sessionId || '',
         ipAddress:""
       })
-        .then(res => {
+        .then( res => {
           setIsLoading(false);
           console.log('res: ', res);
-          if (get(res, 'succeeded')) {
+          if ( get( res, 'succeeded' ) ) {
             dispatcher(
               createAction(
-                get(data, 'isUpdate')
-                  ? UPDATE_ADVERTISMENT
-                  : CREATE_ADVERTISMENT,
+                 CREATE_ADVERTISMENT,
                 {
                   side: get(data, 'activeType'),
                   coinSymbol: get(data, 'ActiveAsset'),
@@ -123,6 +121,8 @@ export default function Step2FaAdsAdd({componentId, data}) {
         value={otp}
         onChangeText={text => setOtp(text)}
         isPaste
+        autoFocus={true}
+        keyboardType='numeric'
         spaceVertical={10}
         isResend={twoFactorySerice === constant.TWO_FACTOR_TYPE.EMAIL_2FA}
         placeholder={'2FA_CODE'.t()}

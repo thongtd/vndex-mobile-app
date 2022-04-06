@@ -61,6 +61,11 @@ export const P2pService = {
     let response = await httpService.get(url);
     return response.data;
   },
+  getComplainReason: async () => {
+    let urlGetComplain = `${P2P_API.GET_COMPLAIN_REASON}`;
+    let response = await httpService.get(urlGetComplain);
+    return response;
+  },
   getComplain: async orderId => {
     let urlGetComplain = `${P2P_API.GET_COMPLAIN}${orderId}`;
     let response = await httpService.get(urlGetComplain);
@@ -78,7 +83,7 @@ export const P2pService = {
   },
   createlComplain: async data => {
     let urlCreateComplain = `${P2P_API.CREATE_COMPLAIN}`;
-    let response = await httpService.post(urlCreateComplain, data);
+    let response = await httpService.postFormData(urlCreateComplain, data);
     return response.data;
   },
   getAdvertisment: async orderId => {
@@ -211,7 +216,7 @@ export const P2pService = {
     return response.data;
   },
   getFeeTax: async data => {
-    let url = `${P2P_API.GET_FEE_TAX}?quantity=${data.quantity}&price=${data.price}`;
+    let url = `${P2P_API.GET_FEE_TAX}?quantity=${data.quantity}&price=${data.price}&side=${data.side}&coinSymbol=${data.symbol}`;
     let response = await httpService.get_without_token(url, data);
     return response;
   },

@@ -51,6 +51,7 @@ const ChangePasswordScreen = ({
                     dispatcher(createAction(SET_USER_INFO, null));
                     pushSingleScreenApp(componentId, LOGIN_SCREEN);
                     toast(`Your password has been changed successfully`.t())
+                    
                 } else {
                     toast("Change password failed".t())
                 }

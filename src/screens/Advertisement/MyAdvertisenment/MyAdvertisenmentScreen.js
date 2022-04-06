@@ -34,18 +34,8 @@ import ButtonAddNew from './ButtonAddNew';
 const ActionBottom = (status)=>{
   console.log('status: ', status);
   return [
-    {
-      name: 'Chỉnh sửa',
-      type: 'EDIT',
-    },
-    {
-      name: 'Offline',
-      type: 'OFFLINE',
-    },
-    {
-      name: 'Chia sẻ quảng cáo',
-      type: 'SHARE',
-    },
+    
+    
     {
       name: 'Huỷ quảng cáo',
       type: 'CLOSE',

@@ -1,4 +1,4 @@
-import {get} from 'lodash';
+import {get,isEmpty} from 'lodash';
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
@@ -20,18 +20,23 @@ import TextFnx from '../../components/Text/TextFnx';
 import {BUY, IdNavigation, SELL} from '../../configs/constant';
 import icons from '../../configs/icons';
 import colors from '../../configs/styles/colors';
+import Button from '../../components/Button/Button';
 import {
   formatCurrency,
   listenerEventEmitter,
   to_UTCDate,
+  str2Number
 } from '../../configs/utils';
 import {
   CHAT_SCREEN,
   COMMAND_SCREEN,
   COMPLAINING_SCREEN,
   FEEDBACK_SCREEN,
+  ADS_ADD_NEW_SCREEN,
+  COMPLAINING_PROCESS_SCREEN,
   MODAL_FILTER_COMMAND,
   pushSingleScreenApp,
+  STEP_2_BUY_SELL_SCREEN,
   STEP_3_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
   STEP_5_BUY_SELL_SCREEN,
@@ -82,24 +87,39 @@ const CommandScreen2 = ({componentId}) => {
     // alert(JSON.stringify(UserInfo))
     useActionsP2p(dispatch).handleGetOfferOrder(get(item, 'id'));
     useActionsP2p(dispatch).handleGetAdvertisment(
-      get(item, 'p2PTradingOrder.id'),
+      get(item, 'p2PTradingOrderId'),
     );
+    
     // if(get(UserInfo, 'id') ===
-    // get(item, 'p2PTradingOrder.accId')){
+    // get(item, 'ownerIdentityUser.identityUserId')){
     //   alert("ok");
     // }
-    if (get(item, 'isPaymentCancel')) {
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN);
-    } else if (get(item, 'isUnLockConfirm')) {
-      pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
+    if ( get( item, 'status' ) == 4 ) {
+      pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN );
+    } else if ( get( item, 'status' ) == 3 ) {
+      pushSingleScreenApp( componentId, STEP_5_BUY_SELL_SCREEN );
     } else if (
-      get(item, 'isPaymentConfirm') &&
-      get(item, 'timeToLiveInSecond') > 0 &&
-      !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == SELL &&
-      get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
+      get( item, 'status' ) == 7 &&
+      get( item, 'orderSide' ) == SELL 
     ) {
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+      pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
+        topBar: {
+          rightButtons: [
+            {
+              id: IdNavigation.PressIn.chat,
+              icon: require( 'assets/icons/ic_chat.png' ),
+            },
+          ],
+        },
+      } );
+    } else if (
+      get( item, 'status' ) == 1 &&
+      get( item, 'orderSide' ) == BUY &&
+      get( UserInfo, 'id' ) === get( item, 'ownerIdentityUser.identityUserId' )
+    ) {
+      pushSingleScreenApp( componentId, STEP_3_BUY_SELL_SCREEN, {
+        item: item,
+      }, {
         topBar: {
           rightButtons: [
             {
@@ -110,38 +130,20 @@ const CommandScreen2 = ({componentId}) => {
         },
       });
     } else if (
-      !get(item, 'isPaymentConfirm') &&
-      get(item, 'timeToLiveInSecond') > 0 &&
-      !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == SELL &&
-      get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
+      get(item, 'status') ==1 &&
+      get(item, 'orderSide') == SELL &&
+      get(UserInfo, 'id') === get(item, 'ownerIdentityUser.identityUserId')
     ) {
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
-        topBar: {
-          rightButtons: [
-            {
-              id: IdNavigation.PressIn.chat,
-              icon: require('assets/icons/ic_chat.png'),
-            },
-          ],
-        },
-      });
-    } else if (
-      !get(item, 'isPaymentConfirm') &&
-      get(item, 'timeToLiveInSecond') > 0 &&
-      !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == BUY &&
-      get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
-    ) {
+      
       pushSingleScreenApp(
         componentId,
-        STEP_3_BUY_SELL_SCREEN,
+      STEP_4_BUY_SELL_SCREEN,
         {
-          item: {...item, side: get(item, 'offerSide') == BUY ? SELL : BUY},
+          item: {...item, side: get(item, 'orderSide') == BUY ? BUY : SELL},
           offerOrder: {
             ...item,
             offerOrderId: get(item, 'id'),
-            p2PTradingOrderId: get(item, 'p2PTradingOrder.id'),
+            p2PTradingOrderId: get(item, 'p2PTradingOrderId'),
           },
         },
         {
@@ -156,13 +158,11 @@ const CommandScreen2 = ({componentId}) => {
         },
       );
     } else if (
-      get(item, 'isPaymentConfirm') &&
-      get(item, 'timeToLiveInSecond') > 0 &&
-      !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == BUY &&
-      get(UserInfo, 'id') === get(item, 'p2PTradingOrder.accId')
+      get(item, 'status') == 7 &&
+      get(item, 'orderSide') == BUY &&
+      get(UserInfo, 'id') === get(item, 'offerIdentityUser.identityUserId')
     ) {
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+      pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
         topBar: {
           rightButtons: [
             {
@@ -173,12 +173,10 @@ const CommandScreen2 = ({componentId}) => {
         },
       });
     } else if (
-      !get(item, 'isPaymentConfirm') &&
-      get(item, 'timeToLiveInSecond') > 0 &&
-      !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == SELL
+      get(item, 'status') ==1 && 
+      get(item, 'orderSide') == SELL
     ) {
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
         topBar: {
           rightButtons: [
             {
@@ -189,12 +187,10 @@ const CommandScreen2 = ({componentId}) => {
         },
       });
     } else if (
-      !get(item, 'isPaymentConfirm') &&
-      get(item, 'timeToLiveInSecond') > 0 &&
-      !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == SELL
+      get(item, 'status') ==1 &&
+      get(item, 'orderSide') == SELL
     ) {
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+      pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
         topBar: {
           rightButtons: [
             {
@@ -205,21 +201,15 @@ const CommandScreen2 = ({componentId}) => {
         },
       });
     } else if (
-      !get(item, 'isPaymentConfirm') &&
-      get(item, 'timeToLiveInSecond') > 0 &&
-      !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == BUY
+      get(item, 'status')  ==1 &&
+      get(item, 'orderSide') == BUY
     ) {
       pushSingleScreenApp(
         componentId,
         STEP_3_BUY_SELL_SCREEN,
         {
-          item: {...item, side: get(item, 'offerSide') == BUY ? SELL : BUY},
-          offerOrder: {
-            ...item,
-            offerOrderId: get(item, 'id'),
-            p2PTradingOrderId: get(item, 'p2PTradingOrder.id'),
-          },
+          item: {...item},
+          
         },
         {
           topBar: {
@@ -233,12 +223,10 @@ const CommandScreen2 = ({componentId}) => {
         },
       );
     } else if (
-      get(item, 'isPaymentConfirm') &&
-      get(item, 'timeToLiveInSecond') > 0 &&
-      !get(item, 'isUnLockConfirm') &&
-      get(item, 'offerSide') == BUY
+      get(item, 'status') == 7 &&
+      get(item, 'orderSide') == BUY
     ) {
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+      pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
         topBar: {
           rightButtons: [
             {
@@ -249,16 +237,14 @@ const CommandScreen2 = ({componentId}) => {
         },
       });
     } else if (
-      get(item, 'isPaymentConfirm') &&
-      get(item, 'timeToLiveInSecond') == 0 &&
-      !get(item, 'isUnLockConfirm') &&
-      !get(item, 'isPaymentCancel')
+      get(item, 'status') ==5 
     ) {
       useActionsP2p(dispatch).handleGetComplain({
         orderId: get(item, 'id'),
         type: '2',
-      });
-      pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, null, {
+      } );
+      
+      pushSingleScreenApp( componentId, STEP_4_BUY_SELL_SCREEN, {item:item}, {
         topBar: {
           rightButtons: [
             {
@@ -268,6 +254,12 @@ const CommandScreen2 = ({componentId}) => {
           ],
         },
       });
+    } else if (get(item, 'status') == 6) {
+      pushSingleScreenApp(componentId, COMPLAINING_SCREEN,{
+        orderId: get(item, 'id'),
+        item : item
+          });
+    
     } else {
       pushSingleScreenApp(componentId, STEP_5_BUY_SELL_SCREEN);
     }
@@ -321,6 +313,23 @@ const CommandScreen2 = ({componentId}) => {
           }
         },
       );
+    const navigationBuySellButtonEventListener =
+      Navigation.events().registerNavigationButtonPressedListener(
+        ({buttonId}) => {
+          if (buttonId == IdNavigation.PressIn.adsAddNew) {
+            pushSingleScreenApp(componentId, ADS_ADD_NEW_SCREEN, null, {
+          topBar: {
+            rightButtons: [
+              {
+                id: IdNavigation.PressIn.filterMyAdvertisement,
+                icon: require('assets/icons/Filter.png'),
+              },
+            ],
+          },
+        });
+          }
+        },
+      );
     const screenEventListener =
       Navigation.events().registerComponentDidAppearListener(
         ({componentId, componentName}) => {
@@ -337,6 +346,7 @@ const CommandScreen2 = ({componentId}) => {
     return () => {
       evGetComplain.remove();
       evSubmitFiler.remove();
+      navigationBuySellButtonEventListener.remove();
       navigationButtonEventListener.remove();
       screenEventListener.remove();
     };
@@ -359,11 +369,20 @@ const CommandScreen2 = ({componentId}) => {
       ...dataSubmit,
     });
   };
+  let source = get( historyOrders, 'source' );
+  let isShowButtonBuySell = source.length < 2 && source.length > 0;
   return (
     <Container
       customsNavigation={() => {
         Navigation.mergeOptions(componentId, {
           topBar: {
+            leftButtons: [
+              {
+                id: IdNavigation.PressIn.adsAddNew,
+                icon: require('assets/icons/ic_marketting_trans.png'),
+                color: colors.app.yellowHightlight,
+              },
+            ],
             rightButtons: [
               {
                 id: IdNavigation.PressIn.filterCommand,
@@ -374,7 +393,7 @@ const CommandScreen2 = ({componentId}) => {
         });
       }}
       componentId={componentId}
-      title="Lịch sử giao dịch">
+      title="Giao dịch của tôi">
       <ButtonTop
         onChangeActive={onChangeActive}
         activeMenu={activeMenu}
@@ -385,15 +404,43 @@ const CommandScreen2 = ({componentId}) => {
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
-            onRefresh={() => onRefresh(activeMenu)}
+            onRefresh={() => onRefresh( activeMenu )}
           />
         }
-        ListEmptyComponent={<Empty />}
-        data={get(historyOrders, 'source')}
+        ListEmptyComponent={
+          <View>
+            <Empty />
+            <Button
+              marginTop={40}
+              isNormal
+              onPress={() => {
+                pushSingleScreenApp( componentId, ADS_ADD_NEW_SCREEN, null, {
+                  topBar: {
+                    rightButtons: [
+                      {
+                        id: IdNavigation.PressIn.filterMyAdvertisement,
+                        icon: require( 'assets/icons/Filter.png' ),
+                      },
+                    ],
+                  },
+                } );
+              }}
+              title={'Chào MUA/BÁN'}
+              iconLeftSubmit={icons.IcMarkettingTrans}
+            />
+          
+            </View>
+        }
+        data={get( historyOrders, 'source' )}
         scrollEnabled
         ListFooterComponent={
-          (isLoading && <ActivityIndicator style={{color: colors.text}} />) ||
+          
+             (isLoading && <ActivityIndicator style={{color: colors.text}} />) ||
           null
+          
+        
+          
+         
         }
         onEndReachedThreshold={0.4}
         onEndReached={() => {
@@ -405,15 +452,15 @@ const CommandScreen2 = ({componentId}) => {
           <BoxCommand
             key={`item-${index}`}
             onSeeDetailCommand={() => onSeeDetailCommand(item)}
-            type={get(item, 'offerSide') == 'B' ? 'MUA' : 'BÁN'}
-            isSell={get(item, 'offerSide') !== 'B'}
+            type={get(item, 'orderSide') == 'B' ? 'MUA' : 'BÁN'}
+            isSell={get(item, 'orderSide') !== 'B'}
             price={formatCurrency(
               get(item, 'price') * get(item, 'quantity') || 0,
-              get(item, 'p2PTradingOrder.paymentUnit') || '',
+              get(item, 'paymentUnit') || '',
               currencyList,
             )}
-            unit={get(item, 'p2PTradingOrder.paymentUnit') || ''}
-            nameCoin={get(item, 'p2PTradingOrder.symbol') || ''}
+            unit={get(item, 'paymentUnit') || ''}
+            nameCoin={get(item, 'symbol') || ''}
             dateTime={to_UTCDate(
               get(item, 'createdDate'),
               'DD/MM/YYYY hh:mm:ss',
@@ -427,9 +474,9 @@ const CommandScreen2 = ({componentId}) => {
                   <TextFnx color={colors.greyLight} size={12}>
                     {`${formatCurrency(
                       get(item, 'price') || 0,
-                      get(item, 'p2PTradingOrder.paymentUnit') || '',
+                      get(item, 'paymentUnit') || '',
                       currencyList,
-                    )} ${get(item, 'p2PTradingOrder.paymentUnit')}`}
+                    )} ${get(item, 'paymentUnit')}`}
                   </TextFnx>
                 </Layout>
                 <Layout isSpaceBetween isLineCenter spaceBottom={10}>
@@ -439,9 +486,9 @@ const CommandScreen2 = ({componentId}) => {
                   <TextFnx color={colors.greyLight} size={12}>
                     {`${formatCurrency(
                       get(item, 'quantity') || 0,
-                      get(item, 'p2PTradingOrder.symbol') || '',
+                      get(item, 'symbol') || '',
                       currencyList,
-                    )} ${get(item, 'p2PTradingOrder.symbol')}`}
+                    )} ${get(item, 'symbol')}`}
                   </TextFnx>
                 </Layout>
               </>
@@ -452,7 +499,7 @@ const CommandScreen2 = ({componentId}) => {
                   onPress={() => {
                     pushSingleScreenApp(componentId, CHAT_SCREEN, {
                       orderId: get(item, 'id'),
-                      email: get(item, 'p2PTradingOrder.identityUser.userName'),
+                      email: get(item, 'identityUser.userName'),
                     });
                   }}
                   iconComponent={icons.IcChat}
@@ -472,13 +519,32 @@ const CommandScreen2 = ({componentId}) => {
                     borderRadius: 5,
                   }}
                   spaceHorizontal={12}>
-                  {mapStatus(item).label}
+                  {item.statusLable}
                 </TextFnx>
               </Layout>
             }
           />
         )}
       />
+      
+      {isShowButtonBuySell && <Button
+        marginBottom={60}
+        isNormal
+        onPress={() => {
+          pushSingleScreenApp( componentId, ADS_ADD_NEW_SCREEN, null, {
+            topBar: {
+              rightButtons: [
+                {
+                  id: IdNavigation.PressIn.filterMyAdvertisement,
+                  icon: require( 'assets/icons/Filter.png' ),
+                },
+              ],
+            },
+          } );
+        }}
+        title={'Chào MUA/BÁN'}
+        iconLeftSubmit={icons.IcMarkettingTrans}
+      />}
     </Container>
   );
 };
@@ -490,45 +556,40 @@ const CommandScreen = ({componentId}) => {
   return <LoginScreen componentId={componentId} />;
 };
 const mapStatus = ({
-  isPaymentCancel,
-  isPaymentConfirm,
-  isUnLockConfirm,
-  timeToLiveInSecond,
+ status
 }) => {
   if (
-    isPaymentCancel ||
-    (!isPaymentConfirm &&
-      !isPaymentCancel &&
-      !isUnLockConfirm &&
-      timeToLiveInSecond == 0)
+    status == 5
+  ) {
+    return {
+      color: colors.app.sell,
+      bg: colors.app.bgSell,
+      label: 'Hết hạn',
+    };
+  } else if (
+    status == 4
   ) {
     return {
       color: colors.app.sell,
       bg: colors.app.bgSell,
       label: 'Đã huỷ',
     };
-  } else if (isUnLockConfirm) {
+  } else if (status == 3) {
     return {
       color: colors.app.buy,
       bg: colors.app.bgBuy,
       label: 'Hoàn thành',
     };
   } else if (
-    isPaymentConfirm &&
-    !isPaymentCancel &&
-    !isUnLockConfirm &&
-    timeToLiveInSecond > 0
+    status ==7
   ) {
     return {
       color: colors.app.buy,
       bg: colors.app.bgBuy,
-      label: 'Đã thanh toán',
+      label: 'Chờ mở khóa',
     };
   } else if (
-    isPaymentConfirm &&
-    !isPaymentCancel &&
-    !isUnLockConfirm &&
-    timeToLiveInSecond == 0
+    status == 6 
   ) {
     return {
       color: colors.app.sell,
@@ -536,15 +597,19 @@ const mapStatus = ({
       label: 'Khiếu nại',
     };
   } else if (
-    !isPaymentConfirm &&
-    !isPaymentCancel &&
-    !isUnLockConfirm &&
-    timeToLiveInSecond > 0
+    status == 1
   ) {
     return {
+      color: colors.app.buy,
+      bg: colors.app.bgBuy,
+      label: 'Chờ khớp',
+    };
+  }
+  else{
+      return {
       color: colors.app.sell,
       bg: colors.app.bgSell,
-      label: 'Chờ thanh toán',
+      label: 'N/A',
     };
   }
 };

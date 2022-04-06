@@ -9,6 +9,7 @@ import {
   LOGIN_SCREEN,
   pushSingleScreenApp,
   pushTabBasedApp,
+  SYMBOLS_SCREEN,
   pushTutorialScreen,
   ADS_HISTORY_EXCHANGE_SCREEN,
 } from '../../navigation';
@@ -43,6 +44,7 @@ const Drawer = ({componentId}) => {
         iconRight={false}
         iconLeftSvg={icons.IcMarketting}
         textLeft={'Quảng cáo của tôi'}
+        
         onPress={() => {
           setTimeout(() => {
             Navigation.mergeOptions(componentId, {
@@ -59,9 +61,27 @@ const Drawer = ({componentId}) => {
       <ItemSetting
         iconRight={false}
         iconLeftSvg={icons.IcHistory}
-        textLeft={'Lịch sử giao dịch'}
+        textLeft={'Giao dịch của tôi'}
         onPress={() => {
           pushTabBasedApp(2);
+        }}
+      />
+      <ItemSetting
+        iconRight={false}
+        iconLeftSvg={icons.IcHistory}
+        textLeft={'Tìm kiếm mã CK'}
+        onPress={() => {
+          setTimeout(() => {
+            Navigation.mergeOptions(componentId, {
+              sideMenu: {
+                left: {
+                  visible: false,
+                },
+                
+              },
+            });
+          }, 500);
+          emitEventEmitter('pushSymbos', true);
         }}
       />
       <Button

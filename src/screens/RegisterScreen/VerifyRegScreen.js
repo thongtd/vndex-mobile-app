@@ -64,10 +64,10 @@ const VerifyRegScreen = ({componentId, email}) => {
       </TextFnx>
       <TextFnx>{'Content verify account'.t().replace('{0}', email)}</TextFnx>
       <Button
-        onPress={handleResend}
+        // onPress={handleResend}
         isButtonCircle={false}
         disabled={timer && isTimer ? true : false}
-        // onSubmit={handleSubmitCheckEmail}
+        onSubmit={handleResend}
         spaceVertical={25}
         isSubmit
         textSubmit={

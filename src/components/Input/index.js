@@ -64,6 +64,7 @@ const Input = ({
   prefix,
   isRequired,
   titleLeft,
+  autoFocus,
   ...rest
 }) => {
   const [valueInput, setValue] = useState(value);
@@ -165,6 +166,7 @@ const Input = ({
               <TextInput
                 defaultValue={defaultValue}
                 editable={editable}
+                autoFocus={ autoFocus}
                 maxLength={rest.isResend ? 6 : maxLength}
                 keyboardType={rest.isResend ? 'number-pad' : keyboardType}
                 secureTextEntry={isSecurity}
@@ -183,6 +185,7 @@ const Input = ({
           <TextInput
             defaultValue={defaultValue}
             editable={editable}
+            autoFocus={ autoFocus}
             maxLength={rest.isResend ? 6 : maxLength}
             keyboardType={rest.isResend ? 'number-pad' : keyboardType}
             secureTextEntry={isSecurity}

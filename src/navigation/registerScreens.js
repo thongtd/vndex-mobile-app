@@ -54,6 +54,8 @@ import {
   WITHDRAW_COIN_SCREEN,
   WITHDRAW_FIAT_SCREEN,
   TRANSACTION_HISTORY,
+  SYMBOLS_SCREEN,
+  SYMBOL_SCREEN
 } from './Screens';
 import AlertNoticePassword from '../components/Alert/AlertNoticePassword';
 import PickerSearchBox from '../components/Picker/PickerSearchBox';
@@ -168,6 +170,8 @@ import FilterHomeScreen from '../screens/HomeScreen/components/FilterHomeScreen'
 import DetailAccountP2pScreen from '../screens/AccountP2P/DetailAccountP2pScreen';
 import ListUpdateAccountScreen from '../screens/UpdateAccountScreen/ListUpdateAccountScreen';
 import ListUpdateScreen from '../screens/UpdateAccountScreen/ListUpdateScreen';
+import SymbolsScreen from '../screens/SymbolsScreen/SymbolsScreen';
+import SymbolScreen from '../screens/SymbolScreen/SymbolScreen';
 
 const WrapScreen = (ReduxScreen, store) => props =>
   (
@@ -568,5 +572,15 @@ export const registerScreens = store => {
     BUTTON_ICON_LEFT_NAV,
     () => withNavigationProvider(WrapScreen(Drawer, store)),
     () => Drawer,
+  );
+   Navigation.registerComponent(
+    SYMBOLS_SCREEN,
+    () => withNavigationProvider(WrapScreen(SymbolsScreen, store)),
+    () => SymbolsScreen,
+  );
+   Navigation.registerComponent(
+    SYMBOL_SCREEN,
+    () => withNavigationProvider(WrapScreen(SymbolScreen, store)),
+    () => SymbolScreen,
   );
 };

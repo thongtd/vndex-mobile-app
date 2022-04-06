@@ -9,7 +9,7 @@ import ButtonWithTitle from '../../components/Button/ButtonWithTitle';
 import Icon from '../../components/Icon';
 import CheckBox from 'react-native-check-box';
 import ModalAlert from '../../components/Alert/AlertNoticePassword';
-import { Navigation } from 'react-native-navigation';
+// import { Navigation } from 'react-native-navigation';
 import { ALERT_NOTICE_PASSWORD, ALERT_ACCOUNT_ACTIVE, LOGIN_SCREEN, pushSingleHiddenTopBarApp } from '../../navigation';
 import { hiddenModal, get, toast, _validateAuth, size } from '../../configs/utils';
 import ButtonFooterAuth from '../../components/Button/ButtonFooterAuth';
@@ -37,10 +37,11 @@ const ConfirmResetScreen = ({
         if (isValid) {
             setDisabled(true);
             let res = await authService.confirmResetPassword(data);
+            
             if (get(res, "status")) {
-                toast(get(res, "message").t())
                 setDisabled(false);
-                pushSingleHiddenTopBarApp(rest.componentId, LOGIN_SCREEN)
+                toast(get(res, "message").t())
+                await pushSingleHiddenTopBarApp(rest.componentId,LOGIN_SCREEN);
             } else {
                 setDisabled(false);
                 toast(get(res, "message").t())

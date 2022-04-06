@@ -31,6 +31,7 @@ import {
   pushSingleScreenApp,
   STEP_2_BUY_SELL_SCREEN,
   STEP_3_BUY_SELL_SCREEN,
+  STEP_2FA_BUY_SELL_SCREEN,
   STEP_4_BUY_SELL_SCREEN,
 } from '../../../navigation';
 import ButtonIcon from '../../../components/Button/ButtonIcon';
@@ -49,7 +50,8 @@ import {useDispatch} from 'react-redux';
 import {isEmpty} from 'lodash';
 import {useActionsP2p} from '../../../redux';
 import { Navigation } from 'react-native-navigation';
-const Step2BuySellScreen = ({componentId, item, data}) => {
+const Step2BuySellScreen = ( { componentId, item, data,taxFeeByCurrency,fee,tax } ) => {
+  
   const actionSheetRef = useRef(null);
   const dispatch = useDispatch();
   const advertisment = useSelector(state => state.p2p.advertisment);
@@ -65,12 +67,18 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
     //     }
     //   },
     // );
-    const ev = listenerEventEmitter('pushOfferOrder', data => {
-      if (get(data, 'offerOrder.offerSide') === BUY) {
+    const ev = listenerEventEmitter('pushOfferOrder', args => {
+      if ( get( args, 'offerOrder.offerSide' ) === BUY ) {
+        
         pushSingleScreenApp(componentId, STEP_3_BUY_SELL_SCREEN, {
-          paymentMethodData: get(data, 'paymentMethodData'),
-          offerOrder: get(data, 'offerOrder'),
-          item,
+          paymentMethodData: get(args, 'paymentMethodData'),
+          offerOrder: get(args, 'offerOrder'),
+          item: {
+            ...item,
+            fee: fee,
+            tax: tax,
+            quantity:get( data, 'quantity' ),
+          taxFeeByCurrency:taxFeeByCurrency},
         },{
           topBar: {
             rightButtons: [
@@ -83,8 +91,14 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
         });
       } else {
         pushSingleScreenApp(componentId, STEP_4_BUY_SELL_SCREEN, {
-          paymentMethodData: get(data, 'paymentMethodData'),
-          item,
+          paymentMethodData: get(args, 'paymentMethodData'),
+          item :{
+            ...item,
+            fee: fee,
+            tax: tax,
+            quantity:get( data, 'quantity' ),
+          taxFeeByCurrency:taxFeeByCurrency},
+        
         },{
           topBar: {
             rightButtons: [
@@ -103,42 +117,24 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
       // navigationButtonEventListener.remove();
     };
   }, [componentId]);
-  const checkTax = (isPercent, stateData = item, tax = feeTax) => {
-    if (
-      (get(stateData, 'symbol') == 'SMAT' &&
-        get(stateData, 'side') == SELL) ||
-      (get(stateData, 'symbol') == 'SMAT' &&
-        get(stateData, 'side') == SELL &&
-        isPercent) ||
-      (get(stateData, 'symbol') !== 'SMAT' &&
-        get(stateData, 'side') == SELL)
-    ) {
-      return '0';
-    } else if (get(stateData, 'side') == BUY && isPercent) {
-      return get(tax, 'taxPercent');
-    } else if (get(stateData, 'side') == BUY) {
+  const checkTax = ( isPercent, stateData = item, tax = feeTax ) => {
+     if ( isPercent) {
+      return get(stateData, 'taxPercent');
+    } else 
       return formatCurrency(
-        get(tax, 'taxAmount'),
-        get(tax, 'taxFeeByCurrency'),
+        get(stateData, 'tax'),
+        get(stateData, 'feeTaxBy'),
         currencyList,
       );
-    }
+    
   };
-  const checkFee = (isPercent, stateData = item, fee = feeTax) => {
-    if (
-      (get(stateData, 'symbol') == 'SMAT' &&
-        get(stateData, 'side') == SELL) ||
-      (get(stateData, 'symbol') == 'SMAT' &&
-        get(stateData, 'side') == SELL &&
-        isPercent)
-    ) {
-      return '0';
-    } else if (isPercent) {
-      return get(fee, 'feePercent');
+  const checkFee = ( isPercent, stateData = item, fee = feeTax ) => {
+     if (isPercent) {
+      return get(stateData, 'feePercent');
     } else {
       return formatCurrency(
-        get(fee, 'feeAmount'),
-        get(fee, 'taxFeeByCurrency'),
+        get(stateData, 'fee'),
+        get(stateData, 'feeTaxBy'),
         currencyList,
       );
     }
@@ -168,7 +164,7 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
       <Layout type="column" spaceHorizontal={spacingApp}>
         <TimelineBuySell
           step={1}
-          side={get(item, 'side') == SELL ? BUY : SELL}
+          side={get(item, 'offerSide') == BUY ? BUY : SELL}
           title={'Chuyển tiền và Xác nhận chuyển tiền'}
         />
       </Layout>
@@ -182,8 +178,8 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
         }}>
         <TextFnx
           weight="700"
-          color={get(item, 'side') == SELL ? colors.app.buy : colors.app.sell}>
-          {`${get(item, 'side') == SELL ? 'Mua' : 'Bán'} ${get(
+          color={get(item, 'offerSide') == BUY ? colors.app.buy : colors.app.sell}>
+          {`${get(item, 'offerSide') == BUY ? 'Mua' : 'Bán'} ${get(
             item,
             'symbol',
           )}`}
@@ -201,45 +197,45 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
             size={16}
             weight="700"
             color={
-              get(item, 'side') == SELL ? colors.app.buy : colors.app.sell
+              get(item, 'offerSide') == BUY ? colors.app.buy : colors.app.sell
             }>
             {`${formatCurrency(
-              get(data, 'price'),
-              get(advertisment, 'paymentUnit'),
+              (get( item, 'price' ) * get( data, 'quantity' )),
+              get(item, 'paymentUnit'),
               currencyList,
             )} `}
             <TextFnx color={colors.app.textContentLevel3}>
-              {get(advertisment, 'paymentUnit')}
+              {get(item, 'paymentUnit')}
             </TextFnx>
           </TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Giá</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
-            get(advertisment, 'price'),
-            get(advertisment, 'paymentUnit'),
+             get( item, 'price' ),
+            get(item, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'paymentUnit')}`}</TextFnx>
+          )} ${get(item, 'paymentUnit')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số lượng</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>{`${formatCurrency(
             get(data, 'quantity'),
-            get(advertisment, 'paymentUnit'),
+            get(item, 'paymentUnit'),
             currencyList,
-          )} ${get(advertisment, 'symbol')}`}</TextFnx>
+          )} ${get(item, 'symbol')}`}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Phí</TextFnx>
-          <TextFnx color={colors.app.textContentLevel2}>{`${checkFee()} ${get(feeTax,'taxFeeByCurrency')}`}</TextFnx>
+          <TextFnx color={colors.app.textContentLevel2}>{fee} {taxFeeByCurrency}</TextFnx>
         </Layout>
         <Layout isSpaceBetween space={8}>
-          <TextFnx color={colors.app.textContentLevel3}>Thuế</TextFnx>
+          <TextFnx color={colors.app.textContentLevel3}>Thuế </TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
-          {`${checkTax()} ${get(feeTax,'taxFeeByCurrency')}`}
+          {tax} {taxFeeByCurrency}
           </TextFnx>
         </Layout>
-        <Layout isSpaceBetween space={8}>
+        {/* <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Số Lệnh</TextFnx>
           <Layout isLineCenter>
             <TextFnx color={colors.app.textContentLevel2}>
@@ -257,12 +253,12 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
               iconComponent={<Copy height={20} width={20} />}
             />
           </Layout>
-        </Layout>
+        </Layout> */}
         <Layout isSpaceBetween space={8}>
           <TextFnx color={colors.app.textContentLevel3}>Thời gian tạo</TextFnx>
           <TextFnx color={colors.app.textContentLevel2}>
             {to_UTCDate(
-              get(advertisment, 'createdDate'),
+              Date.now(),
               'DD-MM-YYYY hh:mm:ss',
             )}
           </TextFnx>
@@ -301,7 +297,8 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
                 style={{
                   paddingTop: 5,
                 }}>
-                {(get(advertisment, 'paymentMethods') || []).map((it, ind) => {
+                {( get( advertisment, 'paymentMethods' ) || [] ).map( ( it, ind ) => {
+                  
                   if (get(it, 'code') == constant.CODE_PAYMENT_METHOD.MOMO) {
                     return (
                       <View
@@ -387,7 +384,31 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
         <Button
           spaceVertical={20}
           isSubmit
-          onSubmit={() => actionSheetRef?.current?.show()}
+          onSubmit={() => { 
+            if (get(item, 'side') == SELL) {
+              actionSheetRef?.current?.show()
+            }
+            else {
+              actionSheetRef.current?.hide();
+              pushSingleScreenApp( componentId, STEP_2FA_BUY_SELL_SCREEN, {
+                      onSubmitSuccess: ()=>{
+                        
+                    
+                        // useActionsP2p(dispatch).handleResetOffer();
+                        useActionsP2p( dispatch ).handleCreateOfferOrder( {
+                          data: {
+                            orderId: get( advertisment, 'orderId' ),
+                            orderQtty: get( data, 'quantity' ),
+                            orderPrice: get( advertisment, 'price' ),
+                            p2PAccountPaymentMethodId: get( item, 'id' ),
+                          },
+                          paymentMethodData: item,
+                        } );
+                      }
+                    } );
+            }
+          } 
+        }
           colorTitle={colors.text}
           weightTitle={'700'}
           colorTitleClose={colors.app.sell}
@@ -416,22 +437,26 @@ const Step2BuySellScreen = ({componentId, item, data}) => {
             (get(advertisment, 'side') == SELL
               ? get(advertisment, 'paymentMethods')
               : paymentMethods
-            ).map((item, index) => {
+          ).map( ( item, index ) => {
+              
               return (
                 <TouchableOpacity
                   key={`ite-${index}`}
                   onPress={() => {
                     actionSheetRef.current?.hide();
-                    // useActionsP2p(dispatch).handleResetOffer();
-                    useActionsP2p(dispatch).handleCreateOfferOrder({
-                      data: {
-                        orderId: get(advertisment, 'orderId'),
-                        orderQtty: get(data, 'quantity'),
-                        orderPrice: get(advertisment, 'price'),
-                        p2PAccountPaymentMethodId: get(item, 'id'),
-                      },
-                      paymentM1000ethodData: item,
-                    });
+                    pushSingleScreenApp( componentId, STEP_2FA_BUY_SELL_SCREEN, {
+                      onSubmitSuccess: ()=>{
+                        useActionsP2p(dispatch).handleCreateOfferOrder({
+                          data: {
+                            orderId: get(advertisment, 'orderId'),
+                            orderQtty: get(data, 'quantity'),
+                            orderPrice: get(advertisment, 'price'),
+                            p2PAccountPaymentMethodId: get(item, 'id'),
+                          },
+                          paymentMethodData: item,
+                        });
+                      }
+                    } );
                   }}>
                   <Layout
                     style={{

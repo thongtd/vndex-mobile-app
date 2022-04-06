@@ -78,10 +78,11 @@ const HeaderWalletScreen = ({componentId}) => {
           padding:30
         }}>
         <TextFnx weight="500" size={20} color={colors.iconButton}>
-          Số dư token
+          Tổng tài sản (Token)
         </TextFnx>
         <TextFnx weight='700' spaceTop={8} color={colors.text} size={30}>
-          {logged?`${thousandsSeparators(TotalValue)}`:'0'}
+          {logged?`${thousandsSeparators(TotalValue)}`:'0'} 
+          {/* {thousandsSeparators(100000000000)}  */}
         </TextFnx>
       </View>
     </TopBarWallet>

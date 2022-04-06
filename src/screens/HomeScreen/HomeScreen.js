@@ -26,6 +26,7 @@ import {
   WALLET_SCREEN,
   UPDATE_ACCOUNT_SCREEN,
   ACCOUNTP2P_SCREEN,
+  SYMBOLS_SCREEN
 } from '../../navigation';
 import {
   pushSingleHiddenTopBarApp,
@@ -80,9 +81,9 @@ import Empty from '../../components/Item/Empty';
 var flagMenu = true;
 const HomeScreen = ({componentId}) => {
   const dispatch = useDispatch();
-  const [ActiveSymbol, setActiveSymbol] = useState('DIC');
+  const [ActiveSymbol, setActiveSymbol] = useState('SMAT');
   const [isRefresh, setRefresh] = useState(false);
-  const [ActiveType, setActiveType] = useState('S');
+  const [ActiveType, setActiveType] = useState('B');
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadMore, setLoadMore] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
@@ -118,6 +119,13 @@ const HomeScreen = ({componentId}) => {
       } else {
         pushSingleScreenApp(componentId, LOGIN_SCREEN);
       }
+    } );
+    const listenerSymbosEmit = listenerEventEmitter('pushSymbos', () => {
+      
+        pushSingleScreenApp(componentId, SYMBOLS_SCREEN, null, {
+         
+        });
+     
     });
     const filerHomeEvent = listenerEventEmitter(
       'filerHomeEvent',
@@ -210,6 +218,7 @@ const HomeScreen = ({componentId}) => {
       );
     return () => {
       listenerEmit.remove();
+      listenerSymbosEmit.remove();
       screenPoppedListener.remove();
       listenerPushNewAds.remove();
       navigationButtonEventListener.remove();
