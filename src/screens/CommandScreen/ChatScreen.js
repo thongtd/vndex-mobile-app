@@ -24,6 +24,7 @@ import colors from '../../configs/styles/colors';
 import {isArray, size, toast} from '../../configs/utils';
 import {useActionsP2p} from '../../redux';
 import SignalRService from '../../services/signalr.service';
+// import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   HubConnectionBuilder,
   JsonHubProtocol,
@@ -35,13 +36,13 @@ import MessageImage from '../../components/MessageImage';
 import InputToolbar from '../../components/InputToolbar';
 
 export default function ChatScreen({componentId, orderId, email = ''}) {
-  const [messages, setMessages] = useState([]);
   const infoChat = useSelector(state => state.p2p.chatInfoP2p);
   const chatHistory = useSelector(state => state.p2p.chatHistory);
+  const UserInfo = useSelector(state => state.authentication.userInfo);
+  const [messages, setMessages] = useState([]);
   const dispatcher = useDispatch();
   const [images, setImages] = useState([]);
   const [skip, setSkip] = useState(0);
-  const UserInfo = useSelector(state => state.authentication.userInfo);
   useEffect(() => {
     useActionsP2p(dispatcher).handleGetChatHistory({
       orderId: orderId,
@@ -165,10 +166,17 @@ useEffect(() => {
     }).then(res => {
       setImages([...res.assets]);
     });
-  };
+  }
+    ;
+  // const {bottom} = useSafeAreaInsets();
   return (
-    <Container isNotTranslateTitle componentId={componentId} isTopBar isFlex title={get(infoChat,"offerIdentityUser.id") == get(UserInfo,"id")?`${get(infoChat,"provideIdentityUser.email")}`:`${get(infoChat,"offerIdentityUser.email")}`}>
-      <GiftedChat
+     
+    // <SafeAreaView>
+    <Container isNotTranslateTitle componentId={componentId} isTopBar isFlex title={get(infoChat, "offerIdentityUser.id") == get(UserInfo, "id") ? `${get(infoChat, "provideIdentityUser.email")}` : `${get(infoChat, "offerIdentityUser.email")}`}>
+      
+        
+        <GiftedChat
+          bottomOffset={34}
         renderLoading={() => <ActivityIndicator />}
         scrollToBottom
         scrollToBottomComponent={() => (
@@ -243,11 +251,12 @@ useEffect(() => {
         placeholder={'Nhập tin nhắn của bạn'}
         messages={messages}
         onSend={messages => onSend(messages)}
+        
         alwaysShowSend
         renderUsernameOnMessage
         loadEarlier={get(chatHistory, 'totalRecords') > skip ? true : false}
         onLoadEarlier={() => setSkip(skip + 10)}
-        isLoadingEarlier={false}
+        isLoadingEarlier={true}
         renderSend={data => <Send {...data} />}
         onPressActionButton={handleSelfieSide}
         user={{
@@ -266,9 +275,8 @@ useEffect(() => {
         //   )
         // }}
         infiniteScroll={true}
-      />
-      {/* {Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />} */}
-    </Container>
+        />
+      </Container>
   );
 }
 const handleFormatData = (data, accId) => {
